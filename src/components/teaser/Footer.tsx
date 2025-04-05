@@ -20,15 +20,15 @@ const Footer = () => {
           </div>
           
           <div className="flex flex-col space-y-4">
-            <div className="flex space-x-6">
+            <div className="flex flex-wrap space-x-4 md:space-x-6">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 About
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 Blog
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                Contact
+              <a href="#" className="text-gray-400 hover:text-white transition-colors py-1">
+                Fique em contato conosco
               </a>
               <Link to="/" className="text-gray-400 hover:text-white transition-colors">
                 Platform
