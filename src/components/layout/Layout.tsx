@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -21,13 +22,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <Link to="/" className="flex items-center space-x-2">
+            <Link to="/" className="flex items-center">
               <img 
                 src="/lovable-uploads/9aa53f79-4c5b-41fe-8e7f-ece7cc41dd89.png" 
                 alt="ADAspending Logo" 
                 className="h-8 w-auto"
               />
-              <span className="font-bold text-xl text-cardano-blue">ADAspending</span>
             </Link>
           </div>
           
