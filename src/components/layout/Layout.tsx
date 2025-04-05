@@ -24,7 +24,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <div className="flex items-center space-x-2">
             <Link to="/" className="flex items-center">
               <img 
-                src="/lovable-uploads/9aa53f79-4c5b-41fe-8e7f-ece7cc41dd89.png" 
+                src="/lovable-uploads/6a1ead3b-f378-40e6-b661-459758a430af.png" 
                 alt="ADAspending Logo" 
                 className="h-8 w-auto"
               />
@@ -85,7 +85,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <div className="mb-4 md:mb-0">
               <div className="flex items-center justify-center md:justify-start space-x-2">
                 <img 
-                  src="/lovable-uploads/9aa53f79-4c5b-41fe-8e7f-ece7cc41dd89.png" 
+                  src="/lovable-uploads/6a1ead3b-f378-40e6-b661-459758a430af.png" 
                   alt="ADAspending Logo" 
                   className="h-8 w-auto"
                 />
