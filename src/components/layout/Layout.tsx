@@ -89,7 +89,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   alt="ADAspending Logo" 
                   className="h-8 w-auto"
                 />
-                <span className="font-bold text-xl text-cardano-blue">ADAspending</span>
+                {/* ADAspending text removed from here */}
               </div>
               <p className="text-sm text-gray-600 mt-2">
                 An open data source for treasury spending on the Cardano blockchain.
