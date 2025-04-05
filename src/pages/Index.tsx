@@ -1,16 +1,6 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  BarChart3, 
-  TrendingUp, 
-  Users, 
-  Award, 
-  FileCheck, 
-  Clock, 
-  ChevronRight,
-  Search
-} from 'lucide-react';
+import { BarChart3, TrendingUp, Users, Award, FileCheck, Clock, ChevronRight, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,51 +9,38 @@ import ProposalCard from '@/components/ui/ProposalCard';
 import Layout from '@/components/layout/Layout';
 import { treasuryStats, proposals, fundRounds } from '@/data/mockData';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-
 const Index = () => {
   const formattedTotalFunds = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    maximumFractionDigits: 0
   }).format(treasuryStats.totalFundsAvailable);
-
   const formattedAwardedFunds = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
     minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+    maximumFractionDigits: 0
   }).format(treasuryStats.totalFundsAwarded);
 
   // Get the latest fund round data
   const latestFundRound = fundRounds[fundRounds.length - 1];
-  
+
   // Get recent proposals (active and approved)
-  const recentProposals = proposals
-    .filter(p => p.status === 'active' || p.status === 'approved')
-    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
-    .slice(0, 4);
-
+  const recentProposals = proposals.filter(p => p.status === 'active' || p.status === 'approved').sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()).slice(0, 4);
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#BFBFBF'];
-
-  return (
-    <Layout>
+  return <Layout>
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-cardano-blue to-cardano-teal rounded-lg text-white p-6 md:p-10 mb-8">
         <div className="max-w-5xl mx-auto">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">ADAspending</h1>
-          <p className="text-lg md:text-xl mb-6 opacity-90">
-            An open data source for treasury spending on the Cardano blockchain.
-            Explore decentralized funding awards, track proposals, and understand how the 
-            community allocates blockchain treasury funds.
-          </p>
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+        </h1>
+          <p className="text-lg md:text-xl mb-6 opacity-90 font-normal">ADAspending is an open data source for treasury spending on the Cardano blockchain.
+Explore decentralized funding awards, track proposals, follow ADA flows, and understand how the community allocates public blockchain funds.</p>
           
           <div className="flex flex-col md:flex-row gap-4 max-w-xl">
             <div className="flex-grow">
-              <Input 
-                className="bg-white/20 border-white/30 placeholder:text-white/70 text-white"
-                placeholder="Search proposals, recipients, or categories..." 
-              />
+              <Input className="bg-white/20 border-white/30 placeholder:text-white/70 text-white" placeholder="Search proposals, recipients, or categories..." />
             </div>
             <Button className="bg-white text-cardano-blue hover:bg-white/90">
               <Search className="h-4 w-4 mr-2" />
@@ -76,32 +53,10 @@ const Index = () => {
       {/* Key Stats Section */}
       <section className="mb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard 
-            title="Total Treasury Size" 
-            value={formattedTotalFunds}
-            icon={<BarChart3 className="h-5 w-5" />}
-            className="bg-cardano-blue/10 border-cardano-blue/30"
-          />
-          <StatCard 
-            title="Total Funds Awarded" 
-            value={formattedAwardedFunds} 
-            icon={<TrendingUp className="h-5 w-5" />}
-            className="bg-cardano-teal/10 border-cardano-teal/30"
-          />
-          <StatCard 
-            title="Funded Proposals" 
-            value={treasuryStats.fundedProposals} 
-            icon={<Award className="h-5 w-5" />}
-            className="bg-cardano-coral/10 border-cardano-coral/30"
-          />
-          <StatCard 
-            title="Voter Participation" 
-            value={`${treasuryStats.averageVoterParticipation}%`}
-            change="2.1% from last round"
-            positive={true}
-            icon={<Users className="h-5 w-5" />}
-            className="bg-purple-100 border-purple-300"
-          />
+          <StatCard title="Total Treasury Size" value={formattedTotalFunds} icon={<BarChart3 className="h-5 w-5" />} className="bg-cardano-blue/10 border-cardano-blue/30" />
+          <StatCard title="Total Funds Awarded" value={formattedAwardedFunds} icon={<TrendingUp className="h-5 w-5" />} className="bg-cardano-teal/10 border-cardano-teal/30" />
+          <StatCard title="Funded Proposals" value={treasuryStats.fundedProposals} icon={<Award className="h-5 w-5" />} className="bg-cardano-coral/10 border-cardano-coral/30" />
+          <StatCard title="Voter Participation" value={`${treasuryStats.averageVoterParticipation}%`} change="2.1% from last round" positive={true} icon={<Users className="h-5 w-5" />} className="bg-purple-100 border-purple-300" />
         </div>
       </section>
       
@@ -165,19 +120,11 @@ const Index = () => {
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie
-                      data={treasuryStats.categoryDistribution}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={80}
-                      fill="#8884d8"
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                    >
-                      {treasuryStats.categoryDistribution.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
+                    <Pie data={treasuryStats.categoryDistribution} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} fill="#8884d8" label={({
+                    name,
+                    percent
+                  }) => `${name} ${(percent * 100).toFixed(0)}%`}>
+                      {treasuryStats.categoryDistribution.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />)}
                     </Pie>
                     <Tooltip formatter={(value: number) => `${value}%`} />
                   </PieChart>
@@ -195,10 +142,12 @@ const Index = () => {
             <CardContent>
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={fundRounds}
-                    margin={{ top: 10, right: 10, left: 10, bottom: 20 }}
-                  >
+                  <BarChart data={fundRounds} margin={{
+                  top: 10,
+                  right: 10,
+                  left: 10,
+                  bottom: 20
+                }}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
                     <YAxis yAxisId="left" orientation="left" stroke="#0033AD" />
@@ -224,18 +173,7 @@ const Index = () => {
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {recentProposals.map((proposal) => (
-            <ProposalCard 
-              key={proposal.id}
-              id={proposal.id}
-              title={proposal.title}
-              category={proposal.category}
-              requestedAmount={proposal.requestedAmount}
-              status={proposal.status}
-              fundRound={proposal.fundRound}
-              recipient={proposal.recipient}
-            />
-          ))}
+          {recentProposals.map(proposal => <ProposalCard key={proposal.id} id={proposal.id} title={proposal.title} category={proposal.category} requestedAmount={proposal.requestedAmount} status={proposal.status} fundRound={proposal.fundRound} recipient={proposal.recipient} />)}
         </div>
       </section>
       
@@ -270,8 +208,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-    </Layout>
-  );
+    </Layout>;
 };
-
 export default Index;
