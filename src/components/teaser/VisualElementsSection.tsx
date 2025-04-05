@@ -131,7 +131,7 @@ const VisualElementsSection = () => {
                   alt="Dashboard Mockup" 
                   className="w-full rounded-lg shadow-lg transform transition-all duration-500 hover:scale-[1.01]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-lg opacity-50"></div>
+                {/* Gradient overlay removed from here */}
               </div>
             </CardContent>
           </Card>
