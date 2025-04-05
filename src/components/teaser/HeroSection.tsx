@@ -20,7 +20,7 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative bg-gradient-to-br from-cardano-blue to-cardano-teal py-20 px-4 md:py-32">
+    <section className="relative bg-gradient-to-br from-cardano-blue to-cardano-teal py-12 px-4 md:py-24">
       <div className="container mx-auto text-center">
         <div className="flex flex-col items-center mb-8">
           <img 
