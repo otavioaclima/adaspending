@@ -28,7 +28,7 @@ const Footer = () => {
                 Blog
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors py-1">
-                Fique em contato conosco
+                Stay in touch with us
               </a>
               <Link to="/" className="text-gray-400 hover:text-white transition-colors">
                 Platform
