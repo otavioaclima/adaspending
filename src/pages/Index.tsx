@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { BarChart3, TrendingUp, Users, Award, FileCheck, Clock, ChevronRight, Search } from 'lucide-react';
@@ -37,7 +38,7 @@ const Index = () => {
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
             <div className="flex justify-center mb-6">
               <img 
-                src="/lovable-uploads/4f44d518-5eb0-4089-8098-28db3212a259.png" 
+                src="/lovable-uploads/977f5d38-73cb-4780-adac-737740e44017.png" 
                 alt="ADAspending Logo" 
                 className="h-16 md:h-20" 
               />
