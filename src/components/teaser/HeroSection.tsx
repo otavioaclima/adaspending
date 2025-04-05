@@ -28,11 +28,6 @@ const HeroSection = () => {
             alt="ADAspending Graph Logo" 
             className="h-32 md:h-40 mb-4 animate-fade-in" 
           />
-          <img 
-            src="/lovable-uploads/e4da4614-7cea-4f9c-853c-3f019f7932ca.png" 
-            alt="ADAspending Logo" 
-            className="h-16 md:h-20" 
-          />
         </div>
         
         <div className="h-24 md:h-28 flex items-center justify-center mb-6">
