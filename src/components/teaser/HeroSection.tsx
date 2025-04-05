@@ -21,17 +21,17 @@ const HeroSection = () => {
   }, []);
 
   return (
-    <section className="relative bg-gradient-to-br from-cardano-blue to-cardano-teal py-12 px-4 md:py-24">
+    <section className="relative bg-gradient-to-br from-cardano-blue to-cardano-teal py-6 px-4 md:py-16">
       <div className="container mx-auto text-center">
-        <div className="flex flex-col items-center mb-8">
+        <div className="flex flex-col items-center mb-6">
           <img 
             src="/lovable-uploads/257db3dc-2214-4178-afd2-70760c3899c4.png" 
             alt="ADAspending Graph Logo" 
-            className="h-40 md:h-52 mb-4 animate-fade-in" 
+            className="h-32 md:h-40 mb-4 animate-fade-in" 
           />
         </div>
         
-        <div className="h-24 md:h-28 flex items-center justify-center mb-6">
+        <div className="h-20 md:h-24 flex items-center justify-center mb-6">
           <h1 
             className="text-3xl md:text-5xl font-bold text-white animate-fade-in transition-all duration-500"
             key={currentPhraseIndex}
@@ -40,7 +40,7 @@ const HeroSection = () => {
           </h1>
         </div>
         
-        <p className="text-2xl text-white/90 max-w-3xl mx-auto mb-8 leading-relaxed">
+        <p className="text-xl text-white/90 max-w-3xl mx-auto mb-6 leading-relaxed">
           An open data source for tracking treasury spending on the Cardano blockchain.
           Bringing transparency and accountability to community funds.
         </p>
