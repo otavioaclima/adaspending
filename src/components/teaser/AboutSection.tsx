@@ -60,8 +60,8 @@ const AboutSection = () => {
           <div className="md:w-1/2 flex justify-center">
             <div className="relative rounded-lg overflow-hidden shadow-xl">
               <img 
-                src="/lovable-uploads/977f5d38-73cb-4780-adac-737740e44017.png" 
-                alt="Cardano Governance and Transparency" 
+                src="/lovable-uploads/2c4f875e-42d5-46d5-a340-7955b881717a.png" 
+                alt="Cardano Blockchain Technology" 
                 className="w-full object-cover h-[400px]"
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-cardano-blue/80 to-transparent p-4">
