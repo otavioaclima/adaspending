@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Linkedin, Instagram, Mail } from 'lucide-react';
+import { Twitter, Mail } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -43,17 +43,9 @@ const Footer = () => {
             </div>
             
             <div className="flex items-center space-x-4 justify-center md:justify-end">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Facebook size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors flex items-center gap-1">
                 <Twitter size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Linkedin size={20} />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Instagram size={20} />
+                <span>Follow us on X</span>
               </a>
             </div>
           </div>
