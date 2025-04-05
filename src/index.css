@@ -1,10 +1,11 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -16,8 +17,8 @@
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 201 100% 47%;
+    --secondary-foreground: 210 40% 98%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
@@ -35,19 +36,12 @@
     --radius: 0.5rem;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
@@ -64,7 +58,7 @@
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 201 100% 47%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 217.2 32.6% 17.5%;
@@ -97,5 +91,27 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white bg-opacity-80 backdrop-blur-sm border border-white/20 shadow-md rounded-lg;
+  }
+  
+  .cardano-card {
+    @apply bg-gradient-to-br from-cardano-blue/10 to-cardano-teal/10 border border-cardano-teal/20 shadow-lg rounded-lg;
+  }
+  
+  .stat-card {
+    @apply p-4 flex flex-col space-y-2 rounded-lg border shadow-sm hover:shadow-md transition-all duration-200;
+  }
+  
+  .nav-link {
+    @apply px-3 py-2 text-sm font-medium rounded-md hover:bg-cardano-blue/10 hover:text-cardano-blue transition-all duration-200;
+  }
+  
+  .nav-link-active {
+    @apply bg-cardano-blue text-white hover:bg-cardano-blue/90 hover:text-white;
   }
 }
