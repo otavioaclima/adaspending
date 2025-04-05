@@ -1,10 +1,25 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { BarChart3, Award, Search, ChevronRight, Globe, Info, Database } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Teaser = () => {
+  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+  const phrases = [
+    "Search, Track, Explore Cardano spending by industry, over time",
+    "Analyze, Download Cardano spending by recipient, by agency",
+    "Visualize, Understand Cardano treasury allocation trends"
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentPhraseIndex((prevIndex) => (prevIndex + 1) % phrases.length);
+    }, 3000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Hero Section */}
@@ -16,9 +31,14 @@ const Teaser = () => {
             className="h-20 mx-auto mb-8" 
           />
           
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
-            Cardano Treasury Explorer
-          </h1>
+          <div className="h-24 md:h-28 flex items-center justify-center mb-6">
+            <h1 
+              className="text-4xl md:text-6xl font-bold text-white animate-fade-in transition-all duration-500"
+              key={currentPhraseIndex} // Add key to trigger animation on phrase change
+            >
+              {phrases[currentPhraseIndex]}
+            </h1>
+          </div>
           
           <p className="text-xl text-white/90 max-w-3xl mx-auto mb-8 leading-relaxed">
             An open data source for tracking treasury spending on the Cardano blockchain.
