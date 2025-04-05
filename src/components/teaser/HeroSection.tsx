@@ -33,7 +33,7 @@ const HeroSection = () => {
         
         <div className="h-20 md:h-24 flex items-center justify-center mb-6">
           <h1 
-            className="text-3xl md:text-5xl font-bold text-white animate-fade-in transition-all duration-500"
+            className="text-2xl md:text-4xl font-bold text-white animate-fade-in transition-all duration-500"
             key={currentPhraseIndex}
           >
             {phrases[currentPhraseIndex]}
