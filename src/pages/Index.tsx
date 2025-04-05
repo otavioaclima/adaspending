@@ -9,6 +9,7 @@ import ProposalCard from '@/components/ui/ProposalCard';
 import Layout from '@/components/layout/Layout';
 import { treasuryStats, proposals, fundRounds } from '@/data/mockData';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+
 const Index = () => {
   const formattedTotalFunds = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -34,7 +35,15 @@ const Index = () => {
       <section className="bg-gradient-to-br from-cardano-blue to-cardano-teal rounded-lg text-white p-6 md:p-10 mb-8">
         <div className="max-w-5xl mx-auto">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-        </h1>
+            <div className="flex justify-center mb-6">
+              <img 
+                src="/lovable-uploads/4f44d518-5eb0-4089-8098-28db3212a259.png" 
+                alt="ADAspending Logo" 
+                className="h-16 md:h-20" 
+              />
+            </div>
+            ADA Spending Dashboard
+          </h1>
           <p className="text-lg md:text-xl mb-6 opacity-90">ADAspending is an open data source for treasury spending on the Cardano blockchain.
 Explore decentralized funding awards, track proposals, follow ADA flows, and understand how the community allocates public blockchain funds.</p>
           
@@ -210,4 +219,5 @@ Explore decentralized funding awards, track proposals, follow ADA flows, and und
       </section>
     </Layout>;
 };
+
 export default Index;
