@@ -25,11 +25,18 @@ const Teaser = () => {
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-cardano-blue to-cardano-teal py-20 px-4 md:py-32">
         <div className="container mx-auto text-center">
-          <img 
-            src="/lovable-uploads/e4da4614-7cea-4f9c-853c-3f019f7932ca.png" 
-            alt="ADAspending Logo" 
-            className="h-20 mx-auto mb-8" 
-          />
+          <div className="flex flex-col items-center mb-8">
+            <img 
+              src="/lovable-uploads/257db3dc-2214-4178-afd2-70760c3899c4.png" 
+              alt="ADAspending Graph Logo" 
+              className="h-32 md:h-40 mb-4 animate-fade-in" 
+            />
+            <img 
+              src="/lovable-uploads/e4da4614-7cea-4f9c-853c-3f019f7932ca.png" 
+              alt="ADAspending Logo" 
+              className="h-16 md:h-20" 
+            />
+          </div>
           
           <div className="h-24 md:h-28 flex items-center justify-center mb-6">
             <h1 
