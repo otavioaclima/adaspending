@@ -1,20 +1,21 @@
 
 import React, { useState, useEffect } from 'react';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 const HeroSection = () => {
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
   const phrases = [
-    "Search and explore Cardano spending by industry, recipient over time",
-    "Track and Analyze Cardano spending to communit"
+    "Search and explore Cardano treasury spending by industry and recipient",
+    "Track and analyze Cardano funding across time and categories",
+    "Bring transparency to community fund allocation on Cardano"
   ];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentPhraseIndex((prevIndex) => (prevIndex + 1) % phrases.length);
-    }, 5000); // Changed from 3000 to 5000 milliseconds (5 seconds)
+    }, 5000);
     
     return () => clearInterval(interval);
   }, []);
@@ -44,13 +45,18 @@ const HeroSection = () => {
           Bringing transparency and accountability to community funds.
         </p>
         
-        <div className="flex justify-center">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
           <Button asChild size="lg" className="bg-white text-cardano-blue hover:bg-white/90">
             <Link to="/">
               Launch Coming Soon
               <ChevronRight className="h-4 w-4 ml-1" />
             </Link>
           </Button>
+          
+          <div className="flex items-center text-white/80 mt-2 sm:mt-0">
+            <Calendar className="h-5 w-5 mr-2" />
+            <span>Expected Release: Q2 2025</span>
+          </div>
         </div>
       </div>
     </section>

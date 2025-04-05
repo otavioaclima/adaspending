@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Twitter, Mail } from 'lucide-react';
+import { Twitter, Mail, Info, FileText, Users } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -41,9 +41,27 @@ const Footer = () => {
           </div>
         </div>
         
-        <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-500">
-          <p className="mb-2">© {new Date().getFullYear()} ADAspending.com. All data is sourced from the public Cardano blockchain.</p>
-          <p>ADAspending is a 100% open-source project.</p>
+        <div className="border-t border-gray-800 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="text-sm text-gray-500 mb-4 md:mb-0">
+              <p>© {new Date().getFullYear()} ADAspending.com. All data is sourced from the public Cardano blockchain.</p>
+              <p>ADAspending is a 100% open-source project.</p>
+            </div>
+            <div className="flex space-x-6">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors flex items-center gap-1">
+                <Info size={16} />
+                <span>FAQ</span>
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors flex items-center gap-1">
+                <FileText size={16} />
+                <span>Documentation</span>
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors flex items-center gap-1">
+                <Users size={16} />
+                <span>Community</span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
