@@ -57,54 +57,15 @@ const AboutSection = () => {
             </ul>
           </div>
           
-          <div className="md:w-1/2">
-            <div className="bg-gray-100 p-8 rounded-lg">
-              <h3 className="text-2xl font-bold mb-6 text-center">How It Works</h3>
-              
-              <div className="space-y-6">
-                <div className="flex items-start">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-cardano-blue text-white font-bold mr-4 flex-shrink-0">1</div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Data Collection</h4>
-                    <p className="text-gray-600">We collect and process data directly from the Cardano blockchain and public treasury records.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-cardano-blue text-white font-bold mr-4 flex-shrink-0">2</div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Data Analysis</h4>
-                    <p className="text-gray-600">Our algorithms categorize and analyze the data to identify patterns and trends in spending.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-cardano-blue text-white font-bold mr-4 flex-shrink-0">3</div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Visualization</h4>
-                    <p className="text-gray-600">Data is transformed into intuitive charts and graphs that make complex information easy to understand.</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-cardano-blue text-white font-bold mr-4 flex-shrink-0">4</div>
-                  <div>
-                    <h4 className="font-semibold mb-1">User Access</h4>
-                    <p className="text-gray-600">You get access to all this information through our user-friendly dashboard and search tools.</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-8 aspect-video rounded-lg bg-cardano-blue/90 flex items-center justify-center text-white">
-                <div className="text-center p-8">
-                  <h3 className="text-2xl font-bold mb-4">Coming Soon</h3>
-                  <p className="mb-6">
-                    Our complete dashboard with in-depth analytics, proposal tracking, and more
-                  </p>
-                  <p className="text-sm opacity-75">
-                    Q2 2025
-                  </p>
-                </div>
+          <div className="md:w-1/2 flex justify-center">
+            <div className="relative rounded-lg overflow-hidden shadow-xl">
+              <img 
+                src="/lovable-uploads/977f5d38-73cb-4780-adac-737740e44017.png" 
+                alt="Cardano Governance and Transparency" 
+                className="w-full object-cover h-[400px]"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-cardano-blue/80 to-transparent p-4">
+                <p className="text-white font-medium text-lg">Transparent governance for a decentralized future</p>
               </div>
             </div>
           </div>

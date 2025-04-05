@@ -4,6 +4,7 @@ import HeroSection from '@/components/teaser/HeroSection';
 import FeaturesSection from '@/components/teaser/FeaturesSection';
 import VisualElementsSection from '@/components/teaser/VisualElementsSection';
 import AboutSection from '@/components/teaser/AboutSection';
+import HowItWorksSection from '@/components/teaser/HowItWorksSection';
 import CtaSection from '@/components/teaser/CtaSection';
 import Footer from '@/components/teaser/Footer';
 
@@ -14,6 +15,7 @@ const Teaser = () => {
       <FeaturesSection />
       <VisualElementsSection />
       <AboutSection />
+      <HowItWorksSection />
       <CtaSection />
       <Footer />
     </div>
