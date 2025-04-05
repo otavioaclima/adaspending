@@ -7,15 +7,14 @@ import { Button } from '@/components/ui/button';
 const HeroSection = () => {
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
   const phrases = [
-    "Search, Track, Explore Cardano spending by industry, over time",
-    "Analyze, Download Cardano spending by recipient, by agency",
-    "Visualize, Understand Cardano treasury allocation trends"
+    "Search and explore Cardano spending by industry, recipient over time",
+    "Track and Analyze Cardano spending to communit"
   ];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentPhraseIndex((prevIndex) => (prevIndex + 1) % phrases.length);
-    }, 3000);
+    }, 5000); // Changed from 3000 to 5000 milliseconds (5 seconds)
     
     return () => clearInterval(interval);
   }, []);
