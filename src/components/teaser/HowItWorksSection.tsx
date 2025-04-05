@@ -47,18 +47,6 @@ const HowItWorksSection = () => {
               </div>
             </div>
           </div>
-          
-          <div className="bg-cardano-blue/90 p-8 text-white">
-            <div className="text-center">
-              <h3 className="text-2xl font-bold mb-4">Coming Soon</h3>
-              <p className="mb-6 max-w-xl mx-auto">
-                Our complete dashboard with in-depth analytics, proposal tracking, and more
-              </p>
-              <p className="text-sm opacity-75">
-                Q2 2025
-              </p>
-            </div>
-          </div>
         </div>
       </div>
     </section>
