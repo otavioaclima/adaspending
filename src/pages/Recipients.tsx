@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Users, Building, User, ExternalLink, Filter, ChevronDown, X } from 'lucide-react';
+import { Search, Users, Building, User, Filter, ChevronDown, X } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -166,9 +166,9 @@ const Recipients = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="any">Any Success Rate</SelectItem>
-                      <SelectItem value="high">High (>75%)</SelectItem>
+                      <SelectItem value="high">High (&gt;75%)</SelectItem>
                       <SelectItem value="medium">Medium (25-75%)</SelectItem>
-                      <SelectItem value="low">Low (<25%)</SelectItem>
+                      <SelectItem value="low">Low (&lt;25%)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
