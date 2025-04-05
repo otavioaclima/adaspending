@@ -35,7 +35,7 @@ const Index = () => {
         <div className="max-w-5xl mx-auto">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
         </h1>
-          <p className="text-lg md:text-xl mb-6 opacity-90 font-normal">ADAspending is an open data source for treasury spending on the Cardano blockchain.
+          <p className="text-lg md:text-xl mb-6 opacity-90">ADAspending is an open data source for treasury spending on the Cardano blockchain.
 Explore decentralized funding awards, track proposals, follow ADA flows, and understand how the community allocates public blockchain funds.</p>
           
           <div className="flex flex-col md:flex-row gap-4 max-w-xl">
