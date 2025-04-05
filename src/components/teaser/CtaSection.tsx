@@ -25,7 +25,7 @@ const CtaSection = () => {
     <section className="bg-cardano-blue py-20 px-4">
       <div className="container mx-auto max-w-3xl text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-          Fique Ligado
+          Stay Tuned
         </h2>
         
         <p className="text-xl text-white/90 mb-8">
