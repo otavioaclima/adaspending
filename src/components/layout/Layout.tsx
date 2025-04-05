@@ -24,9 +24,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <div className="flex items-center space-x-2">
             <Link to="/" className="flex items-center">
               <img 
-                src="/lovable-uploads/2c4f875e-42d5-46d5-a340-7955b881717a.png" 
+                src="/lovable-uploads/e4da4614-7cea-4f9c-853c-3f019f7932ca.png" 
                 alt="ADAspending Logo" 
-                className="h-12 w-auto" // Increased size from h-8 to h-12
+                className="h-14 w-auto" // Increased size from h-12 to h-14
               />
             </Link>
           </div>
@@ -85,7 +85,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <div className="mb-4 md:mb-0">
               <div className="flex items-center justify-center md:justify-start space-x-2">
                 <img 
-                  src="/lovable-uploads/2c4f875e-42d5-46d5-a340-7955b881717a.png" 
+                  src="/lovable-uploads/e4da4614-7cea-4f9c-853c-3f019f7932ca.png" 
                   alt="ADAspending Logo" 
                   className="h-8 w-auto"
                 />
