@@ -9,8 +9,8 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <div className="mb-6 md:mb-0">
             <img 
-              src="/lovable-uploads/e4da4614-7cea-4f9c-853c-3f019f7932ca.png" 
-              alt="ADAspending Logo" 
+              src="/lovable-uploads/257db3dc-2214-4178-afd2-70760c3899c4.png" 
+              alt="ADAspending Graph Logo" 
               className="h-10" 
             />
             <p className="mt-2 text-gray-400 text-sm">
