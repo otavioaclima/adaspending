@@ -11,6 +11,7 @@ import Recipients from "./pages/Recipients";
 import RecipientDetail from "./pages/RecipientDetail";
 import SpendingExplorer from "./pages/SpendingExplorer";
 import Governance from "./pages/Governance";
+import Teaser from "./pages/Teaser";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -22,7 +23,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/dashboard" element={<Index />} />
+          <Route path="/" element={<Teaser />} />
           <Route path="/awards" element={<Awards />} />
           <Route path="/proposals/:id" element={<ProposalDetail />} />
           <Route path="/recipients" element={<Recipients />} />
