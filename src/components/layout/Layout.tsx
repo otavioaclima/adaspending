@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -23,7 +22,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <Link to="/" className="flex items-center space-x-2">
-              <div className="bg-cardano-blue rounded-full w-8 h-8 flex items-center justify-center text-white font-bold text-lg">A</div>
+              <img 
+                src="/lovable-uploads/9aa53f79-4c5b-41fe-8e7f-ece7cc41dd89.png" 
+                alt="ADAspending Logo" 
+                className="h-8 w-auto"
+              />
               <span className="font-bold text-xl text-cardano-blue">ADAspending</span>
             </Link>
           </div>
@@ -81,7 +84,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <div className="flex items-center justify-center md:justify-start space-x-2">
-                <div className="bg-cardano-blue rounded-full w-8 h-8 flex items-center justify-center text-white font-bold text-lg">A</div>
+                <img 
+                  src="/lovable-uploads/9aa53f79-4c5b-41fe-8e7f-ece7cc41dd89.png" 
+                  alt="ADAspending Logo" 
+                  className="h-8 w-auto"
+                />
                 <span className="font-bold text-xl text-cardano-blue">ADAspending</span>
               </div>
               <p className="text-sm text-gray-600 mt-2">
