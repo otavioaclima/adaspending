@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Twitter, Mail } from 'lucide-react';
 
 const Footer = () => {
@@ -21,18 +20,9 @@ const Footer = () => {
           
           <div className="flex flex-col space-y-4">
             <div className="flex flex-wrap space-x-4 md:space-x-6">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                About
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                Blog
-              </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors py-1">
                 Stay in touch with us
               </a>
-              <Link to="/" className="text-gray-400 hover:text-white transition-colors">
-                Platform
-              </Link>
             </div>
             
             <div className="flex items-center space-x-4 justify-center md:justify-end">
