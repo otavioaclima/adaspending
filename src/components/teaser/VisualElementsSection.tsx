@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from 'recharts';
@@ -113,29 +112,6 @@ const VisualElementsSection = () => {
           </Card>
         </div>
         
-        {/* Dashboard Mockup */}
-        <div className="mb-12">
-          <Card className="shadow-xl overflow-hidden border-none">
-            <CardContent className="p-0">
-              <div className="relative">
-                <div className="absolute top-0 left-0 right-0 h-10 bg-cardano-blue flex items-center px-4 rounded-t-lg">
-                  <div className="flex space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                  </div>
-                  <div className="text-white text-xs ml-4">ADAspending Dashboard</div>
-                </div>
-                <img 
-                  src="/lovable-uploads/2c4f875e-42d5-46d5-a340-7955b881717a.png" 
-                  alt="Dashboard Mockup" 
-                  className="w-full rounded-lg shadow-lg transform transition-all duration-500 hover:scale-[1.01]"
-                />
-                {/* Gradient overlay removed from here */}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
         
         {/* Bar Chart for Fund Rounds */}
         <Card className="shadow-lg border-cardano-teal/20 overflow-hidden transform transition-all duration-500 hover:shadow-xl cardano-card">
