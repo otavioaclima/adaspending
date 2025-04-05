@@ -11,7 +11,7 @@ const HeroSection = () => {
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
           <div className="flex justify-center mb-6">
             <img 
-              src="/lovable-uploads/977f5d38-73cb-4780-adac-737740e44017.png" 
+              src="/lovable-uploads/9aa53f79-4c5b-41fe-8e7f-ece7cc41dd89.png" 
               alt="ADAspending Logo" 
               className="h-16 md:h-20" 
             />
