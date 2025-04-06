@@ -29,7 +29,7 @@ const HeroSection = () => {
           <img 
             src="/lovable-uploads/257db3dc-2214-4178-afd2-70760c3899c4.png" 
             alt="ADAspending Graph Logo" 
-            className="h-32 md:h-56 mb-4 animate-fade-in object-contain" 
+            className="h-40 md:h-56 mb-4 animate-fade-in object-contain" 
           />
         </div>
         
