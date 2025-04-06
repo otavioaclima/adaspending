@@ -3,9 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { ChevronRight, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const HeroSection = () => {
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+  const isMobile = useIsMobile();
   const phrases = [
     "Search and explore Cardano treasury spending by industry and recipient",
     "Track and analyze Cardano funding across time and categories",
@@ -27,7 +29,7 @@ const HeroSection = () => {
           <img 
             src="/lovable-uploads/257db3dc-2214-4178-afd2-70760c3899c4.png" 
             alt="ADAspending Graph Logo" 
-            className="h-40 md:h-56 mb-4 animate-fade-in" 
+            className="h-32 md:h-56 mb-4 animate-fade-in object-contain" 
           />
         </div>
         
