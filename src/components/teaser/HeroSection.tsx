@@ -29,7 +29,7 @@ const HeroSection = () => {
         <div className="flex flex-col items-center mb-8">
           <img 
             alt="ADAspending Graph Logo" 
-            className="h-40 md:h-28 mb-4 animate-fade-in object-contain w-auto max-w-full" 
+            className="h-28 md:h-28 mb-4 animate-fade-in object-contain w-auto max-w-full" 
             src="/lovable-uploads/1b553c01-58c1-4454-8098-2be801352be8.png" 
           />
         </div>
