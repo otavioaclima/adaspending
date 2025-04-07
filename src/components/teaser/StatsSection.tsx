@@ -1,7 +1,13 @@
 
 import React from 'react';
-import { BarChart3, TrendingUp, Award, FileText } from 'lucide-react';
+import { BarChart3, TrendingUp, Award, FileText, PieChart } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { 
+  ChartContainer, 
+  ChartTooltip, 
+  ChartTooltipContent 
+} from '@/components/ui/chart';
+import { PieChart as ReChartsPieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
 // Treasury stats
 const treasuryStats = {
@@ -12,6 +18,27 @@ const treasuryStats = {
   fundedProposals: 981,
   voterParticipation: 26.8
 };
+
+// Proposal distribution data
+const categoryData = [
+  { name: 'Core', value: 25, fill: '#0033AD' },
+  { name: 'Governance Support', value: 10, fill: '#1BAAD6' },
+  { name: 'Marketing and Innovation', value: 33, fill: '#FF5733' },
+  { name: 'Research', value: 8, fill: '#8884D8' },
+  { name: 'None of these', value: 9, fill: '#82ca9d' }
+];
+
+const committeeData = [
+  { name: 'Growth and Marketing', value: 18, fill: '#0033AD' },
+  { name: 'Budget', value: 2, fill: '#1BAAD6' },
+  { name: 'Membership & Community', value: 11, fill: '#FF5733' },
+  { name: 'Civics', value: 2, fill: '#8884D8' },
+  { name: 'Open Source', value: 20, fill: '#82ca9d' },
+  { name: 'Product', value: 13, fill: '#ffc658' },
+  { name: 'Technical Steering', value: 15, fill: '#8dd1e1' },
+  { name: 'None', value: 2, fill: '#a4de6c' },
+  { name: 'Unsure', value: 2, fill: '#d0ed57' }
+];
 
 const StatsSection = () => {
   // Format numbers with commas
@@ -29,9 +56,32 @@ const StatsSection = () => {
     }).format(num);
   };
 
+  const RADIAN = Math.PI / 180;
+  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, name, value }: any) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+    // Only render labels for slices with enough space
+    if (percent < 0.05) return null;
+
+    return (
+      <text 
+        x={x} 
+        y={y} 
+        fill="white" 
+        textAnchor={x > cx ? 'start' : 'end'} 
+        dominantBaseline="central"
+        fontSize="12"
+      >
+        {`${name}: ${value}`}
+      </text>
+    );
+  };
+
   return (
     <div className="w-full py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
         {/* Treasury Size Card */}
         <Card className="bg-blue-50 border-blue-200 overflow-hidden shadow-sm hover:shadow-md transition-all">
           <CardContent className="p-4">
@@ -81,6 +131,72 @@ const StatsSection = () => {
             </div>
             <div>
               <p className="text-2xl font-bold text-gray-900">{formatNumber(treasuryStats.fundedProposals)}</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* New Proposals Distribution Section */}
+      <div className="mb-6">
+        <h3 className="text-xl font-semibold text-cardano-blue text-center mb-2">Proposal Distribution</h3>
+        <p className="text-gray-500 text-center mb-6">Total proposals received: 85</p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        {/* Category Distribution Chart */}
+        <Card className="shadow-lg border-cardano-teal/20 overflow-hidden hover:shadow-xl transition-all duration-300">
+          <CardContent className="p-6">
+            <h3 className="text-lg font-semibold mb-2 text-cardano-blue">Proposals by Category</h3>
+            <div className="h-80 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <ReChartsPieChart>
+                  <Pie
+                    data={categoryData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={renderCustomizedLabel}
+                    outerRadius={90}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {categoryData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value) => [`${value} proposals`, 'Count']} />
+                  <Legend layout="vertical" verticalAlign="bottom" align="center" />
+                </ReChartsPieChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Committee Distribution Chart */}
+        <Card className="shadow-lg border-cardano-teal/20 overflow-hidden hover:shadow-xl transition-all duration-300">
+          <CardContent className="p-6">
+            <h3 className="text-lg font-semibold mb-2 text-cardano-blue">Proposals by Committee</h3>
+            <div className="h-80 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <ReChartsPieChart>
+                  <Pie
+                    data={committeeData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={renderCustomizedLabel}
+                    outerRadius={90}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {committeeData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value) => [`${value} proposals`, 'Count']} />
+                  <Legend layout="vertical" verticalAlign="bottom" align="center" />
+                </ReChartsPieChart>
+              </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
