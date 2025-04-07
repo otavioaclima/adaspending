@@ -20,6 +20,9 @@ const Footer = () => {
           
           <div className="flex flex-col space-y-4">
             <div className="flex flex-wrap space-x-4 md:space-x-6 justify-end">
+              <a href="#quem-somos" className="text-gray-400 hover:text-white transition-colors py-1">
+                Quem Somos
+              </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors py-1">
                 Stay in touch with us
               </a>
@@ -56,6 +59,9 @@ const Footer = () => {
               </a>
               <a href="https://governancespace.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
                 Governance Space
+              </a>
+              <a href="https://cardanofeed.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                CardanoFeed
               </a>
             </div>
           </div>
