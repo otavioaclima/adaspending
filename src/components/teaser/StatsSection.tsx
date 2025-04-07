@@ -168,47 +168,11 @@ const StatsSection = () => {
 
       {/* New Proposals Distribution Section */}
       <div className="mb-6">
-        <h3 className="text-xl font-semibold text-cardano-blue text-center mb-2">Proposal Distribution</h3>
-        <p className="text-gray-500 text-center mb-6">Total proposals received: 85</p>
+        
+        
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        {/* Category Distribution Chart */}
-        <Card className="cardano-card shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300">
-          
-        </Card>
-
-        {/* Committee Distribution Chart */}
-        <Card className="cardano-card shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300">
-          <CardContent className="p-6">
-            <h3 className="text-lg font-semibold mb-2 text-cardano-blue">Proposals by Committee</h3>
-            <div className="h-80 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <ReChartsPieChart>
-                  <defs>
-                    {committeeData.map((entry, index) => <linearGradient key={`gradient-comm-${index}`} id={`colorGradientComm-${index}`} x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor={entry.fill} stopOpacity={0.9} />
-                        <stop offset="100%" stopColor={entry.fill} stopOpacity={0.6} />
-                      </linearGradient>)}
-                  </defs>
-                  <Pie data={committeeData} cx="50%" cy="50%" labelLine={false} label={renderCustomizedLabel} outerRadius={90} innerRadius={40} paddingAngle={2} dataKey="value" animationDuration={1000} animationBegin={200} animationEasing="ease-out">
-                    {committeeData.map((entry, index) => <Cell key={`cell-comm-${index}`} fill={`url(#colorGradientComm-${index})`} stroke={entry.fill} strokeWidth={1.5} />)}
-                  </Pie>
-                  <Tooltip formatter={value => [`${value} proposals`, 'Count']} contentStyle={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                  borderRadius: '8px',
-                  border: '1px solid rgba(0, 51, 173, 0.2)',
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-                }} />
-                  <Legend layout="vertical" verticalAlign="bottom" align="center" iconType="circle" iconSize={10} formatter={value => <span className="text-sm font-medium text-gray-700">{value}</span>} wrapperStyle={{
-                  paddingTop: '10px'
-                }} />
-                </ReChartsPieChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      
     </div>;
 };
 export default StatsSection;
