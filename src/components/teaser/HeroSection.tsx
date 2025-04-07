@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Twitter } from 'lucide-react';
+import { ChevronRight, Twitter, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -16,6 +16,13 @@ const HeroSection = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+  const scrollToNextSection = () => {
+    const nextSection = document.querySelector('section:nth-of-type(2)');
+    if (nextSection) {
+      nextSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
   
   return <section className="relative bg-gradient-to-br from-cardano-blue to-cardano-teal py-6 px-4 md:py-16">
       <div className="container mx-auto text-center">
@@ -56,6 +63,17 @@ const HeroSection = () => {
             >
               <Twitter className="h-5 w-5" />
             </a>
+          </div>
+        </div>
+        
+        {/* Scroll Down Animation */}
+        <div 
+          className="absolute bottom-8 left-0 right-0 flex justify-center animate-bounce cursor-pointer"
+          onClick={scrollToNextSection}
+        >
+          <div className="flex flex-col items-center text-white/90 hover:text-white transition-colors">
+            <span className="text-sm mb-1">Scroll to explore</span>
+            <ChevronDown className="h-6 w-6" />
           </div>
         </div>
       </div>
