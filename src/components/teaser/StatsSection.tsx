@@ -1,12 +1,7 @@
-
 import React from 'react';
 import { BarChart3, TrendingUp, Award, FileText, PieChart } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { 
-  ChartContainer, 
-  ChartTooltip, 
-  ChartTooltipContent 
-} from '@/components/ui/chart';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { PieChart as ReChartsPieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 
 // Treasury stats
@@ -20,26 +15,64 @@ const treasuryStats = {
 };
 
 // Proposal distribution data
-const categoryData = [
-  { name: 'Core', value: 25, fill: '#0033AD' },
-  { name: 'Governance Support', value: 10, fill: '#1BAAD6' },
-  { name: 'Marketing and Innovation', value: 33, fill: '#FF5733' },
-  { name: 'Research', value: 8, fill: '#8884D8' },
-  { name: 'None of these', value: 9, fill: '#82ca9d' }
-];
-
-const committeeData = [
-  { name: 'Growth and Marketing', value: 18, fill: '#0033AD' },
-  { name: 'Budget', value: 2, fill: '#1BAAD6' },
-  { name: 'Membership & Community', value: 11, fill: '#FF5733' },
-  { name: 'Civics', value: 2, fill: '#8884D8' },
-  { name: 'Open Source', value: 20, fill: '#82ca9d' },
-  { name: 'Product', value: 13, fill: '#ffc658' },
-  { name: 'Technical Steering', value: 15, fill: '#8dd1e1' },
-  { name: 'None', value: 2, fill: '#a4de6c' },
-  { name: 'Unsure', value: 2, fill: '#d0ed57' }
-];
-
+const categoryData = [{
+  name: 'Core',
+  value: 25,
+  fill: '#0033AD'
+}, {
+  name: 'Governance Support',
+  value: 10,
+  fill: '#1BAAD6'
+}, {
+  name: 'Marketing and Innovation',
+  value: 33,
+  fill: '#FF5733'
+}, {
+  name: 'Research',
+  value: 8,
+  fill: '#8884D8'
+}, {
+  name: 'None of these',
+  value: 9,
+  fill: '#82ca9d'
+}];
+const committeeData = [{
+  name: 'Growth and Marketing',
+  value: 18,
+  fill: '#0033AD'
+}, {
+  name: 'Budget',
+  value: 2,
+  fill: '#1BAAD6'
+}, {
+  name: 'Membership & Community',
+  value: 11,
+  fill: '#FF5733'
+}, {
+  name: 'Civics',
+  value: 2,
+  fill: '#8884D8'
+}, {
+  name: 'Open Source',
+  value: 20,
+  fill: '#82ca9d'
+}, {
+  name: 'Product',
+  value: 13,
+  fill: '#ffc658'
+}, {
+  name: 'Technical Steering',
+  value: 15,
+  fill: '#8dd1e1'
+}, {
+  name: 'None',
+  value: 2,
+  fill: '#a4de6c'
+}, {
+  name: 'Unsure',
+  value: 2,
+  fill: '#d0ed57'
+}];
 const StatsSection = () => {
   // Format numbers with commas
   const formatNumber = (num: number) => {
@@ -55,33 +88,29 @@ const StatsSection = () => {
       maximumFractionDigits: 0
     }).format(num);
   };
-
   const RADIAN = Math.PI / 180;
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, name, value }: any) => {
+  const renderCustomizedLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+    index,
+    name,
+    value
+  }: any) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
 
     // Only render labels for slices with enough space
     if (percent < 0.05) return null;
-
-    return (
-      <text 
-        x={x} 
-        y={y} 
-        fill="white" 
-        textAnchor={x > cx ? 'start' : 'end'} 
-        dominantBaseline="central"
-        fontSize="12"
-        fontWeight="600"
-      >
+    return <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central" fontSize="12" fontWeight="600">
         {`${name}: ${value}`}
-      </text>
-    );
+      </text>;
   };
-
-  return (
-    <div className="w-full py-8">
+  return <div className="w-full py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
         {/* Treasury Size Card */}
         <Card className="bg-blue-50 border-blue-200 overflow-hidden shadow-sm hover:shadow-md transition-all">
@@ -146,63 +175,7 @@ const StatsSection = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
         {/* Category Distribution Chart */}
         <Card className="cardano-card shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300">
-          <CardContent className="p-6">
-            <h3 className="text-lg font-semibold mb-2 text-cardano-blue">Proposals by Category</h3>
-            <div className="h-80 w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <ReChartsPieChart>
-                  <defs>
-                    {categoryData.map((entry, index) => (
-                      <linearGradient key={`gradient-${index}`} id={`colorGradient-${index}`} x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor={entry.fill} stopOpacity={0.9}/>
-                        <stop offset="100%" stopColor={entry.fill} stopOpacity={0.6}/>
-                      </linearGradient>
-                    ))}
-                  </defs>
-                  <Pie
-                    data={categoryData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={renderCustomizedLabel}
-                    outerRadius={90}
-                    innerRadius={40}
-                    paddingAngle={2}
-                    dataKey="value"
-                    animationDuration={1000}
-                    animationBegin={0}
-                    animationEasing="ease-out"
-                  >
-                    {categoryData.map((entry, index) => (
-                      <Cell 
-                        key={`cell-${index}`} 
-                        fill={`url(#colorGradient-${index})`} 
-                        stroke={entry.fill} 
-                        strokeWidth={1.5}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip 
-                    formatter={(value) => [`${value} proposals`, 'Count']}
-                    contentStyle={{ 
-                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                      borderRadius: '8px',
-                      border: '1px solid rgba(0, 51, 173, 0.2)',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-                    }}
-                  />
-                  <Legend 
-                    layout="vertical" 
-                    verticalAlign="bottom" 
-                    align="center"
-                    iconType="circle"
-                    iconSize={10}
-                    formatter={(value) => <span className="text-sm font-medium text-gray-700">{value}</span>}
-                  />
-                </ReChartsPieChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
+          
         </Card>
 
         {/* Committee Distribution Chart */}
@@ -213,62 +186,29 @@ const StatsSection = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <ReChartsPieChart>
                   <defs>
-                    {committeeData.map((entry, index) => (
-                      <linearGradient key={`gradient-comm-${index}`} id={`colorGradientComm-${index}`} x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor={entry.fill} stopOpacity={0.9}/>
-                        <stop offset="100%" stopColor={entry.fill} stopOpacity={0.6}/>
-                      </linearGradient>
-                    ))}
+                    {committeeData.map((entry, index) => <linearGradient key={`gradient-comm-${index}`} id={`colorGradientComm-${index}`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={entry.fill} stopOpacity={0.9} />
+                        <stop offset="100%" stopColor={entry.fill} stopOpacity={0.6} />
+                      </linearGradient>)}
                   </defs>
-                  <Pie
-                    data={committeeData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={renderCustomizedLabel}
-                    outerRadius={90}
-                    innerRadius={40}
-                    paddingAngle={2}
-                    dataKey="value"
-                    animationDuration={1000}
-                    animationBegin={200}
-                    animationEasing="ease-out"
-                  >
-                    {committeeData.map((entry, index) => (
-                      <Cell 
-                        key={`cell-comm-${index}`} 
-                        fill={`url(#colorGradientComm-${index})`} 
-                        stroke={entry.fill} 
-                        strokeWidth={1.5}
-                      />
-                    ))}
+                  <Pie data={committeeData} cx="50%" cy="50%" labelLine={false} label={renderCustomizedLabel} outerRadius={90} innerRadius={40} paddingAngle={2} dataKey="value" animationDuration={1000} animationBegin={200} animationEasing="ease-out">
+                    {committeeData.map((entry, index) => <Cell key={`cell-comm-${index}`} fill={`url(#colorGradientComm-${index})`} stroke={entry.fill} strokeWidth={1.5} />)}
                   </Pie>
-                  <Tooltip 
-                    formatter={(value) => [`${value} proposals`, 'Count']}
-                    contentStyle={{ 
-                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                      borderRadius: '8px',
-                      border: '1px solid rgba(0, 51, 173, 0.2)',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
-                    }}
-                  />
-                  <Legend 
-                    layout="vertical" 
-                    verticalAlign="bottom" 
-                    align="center" 
-                    iconType="circle"
-                    iconSize={10}
-                    formatter={(value) => <span className="text-sm font-medium text-gray-700">{value}</span>}
-                    wrapperStyle={{ paddingTop: '10px' }}
-                  />
+                  <Tooltip formatter={value => [`${value} proposals`, 'Count']} contentStyle={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(0, 51, 173, 0.2)',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                }} />
+                  <Legend layout="vertical" verticalAlign="bottom" align="center" iconType="circle" iconSize={10} formatter={value => <span className="text-sm font-medium text-gray-700">{value}</span>} wrapperStyle={{
+                  paddingTop: '10px'
+                }} />
                 </ReChartsPieChart>
               </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default StatsSection;
