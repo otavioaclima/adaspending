@@ -1,18 +1,11 @@
-
 import React from 'react';
 import { Twitter, Mail, Info, FileText, Users } from 'lucide-react';
-
 const Footer = () => {
-  return (
-    <footer className="bg-gray-900 text-white py-12 px-4">
+  return <footer className="bg-gray-900 text-white py-12 px-4">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <div className="mb-6 md:mb-0">
-            <img 
-              src="/lovable-uploads/257db3dc-2214-4178-afd2-70760c3899c4.png" 
-              alt="ADAspending Graph Logo" 
-              className="h-16" 
-            />
+            <img src="/lovable-uploads/257db3dc-2214-4178-afd2-70760c3899c4.png" alt="ADAspending Graph Logo" className="h-16" />
             <p className="mt-2 text-gray-400 text-sm">
               An open data source for treasury spending on the Cardano blockchain.
             </p>
@@ -20,9 +13,7 @@ const Footer = () => {
           
           <div className="flex flex-col space-y-4">
             <div className="flex flex-wrap space-x-4 md:space-x-6 justify-end">
-              <a href="#quem-somos" className="text-gray-400 hover:text-white transition-colors py-1">
-                Who We Are
-              </a>
+              
               <a href="#" className="text-gray-400 hover:text-white transition-colors py-1">
                 Stay in touch with us
               </a>
@@ -70,8 +61,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
