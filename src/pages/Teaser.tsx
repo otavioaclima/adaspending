@@ -17,8 +17,8 @@ const Teaser = () => {
       <FeaturesSection />
       <VisualElementsSection />
       <AboutSection />
-      <QuemSomosSection />
       <HowItWorksSection />
+      <QuemSomosSection />
       <FaqSection />
       <CtaSection />
       <Footer />
