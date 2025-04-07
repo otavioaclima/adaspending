@@ -45,7 +45,7 @@ const HeroSection = () => {
           Bringing transparency and accountability to community funds.
         </p>
         
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-16 sm:mb-20">
           <Button asChild size="lg" className="bg-white text-cardano-blue hover:bg-white/90">
             <Link to="/">
               Launch Coming Soon
@@ -66,9 +66,9 @@ const HeroSection = () => {
           </div>
         </div>
         
-        {/* Scroll Down Animation */}
+        {/* Scroll Down Animation - Repositioned lower */}
         <div 
-          className="absolute bottom-8 left-0 right-0 flex justify-center animate-bounce cursor-pointer"
+          className="absolute bottom-4 left-0 right-0 flex justify-center animate-bounce cursor-pointer"
           onClick={scrollToNextSection}
         >
           <div className="flex flex-col items-center text-white/90 hover:text-white transition-colors">
