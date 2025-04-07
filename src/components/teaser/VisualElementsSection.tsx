@@ -21,14 +21,14 @@ const categoryData = [
   { name: 'Research', value: 15 },
 ];
 
-// New data for monthly spending 
+// Updated monthly data with requested and approved funds
 const monthlyData = [
-  { name: 'Jan', spending: 2300000, proposals: 18 },
-  { name: 'Feb', spending: 1800000, proposals: 15 },
-  { name: 'Mar', spending: 2700000, proposals: 22 },
-  { name: 'Apr', spending: 3100000, proposals: 25 },
-  { name: 'May', spending: 2500000, proposals: 20 },
-  { name: 'Jun', spending: 3400000, proposals: 28 },
+  { name: 'Jan', requestedFunds: 3500000, approvedFunds: 2300000 },
+  { name: 'Feb', requestedFunds: 2800000, approvedFunds: 1800000 },
+  { name: 'Mar', requestedFunds: 4200000, approvedFunds: 2700000 },
+  { name: 'Apr', requestedFunds: 4800000, approvedFunds: 3100000 },
+  { name: 'May', requestedFunds: 3900000, approvedFunds: 2500000 },
+  { name: 'Jun', requestedFunds: 5100000, approvedFunds: 3400000 },
 ];
 
 const COLORS = ['#0033AD', '#1BAAD6', '#FF5733', '#33C3F0', '#8884D8'];
@@ -117,11 +117,11 @@ const VisualElementsSection = () => {
         </div>
         
         
-        {/* Bar Chart for Monthly Spending */}
+        {/* Bar Chart for Monthly Funds - Updated to show Requested and Approved Funds */}
         <Card className="shadow-lg border-cardano-teal/20 overflow-hidden transform transition-all duration-500 hover:shadow-xl cardano-card">
           <CardContent className="p-6">
-            <h3 className="text-xl font-semibold mb-2 text-cardano-blue">Monthly Spending Analytics</h3>
-            <p className="text-sm text-gray-500 mb-4">Spending and proposals by month</p>
+            <h3 className="text-xl font-semibold mb-2 text-cardano-blue">Monthly Funds Analytics</h3>
+            <p className="text-sm text-gray-500 mb-4">Requested vs approved funds by month</p>
             <div className="h-64 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
@@ -132,11 +132,11 @@ const VisualElementsSection = () => {
                   <XAxis dataKey="name" />
                   <YAxis />
                   <Tooltip formatter={(value, name) => [
-                    name === 'spending' ? `${value.toLocaleString()} ADA` : value,
-                    name === 'spending' ? 'Spending' : 'Proposals'
+                    `${value.toLocaleString()} ADA`,
+                    name === 'requestedFunds' ? 'Requested Funds' : 'Approved Funds'
                   ]} />
-                  <Bar dataKey="spending" fill="#0033AD" name="Monthly Spending" className="animate-pulse-slow" />
-                  <Bar dataKey="proposals" fill="#1BAAD6" name="Monthly Proposals" className="animate-pulse-slow" />
+                  <Bar dataKey="requestedFunds" fill="#0033AD" name="Requested Funds" className="animate-pulse-slow" />
+                  <Bar dataKey="approvedFunds" fill="#1BAAD6" name="Approved Funds" className="animate-pulse-slow" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
