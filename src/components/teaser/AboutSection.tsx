@@ -1,10 +1,7 @@
-
 import React from 'react';
 import { Globe, Search, Info, ChartBar, Clock, Link } from 'lucide-react';
-
 const AboutSection = () => {
-  return (
-    <section className="py-20 px-4 bg-white">
+  return <section className="py-20 px-4 bg-white">
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row items-center gap-12">
           <div className="md:w-1/2">
@@ -59,11 +56,7 @@ const AboutSection = () => {
           
           <div className="md:w-1/2 flex justify-center">
             <div className="relative rounded-lg overflow-hidden shadow-xl">
-              <img 
-                src="/lovable-uploads/2c4f875e-42d5-46d5-a340-7955b881717a.png" 
-                alt="Cardano Blockchain Technology" 
-                className="w-full object-cover h-[300px]"
-              />
+              <img alt="Cardano Blockchain Technology" className="w-full object-cover h-[300px]" src="/lovable-uploads/5ece5163-4c47-4a41-a6c7-349747c21ed0.png" />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-cardano-blue/80 to-transparent p-4">
                 <p className="text-white font-medium text-lg">Transparent governance for a decentralized future</p>
               </div>
@@ -71,8 +64,6 @@ const AboutSection = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default AboutSection;
