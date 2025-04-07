@@ -5,9 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { useForm } from 'react-hook-form';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/lib/supabase';
 
 const CtaSection = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
   
   const form = useForm({
     defaultValues: {
@@ -15,10 +19,45 @@ const CtaSection = () => {
     },
   });
 
-  const onSubmit = (data: { email: string }) => {
-    console.log('Email submitted:', data.email);
-    setSubmitted(true);
-    form.reset();
+  const onSubmit = async (data: { email: string }) => {
+    try {
+      setIsSubmitting(true);
+      
+      // Insert the email into the subscribers table
+      const { error } = await supabase
+        .from('newsletter_subscribers')
+        .insert([{ email: data.email }]);
+        
+      if (error) {
+        if (error.code === '23505') { // Unique constraint violation
+          toast({
+            title: "Already subscribed",
+            description: "This email is already subscribed to our newsletter.",
+            variant: "default",
+          });
+        } else {
+          throw error;
+        }
+      } else {
+        console.log('Email submitted:', data.email);
+        setSubmitted(true);
+        form.reset();
+        toast({
+          title: "Subscription successful",
+          description: "Thank you for subscribing to our newsletter!",
+          variant: "default",
+        });
+      }
+    } catch (error) {
+      console.error('Error subscribing:', error);
+      toast({
+        title: "Subscription failed",
+        description: "There was an error subscribing. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -40,10 +79,15 @@ const CtaSection = () => {
                   placeholder="Enter your email address"
                   className="bg-white/10 border-white/30 text-white placeholder:text-white/70"
                   {...form.register('email', { required: true, pattern: /^\S+@\S+$/i })}
+                  disabled={isSubmitting}
                 />
-                <Button type="submit" className="bg-white text-cardano-blue hover:bg-white/90">
-                  Subscribe
-                  <ChevronRight className="ml-1 h-4 w-4" />
+                <Button 
+                  type="submit" 
+                  className="bg-white text-cardano-blue hover:bg-white/90"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Subscribing...' : 'Subscribe'}
+                  {!isSubmitting && <ChevronRight className="ml-1 h-4 w-4" />}
                 </Button>
               </div>
               {form.formState.errors.email && (
