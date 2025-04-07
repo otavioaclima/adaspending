@@ -21,7 +21,7 @@ const Footer = () => {
           <div className="flex flex-col space-y-4">
             <div className="flex flex-wrap space-x-4 md:space-x-6 justify-end">
               <a href="#quem-somos" className="text-gray-400 hover:text-white transition-colors py-1">
-                Quem Somos
+                Who We Are
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors py-1">
                 Stay in touch with us
