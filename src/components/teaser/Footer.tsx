@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Twitter, Mail, Info, FileText, Users } from 'lucide-react';
 
@@ -47,17 +48,14 @@ const Footer = () => {
               <p>ADAspending is a 100% open-source project.</p>
             </div>
             <div className="flex space-x-6">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors flex items-center gap-1">
-                <Info size={16} />
-                <span>FAQ</span>
+              <a href="https://cardano.org/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                Cardano
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors flex items-center gap-1">
-                <FileText size={16} />
-                <span>Documentation</span>
+              <a href="https://intersectmbo.org/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                Intersect
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors flex items-center gap-1">
-                <Users size={16} />
-                <span>Community</span>
+              <a href="https://governancespace.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                Governance Space
               </a>
             </div>
           </div>
