@@ -63,6 +63,9 @@ const Footer = () => {
               <a href="https://cardanofeed.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
                 CardanoFeed
               </a>
+              <a href="https://gov.tools/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                GovTool
+              </a>
             </div>
           </div>
         </div>
