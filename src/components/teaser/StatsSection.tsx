@@ -73,6 +73,7 @@ const StatsSection = () => {
         textAnchor={x > cx ? 'start' : 'end'} 
         dominantBaseline="central"
         fontSize="12"
+        fontWeight="600"
       >
         {`${name}: ${value}`}
       </text>
@@ -144,12 +145,20 @@ const StatsSection = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
         {/* Category Distribution Chart */}
-        <Card className="shadow-lg border-cardano-teal/20 overflow-hidden hover:shadow-xl transition-all duration-300">
+        <Card className="cardano-card shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300">
           <CardContent className="p-6">
             <h3 className="text-lg font-semibold mb-2 text-cardano-blue">Proposals by Category</h3>
             <div className="h-80 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <ReChartsPieChart>
+                  <defs>
+                    {categoryData.map((entry, index) => (
+                      <linearGradient key={`gradient-${index}`} id={`colorGradient-${index}`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={entry.fill} stopOpacity={0.9}/>
+                        <stop offset="100%" stopColor={entry.fill} stopOpacity={0.6}/>
+                      </linearGradient>
+                    ))}
+                  </defs>
                   <Pie
                     data={categoryData}
                     cx="50%"
@@ -157,15 +166,39 @@ const StatsSection = () => {
                     labelLine={false}
                     label={renderCustomizedLabel}
                     outerRadius={90}
-                    fill="#8884d8"
+                    innerRadius={40}
+                    paddingAngle={2}
                     dataKey="value"
+                    animationDuration={1000}
+                    animationBegin={0}
+                    animationEasing="ease-out"
                   >
                     {categoryData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={`url(#colorGradient-${index})`} 
+                        stroke={entry.fill} 
+                        strokeWidth={1.5}
+                      />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => [`${value} proposals`, 'Count']} />
-                  <Legend layout="vertical" verticalAlign="bottom" align="center" />
+                  <Tooltip 
+                    formatter={(value) => [`${value} proposals`, 'Count']}
+                    contentStyle={{ 
+                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(0, 51, 173, 0.2)',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                    }}
+                  />
+                  <Legend 
+                    layout="vertical" 
+                    verticalAlign="bottom" 
+                    align="center"
+                    iconType="circle"
+                    iconSize={10}
+                    formatter={(value) => <span className="text-sm font-medium text-gray-700">{value}</span>}
+                  />
                 </ReChartsPieChart>
               </ResponsiveContainer>
             </div>
@@ -173,12 +206,20 @@ const StatsSection = () => {
         </Card>
 
         {/* Committee Distribution Chart */}
-        <Card className="shadow-lg border-cardano-teal/20 overflow-hidden hover:shadow-xl transition-all duration-300">
+        <Card className="cardano-card shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300">
           <CardContent className="p-6">
             <h3 className="text-lg font-semibold mb-2 text-cardano-blue">Proposals by Committee</h3>
             <div className="h-80 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <ReChartsPieChart>
+                  <defs>
+                    {committeeData.map((entry, index) => (
+                      <linearGradient key={`gradient-comm-${index}`} id={`colorGradientComm-${index}`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={entry.fill} stopOpacity={0.9}/>
+                        <stop offset="100%" stopColor={entry.fill} stopOpacity={0.6}/>
+                      </linearGradient>
+                    ))}
+                  </defs>
                   <Pie
                     data={committeeData}
                     cx="50%"
@@ -186,15 +227,40 @@ const StatsSection = () => {
                     labelLine={false}
                     label={renderCustomizedLabel}
                     outerRadius={90}
-                    fill="#8884d8"
+                    innerRadius={40}
+                    paddingAngle={2}
                     dataKey="value"
+                    animationDuration={1000}
+                    animationBegin={200}
+                    animationEasing="ease-out"
                   >
                     {committeeData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                      <Cell 
+                        key={`cell-comm-${index}`} 
+                        fill={`url(#colorGradientComm-${index})`} 
+                        stroke={entry.fill} 
+                        strokeWidth={1.5}
+                      />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => [`${value} proposals`, 'Count']} />
-                  <Legend layout="vertical" verticalAlign="bottom" align="center" />
+                  <Tooltip 
+                    formatter={(value) => [`${value} proposals`, 'Count']}
+                    contentStyle={{ 
+                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(0, 51, 173, 0.2)',
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                    }}
+                  />
+                  <Legend 
+                    layout="vertical" 
+                    verticalAlign="bottom" 
+                    align="center" 
+                    iconType="circle"
+                    iconSize={10}
+                    formatter={(value) => <span className="text-sm font-medium text-gray-700">{value}</span>}
+                    wrapperStyle={{ paddingTop: '10px' }}
+                  />
                 </ReChartsPieChart>
               </ResponsiveContainer>
             </div>
