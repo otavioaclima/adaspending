@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Twitter, Mail, Info, FileText, Users } from 'lucide-react';
 
@@ -46,7 +47,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-sm text-gray-500 mb-4 md:mb-0">
-              <p>© {new Date().getFullYear()} ADAspending.com. All data is sourced from the public Cardano blockchain.</p>
+              <p>{new Date().getFullYear()} ADAspending.com. All data is sourced from the public Cardano blockchain.</p>
               <p>ADAspending is a 100% open-source project.</p>
             </div>
             <div className="flex space-x-6">
