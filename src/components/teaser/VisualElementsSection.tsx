@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from 'recharts';
+import StatsSection from '@/components/teaser/StatsSection';
 
 // Sample data for charts
 const treasuryData = [
@@ -48,6 +49,9 @@ const VisualElementsSection = () => {
         <p className="text-gray-600 text-center max-w-3xl mx-auto mb-12">
           A sneak peek into the powerful data visualization tools available in the ADAspending dashboard.
         </p>
+        
+        {/* Add Stats Section here */}
+        <StatsSection />
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           {/* Treasury Spending Over Time Chart */}
@@ -115,7 +119,6 @@ const VisualElementsSection = () => {
             </CardContent>
           </Card>
         </div>
-        
         
         {/* Bar Chart for Monthly Funds - Updated to show Requested and Approved Funds */}
         <Card className="shadow-lg border-cardano-teal/20 overflow-hidden transform transition-all duration-500 hover:shadow-xl cardano-card">
