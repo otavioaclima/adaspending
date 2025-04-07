@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Facebook, Twitter, Linkedin } from 'lucide-react';
+import { ChevronRight, Twitter } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -57,14 +57,8 @@ const HeroSection = () => {
           
           <div className="flex items-center gap-3 mt-2 sm:mt-0">
             <span className="text-white/80">Follow us on:</span>
-            <a href="#" className="text-white hover:text-white/80 transition-colors">
+            <a href="https://x.com/ADAspending_com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-white/80 transition-colors">
               <Twitter className="h-5 w-5" />
-            </a>
-            <a href="#" className="text-white hover:text-white/80 transition-colors">
-              <Facebook className="h-5 w-5" />
-            </a>
-            <a href="#" className="text-white hover:text-white/80 transition-colors">
-              <Linkedin className="h-5 w-5" />
             </a>
           </div>
         </div>
