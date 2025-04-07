@@ -15,6 +15,10 @@ const FaqSection = () => {
       answer: "ADAspending is an open data source for tracking treasury spending on the Cardano blockchain. We provide transparency and accountability for community funds by making all spending data accessible and easy to understand."
     },
     {
+      question: "Is ADAspending an open-source project?",
+      answer: "ADAspending is a 100% open-source project."
+    },
+    {
       question: "How does ADAspending get its data?",
       answer: "All data is sourced directly from the public Cardano blockchain. We monitor treasury transactions and categorize them to provide insights into how funds are being used across different industries and recipients."
     },
@@ -48,7 +52,7 @@ const FaqSection = () => {
         </div>
         
         <div className="bg-white rounded-lg shadow-md">
-          <Accordion type="single" collapsible className="w-full">
+          <Accordion type="single" collapsible className="w-full" defaultValue="item-0">
             {faqs.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger className="text-left px-6 text-gray-800 hover:text-cardano-blue">
