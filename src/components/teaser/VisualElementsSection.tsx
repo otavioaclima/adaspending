@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from 'recharts';
@@ -20,11 +21,14 @@ const categoryData = [
   { name: 'Research', value: 15 },
 ];
 
-const roundsData = [
-  { name: 'Fund 7', proposals: 58, funded: 32 },
-  { name: 'Fund 8', proposals: 72, funded: 41 },
-  { name: 'Fund 9', proposals: 89, funded: 47 },
-  { name: 'Fund 10', proposals: 103, funded: 52 },
+// New data for monthly spending 
+const monthlyData = [
+  { name: 'Jan', spending: 2300000, proposals: 18 },
+  { name: 'Feb', spending: 1800000, proposals: 15 },
+  { name: 'Mar', spending: 2700000, proposals: 22 },
+  { name: 'Apr', spending: 3100000, proposals: 25 },
+  { name: 'May', spending: 2500000, proposals: 20 },
+  { name: 'Jun', spending: 3400000, proposals: 28 },
 ];
 
 const COLORS = ['#0033AD', '#1BAAD6', '#FF5733', '#33C3F0', '#8884D8'];
@@ -113,23 +117,26 @@ const VisualElementsSection = () => {
         </div>
         
         
-        {/* Bar Chart for Fund Rounds */}
+        {/* Bar Chart for Monthly Spending */}
         <Card className="shadow-lg border-cardano-teal/20 overflow-hidden transform transition-all duration-500 hover:shadow-xl cardano-card">
           <CardContent className="p-6">
-            <h3 className="text-xl font-semibold mb-2 text-cardano-blue">Fund Rounds Analytics</h3>
-            <p className="text-sm text-gray-500 mb-4">Proposals submitted vs funded by round</p>
+            <h3 className="text-xl font-semibold mb-2 text-cardano-blue">Monthly Spending Analytics</h3>
+            <p className="text-sm text-gray-500 mb-4">Spending and proposals by month</p>
             <div className="h-64 w-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
-                  data={roundsData}
+                  data={monthlyData}
                   margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="proposals" fill="#0033AD" name="Total Proposals" className="animate-pulse-slow" />
-                  <Bar dataKey="funded" fill="#1BAAD6" name="Funded Projects" className="animate-pulse-slow" />
+                  <Tooltip formatter={(value, name) => [
+                    name === 'spending' ? `${value.toLocaleString()} ADA` : value,
+                    name === 'spending' ? 'Spending' : 'Proposals'
+                  ]} />
+                  <Bar dataKey="spending" fill="#0033AD" name="Monthly Spending" className="animate-pulse-slow" />
+                  <Bar dataKey="proposals" fill="#1BAAD6" name="Monthly Proposals" className="animate-pulse-slow" />
                 </BarChart>
               </ResponsiveContainer>
             </div>
