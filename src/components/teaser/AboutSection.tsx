@@ -61,7 +61,7 @@ const AboutSection = () => {
               <img 
                 alt="Cardano Blockchain Technology" 
                 className="w-full h-auto object-contain max-h-[300px]" 
-                src="/lovable-uploads/5ece5163-4c47-4a41-a6c7-349747c21ed0.png" 
+                src="/lovable-uploads/af43cb7f-1898-49c4-8d04-6a7e036cee61.png" 
               />
             </div>
             <p className="text-cardano-blue font-medium text-lg mt-4 text-center">Transparent governance for a decentralized future</p>
