@@ -30,7 +30,12 @@ const Footer = () => {
             </div>
             
             <div className="flex items-center space-x-4 justify-center md:justify-end">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors flex items-center gap-1">
+              <a 
+                href="https://x.com/ADAspending_com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-gray-400 hover:text-white transition-colors flex items-center gap-1"
+              >
                 <Twitter size={20} />
                 <span>Follow us on X</span>
               </a>
