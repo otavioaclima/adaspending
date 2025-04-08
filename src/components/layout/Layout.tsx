@@ -19,14 +19,14 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
-      <header className="bg-gradient-to-r from-[#131637] to-[#000111] border-b sticky top-0 z-10">
+      <header className="bg-gradient-to-r from-[#131637] to-[#000111] border-b border-gray-800 sticky top-0 z-10">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <Link to="/" className="flex items-center">
               <img 
                 src="/lovable-uploads/e4da4614-7cea-4f9c-853c-3f019f7932ca.png" 
                 alt="ADAspending Logo" 
-                className="h-10 w-auto" // Decreased size from h-14 to h-10
+                className="h-10 w-auto" 
               />
             </Link>
           </div>
@@ -36,7 +36,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               <Link
                 key={item.name}
                 to={item.href}
-                className={`nav-link ${location.pathname === item.href ? 'nav-link-active' : ''}`}
+                className={`nav-link text-white hover:text-gray-200 ${location.pathname === item.href ? 'nav-link-active' : ''}`}
               >
                 {item.name}
               </Link>
@@ -44,7 +44,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </div>
           
           <div className="flex items-center space-x-2">
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="bg-transparent text-white border-white/30 hover:bg-white/10">
               <Search className="h-4 w-4 mr-2" />
               Search
             </Button>
