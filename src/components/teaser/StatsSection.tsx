@@ -6,8 +6,8 @@ import { PieChart as ReChartsPieChart, Pie, Cell, ResponsiveContainer, Legend, T
 
 // Treasury stats
 const treasuryStats = {
-  treasurySizeADA: 1600000000,
-  treasurySizeUSD: 1600000000,
+  treasurySizeADA: 1000000000,
+  treasurySizeUSD: 1000000000,
   totalFundsAwarded: 56000000,
   totalProposals: 1350,
   fundedProposals: 981,
@@ -73,6 +73,7 @@ const committeeData = [{
   value: 2,
   fill: '#d0ed57'
 }];
+
 const StatsSection = () => {
   // Format numbers with commas
   const formatNumber = (num: number) => {

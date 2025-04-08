@@ -431,7 +431,7 @@ export const fundRounds: FundRound[] = [
 
 // Treasury Summary Statistics
 export const treasuryStats = {
-  totalFundsAvailable: 1600000000, // $1.6 billion in ADA
+  totalFundsAvailable: 1000000000, // $1 billion in ADA
   totalFundsAwarded: 56000000, // $56 million in ADA
   totalProposals: 4200,
   fundedProposals: 981,
