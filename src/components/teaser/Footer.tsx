@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Twitter, Mail, Info, FileText, Users } from 'lucide-react';
 const Footer = () => {
@@ -7,20 +6,14 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <div className="mb-6 md:mb-0">
             <img src="/lovable-uploads/257db3dc-2214-4178-afd2-70760c3899c4.png" alt="ADAspending Graph Logo" className="h-16" />
-            <p className="mt-2 text-gray-400 text-sm">
-              Cardano Treasury Explorer
-            </p>
-            <p className="mt-2 text-gray-400 text-sm">
-              An open data source for tracking treasury spending on the Cardano blockchain.
-              Bringing transparency and accountability to community funds.
-            </p>
+            
+            <p className="mt-2 text-gray-400 text-sm">An open data source for tracking treasury spending on the Cardano blockchain. 
+Bringing transparency and accountability to community funds.</p>
           </div>
           
           <div className="flex flex-col space-y-4">
             <div className="flex flex-wrap space-x-4 md:space-x-6 justify-end">
-              <span className="text-gray-400 py-1">
-                Connect with our community
-              </span>
+              
               <span className="text-gray-400 py-1">
                 Stay in touch with us
               </span>
@@ -34,12 +27,7 @@ const Footer = () => {
             </div>
             
             <div className="flex items-center space-x-4 justify-center md:justify-end">
-              <a 
-                href="https://x.com/ADAspending_com" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-gray-400 hover:text-white transition-colors flex items-center gap-1"
-              >
+              <a href="https://x.com/ADAspending_com" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors flex items-center gap-1">
                 <Twitter size={20} />
                 <span>Follow us on X</span>
               </a>
