@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 
 const HeroSection = () => {
   return (
-    <section className="bg-gradient-to-br from-cardano-blue to-cardano-teal rounded-lg text-white p-6 md:p-10 mb-8">
+    <section className="bg-[#000111] rounded-lg text-white p-6 md:p-10 mb-8">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
           <div className="flex justify-center mb-6">
