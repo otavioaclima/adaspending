@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Twitter, Mail, Info, FileText, Users } from 'lucide-react';
 const Footer = () => {
@@ -51,12 +50,8 @@ const Footer = () => {
               <a href="https://intersectmbo.org/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
                 Intersect
               </a>
-              <a href="https://governancespace.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
-                Governance Space
-              </a>
-              <a href="https://cardanofeed.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
-                CardanoFeed
-              </a>
+              <a href="https://governancespace.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">GovSpace</a>
+              
               <a href="https://gov.tools/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
                 GovTool
               </a>
