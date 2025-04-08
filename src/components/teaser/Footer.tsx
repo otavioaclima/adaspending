@@ -12,14 +12,7 @@ const Footer = () => {
           </div>
           
           <div className="flex flex-col space-y-4">
-            <div className="flex flex-wrap space-x-4 md:space-x-6 justify-end">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors py-1">
-                Connect with our community
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors py-1">
-                Stay in touch with us
-              </a>
-            </div>
+            
             
             <div className="flex items-center space-x-4 justify-center md:justify-end">
               <a href="mailto:hello@adaspending.com" className="text-gray-400 hover:text-white transition-colors flex items-center gap-1">
