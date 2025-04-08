@@ -1,18 +1,22 @@
+
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, Twitter, ChevronDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
+
 const HeroSection = () => {
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
   const isMobile = useIsMobile();
   const phrases = ["Search and explore Cardano treasury spending by industry and recipient", "Track and analyze Cardano funding across time and categories", "Bring transparency to community fund allocation on Cardano"];
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentPhraseIndex(prevIndex => (prevIndex + 1) % phrases.length);
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
   const scrollToNextSection = () => {
     const nextSection = document.querySelector('section:nth-of-type(2)');
     if (nextSection) {
@@ -21,7 +25,8 @@ const HeroSection = () => {
       });
     }
   };
-  return <section className="relative bg-gradient-to-br from-cardano-blue to-cardano-teal py-12 px-4 md:py-24">
+
+  return <section className="relative bg-gradient-to-br from-[#131637] to-[#000111] py-12 px-4 md:py-24">
       <div className="container mx-auto text-center">
         <div className="flex flex-col items-center mb-8">
           <img alt="ADAspending Graph Logo" className="h-28 md:h-28 mb-4 animate-fade-in object-contain w-auto max-w-full" src="/lovable-uploads/1b553c01-58c1-4454-8098-2be801352be8.png" />
@@ -64,4 +69,5 @@ const HeroSection = () => {
       </div>
     </section>;
 };
+
 export default HeroSection;
