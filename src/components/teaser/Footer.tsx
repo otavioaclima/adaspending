@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Twitter, Mail, Info, FileText, Users } from 'lucide-react';
 const Footer = () => {
@@ -13,12 +14,12 @@ const Footer = () => {
           
           <div className="flex flex-col space-y-4">
             <div className="flex flex-wrap space-x-4 md:space-x-6 justify-end">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors py-1">
+              <span className="text-gray-400 py-1">
                 Connect with our community
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors py-1">
+              </span>
+              <span className="text-gray-400 py-1">
                 Stay in touch with us
-              </a>
+              </span>
             </div>
             
             <div className="flex items-center space-x-4 justify-center md:justify-end">
