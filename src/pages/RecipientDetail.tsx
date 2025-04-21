@@ -1,13 +1,20 @@
 
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, User, Users, Building, Award, Calendar } from 'lucide-react';
+import { ArrowLeft, ExternalLink, User, Users, Building, Award, Calendar, Info, Mail, Link2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Layout from '@/components/layout/Layout';
 import ProposalCard from '@/components/ui/ProposalCard';
 import { recipients, proposals } from '@/data/mockData';
+
+const getRecipientTypeLabel = (type: string) => {
+  if (type === 'organization') return 'Organization';
+  if (type === 'team') return 'Team';
+  if (type === 'individual') return 'Individual';
+  return type.charAt(0).toUpperCase() + type.slice(1);
+};
 
 const RecipientDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -39,7 +46,18 @@ const RecipientDetail = () => {
   const successRate = recipient.proposalsSubmitted > 0 
     ? Math.round((recipient.proposalsApproved / recipient.proposalsSubmitted) * 100) 
     : 0;
-  
+
+  const rejectedProposals = recipient.proposalsSubmitted - recipient.proposalsApproved;
+
+  // Format website URL display
+  const getHostname = (url: string) => {
+    try {
+      return new URL(url).hostname.replace('www.', '');
+    } catch {
+      return url;
+    }
+  };
+
   return (
     <Layout>
       <div className="mb-6">
@@ -54,18 +72,31 @@ const RecipientDetail = () => {
             </div>
             <div>
               <h1 className="text-2xl md:text-3xl font-bold">{recipient.name}</h1>
-              <p className="text-gray-600 capitalize">{recipient.type}</p>
+              <div className="flex items-center gap-2 flex-wrap text-gray-600">
+                <span className="capitalize flex items-center gap-1">
+                  <Info className="h-4 w-4 text-gray-400" />{getRecipientTypeLabel(recipient.type)}
+                </span>
+                {recipient.location && (
+                  <span className="flex items-center gap-1">
+                    <Calendar className="h-4 w-4 text-gray-400" />{recipient.location}
+                  </span>
+                )}
+                {recipient.website && (
+                  <span className="flex items-center gap-1">
+                    <Link2 className="h-4 w-4 text-gray-400" />
+                    <a
+                      href={recipient.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="underline hover:text-cardano-blue"
+                    >
+                      {getHostname(recipient.website)}
+                    </a>
+                  </span>
+                )}
+              </div>
             </div>
           </div>
-          
-          {recipient.website && (
-            <Button asChild variant="outline">
-              <a href={recipient.website} target="_blank" rel="noopener noreferrer">
-                <ExternalLink className="h-4 w-4 mr-2" />
-                Visit Website
-              </a>
-            </Button>
-          )}
         </div>
       </div>
       
@@ -73,16 +104,34 @@ const RecipientDetail = () => {
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
           {/* About Section */}
-          {recipient.description && (
-            <Card>
-              <CardHeader>
-                <CardTitle>About</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-700">{recipient.description}</p>
-              </CardContent>
-            </Card>
-          )}
+          <Card>
+            <CardHeader>
+              <CardTitle>About</CardTitle>
+              <CardDescription>
+                This is a {getRecipientTypeLabel(recipient.type)}{recipient.location ? ` based in ${recipient.location}` : ''}.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="text-gray-700 mb-2">
+                {recipient.description || (
+                  <span className="italic text-gray-400">No description available for this recipient yet.</span>
+                )}
+              </div>
+              {recipient.website && (
+                <div className="flex items-center gap-1 mt-4">
+                  <Link2 className="h-4 w-4 text-gray-500" />
+                  <a
+                    href={recipient.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-cardano-blue underline break-all"
+                  >
+                    {recipient.website}
+                  </a>
+                </div>
+              )}
+            </CardContent>
+          </Card>
           
           {/* Proposals Section */}
           <Card>
@@ -111,7 +160,7 @@ const RecipientDetail = () => {
               ) : (
                 <div className="text-center py-8">
                   <Award className="h-10 w-10 text-gray-300 mx-auto mb-3" />
-                  <p className="text-gray-500">No proposals found for this recipient</p>
+                  <p className="text-gray-500">No proposals found for this recipient.</p>
                 </div>
               )}
             </CardContent>
@@ -133,9 +182,7 @@ const RecipientDetail = () => {
                     {recipient.totalFunded.toLocaleString()} ADA
                   </p>
                 </div>
-                
                 <Separator />
-                
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <p className="text-sm text-gray-500 mb-1">Proposals Submitted</p>
@@ -150,9 +197,14 @@ const RecipientDetail = () => {
                     </p>
                   </div>
                 </div>
-                
                 <Separator />
-                
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Rejected Proposals</p>
+                  <p className="font-medium text-red-500">
+                    {rejectedProposals}
+                  </p>
+                </div>
+                <Separator />
                 <div>
                   <p className="text-sm text-gray-500 mb-1">Success Rate</p>
                   <div className="flex items-center gap-2">
@@ -181,7 +233,7 @@ const RecipientDetail = () => {
               <div className="space-y-4">
                 <div>
                   <p className="text-sm text-gray-500 mb-1">Type</p>
-                  <p className="font-medium text-gray-900 capitalize">{recipient.type}</p>
+                  <p className="font-medium text-gray-900">{getRecipientTypeLabel(recipient.type)}</p>
                 </div>
                 
                 {recipient.location && (
@@ -190,16 +242,20 @@ const RecipientDetail = () => {
                     <p className="font-medium text-gray-900">{recipient.location}</p>
                   </div>
                 )}
-                
-                <div>
-                  <p className="text-sm text-gray-500 mb-1">First Proposal</p>
-                  <p className="font-medium text-gray-900">Fund 8 (2023)</p>
-                </div>
-                
-                <div>
-                  <p className="text-sm text-gray-500 mb-1">Latest Proposal</p>
-                  <p className="font-medium text-gray-900">Fund 10 (2023)</p>
-                </div>
+
+                {recipient.website && (
+                  <div>
+                    <p className="text-sm text-gray-500 mb-1">Website</p>
+                    <a 
+                      href={recipient.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cardano-blue underline break-all font-medium"
+                    >
+                      {recipient.website}
+                    </a>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
