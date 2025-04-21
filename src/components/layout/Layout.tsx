@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,8 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     { name: 'Governance', href: '/governance', icon: Vote },
   ];
 
+  const isHomePage = location.pathname === '/';
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
@@ -22,11 +25,19 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <Link to="/dashboard" className="flex items-center">
-              <img 
-                src="/lovable-uploads/257db3dc-2214-4178-afd2-70760c3899c4.png" 
-                alt="Cardano Treasury Explorer" 
-                className="h-20 w-auto" 
-              />
+              {isHomePage ? (
+                <img 
+                  src="/lovable-uploads/257db3dc-2214-4178-afd2-70760c3899c4.png" 
+                  alt="Cardano Treasury Explorer" 
+                  className="h-20 w-auto" 
+                />
+              ) : (
+                <img
+                  src="/lovable-uploads/14b66eb5-72ae-42fe-94f7-70a49cc9ad69.png"
+                  alt="ADAspending Logo"
+                  className="h-14 w-auto"
+                />
+              )}
             </Link>
           </div>
           
