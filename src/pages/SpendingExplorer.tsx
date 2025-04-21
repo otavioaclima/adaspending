@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { BarChart3, PieChart as PieChartIcon, Map, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -25,6 +24,8 @@ import {
   ScatterChart,
   ZAxis
 } from 'recharts';
+import SpendingMap from "@/components/spending/SpendingMap";
+import SpendingTable from "@/components/spending/SpendingTable";
 
 const SpendingExplorer = () => {
   const [chartType, setChartType] = useState('category');
@@ -316,16 +317,12 @@ const SpendingExplorer = () => {
           <Card className="mb-6">
             <CardHeader>
               <CardTitle>Geographic Distribution</CardTitle>
-              <CardDescription>Coming soon: Interactive map showing the global distribution of treasury funding</CardDescription>
+              <CardDescription>
+                Interactive map showing the global distribution of treasury funding (Mapbox Globe)
+              </CardDescription>
             </CardHeader>
             <CardContent className="h-96 flex items-center justify-center bg-gray-50">
-              <div className="text-center">
-                <Map className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-lg font-medium text-gray-500">Map View Coming Soon</p>
-                <p className="text-gray-500 max-w-md mx-auto mt-2">
-                  We're working on an interactive map to visualize the geographic distribution of Cardano treasury funding.
-                </p>
-              </div>
+              <SpendingMap height="340px" />
             </CardContent>
           </Card>
         </TabsContent>
@@ -334,16 +331,12 @@ const SpendingExplorer = () => {
           <Card className="mb-6">
             <CardHeader>
               <CardTitle>Data Table View</CardTitle>
-              <CardDescription>Coming soon: Detailed tabular data with advanced filtering and export options</CardDescription>
+              <CardDescription>
+                Detailed tabular data of proposals (sortable)
+              </CardDescription>
             </CardHeader>
-            <CardContent className="h-96 flex items-center justify-center bg-gray-50">
-              <div className="text-center">
-                <FileText className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-lg font-medium text-gray-500">Data Table Coming Soon</p>
-                <p className="text-gray-500 max-w-md mx-auto mt-2">
-                  We're developing a comprehensive data table view with advanced sorting, filtering and export capabilities.
-                </p>
-              </div>
+            <CardContent className="h-auto bg-gray-50">
+              <SpendingTable />
             </CardContent>
           </Card>
         </TabsContent>
