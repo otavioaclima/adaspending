@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -34,7 +35,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 <img
                   src="/lovable-uploads/14b66eb5-72ae-42fe-94f7-70a49cc9ad69.png"
                   alt="ADAspending Logo"
-                  className="h-12 w-auto"
+                  className="h-10 w-auto"
                 />
               )}
             </Link>
@@ -145,3 +146,4 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default Layout;
+
