@@ -17,9 +17,9 @@ const Index = () => {
     <Layout>
       <HeroSection />
       <StatsSection />
-      {/* NOVA SEÇÃO - PAINÉIS DE ANÁLISE */}
+      {/* NEW SECTION - ANALYSIS PANELS */}
       <section className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Painéis de Análise</h2>
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Analysis Panels</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4">
           <ProposalBudgetComparator />
           <Thermometer />
@@ -36,3 +36,4 @@ const Index = () => {
 };
 
 export default Index;
+
