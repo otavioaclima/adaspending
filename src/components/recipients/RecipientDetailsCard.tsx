@@ -15,11 +15,32 @@ type Props = {
 };
 
 const getRecipientTypeLabel = (type: string) => {
-  if (type === "organization") return "Organization";
-  if (type === "team") return "Team";
-  if (type === "individual") return "Individual";
+  if (type === "organization") return "Organização";
+  if (type === "team") return "Equipe";
+  if (type === "individual") return "Indivíduo";
   return type.charAt(0).toUpperCase() + type.slice(1);
 };
+
+const InfoItem = ({
+  icon,
+  label,
+  value,
+  colorClass,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value?: string | number;
+  colorClass?: string;
+}) =>
+  value ? (
+    <div className="flex items-center gap-3">
+      <div className={`flex items-center justify-center p-2 rounded-md ${colorClass ?? "bg-muted"}`}>{icon}</div>
+      <div>
+        <div className="text-xs text-gray-500">{label}</div>
+        <div className="font-medium text-gray-900">{value}</div>
+      </div>
+    </div>
+  ) : null;
 
 const RecipientDetailsCard = ({
   type,
@@ -31,81 +52,58 @@ const RecipientDetailsCard = ({
   address,
   registrationNumber,
 }: Props) => (
-  <Card>
+  <Card className="divide-y divide-muted">
+    {/* Header e Descrição */}
     <CardHeader>
-      <CardTitle>About</CardTitle>
+      <CardTitle className="mb-1">Sobre o Recipient</CardTitle>
       <CardDescription>
-        This is a {getRecipientTypeLabel(type)}
-        {location ? ` based in ${location}` : ""}.
+        {getRecipientTypeLabel(type)}
+        {location ? ` em ${location}` : ""}.
       </CardDescription>
     </CardHeader>
-    <CardContent>
-      <div className="text-gray-700 mb-4">
-        {description || (
-          <span className="italic text-gray-400">
-            No description available for this recipient yet.
-          </span>
-        )}
-      </div>
-      
-      <div className="space-y-4 mt-6">
-        {(numberOfEmployees || capital || address || registrationNumber) && (
-          <h3 className="font-medium text-gray-800 mb-2">Organization Details</h3>
-        )}
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {numberOfEmployees !== undefined && (
-            <div className="flex items-start gap-2">
-              <div className="bg-blue-50 p-2 rounded-md">
-                <Users className="h-5 w-5 text-blue-500" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Employees</p>
-                <p className="font-medium">{numberOfEmployees}</p>
-              </div>
-            </div>
-          )}
-          
-          {capital && (
-            <div className="flex items-start gap-2">
-              <div className="bg-green-50 p-2 rounded-md">
-                <Banknote className="h-5 w-5 text-green-500" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Capital</p>
-                <p className="font-medium">{capital}</p>
-              </div>
-            </div>
-          )}
-          
-          {address && (
-            <div className="flex items-start gap-2">
-              <div className="bg-yellow-50 p-2 rounded-md">
-                <Building className="h-5 w-5 text-yellow-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Address</p>
-                <p className="font-medium">{address}</p>
-              </div>
-            </div>
-          )}
-          
-          {registrationNumber && (
-            <div className="flex items-start gap-2">
-              <div className="bg-purple-50 p-2 rounded-md">
-                <FileText className="h-5 w-5 text-purple-500" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">Registration Number</p>
-                <p className="font-medium">{registrationNumber}</p>
-              </div>
-            </div>
+    <CardContent className="space-y-8">
+      <div>
+        <h3 className="text-sm font-semibold text-gray-700 mb-2">Descrição</h3>
+        <div className="text-gray-700">
+          {description || (
+            <span className="italic text-gray-400">
+              Nenhuma descrição disponível para este recipient.
+            </span>
           )}
         </div>
       </div>
-      
+      <div>
+        <h3 className="text-sm font-semibold text-gray-700 mb-2">Rastreabilidade & Informações</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <InfoItem
+            icon={<Users className="h-5 w-5 text-blue-500" />}
+            label="Funcionários"
+            value={numberOfEmployees !== undefined ? numberOfEmployees : undefined}
+            colorClass="bg-blue-50"
+          />
+          <InfoItem
+            icon={<Banknote className="h-5 w-5 text-green-600" />}
+            label="Capital Social"
+            value={capital}
+            colorClass="bg-green-50"
+          />
+          <InfoItem
+            icon={<Building className="h-5 w-5 text-yellow-700" />}
+            label="Endereço"
+            value={address}
+            colorClass="bg-yellow-50"
+          />
+          <InfoItem
+            icon={<FileText className="h-5 w-5 text-purple-500" />}
+            label="Número de Registro"
+            value={registrationNumber}
+            colorClass="bg-purple-50"
+          />
+        </div>
+      </div>
       {website && (
-        <div className="flex items-center gap-1 mt-6">
+        <div>
+          <h3 className="text-sm font-semibold text-gray-700 mb-2">Website</h3>
           <a
             href={website}
             target="_blank"
