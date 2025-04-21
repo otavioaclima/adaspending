@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Users, Building, User, Filter, ChevronDown, X } from 'lucide-react';
@@ -30,7 +31,13 @@ const RecipientCard = ({ recipient }: { recipient: typeof recipients[0] }) => {
             </div>
             <div>
               <h3 className="font-medium text-gray-900">{recipient.name}</h3>
-              <p className="text-sm text-gray-500 capitalize">{recipient.type}</p>
+              <p className="text-sm text-gray-500 capitalize">
+                {recipient.type === 'organization'
+                  ? 'Organização'
+                  : recipient.type === 'team'
+                    ? 'Equipe'
+                    : 'Indivíduo'}
+              </p>
             </div>
           </div>
           
@@ -40,13 +47,13 @@ const RecipientCard = ({ recipient }: { recipient: typeof recipients[0] }) => {
           
           <div className="grid grid-cols-2 gap-2 mb-4">
             <div>
-              <p className="text-xs text-gray-500">Total Funded</p>
+              <p className="text-xs text-gray-500">Total Recebido</p>
               <p className="font-bold text-cardano-blue">
                 {recipient.totalFunded.toLocaleString()} ADA
               </p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">Success Rate</p>
+              <p className="text-xs text-gray-500">Taxa de Sucesso</p>
               <p className="font-medium">
                 {recipient.proposalsSubmitted > 0 
                   ? Math.round((recipient.proposalsApproved / recipient.proposalsSubmitted) * 100) 
@@ -57,7 +64,7 @@ const RecipientCard = ({ recipient }: { recipient: typeof recipients[0] }) => {
           
           <div className="flex justify-between text-sm">
             <span className="text-gray-500">
-              {recipient.proposalsApproved} / {recipient.proposalsSubmitted} proposals
+              {recipient.proposalsApproved} / {recipient.proposalsSubmitted} propostas
             </span>
             {recipient.location && (
               <span className="text-gray-500">
@@ -111,20 +118,18 @@ const Recipients = () => {
     if (searchTerm && !recipient.name.toLowerCase().includes(searchTerm.toLowerCase())) {
       return false;
     }
-    
     if (selectedType !== 'all' && recipient.type !== selectedType) {
       return false;
     }
-    
     return true;
   });
   
   return (
     <Layout>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Recipients</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Recebedores</h1>
         <p className="text-lg text-gray-600">
-          Explore individuals, teams, and organizations that received treasury funding
+          Explore indivíduos, equipes e organizações que receberam financiamento do tesouro
         </p>
       </div>
       
@@ -136,7 +141,7 @@ const Recipients = () => {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               className="pl-9"
-              placeholder="Search recipients by name..."
+              placeholder="Buscar recebedores pelo nome..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -147,7 +152,7 @@ const Recipients = () => {
             onClick={() => setShowFilters(!showFilters)}
           >
             <Filter className="h-4 w-4" />
-            <span>Filters</span>
+            <span>Filtros</span>
             {selectedType !== 'all' && (
               <Badge variant="secondary" className="ml-1">1</Badge>
             )}
@@ -155,7 +160,7 @@ const Recipients = () => {
           </Button>
           <Button>
             <Search className="h-4 w-4 mr-2" />
-            Search
+            Buscar
           </Button>
         </div>
         
@@ -164,39 +169,39 @@ const Recipients = () => {
             <CardContent className="pt-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1 block">Recipient Type</label>
+                  <label className="text-sm font-medium text-gray-700 mb-1 block">Tipo de Recebedor</label>
                   <Select 
                     value={selectedType} 
                     onValueChange={setSelectedType}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="All Types" />
+                      <SelectValue placeholder="Todos os Tipos" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Types</SelectItem>
-                      <SelectItem value="individual">Individual</SelectItem>
-                      <SelectItem value="team">Team</SelectItem>
-                      <SelectItem value="organization">Organization</SelectItem>
+                      <SelectItem value="all">Todos os Tipos</SelectItem>
+                      <SelectItem value="individual">Indivíduo</SelectItem>
+                      <SelectItem value="team">Equipe</SelectItem>
+                      <SelectItem value="organization">Organização</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1 block">Minimum Funding</label>
-                  <Input type="number" placeholder="Min ADA Funded" />
+                  <label className="text-sm font-medium text-gray-700 mb-1 block">Financiamento Mínimo</label>
+                  <Input type="number" placeholder="Valor mínimo em ADA" />
                 </div>
                 
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1 block">Success Rate</label>
+                  <label className="text-sm font-medium text-gray-700 mb-1 block">Taxa de Sucesso</label>
                   <Select defaultValue="any">
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Any Success Rate" />
+                      <SelectValue placeholder="Qualquer taxa de sucesso" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="any">Any Success Rate</SelectItem>
-                      <SelectItem value="high">High (&gt;75%)</SelectItem>
-                      <SelectItem value="medium">Medium (25-75%)</SelectItem>
-                      <SelectItem value="low">Low (&lt;25%)</SelectItem>
+                      <SelectItem value="any">Qualquer taxa de sucesso</SelectItem>
+                      <SelectItem value="high">Alta (&gt;75%)</SelectItem>
+                      <SelectItem value="medium">Média (25-75%)</SelectItem>
+                      <SelectItem value="low">Baixa (&lt;25%)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -211,7 +216,7 @@ const Recipients = () => {
                   className="flex items-center gap-1"
                 >
                   <X className="h-4 w-4" />
-                  Clear Filters
+                  Limpar filtros
                 </Button>
               </div>
             </CardContent>
@@ -221,7 +226,13 @@ const Recipients = () => {
         {selectedType !== 'all' && (
           <div className="flex flex-wrap gap-2 mb-4">
             <Badge variant="outline" className="py-1 px-3 flex items-center gap-1">
-              Type: {selectedType.charAt(0).toUpperCase() + selectedType.slice(1)}
+              Tipo: {selectedType === 'organization'
+                ? 'Organização'
+                : selectedType === 'team'
+                  ? 'Equipe'
+                  : selectedType === 'individual'
+                    ? 'Indivíduo'
+                    : selectedType.charAt(0).toUpperCase() + selectedType.slice(1)}
               <X 
                 className="h-3 w-3 ml-1 cursor-pointer" 
                 onClick={() => setSelectedType('all')}
@@ -242,8 +253,8 @@ const Recipients = () => {
           <div className="bg-gray-100 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
             <Users className="h-8 w-8 text-gray-400" />
           </div>
-          <h3 className="text-lg font-medium mb-2">No Recipients Found</h3>
-          <p className="text-gray-600 mb-6">Try adjusting your search or filters</p>
+          <h3 className="text-lg font-medium mb-2">Nenhum Recebedor Encontrado</h3>
+          <p className="text-gray-600 mb-6">Tente ajustar sua busca ou filtros</p>
           <Button 
             variant="outline" 
             onClick={() => {
@@ -251,7 +262,7 @@ const Recipients = () => {
               setSelectedType('all');
             }}
           >
-            Clear Filters
+            Limpar filtros
           </Button>
         </div>
       )}
@@ -260,3 +271,4 @@ const Recipients = () => {
 };
 
 export default Recipients;
+
