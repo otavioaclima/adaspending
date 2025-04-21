@@ -1,20 +1,13 @@
-
 import React from 'react';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-
 const HeroSection = () => {
-  return (
-    <section className="bg-[#000111] rounded-lg text-white p-6 md:p-10 mb-8">
+  return <section className="bg-[#000111] rounded-lg text-white p-6 md:p-10 mb-8">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
           <div className="flex justify-center mb-6">
-            <img 
-              src="/lovable-uploads/9aa53f79-4c5b-41fe-8e7f-ece7cc41dd89.png" 
-              alt="ADAspending Logo" 
-              className="h-16 md:h-20" 
-            />
+            
           </div>
           ADA Spending Dashboard
         </h1>
@@ -33,8 +26,6 @@ const HeroSection = () => {
           </Button>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default HeroSection;
