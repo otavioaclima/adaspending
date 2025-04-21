@@ -1,4 +1,3 @@
-
 export interface Proposal {
   id: string;
   title: string;
@@ -14,6 +13,8 @@ export interface Proposal {
   updatedAt: string;
   yesVotes: number;
   noVotes: number;
+  spentAmount?: number;
+  endDate?: string;
   milestones?: Array<{
     title: string;
     description: string;
@@ -37,7 +38,7 @@ export interface Recipient {
   location?: string;
   description?: string;
   website?: string;
-  proposals: string[]; // References to proposal IDs
+  proposals: string[];
 }
 
 export interface FundRound {
@@ -48,10 +49,9 @@ export interface FundRound {
   totalBudget: number;
   proposals: number;
   approvedProposals: number;
-  participation: number; // Voting participation percentage
+  participation: number;
 }
 
-// Mock proposals data
 export const proposals: Proposal[] = [
   {
     id: "prop-001",
@@ -68,6 +68,8 @@ export const proposals: Proposal[] = [
     updatedAt: "2023-11-01T14:30:00Z",
     yesVotes: 12500,
     noVotes: 4200,
+    spentAmount: 85000,
+    endDate: "2024-06-15T00:00:00Z",
     milestones: [
       {
         title: "Prototype Development",
@@ -105,6 +107,8 @@ export const proposals: Proposal[] = [
     updatedAt: "2023-09-10T09:45:00Z",
     yesVotes: 20100,
     noVotes: 8500,
+    spentAmount: 210000,
+    endDate: "2024-05-10T00:00:00Z",
     milestones: [
       {
         title: "Architecture Design",
@@ -136,6 +140,8 @@ export const proposals: Proposal[] = [
     updatedAt: "2023-12-15T16:20:00Z",
     yesVotes: 18700,
     noVotes: 2100,
+    spentAmount: 118000,
+    endDate: "2023-12-01T00:00:00Z",
     milestones: [
       {
         title: "Curriculum Development",
@@ -167,6 +173,8 @@ export const proposals: Proposal[] = [
     updatedAt: "2023-11-05T13:10:00Z",
     yesVotes: 24600,
     noVotes: 5800,
+    spentAmount: 50000,
+    endDate: "2024-07-30T00:00:00Z",
     milestones: [
       {
         title: "Market Research & Design",
@@ -197,7 +205,9 @@ export const proposals: Proposal[] = [
     createdAt: "2024-01-10T14:20:00Z",
     updatedAt: "2024-01-10T14:20:00Z",
     yesVotes: 0,
-    noVotes: 0
+    noVotes: 0,
+    spentAmount: 0,
+    endDate: "2024-12-31T00:00:00Z"
   },
   {
     id: "prop-006",
@@ -213,7 +223,8 @@ export const proposals: Proposal[] = [
     createdAt: "2023-09-05T09:30:00Z",
     updatedAt: "2023-10-15T17:45:00Z",
     yesVotes: 9800,
-    noVotes: 15200
+    noVotes: 15200,
+    spentAmount: 0
   },
   {
     id: "prop-007",
@@ -230,6 +241,8 @@ export const proposals: Proposal[] = [
     updatedAt: "2023-11-08T10:20:00Z",
     yesVotes: 19300,
     noVotes: 7400,
+    spentAmount: 100000,
+    endDate: "2024-06-30T00:00:00Z",
     milestones: [
       {
         title: "Design & Architecture",
@@ -261,6 +274,8 @@ export const proposals: Proposal[] = [
     updatedAt: "2023-06-10T11:25:00Z",
     yesVotes: 22500,
     noVotes: 3800,
+    spentAmount: 220000,
+    endDate: "2023-12-31T00:00:00Z",
     milestones: [
       {
         title: "Toolkit Design",
@@ -285,7 +300,6 @@ export const proposals: Proposal[] = [
   }
 ];
 
-// Mock recipients data
 export const recipients: Recipient[] = [
   {
     id: "rec-001",
@@ -385,7 +399,6 @@ export const recipients: Recipient[] = [
   }
 ];
 
-// Mock fund rounds data
 export const fundRounds: FundRound[] = [
   {
     id: "fund-8",
@@ -424,21 +437,20 @@ export const fundRounds: FundRound[] = [
     endDate: "2024-02-01T00:00:00Z",
     totalBudget: 20000000,
     proposals: 1350,
-    approvedProposals: 0, // Not finalized yet
+    approvedProposals: 0,
     participation: 28.9
   }
 ];
 
-// Treasury Summary Statistics
 export const treasuryStats = {
-  totalFundsAvailable: 1000000000, // $1 billion in ADA
-  totalFundsAwarded: 56000000, // $56 million in ADA
+  totalFundsAvailable: 1000000000,
+  totalFundsAwarded: 56000000,
   totalProposals: 4200,
   fundedProposals: 981,
   activeProposals: 523,
   completedProposals: 458,
   rejectedProposals: 3219,
-  averageVoterParticipation: 26.8, // percentage
+  averageVoterParticipation: 26.8,
   categoryDistribution: [
     { name: "DeFi", value: 28 },
     { name: "Tooling", value: 19 },
