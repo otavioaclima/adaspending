@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Users, Building, User, Filter, ChevronDown, X, MessageSquare, Info, Link2 } from 'lucide-react';
@@ -33,10 +32,10 @@ const RecipientCard = ({ recipient }: { recipient: typeof recipients[0] }) => {
               <h3 className="font-medium text-gray-900">{recipient.name}</h3>
               <p className="text-sm text-gray-500 capitalize">
                 {recipient.type === 'organization'
-                  ? 'Organização'
+                  ? 'Organization'
                   : recipient.type === 'team'
-                    ? 'Equipe'
-                    : 'Indivíduo'}
+                    ? 'Team'
+                    : 'Individual'}
               </p>
             </div>
           </div>
@@ -47,13 +46,13 @@ const RecipientCard = ({ recipient }: { recipient: typeof recipients[0] }) => {
           
           <div className="grid grid-cols-2 gap-2 mb-4">
             <div>
-              <p className="text-xs text-gray-500">Total Recebido</p>
+              <p className="text-xs text-gray-500">Total Received</p>
               <p className="font-bold text-cardano-blue">
                 {recipient.totalFunded.toLocaleString()} ADA
               </p>
             </div>
             <div>
-              <p className="text-xs text-gray-500">Taxa de Sucesso</p>
+              <p className="text-xs text-gray-500">Success Rate</p>
               <p className="font-medium">
                 {recipient.proposalsSubmitted > 0 
                   ? Math.round((recipient.proposalsApproved / recipient.proposalsSubmitted) * 100) 
@@ -64,7 +63,7 @@ const RecipientCard = ({ recipient }: { recipient: typeof recipients[0] }) => {
           
           <div className="flex justify-between text-sm">
             <span className="text-gray-500">
-              {recipient.proposalsApproved} / {recipient.proposalsSubmitted} propostas
+              {recipient.proposalsApproved} / {recipient.proposalsSubmitted} proposals
             </span>
             {recipient.location && (
               <span className="text-gray-500">
@@ -78,35 +77,34 @@ const RecipientCard = ({ recipient }: { recipient: typeof recipients[0] }) => {
   );
 };
 
-// Novo componente para Info e funcionalidades interativas de transparência/comunicação
 const TransparencyCommunicationCard = () => (
   <div className="mb-8">
     <Card className="p-0 border-blue-200 bg-blue-50">
       <CardContent className="p-6 flex flex-col gap-4">
         <h2 className="text-xl font-bold text-blue-900 flex items-center gap-2">
           <Users className="h-5 w-5 text-blue-700" />
-          Transparência &amp; Comunicação
+          Transparency &amp; Communication
         </h2>
         <div className="space-y-4">
           <div className="flex items-start gap-3">
             <Info className="h-5 w-5 text-blue-700 mt-1" />
             <div>
-              <span className="font-semibold text-blue-800">Para DReps:</span>
+              <span className="font-semibold text-blue-800">For DReps:</span>
               <span className="text-blue-900 ml-1">
-                Julgue fornecedores principalmente por sua <b>competência</b>, <b>capacidade de entrega</b> e <b>transparência</b>, não apenas pelo menor preço.
+                Judge vendors primarily by their <b>competence</b>, <b>delivery capacity</b>, and <b>transparency</b>—not just by the lowest price.
               </span>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <Link2 className="h-5 w-5 text-blue-700 mt-1" />
             <div>
-              <span className="font-semibold text-blue-800">Benchmarks do Mercado:</span>
+              <span className="font-semibold text-blue-800">Market Benchmarks:</span>
               <span className="text-blue-900 ml-1">
-                Consulte valores de hora e preços praticados no mercado antes de aprovar propostas.
+                Consult hourly rates and prices practiced in the market before approving proposals.
               </span>
               <Button asChild variant="link" className="ml-2 p-0 h-5 text-blue-700 underline" size="sm">
                 <a href="https://www.linkedin.com/pulse/hourly-rates-worldwide-2023-statista/" target="_blank" rel="noopener noreferrer">
-                  Ver Benchmarks
+                  See Benchmarks
                 </a>
               </Button>
             </div>
@@ -114,9 +112,9 @@ const TransparencyCommunicationCard = () => (
           <div className="flex items-start gap-3">
             <MessageSquare className="h-5 w-5 text-blue-700 mt-1" />
             <div>
-              <span className="font-semibold text-blue-800">Comunicação direta:</span>
+              <span className="font-semibold text-blue-800">Direct Communication:</span>
               <span className="text-blue-900 ml-1">
-                Fale diretamente com fornecedores e usuários pelos canais públicos.
+                Connect directly with vendors and users via public channels.
               </span>
               <div className="flex gap-2 mt-2">
                 <Button asChild variant="outline" size="sm">
@@ -131,7 +129,7 @@ const TransparencyCommunicationCard = () => (
                 </Button>
                 <Button asChild variant="outline" size="sm">
                   <a href="https://forum.cardano.org/" target="_blank" rel="noopener noreferrer">
-                    Fórum
+                    Forum
                   </a>
                 </Button>
               </div>
@@ -141,7 +139,7 @@ const TransparencyCommunicationCard = () => (
         <div className="mt-2">
           <span className="inline-flex items-center gap-2 font-medium text-blue-800">
             <Info className="h-5 w-5 text-blue-700" />
-            Em breve: Fornecedores poderão atualizar contatos e canais de comunicação diretamente na plataforma.
+            Coming soon: Vendors will be able to update their contacts and communication channels directly on the platform.
           </span>
         </div>
       </CardContent>
@@ -167,9 +165,9 @@ const Recipients = () => {
   return (
     <Layout>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Recebedores</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Recipients</h1>
         <p className="text-lg text-gray-600">
-          Explore indivíduos, equipes e organizações que receberam financiamento do tesouro
+          Explore individuals, teams, and organizations that have received funding from the treasury
         </p>
       </div>
       
@@ -181,7 +179,7 @@ const Recipients = () => {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
             <Input
               className="pl-9"
-              placeholder="Buscar recebedores pelo nome..."
+              placeholder="Search recipients by name..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -192,7 +190,7 @@ const Recipients = () => {
             onClick={() => setShowFilters(!showFilters)}
           >
             <Filter className="h-4 w-4" />
-            <span>Filtros</span>
+            <span>Filters</span>
             {selectedType !== 'all' && (
               <Badge variant="secondary" className="ml-1">1</Badge>
             )}
@@ -200,7 +198,7 @@ const Recipients = () => {
           </Button>
           <Button>
             <Search className="h-4 w-4 mr-2" />
-            Buscar
+            Search
           </Button>
         </div>
         
@@ -209,39 +207,39 @@ const Recipients = () => {
             <CardContent className="pt-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1 block">Tipo de Recebedor</label>
+                  <label className="text-sm font-medium text-gray-700 mb-1 block">Recipient Type</label>
                   <Select 
                     value={selectedType} 
                     onValueChange={setSelectedType}
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Todos os Tipos" />
+                      <SelectValue placeholder="All Types" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">Todos os Tipos</SelectItem>
-                      <SelectItem value="individual">Indivíduo</SelectItem>
-                      <SelectItem value="team">Equipe</SelectItem>
-                      <SelectItem value="organization">Organização</SelectItem>
+                      <SelectItem value="all">All Types</SelectItem>
+                      <SelectItem value="individual">Individual</SelectItem>
+                      <SelectItem value="team">Team</SelectItem>
+                      <SelectItem value="organization">Organization</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1 block">Financiamento Mínimo</label>
-                  <Input type="number" placeholder="Valor mínimo em ADA" />
+                  <label className="text-sm font-medium text-gray-700 mb-1 block">Minimum Funding</label>
+                  <Input type="number" placeholder="Minimum funding in ADA" />
                 </div>
                 
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1 block">Taxa de Sucesso</label>
+                  <label className="text-sm font-medium text-gray-700 mb-1 block">Success Rate</label>
                   <Select defaultValue="any">
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Qualquer taxa de sucesso" />
+                      <SelectValue placeholder="Any success rate" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="any">Qualquer taxa de sucesso</SelectItem>
-                      <SelectItem value="high">Alta (&gt;75%)</SelectItem>
-                      <SelectItem value="medium">Média (25-75%)</SelectItem>
-                      <SelectItem value="low">Baixa (&lt;25%)</SelectItem>
+                      <SelectItem value="any">Any success rate</SelectItem>
+                      <SelectItem value="high">High (>75%)</SelectItem>
+                      <SelectItem value="medium">Medium (25-75%)</SelectItem>
+                      <SelectItem value="low">Low (<25%)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -256,7 +254,7 @@ const Recipients = () => {
                   className="flex items-center gap-1"
                 >
                   <X className="h-4 w-4" />
-                  Limpar filtros
+                  Clear filters
                 </Button>
               </div>
             </CardContent>
@@ -266,12 +264,12 @@ const Recipients = () => {
         {selectedType !== 'all' && (
           <div className="flex flex-wrap gap-2 mb-4">
             <Badge variant="outline" className="py-1 px-3 flex items-center gap-1">
-              Tipo: {selectedType === 'organization'
-                ? 'Organização'
+              Type: {selectedType === 'organization'
+                ? 'Organization'
                 : selectedType === 'team'
-                  ? 'Equipe'
+                  ? 'Team'
                   : selectedType === 'individual'
-                    ? 'Indivíduo'
+                    ? 'Individual'
                     : selectedType.charAt(0).toUpperCase() + selectedType.slice(1)}
               <X 
                 className="h-3 w-3 ml-1 cursor-pointer" 
@@ -293,8 +291,8 @@ const Recipients = () => {
           <div className="bg-gray-100 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
             <Users className="h-8 w-8 text-gray-400" />
           </div>
-          <h3 className="text-lg font-medium mb-2">Nenhum Recebedor Encontrado</h3>
-          <p className="text-gray-600 mb-6">Tente ajustar sua busca ou filtros</p>
+          <h3 className="text-lg font-medium mb-2">No Recipients Found</h3>
+          <p className="text-gray-600 mb-6">Try adjusting your search or filters</p>
           <Button 
             variant="outline" 
             onClick={() => {
@@ -302,7 +300,7 @@ const Recipients = () => {
               setSelectedType('all');
             }}
           >
-            Limpar filtros
+            Clear filters
           </Button>
         </div>
       )}
@@ -311,4 +309,3 @@ const Recipients = () => {
 };
 
 export default Recipients;
-
