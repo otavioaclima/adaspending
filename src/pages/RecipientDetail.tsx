@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
@@ -11,13 +12,6 @@ import RecipientDetailsCard from '@/components/recipients/RecipientDetailsCard';
 import RecipientProposalsCard from '@/components/recipients/RecipientProposalsCard';
 import RecipientAccountingTable from '@/components/recipients/RecipientAccountingTable';
 import RecipientMilestones from '@/components/recipients/RecipientMilestones';
-
-const getRecipientTypeLabel = (type: string) => {
-  if (type === 'organization') return 'Organization';
-  if (type === 'team') return 'Team';
-  if (type === 'individual') return 'Individual';
-  return type.charAt(0).toUpperCase() + type.slice(1);
-};
 
 const RecipientDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -65,6 +59,7 @@ const RecipientDetail = () => {
           website={recipient.website}
         />
       </div>
+      
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <RecipientDetailsCard
@@ -73,48 +68,19 @@ const RecipientDetail = () => {
             website={recipient.website}
             description={recipient.description}
           />
-
           <RecipientProposalsCard recipientProposals={recipientProposals} />
-        </div>
-        <div className="space-y-6">
-          <div>
-            <RecipientFundingStats
-              totalFunded={recipient.totalFunded}
-              proposalsSubmitted={recipient.proposalsSubmitted}
-              proposalsApproved={recipient.proposalsApproved}
-            />
-          </div>
-          <div>
-            <RecipientDetailsCard
-              type={recipient.type}
-              location={recipient.location}
-              website={recipient.website}
-              description={recipient.description}
-            />
-          </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
-        <div className="lg:col-span-2">
-          <div className="mb-6">
-            <RecipientAccountingTable
-              transactionRows={transactionRows}
-              totalFunded={recipient.totalFunded}
-            />
-          </div>
+          <RecipientAccountingTable
+            transactionRows={transactionRows}
+            totalFunded={recipient.totalFunded}
+          />
           <RecipientMilestones proposals={recipientProposals} />
         </div>
-        <div>
+        
+        <div className="space-y-6">
           <RecipientFundingStats
             totalFunded={recipient.totalFunded}
             proposalsSubmitted={recipient.proposalsSubmitted}
             proposalsApproved={recipient.proposalsApproved}
-          />
-          <RecipientDetailsCard
-            type={recipient.type}
-            location={recipient.location}
-            website={recipient.website}
-            description={recipient.description}
           />
         </div>
       </div>

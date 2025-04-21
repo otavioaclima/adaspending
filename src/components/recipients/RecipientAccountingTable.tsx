@@ -28,24 +28,24 @@ const RecipientAccountingTable = ({ transactionRows, totalFunded }: Props) => {
   return (
     <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
       <h2 className="font-bold text-xl mb-2 text-yellow-700 flex items-center gap-2">
-        Transparência & Contabilidade
+        Transparency & Accounting
       </h2>
       <p className="mb-4 text-yellow-900">
-        Acompanhe os recursos movimentados pelo fornecedor, com transparência para auditoria e rastreabilidade.
+        Track resources moved by the recipient, with transparency for auditing and traceability.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div>
-          <p className="text-sm text-gray-500">Total Recebido</p>
+          <p className="text-sm text-gray-500">Total Received</p>
           <p className="font-bold text-cardano-blue">
             {totalFunded.toLocaleString()} ADA
           </p>
         </div>
         <div>
-          <p className="text-sm text-gray-500">Total Gasto</p>
+          <p className="text-sm text-gray-500">Total Spent</p>
           <p className="font-bold text-yellow-700">{totalSpent.toLocaleString()} ADA</p>
         </div>
         <div>
-          <p className="text-sm text-gray-500">Restante a Gastar</p>
+          <p className="text-sm text-gray-500">Remaining</p>
           <p className="font-bold text-gray-800">
             {(totalFunded - totalSpent).toLocaleString()} ADA
           </p>
@@ -55,11 +55,11 @@ const RecipientAccountingTable = ({ transactionRows, totalFunded }: Props) => {
         <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-3 py-2 text-left font-semibold text-gray-700">Data</th>
-              <th className="px-3 py-2 text-left font-semibold text-gray-700">Título</th>
+              <th className="px-3 py-2 text-left font-semibold text-gray-700">Date</th>
+              <th className="px-3 py-2 text-left font-semibold text-gray-700">Title</th>
               <th className="px-3 py-2 text-left font-semibold text-gray-700">Fund Round</th>
-              <th className="px-3 py-2 text-left font-semibold text-gray-700">Recebido</th>
-              <th className="px-3 py-2 text-left font-semibold text-gray-700">Gasto</th>
+              <th className="px-3 py-2 text-left font-semibold text-gray-700">Received</th>
+              <th className="px-3 py-2 text-left font-semibold text-gray-700">Spent</th>
               <th className="px-3 py-2 text-left font-semibold text-gray-700">Status</th>
               <th className="px-3 py-2 text-left font-semibold text-gray-700">Tx Hash</th>
             </tr>
@@ -68,7 +68,7 @@ const RecipientAccountingTable = ({ transactionRows, totalFunded }: Props) => {
             {transactionRows.length === 0 ? (
               <tr>
                 <td colSpan={7} className="py-6 text-center text-gray-400 italic">
-                  Nenhuma transação registrada
+                  No transactions recorded
                 </td>
               </tr>
             ) : (

@@ -23,9 +23,9 @@ type Props = {
 
 const RecipientMilestones = ({ proposals }: Props) => (
   <div>
-    <h2 className="font-bold text-lg mb-2">Andamento dos Projetos (Milestones)</h2>
+    <h2 className="font-bold text-lg mb-2">Project Progress (Milestones)</h2>
     {proposals.length === 0 ? (
-      <div className="text-gray-500 italic">Nenhum projeto registrado para este fornecedor.</div>
+      <div className="text-gray-500 italic">No projects registered for this recipient.</div>
     ) : (
       proposals.map((proposal) => (
         <div key={proposal.id} className="mb-6 border rounded-lg p-4 bg-gray-50">
@@ -44,9 +44,9 @@ const RecipientMilestones = ({ proposals }: Props) => (
                 <thead>
                   <tr>
                     <th className="py-1 px-2 text-left">Milestone</th>
-                    <th className="py-1 px-2 text-left">Descrição</th>
+                    <th className="py-1 px-2 text-left">Description</th>
                     <th className="py-1 px-2 text-left">Status</th>
-                    <th className="py-1 px-2 text-left">Prazo</th>
+                    <th className="py-1 px-2 text-left">Due Date</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -65,10 +65,10 @@ const RecipientMilestones = ({ proposals }: Props) => (
                           }
                         >
                           {m.status === "completed"
-                            ? "Concluído"
+                            ? "Completed"
                             : m.status === "in-progress"
-                            ? "Em andamento"
-                            : "Pendente"}
+                            ? "In Progress"
+                            : "Pending"}
                         </span>
                       </td>
                       <td className="py-1 px-2">
@@ -81,7 +81,7 @@ const RecipientMilestones = ({ proposals }: Props) => (
             </div>
           ) : (
             <div className="italic text-gray-400">
-              Nenhuma milestone registrada para este projeto.
+              No milestones registered for this project.
             </div>
           )}
         </div>
