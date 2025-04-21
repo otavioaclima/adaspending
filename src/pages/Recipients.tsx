@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Users, Building, User, Filter, ChevronDown, X, MessageSquare, Info, Link2 } from 'lucide-react';
@@ -163,148 +164,150 @@ const Recipients = () => {
   });
   
   return (
-    <Layout>
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Recipients</h1>
-        <p className="text-lg text-gray-600">
-          Explore individuals, teams, and organizations that have received funding from the treasury
-        </p>
-      </div>
-      
-      <TransparencyCommunicationCard />
+    <div>
+      <Layout>
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Recipients</h1>
+          <p className="text-lg text-gray-600">
+            Explore individuals, teams, and organizations that have received funding from the treasury
+          </p>
+        </div>
+        
+        <TransparencyCommunicationCard />
 
-      <div className="mb-6">
-        <div className="flex flex-col md:flex-row gap-3 mb-4">
-          <div className="flex-grow relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input
-              className="pl-9"
-              placeholder="Search recipients by name..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <Button 
-            variant="outline" 
-            className="flex items-center gap-2"
-            onClick={() => setShowFilters(!showFilters)}
-          >
-            <Filter className="h-4 w-4" />
-            <span>Filters</span>
-            {selectedType !== 'all' && (
-              <Badge variant="secondary" className="ml-1">1</Badge>
-            )}
-            <ChevronDown className={`h-4 w-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
-          </Button>
-          <Button>
-            <Search className="h-4 w-4 mr-2" />
-            Search
-          </Button>
-        </div>
-        
-        {showFilters && (
-          <Card className="mb-4">
-            <CardContent className="pt-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1 block">Recipient Type</label>
-                  <Select 
-                    value={selectedType} 
-                    onValueChange={setSelectedType}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="All Types" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Types</SelectItem>
-                      <SelectItem value="individual">Individual</SelectItem>
-                      <SelectItem value="team">Team</SelectItem>
-                      <SelectItem value="organization">Organization</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1 block">Minimum Funding</label>
-                  <Input type="number" placeholder="Minimum funding in ADA" />
-                </div>
-                
-                <div>
-                  <label className="text-sm font-medium text-gray-700 mb-1 block">Success Rate</label>
-                  <Select defaultValue="any">
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Any success rate" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="any">Any success rate</SelectItem>
-                      <SelectItem value="high">High (>75%)</SelectItem>
-                      <SelectItem value="medium">Medium (25-75%)</SelectItem>
-                      <SelectItem value="low">Low (<25%)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              
-              <div className="flex justify-end">
-                <Button 
-                  variant="ghost" 
-                  onClick={() => {
-                    setSelectedType('all');
-                  }} 
-                  className="flex items-center gap-1"
-                >
-                  <X className="h-4 w-4" />
-                  Clear filters
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-        
-        {selectedType !== 'all' && (
-          <div className="flex flex-wrap gap-2 mb-4">
-            <Badge variant="outline" className="py-1 px-3 flex items-center gap-1">
-              Type: {selectedType === 'organization'
-                ? 'Organization'
-                : selectedType === 'team'
-                  ? 'Team'
-                  : selectedType === 'individual'
-                    ? 'Individual'
-                    : selectedType.charAt(0).toUpperCase() + selectedType.slice(1)}
-              <X 
-                className="h-3 w-3 ml-1 cursor-pointer" 
-                onClick={() => setSelectedType('all')}
+        <div className="mb-6">
+          <div className="flex flex-col md:flex-row gap-3 mb-4">
+            <div className="flex-grow relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                className="pl-9"
+                placeholder="Search recipients by name..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
-            </Badge>
+            </div>
+            <Button 
+              variant="outline" 
+              className="flex items-center gap-2"
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              <Filter className="h-4 w-4" />
+              <span>Filters</span>
+              {selectedType !== 'all' && (
+                <Badge variant="secondary" className="ml-1">1</Badge>
+              )}
+              <ChevronDown className={`h-4 w-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
+            </Button>
+            <Button>
+              <Search className="h-4 w-4 mr-2" />
+              Search
+            </Button>
+          </div>
+          
+          {showFilters && (
+            <Card className="mb-4">
+              <CardContent className="pt-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                  <div>
+                    <label className="text-sm font-medium text-gray-700 mb-1 block">Recipient Type</label>
+                    <Select 
+                      value={selectedType} 
+                      onValueChange={setSelectedType}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="All Types" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Types</SelectItem>
+                        <SelectItem value="individual">Individual</SelectItem>
+                        <SelectItem value="team">Team</SelectItem>
+                        <SelectItem value="organization">Organization</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div>
+                    <label className="text-sm font-medium text-gray-700 mb-1 block">Minimum Funding</label>
+                    <Input type="number" placeholder="Minimum funding in ADA" />
+                  </div>
+                  
+                  <div>
+                    <label className="text-sm font-medium text-gray-700 mb-1 block">Success Rate</label>
+                    <Select defaultValue="any">
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Any success rate" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="any">Any success rate</SelectItem>
+                        <SelectItem value="high">High (&gt;75%)</SelectItem>
+                        <SelectItem value="medium">Medium (25-75%)</SelectItem>
+                        <SelectItem value="low">Low (&lt;25%)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                
+                <div className="flex justify-end">
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => {
+                      setSelectedType('all');
+                    }} 
+                    className="flex items-center gap-1"
+                  >
+                    <X className="h-4 w-4" />
+                    Clear filters
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          
+          {selectedType !== 'all' && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              <Badge variant="outline" className="py-1 px-3 flex items-center gap-1">
+                Type: {selectedType === 'organization'
+                  ? 'Organization'
+                  : selectedType === 'team'
+                    ? 'Team'
+                    : selectedType === 'individual'
+                      ? 'Individual'
+                      : selectedType.charAt(0).toUpperCase() + selectedType.slice(1)}
+                <X 
+                  className="h-3 w-3 ml-1 cursor-pointer" 
+                  onClick={() => setSelectedType('all')}
+                />
+              </Badge>
+            </div>
+          )}
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredRecipients.map(recipient => (
+            <RecipientCard key={recipient.id} recipient={recipient} />
+          ))}
+        </div>
+        
+        {filteredRecipients.length === 0 && (
+          <div className="text-center py-12">
+            <div className="bg-gray-100 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
+              <Users className="h-8 w-8 text-gray-400" />
+            </div>
+            <h3 className="text-lg font-medium mb-2">No Recipients Found</h3>
+            <p className="text-gray-600 mb-6">Try adjusting your search or filters</p>
+            <Button 
+              variant="outline" 
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedType('all');
+              }}
+            >
+              Clear filters
+            </Button>
           </div>
         )}
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredRecipients.map(recipient => (
-          <RecipientCard key={recipient.id} recipient={recipient} />
-        ))}
-      </div>
-      
-      {filteredRecipients.length === 0 && (
-        <div className="text-center py-12">
-          <div className="bg-gray-100 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
-            <Users className="h-8 w-8 text-gray-400" />
-          </div>
-          <h3 className="text-lg font-medium mb-2">No Recipients Found</h3>
-          <p className="text-gray-600 mb-6">Try adjusting your search or filters</p>
-          <Button 
-            variant="outline" 
-            onClick={() => {
-              setSearchTerm('');
-              setSelectedType('all');
-            }}
-          >
-            Clear filters
-          </Button>
-        </div>
-      )}
-    </Layout>
+      </Layout>
+    </div>
   );
 };
 
