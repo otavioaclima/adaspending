@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Users, Building, User, Filter, ChevronDown, X, MessageSquare, Info, Link2 } from 'lucide-react';
@@ -44,10 +43,25 @@ const RecipientCard = ({ recipient }: { recipient: typeof recipients[0] }) => {
           {recipient.description && (
             <p className="text-sm text-gray-600 mb-4 line-clamp-2">{recipient.description}</p>
           )}
+
+          <div className="text-xs text-gray-600 mb-2">
+            {recipient.numberOfEmployees !== undefined && (
+              <div>Employees: <span className="font-medium text-gray-800">{recipient.numberOfEmployees}</span></div>
+            )}
+            {recipient.capital && (
+              <div>Capital: <span className="font-medium text-gray-800">{recipient.capital}</span></div>
+            )}
+            {recipient.address && (
+              <div>Address: <span className="font-medium text-gray-800">{recipient.address}</span></div>
+            )}
+            {recipient.registrationNumber && (
+              <div>Registration #: <span className="font-medium text-gray-800">{recipient.registrationNumber}</span></div>
+            )}
+          </div>
           
           <div className="grid grid-cols-2 gap-2 mb-4">
             <div>
-              <p className="text-xs text-gray-500">Total Received</p>
+              <p className="text-xs text-gray-500">Total Funded</p>
               <p className="font-bold text-cardano-blue">
                 {recipient.totalFunded.toLocaleString()} ADA
               </p>
@@ -84,7 +98,7 @@ const TransparencyCommunicationCard = () => (
       <CardContent className="p-6 flex flex-col gap-4">
         <h2 className="text-xl font-bold text-blue-900 flex items-center gap-2">
           <Users className="h-5 w-5 text-blue-700" />
-          Transparency &amp; Communication
+          Transparency & Communication
         </h2>
         <div className="space-y-4">
           <div className="flex items-start gap-3">
@@ -92,7 +106,7 @@ const TransparencyCommunicationCard = () => (
             <div>
               <span className="font-semibold text-blue-800">For DReps:</span>
               <span className="text-blue-900 ml-1">
-                Judge vendors primarily by their <b>competence</b>, <b>delivery capacity</b>, and <b>transparency</b>—not just by the lowest price.
+                Evaluate vendors based primarily on <b>competence</b>, <b>delivery capacity</b>, and <b>transparency</b>—not only the lowest price.
               </span>
             </div>
           </div>
@@ -101,7 +115,7 @@ const TransparencyCommunicationCard = () => (
             <div>
               <span className="font-semibold text-blue-800">Market Benchmarks:</span>
               <span className="text-blue-900 ml-1">
-                Consult hourly rates and prices practiced in the market before approving proposals.
+                Check hourly rates and market prices before approving proposals.
               </span>
               <Button asChild variant="link" className="ml-2 p-0 h-5 text-blue-700 underline" size="sm">
                 <a href="https://www.linkedin.com/pulse/hourly-rates-worldwide-2023-statista/" target="_blank" rel="noopener noreferrer">
@@ -115,7 +129,7 @@ const TransparencyCommunicationCard = () => (
             <div>
               <span className="font-semibold text-blue-800">Direct Communication:</span>
               <span className="text-blue-900 ml-1">
-                Connect directly with vendors and users via public channels.
+                Connect directly with vendors and users in public channels.
               </span>
               <div className="flex gap-2 mt-2">
                 <Button asChild variant="outline" size="sm">
@@ -140,7 +154,7 @@ const TransparencyCommunicationCard = () => (
         <div className="mt-2">
           <span className="inline-flex items-center gap-2 font-medium text-blue-800">
             <Info className="h-5 w-5 text-blue-700" />
-            Coming soon: Vendors will be able to update their contacts and communication channels directly on the platform.
+            Coming soon: Vendors will be able to add contacts and communication channels directly on the platform.
           </span>
         </div>
       </CardContent>
@@ -169,7 +183,7 @@ const Recipients = () => {
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Recipients</h1>
           <p className="text-lg text-gray-600">
-            Explore individuals, teams, and organizations that have received funding from the treasury
+            Explore individuals, teams, and organizations that have received treasury funding
           </p>
         </div>
         

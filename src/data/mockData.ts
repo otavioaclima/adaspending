@@ -39,6 +39,10 @@ export interface Recipient {
   description?: string;
   website?: string;
   proposals: string[];
+  numberOfEmployees?: number;
+  capital?: string;
+  address?: string;
+  registrationNumber?: string;
 }
 
 export interface FundRound {
@@ -311,7 +315,11 @@ export const recipients: Recipient[] = [
     location: "Switzerland",
     description: "Focused on decentralized identity solutions for the Cardano ecosystem",
     website: "https://example.com/atalasystems",
-    proposals: ["prop-001"]
+    proposals: ["prop-001"],
+    numberOfEmployees: 25,
+    capital: "CHF 1,000,000",
+    address: "Bahnhofstrasse 1, Zürich, Switzerland",
+    registrationNumber: "CH-020.3.456.789-0"
   },
   {
     id: "rec-002",
@@ -323,7 +331,11 @@ export const recipients: Recipient[] = [
     location: "Virtual",
     description: "DAO focused on interoperability between Cardano and other blockchains",
     website: "https://example.com/bridgebuilders",
-    proposals: ["prop-002"]
+    proposals: ["prop-002"],
+    numberOfEmployees: 12,
+    capital: "₳500,000",
+    address: "Virtual DAO (No physical address)",
+    registrationNumber: "DAO-00012234"
   },
   {
     id: "rec-003",
@@ -335,7 +347,11 @@ export const recipients: Recipient[] = [
     location: "Global",
     description: "Consortium of educators focused on Cardano development training",
     website: "https://example.com/cardanoeducation",
-    proposals: ["prop-003"]
+    proposals: ["prop-003"],
+    numberOfEmployees: 32,
+    capital: "₳800,000",
+    address: "Global operations",
+    registrationNumber: "N/A"
   },
   {
     id: "rec-004",
@@ -347,7 +363,11 @@ export const recipients: Recipient[] = [
     location: "Kenya",
     description: "African branch of Emurgo focused on blockchain adoption in Africa",
     website: "https://example.com/emurgoafrica",
-    proposals: ["prop-004"]
+    proposals: ["prop-004"],
+    numberOfEmployees: 20,
+    capital: "KES 20,000,000",
+    address: "Waiyaki Way, Nairobi, Kenya",
+    registrationNumber: "KE-2013456"
   },
   {
     id: "rec-005",
@@ -359,7 +379,11 @@ export const recipients: Recipient[] = [
     location: "United Kingdom",
     description: "Team developing governance solutions for DAOs on Cardano",
     website: "https://example.com/governancelabs",
-    proposals: ["prop-005"]
+    proposals: ["prop-005"],
+    numberOfEmployees: 5,
+    capital: "£50,000",
+    address: "221B Baker Street, London, UK",
+    registrationNumber: "UK-998877"
   },
   {
     id: "rec-006",
@@ -371,7 +395,11 @@ export const recipients: Recipient[] = [
     location: "Germany",
     description: "Non-profit focused on environmental applications of blockchain",
     website: "https://example.com/greenblockchain",
-    proposals: ["prop-006"]
+    proposals: ["prop-006"],
+    numberOfEmployees: 10,
+    capital: "€100,000",
+    address: "Hauptstr. 10, Berlin, Germany",
+    registrationNumber: "DE-101100"
   },
   {
     id: "rec-007",
@@ -383,7 +411,11 @@ export const recipients: Recipient[] = [
     location: "United States",
     description: "Developer collective building infrastructure for dApp discovery",
     website: "https://example.com/dappcollective",
-    proposals: ["prop-007"]
+    proposals: ["prop-007"],
+    numberOfEmployees: 16,
+    capital: "$300,000",
+    address: "123 Market St, San Francisco, CA, USA",
+    registrationNumber: "US-334455"
   },
   {
     id: "rec-008",
@@ -395,7 +427,11 @@ export const recipients: Recipient[] = [
     location: "Global",
     description: "IOG team focused on improving developer experience",
     website: "https://example.com/iogdevexp",
-    proposals: ["prop-008"]
+    proposals: ["prop-008"],
+    numberOfEmployees: 40,
+    capital: "₳900,000",
+    address: "Remote-first (Global)",
+    registrationNumber: "N/A"
   }
 ];
 
