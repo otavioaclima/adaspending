@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Users, Building, User, Filter, ChevronDown, X } from 'lucide-react';
@@ -72,18 +71,47 @@ const RecipientCard = ({ recipient }: { recipient: typeof recipients[0] }) => {
   );
 };
 
+const InformationCard = () => (
+  <div className="mb-8">
+    <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 flex flex-col gap-4 shadow-sm">
+      <h2 className="text-xl font-bold text-blue-900 flex items-center gap-2">
+        <Users className="h-5 w-5 text-blue-700" />
+        Transparência &amp; Comunicação
+      </h2>
+      <ul className="list-disc ml-6 text-blue-900 text-base space-y-2">
+        <li>
+          <span className="font-semibold text-blue-800">Para DReps:</span> avalie fornecedores primeiro por competência, capacidade e transparência na entrega, não apenas pelo menor preço proposto.
+        </li>
+        <li>
+          Consulte <span className="font-semibold text-blue-800">benchmarks de preços/hora</span> do mercado ao decidir orçamentos – desconfie de valores muito abaixo ou acima da média.
+        </li>
+        <li>
+          <span className="font-semibold text-blue-800">Abra espaço para diálogo!</span> Use canais públicos (como Discord, Telegram, ou fóruns) para conversar diretamente com fornecedores e outros usuários.
+        </li>
+      </ul>
+      <div className="mt-2">
+        <span className="inline-flex items-center gap-2 font-medium text-blue-800">
+          <svg width="20" height="20" fill="none" className="inline" viewBox="0 0 20 20">
+            <circle cx="10" cy="10" r="10" fill="#2563EB" fillOpacity="0.16"/>
+            <path d="M7.5 10.8V14h5v-3.2M12.83 8.13A2.5 2.5 0 1 0 7.17 8.13M2.5 10A7.5 7.5 0 1 1 17.5 10A7.5 7.5 0 0 1 2.5 10Z" stroke="#2563EB" strokeWidth="1.25"/>
+          </svg>
+          Em breve: Os próprios fornecedores poderão atualizar contatos &amp; canais públicos diretamente na plataforma.
+        </span>
+      </div>
+    </div>
+  </div>
+);
+
 const Recipients = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
   
   const filteredRecipients = recipients.filter(recipient => {
-    // Apply search filter
     if (searchTerm && !recipient.name.toLowerCase().includes(searchTerm.toLowerCase())) {
       return false;
     }
     
-    // Apply type filter
     if (selectedType !== 'all' && recipient.type !== selectedType) {
       return false;
     }
@@ -100,7 +128,8 @@ const Recipients = () => {
         </p>
       </div>
       
-      {/* Search and Filter Section */}
+      <InformationCard />
+
       <div className="mb-6">
         <div className="flex flex-col md:flex-row gap-3 mb-4">
           <div className="flex-grow relative">
@@ -130,7 +159,6 @@ const Recipients = () => {
           </Button>
         </div>
         
-        {/* Expandable Filters */}
         {showFilters && (
           <Card className="mb-4">
             <CardContent className="pt-6">
@@ -190,7 +218,6 @@ const Recipients = () => {
           </Card>
         )}
         
-        {/* Active Filters Display */}
         {selectedType !== 'all' && (
           <div className="flex flex-wrap gap-2 mb-4">
             <Badge variant="outline" className="py-1 px-3 flex items-center gap-1">
@@ -204,7 +231,6 @@ const Recipients = () => {
         )}
       </div>
       
-      {/* Recipients Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredRecipients.map(recipient => (
           <RecipientCard key={recipient.id} recipient={recipient} />
