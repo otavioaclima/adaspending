@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -8,7 +7,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   
   const navigation = [
-    { name: 'Overview', href: '/', icon: BarChart3 },
+    { name: 'Overview', href: '/dashboard', icon: BarChart3 },
     { name: 'Award Search', href: '/awards', icon: Search },
     { name: 'Proposals', href: '/proposals', icon: Award },
     { name: 'Recipients', href: '/recipients', icon: Users },
@@ -22,12 +21,11 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <header className="bg-gradient-to-r from-[#131637] to-[#000111] border-b border-gray-800 sticky top-0 z-10">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <Link to="/" className="flex items-center">
-              {/* Substitui a logo preta pela logo BRANCA nas páginas internas */}
+            <Link to="/dashboard" className="flex items-center">
               <img 
                 src="/lovable-uploads/257db3dc-2214-4178-afd2-70760c3899c4.png" 
-                alt="ADAspending Logo" 
-                className="h-16 w-auto" 
+                alt="Cardano Treasury Explorer" 
+                className="h-20 w-auto" 
               />
             </Link>
           </div>
@@ -87,10 +85,10 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               <div className="flex items-center justify-center md:justify-start space-x-2">
                 <img 
                   src="/lovable-uploads/e4da4614-7cea-4f9c-853c-3f019f7932ca.png" 
-                  alt="ADAspending Logo" 
+                  alt="Cardano Treasury Explorer" 
                   className="h-8 w-auto"
                 />
-                {/* ADAspending text removed from here */}
+                {/* ADAspending text removido */}
               </div>
               <p className="text-sm text-gray-600 mt-2">
                 An open data source for treasury spending on the Cardano blockchain.
@@ -137,4 +135,3 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default Layout;
-
