@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Users, Building, User, Filter, ChevronDown, X } from 'lucide-react';
+import { Search, Users, Building, User, Filter, ChevronDown, X, MessageSquare, Info, Link2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -78,34 +78,74 @@ const RecipientCard = ({ recipient }: { recipient: typeof recipients[0] }) => {
   );
 };
 
-const InformationCard = () => (
+// Novo componente para Info e funcionalidades interativas de transparência/comunicação
+const TransparencyCommunicationCard = () => (
   <div className="mb-8">
-    <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 flex flex-col gap-4 shadow-sm">
-      <h2 className="text-xl font-bold text-blue-900 flex items-center gap-2">
-        <Users className="h-5 w-5 text-blue-700" />
-        Transparência &amp; Comunicação
-      </h2>
-      <ul className="list-disc ml-6 text-blue-900 text-base space-y-2">
-        <li>
-          <span className="font-semibold text-blue-800">Para DReps:</span> avalie fornecedores primeiro por competência, capacidade e transparência na entrega, não apenas pelo menor preço proposto.
-        </li>
-        <li>
-          Consulte <span className="font-semibold text-blue-800">benchmarks de preços/hora</span> do mercado ao decidir orçamentos – desconfie de valores muito abaixo ou acima da média.
-        </li>
-        <li>
-          <span className="font-semibold text-blue-800">Abra espaço para diálogo!</span> Use canais públicos (como Discord, Telegram, ou fóruns) para conversar diretamente com fornecedores e outros usuários.
-        </li>
-      </ul>
-      <div className="mt-2">
-        <span className="inline-flex items-center gap-2 font-medium text-blue-800">
-          <svg width="20" height="20" fill="none" className="inline" viewBox="0 0 20 20">
-            <circle cx="10" cy="10" r="10" fill="#2563EB" fillOpacity="0.16"/>
-            <path d="M7.5 10.8V14h5v-3.2M12.83 8.13A2.5 2.5 0 1 0 7.17 8.13M2.5 10A7.5 7.5 0 1 1 17.5 10A7.5 7.5 0 0 1 2.5 10Z" stroke="#2563EB" strokeWidth="1.25"/>
-          </svg>
-          Em breve: Os próprios fornecedores poderão atualizar contatos &amp; canais públicos diretamente na plataforma.
-        </span>
-      </div>
-    </div>
+    <Card className="p-0 border-blue-200 bg-blue-50">
+      <CardContent className="p-6 flex flex-col gap-4">
+        <h2 className="text-xl font-bold text-blue-900 flex items-center gap-2">
+          <Users className="h-5 w-5 text-blue-700" />
+          Transparência &amp; Comunicação
+        </h2>
+        <div className="space-y-4">
+          <div className="flex items-start gap-3">
+            <Info className="h-5 w-5 text-blue-700 mt-1" />
+            <div>
+              <span className="font-semibold text-blue-800">Para DReps:</span>
+              <span className="text-blue-900 ml-1">
+                Julgue fornecedores principalmente por sua <b>competência</b>, <b>capacidade de entrega</b> e <b>transparência</b>, não apenas pelo menor preço.
+              </span>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <Link2 className="h-5 w-5 text-blue-700 mt-1" />
+            <div>
+              <span className="font-semibold text-blue-800">Benchmarks do Mercado:</span>
+              <span className="text-blue-900 ml-1">
+                Consulte valores de hora e preços praticados no mercado antes de aprovar propostas.
+              </span>
+              <Button asChild variant="link" className="ml-2 p-0 h-5 text-blue-700 underline" size="sm">
+                <a href="https://www.linkedin.com/pulse/hourly-rates-worldwide-2023-statista/" target="_blank" rel="noopener noreferrer">
+                  Ver Benchmarks
+                </a>
+              </Button>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <MessageSquare className="h-5 w-5 text-blue-700 mt-1" />
+            <div>
+              <span className="font-semibold text-blue-800">Comunicação direta:</span>
+              <span className="text-blue-900 ml-1">
+                Fale diretamente com fornecedores e usuários pelos canais públicos.
+              </span>
+              <div className="flex gap-2 mt-2">
+                <Button asChild variant="outline" size="sm">
+                  <a href="https://discord.gg/cardano" target="_blank" rel="noopener noreferrer">
+                    Discord
+                  </a>
+                </Button>
+                <Button asChild variant="outline" size="sm">
+                  <a href="https://t.me/CardanoBR" target="_blank" rel="noopener noreferrer">
+                    Telegram
+                  </a>
+                </Button>
+                <Button asChild variant="outline" size="sm">
+                  <a href="https://forum.cardano.org/" target="_blank" rel="noopener noreferrer">
+                    Fórum
+                  </a>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="mt-2">
+          <span className="inline-flex items-center gap-2 font-medium text-blue-800">
+            <Info className="h-5 w-5 text-blue-700" />
+            Em breve: Fornecedores poderão atualizar contatos e canais de comunicação diretamente na plataforma.
+          </span>
+        </div>
+      </CardContent>
+    </Card>
   </div>
 );
 
@@ -133,7 +173,7 @@ const Recipients = () => {
         </p>
       </div>
       
-      <InformationCard />
+      <TransparencyCommunicationCard />
 
       <div className="mb-6">
         <div className="flex flex-col md:flex-row gap-3 mb-4">
