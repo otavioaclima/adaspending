@@ -23,8 +23,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <Link to="/" className="flex items-center">
+              {/* Substitui a logo preta pela logo BRANCA nas páginas internas */}
               <img 
-                src="/lovable-uploads/e4da4614-7cea-4f9c-853c-3f019f7932ca.png" 
+                src="/lovable-uploads/257db3dc-2214-4178-afd2-70760c3899c4.png" 
                 alt="ADAspending Logo" 
                 className="h-10 w-auto" 
               />
@@ -136,3 +137,4 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 };
 
 export default Layout;
+
