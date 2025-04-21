@@ -67,6 +67,10 @@ const RecipientDetail = () => {
             location={recipient.location}
             website={recipient.website}
             description={recipient.description}
+            numberOfEmployees={recipient.numberOfEmployees}
+            capital={recipient.capital}
+            address={recipient.address}
+            registrationNumber={recipient.registrationNumber}
           />
           <RecipientProposalsCard recipientProposals={recipientProposals} />
           <RecipientAccountingTable
