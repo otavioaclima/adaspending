@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, ExternalLink, User, Users, Building, Award, Calendar, Info, Mail, Link2 } from 'lucide-react';
@@ -34,22 +33,33 @@ const RecipientDetail = () => {
     );
   }
   
-  // Get recipient's proposals
   const recipientProposals = proposals.filter(p => recipient.proposals.includes(p.id));
   
-  // Determine icon based on recipient type
+  const transactionRows = recipientProposals
+    .map(proposal => ({
+      id: proposal.id,
+      title: proposal.title,
+      fundRound: proposal.fundRound,
+      requestedAmount: proposal.requestedAmount,
+      fundedAmount: proposal.fundedAmount ?? 0,
+      spentAmount: proposal.spentAmount ?? 0,
+      transactionHash: proposal.transactionHash,
+      status: proposal.status,
+      updatedAt: proposal.updatedAt,
+    }));
+
+  const totalSpent = transactionRows.reduce((acc, curr) => acc + (curr.spentAmount || 0), 0);
+
   const RecipientIcon = 
     recipient.type === 'organization' ? Building :
     recipient.type === 'team' ? Users : User;
   
-  // Calculate success rate
   const successRate = recipient.proposalsSubmitted > 0 
     ? Math.round((recipient.proposalsApproved / recipient.proposalsSubmitted) * 100) 
     : 0;
 
   const rejectedProposals = recipient.proposalsSubmitted - recipient.proposalsApproved;
 
-  // Format website URL display
   const getHostname = (url: string) => {
     try {
       return new URL(url).hostname.replace('www.', '');
@@ -101,9 +111,7 @@ const RecipientDetail = () => {
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main Content */}
         <div className="lg:col-span-2 space-y-6">
-          {/* About Section */}
           <Card>
             <CardHeader>
               <CardTitle>About</CardTitle>
@@ -133,7 +141,6 @@ const RecipientDetail = () => {
             </CardContent>
           </Card>
           
-          {/* Proposals Section */}
           <Card>
             <CardHeader>
               <CardTitle>Proposals</CardTitle>
@@ -167,9 +174,7 @@ const RecipientDetail = () => {
           </Card>
         </div>
         
-        {/* Sidebar */}
         <div className="space-y-6">
-          {/* Stats Card */}
           <Card>
             <CardHeader>
               <CardTitle>Funding Stats</CardTitle>
@@ -224,7 +229,237 @@ const RecipientDetail = () => {
             </CardContent>
           </Card>
           
-          {/* Details Card */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Details</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Type</p>
+                  <p className="font-medium text-gray-900">{getRecipientTypeLabel(recipient.type)}</p>
+                </div>
+                
+                {recipient.location && (
+                  <div>
+                    <p className="text-sm text-gray-500 mb-1">Location</p>
+                    <p className="font-medium text-gray-900">{recipient.location}</p>
+                  </div>
+                )}
+
+                {recipient.website && (
+                  <div>
+                    <p className="text-sm text-gray-500 mb-1">Website</p>
+                    <a 
+                      href={recipient.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-cardano-blue underline break-all font-medium"
+                    >
+                      {recipient.website}
+                    </a>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+        <div className="lg:col-span-2">
+          <div className="mb-6">
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+              <h2 className="font-bold text-xl mb-2 text-yellow-700 flex items-center gap-2">
+                Transparência & Contabilidade
+              </h2>
+              <p className="mb-4 text-yellow-900">
+                Acompanhe os recursos movimentados pelo fornecedor, com transparência para auditoria e rastreabilidade.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div>
+                  <p className="text-sm text-gray-500">Total Recebido</p>
+                  <p className="font-bold text-cardano-blue">{recipient.totalFunded.toLocaleString()} ADA</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Total Gasto</p>
+                  <p className="font-bold text-yellow-700">{totalSpent.toLocaleString()} ADA</p>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">Restante a Gastar</p>
+                  <p className="font-bold text-gray-800">{(recipient.totalFunded - totalSpent).toLocaleString()} ADA</p>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto rounded-md border mt-4">
+                <table className="min-w-full divide-y divide-gray-200 text-sm">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Data</th>
+                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Título</th>
+                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Fund Round</th>
+                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Recebido</th>
+                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Gasto</th>
+                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Status</th>
+                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Tx Hash</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {transactionRows.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="py-6 text-center text-gray-400 italic">Nenhuma transação registrada</td>
+                      </tr>
+                    ) : (
+                      transactionRows.map((trx) => (
+                        <tr key={trx.id} className="bg-white hover:bg-gray-50 transition">
+                          <td className="px-3 py-2 whitespace-nowrap">{new Date(trx.updatedAt).toLocaleDateString()}</td>
+                          <td className="px-3 py-2">{trx.title}</td>
+                          <td className="px-3 py-2">{trx.fundRound}</td>
+                          <td className="px-3 py-2 text-cardano-blue">{trx.fundedAmount.toLocaleString()} ADA</td>
+                          <td className="px-3 py-2 text-yellow-700">{trx.spentAmount.toLocaleString()} ADA</td>
+                          <td className="px-3 py-2 capitalize">
+                            <span className={
+                              trx.status === "approved" ? "text-green-700 font-medium" :
+                              trx.status === "rejected" ? "text-red-600 font-medium" :
+                              trx.status === "completed" ? "text-purple-700 font-medium" :
+                              trx.status === "active" ? "text-blue-700 font-medium" :
+                              "text-gray-700" }>
+                              {trx.status}
+                            </span>
+                          </td>
+                          <td className="px-3 py-2">
+                            {trx.transactionHash ? (
+                              <a href={`https://cardanoscan.io/transaction/${trx.transactionHash}`} 
+                                target="_blank" rel="noopener noreferrer"
+                                className="text-blue-600 underline break-all"
+                              >
+                                {trx.transactionHash.slice(0,8)}...
+                              </a>
+                            ) : (
+                              <span className="text-gray-300">-</span>
+                            )}
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h2 className="font-bold text-lg mb-2">Andamento dos Projetos (Milestones)</h2>
+            {recipientProposals.length === 0 ? (
+              <div className="text-gray-500 italic">Nenhum projeto registrado para este fornecedor.</div>
+            ) : (
+              recipientProposals.map(proposal => (
+                <div key={proposal.id} className="mb-6 border rounded-lg p-4 bg-gray-50">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-semibold text-gray-800">{proposal.title}</span>
+                    <span className="text-xs text-gray-500">{proposal.fundRound} · {proposal.category}</span>
+                  </div>
+                  <div className="mb-2">
+                    <span className="text-sm text-gray-600">{proposal.abstract}</span>
+                  </div>
+                  {proposal.milestones && proposal.milestones.length > 0 ? (
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full text-xs">
+                        <thead>
+                          <tr>
+                            <th className="py-1 px-2 text-left">Milestone</th>
+                            <th className="py-1 px-2 text-left">Descrição</th>
+                            <th className="py-1 px-2 text-left">Status</th>
+                            <th className="py-1 px-2 text-left">Prazo</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {proposal.milestones.map((m, idx) => (
+                            <tr key={idx} className="border-b">
+                              <td className="py-1 px-2 font-medium">{m.title}</td>
+                              <td className="py-1 px-2">{m.description}</td>
+                              <td className="py-1 px-2 capitalize">
+                                <span className={
+                                  m.status === "completed" ? "text-green-700 font-medium" :
+                                  m.status === "in-progress" ? "text-yellow-700 font-medium" : "text-gray-600"
+                                }>
+                                  {m.status === "completed"
+                                    ? "Concluído"
+                                    : m.status === "in-progress"
+                                      ? "Em andamento"
+                                      : "Pendente"
+                                  }
+                                </span>
+                              </td>
+                              <td className="py-1 px-2">{new Date(m.dueDate).toLocaleDateString()}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  ) : (
+                    <div className="italic text-gray-400">Nenhuma milestone registrada para este projeto.</div>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+        <div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Funding Stats</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Total Funding Received</p>
+                  <p className="text-2xl font-bold text-cardano-blue">
+                    {recipient.totalFunded.toLocaleString()} ADA
+                  </p>
+                </div>
+                <Separator />
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-gray-500 mb-1">Proposals Submitted</p>
+                    <p className="text-xl font-bold text-gray-900">
+                      {recipient.proposalsSubmitted}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-500 mb-1">Proposals Approved</p>
+                    <p className="text-xl font-bold text-green-600">
+                      {recipient.proposalsApproved}
+                    </p>
+                  </div>
+                </div>
+                <Separator />
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Rejected Proposals</p>
+                  <p className="font-medium text-red-500">
+                    {rejectedProposals}
+                  </p>
+                </div>
+                <Separator />
+                <div>
+                  <p className="text-sm text-gray-500 mb-1">Success Rate</p>
+                  <div className="flex items-center gap-2">
+                    <div className="w-full bg-gray-200 rounded-full h-4">
+                      <div 
+                        className={`h-4 rounded-full ${
+                          successRate > 66 ? 'bg-green-500' : 
+                          successRate > 33 ? 'bg-yellow-500' : 'bg-red-500'
+                        }`}
+                        style={{ width: `${successRate}%` }}
+                      />
+                    </div>
+                    <span className="text-sm font-medium">{successRate}%</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
           <Card>
             <CardHeader>
               <CardTitle>Details</CardTitle>
