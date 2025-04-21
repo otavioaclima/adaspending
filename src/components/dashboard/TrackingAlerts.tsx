@@ -34,9 +34,12 @@ const TrackingAlerts = () => {
         {alerts.length === 0 ? (
           <div className="text-gray-500">No proposals outside expected tracking.</div>
         ) : (
-          <ul className="space-y-2">
+          <div className="flex flex-row gap-4 overflow-x-auto pb-2">
             {alerts.map((p) => (
-              <li key={p.id} className="bg-orange-50 border-l-4 border-orange-400 p-2 rounded">
+              <div
+                key={p.id}
+                className="min-w-[260px] max-w-xs bg-orange-50 border-l-4 border-orange-400 p-3 rounded flex-shrink-0 shadow"
+              >
                 <div className="font-semibold">{p.title}</div>
                 <div className="text-xs text-gray-500">Status: {p.status}</div>
                 {p.updatedAt ? (
@@ -47,9 +50,9 @@ const TrackingAlerts = () => {
                 {p.endDate && (
                   <div className="text-xs">Deadline: {new Date(p.endDate).toLocaleDateString()}</div>
                 )}
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
       </CardContent>
     </Card>
@@ -57,3 +60,4 @@ const TrackingAlerts = () => {
 };
 
 export default TrackingAlerts;
+
