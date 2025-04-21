@@ -27,7 +27,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               <img 
                 src="/lovable-uploads/257db3dc-2214-4178-afd2-70760c3899c4.png" 
                 alt="ADAspending Logo" 
-                className="h-10 w-auto" 
+                className="h-16 w-auto" 
               />
             </Link>
           </div>
