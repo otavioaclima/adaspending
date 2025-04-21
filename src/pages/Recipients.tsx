@@ -44,21 +44,6 @@ const RecipientCard = ({ recipient }: { recipient: typeof recipients[0] }) => {
             <p className="text-sm text-gray-600 mb-4 line-clamp-2">{recipient.description}</p>
           )}
 
-          <div className="text-xs text-gray-600 mb-2">
-            {recipient.numberOfEmployees !== undefined && (
-              <div>Employees: <span className="font-medium text-gray-800">{recipient.numberOfEmployees}</span></div>
-            )}
-            {recipient.capital && (
-              <div>Capital: <span className="font-medium text-gray-800">{recipient.capital}</span></div>
-            )}
-            {recipient.address && (
-              <div>Address: <span className="font-medium text-gray-800">{recipient.address}</span></div>
-            )}
-            {recipient.registrationNumber && (
-              <div>Registration #: <span className="font-medium text-gray-800">{recipient.registrationNumber}</span></div>
-            )}
-          </div>
-          
           <div className="grid grid-cols-2 gap-2 mb-4">
             <div>
               <p className="text-xs text-gray-500">Total Funded</p>
@@ -75,7 +60,7 @@ const RecipientCard = ({ recipient }: { recipient: typeof recipients[0] }) => {
               </p>
             </div>
           </div>
-          
+
           <div className="flex justify-between text-sm">
             <span className="text-gray-500">
               {recipient.proposalsApproved} / {recipient.proposalsSubmitted} proposals
