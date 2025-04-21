@@ -1,7 +1,9 @@
+
 import React from 'react';
 import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+
 const HeroSection = () => {
   return <section className="bg-[#000111] rounded-lg text-white p-6 md:p-10 mb-8">
       <div className="max-w-5xl mx-auto">
@@ -9,7 +11,7 @@ const HeroSection = () => {
           <div className="flex justify-center mb-6">
             
           </div>
-          ADA Spending Dashboard
+          Cardano Treasury Explorer
         </h1>
         <p className="text-lg md:text-xl mb-6 opacity-90">
           ADAspending is an open data source for treasury spending on the Cardano blockchain.
@@ -28,4 +30,5 @@ const HeroSection = () => {
       </div>
     </section>;
 };
+
 export default HeroSection;
