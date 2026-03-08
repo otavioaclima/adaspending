@@ -295,7 +295,7 @@ const TechRequirements: React.FC = () => {
               <div>
                 <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2"><Server className="h-4 w-4 text-secondary" /> Backend</h4>
                 <ul className="space-y-1 text-muted-foreground">
-                  <li>• Lovable Cloud (PostgreSQL)</li>
+                  <li>• Cloud PostgreSQL</li>
                   <li>• Edge Functions (Deno)</li>
                   <li>• Row-Level Security</li>
                   <li>• JWT Authentication</li>
