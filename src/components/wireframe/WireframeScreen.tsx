@@ -39,8 +39,9 @@ const elementStyles: Record<WireframeElement['type'], { bg: string; pattern: str
 
 const WireframeScreen: React.FC<WireframeScreenProps> = ({ title, route, elements, isActive, onClick }) => {
   return (
-    <div
-      className={`border-2 rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg ${
+    <button
+      type="button"
+      className={`text-left w-full border-2 rounded-lg overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg ${
         isActive ? 'border-cardano-teal shadow-lg ring-2 ring-cardano-teal/30' : 'border-border hover:border-cardano-teal/50'
       }`}
       onClick={onClick}
