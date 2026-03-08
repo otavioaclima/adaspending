@@ -173,7 +173,7 @@ const Wireframe: React.FC = () => {
                   route={screen.route}
                   elements={screen.elements}
                   isActive={activeScreen === screen.title}
-                  onClick={() => setExpandedScreen(screen)}
+                  onClick={() => setExpandedIndex(screens.indexOf(screen))}
                 />
               ))}
             </div>
