@@ -5,7 +5,7 @@ import UserJourneyFlow from '@/components/wireframe/UserJourneyFlow';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Printer, ArrowRight, X } from 'lucide-react';
+import { Printer, ArrowRight, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const screens = [
   {
