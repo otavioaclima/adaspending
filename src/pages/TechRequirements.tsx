@@ -69,7 +69,7 @@ const backendRequirements = [
     category: 'Database & Storage',
     icon: Database,
     items: [
-      { name: 'PostgreSQL (via Lovable Cloud)', priority: 'Must', desc: 'Primary relational database for all structured data: proposals, recipients, fund rounds, transactions, and milestones.' },
+      { name: 'PostgreSQL (Cloud Hosted)', priority: 'Must', desc: 'Primary relational database for all structured data: proposals, recipients, fund rounds, transactions, and milestones.' },
       { name: 'Row-Level Security (RLS)', priority: 'Must', desc: 'Fine-grained access control at the database level. All tables must have RLS policies to prevent unauthorized data access.' },
       { name: 'Database Migrations', priority: 'Must', desc: 'Version-controlled schema changes via SQL migrations. All DDL changes must go through the migration tool for auditability.' },
       { name: 'File Storage', priority: 'Should', desc: 'Cloud storage buckets for proposal attachments, recipient avatars, and exported reports. Secured with storage policies.' },
@@ -100,7 +100,7 @@ const backendRequirements = [
     category: 'AI Integration',
     icon: Cpu,
     items: [
-      { name: 'Lovable AI Gateway', priority: 'Should', desc: 'Built-in AI models (Gemini, GPT) without API keys. Use for proposal summarization, spending anomaly detection, and natural language search.' },
+      { name: 'AI Gateway', priority: 'Should', desc: 'Built-in AI models (Gemini, GPT) without API keys. Use for proposal summarization, spending anomaly detection, and natural language search.' },
       { name: 'Supported Models', priority: 'Should', desc: 'google/gemini-2.5-flash (balanced), openai/gpt-5-mini (strong reasoning). Selection based on task complexity and latency requirements.' },
     ],
   },
@@ -113,7 +113,7 @@ const integrationRequirements = [
     items: [
       { name: 'Project Catalyst API', priority: 'Must', desc: 'Primary data source for proposals, fund rounds, voting results, and milestones. REST API with pagination support.' },
       { name: 'Cardano Blockchain Explorer', priority: 'Should', desc: 'On-chain transaction verification via Blockfrost or Koios API. Used to cross-reference treasury disbursements.' },
-      { name: 'IdeaScale Integration', priority: 'Should', desc: 'Deep links to original proposal submissions on IdeaScale platform. Metadata enrichment for proposal descriptions.' },
+      
     ],
   },
   {
@@ -137,9 +137,9 @@ const integrationRequirements = [
     category: 'DevOps & CI/CD',
     icon: GitBranch,
     items: [
-      { name: 'GitHub Integration', priority: 'Must', desc: 'Source code management with branch protection. Lovable auto-commits changes. Supports external IDE workflows.' },
-      { name: 'Automated Deployment', priority: 'Must', desc: 'Frontend: publish via Lovable (click Update). Backend: edge functions auto-deploy on push. Zero-downtime deployments.' },
-      { name: 'Custom Domain + SSL', priority: 'Must', desc: 'Custom domain (adaspending.com) with automatic SSL certificate provisioning and renewal via Lovable domains settings.' },
+      { name: 'GitHub Integration', priority: 'Must', desc: 'Source code management with branch protection. Auto-commits on changes. Supports external IDE workflows.' },
+      { name: 'Automated Deployment', priority: 'Must', desc: 'Frontend: publish via CI/CD pipeline. Backend: edge functions auto-deploy on push. Zero-downtime deployments.' },
+      { name: 'Custom Domain + SSL', priority: 'Must', desc: 'Custom domain (adaspending.com) with automatic SSL certificate provisioning and renewal.' },
       { name: 'Environment Management', priority: 'Should', desc: 'Separate development/staging/production environments with isolated databases and environment-specific secrets.' },
     ],
   },
@@ -148,7 +148,7 @@ const integrationRequirements = [
     icon: Shield,
     items: [
       { name: 'HTTPS Everywhere', priority: 'Must', desc: 'All traffic encrypted via TLS 1.3. HSTS headers enforced. No mixed content allowed.' },
-      { name: 'Content Security Policy', priority: 'Should', desc: 'CSP headers to prevent XSS attacks. Whitelist for Mapbox, Lovable Cloud, and approved CDN domains.' },
+      { name: 'Content Security Policy', priority: 'Should', desc: 'CSP headers to prevent XSS attacks. Whitelist for Mapbox, Cloud backend, and approved CDN domains.' },
       { name: 'CORS Configuration', priority: 'Must', desc: 'Strict Cross-Origin Resource Sharing policies on edge functions. Only allow requests from adaspending.com and preview domains.' },
       { name: 'Data Privacy (LGPD/GDPR)', priority: 'Should', desc: 'Cookie consent banner, data retention policies, and user data export/deletion capabilities for regulatory compliance.' },
       { name: 'Dependency Scanning', priority: 'Should', desc: 'Regular npm audit for vulnerability detection. Automated alerts for critical/high severity issues in dependencies.' },
@@ -157,7 +157,7 @@ const integrationRequirements = [
 ];
 
 const nonFunctionalRequirements = [
-  { name: 'Availability', target: '99.9% uptime', desc: 'Achieved via Lovable Cloud managed infrastructure with automatic failover and health checks.' },
+  { name: 'Availability', target: '99.9% uptime', desc: 'Achieved via managed cloud infrastructure with automatic failover and health checks.' },
   { name: 'Response Time', target: '< 200ms API, < 3s FCP', desc: 'API responses under 200ms (p95). First Contentful Paint under 3 seconds on 3G connections.' },
   { name: 'Scalability', target: '10,000+ concurrent users', desc: 'Serverless edge functions auto-scale. Database connection pooling via PgBouncer. CDN for static assets.' },
   { name: 'Data Freshness', target: '< 1 hour lag', desc: 'Catalyst data synchronized at minimum hourly intervals via CRON edge functions.' },
@@ -256,7 +256,7 @@ const TechRequirements: React.FC = () => {
               <div><span className="font-semibold text-foreground">Version:</span><span className="text-muted-foreground ml-2">1.0</span></div>
               <div><span className="font-semibold text-foreground">Date:</span><span className="text-muted-foreground ml-2">{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span></div>
               <div><span className="font-semibold text-foreground">Methodology:</span><span className="text-muted-foreground ml-2">MoSCoW Prioritization</span></div>
-              <div><span className="font-semibold text-foreground">Stack:</span><span className="text-muted-foreground ml-2">React + TypeScript + Lovable Cloud</span></div>
+              <div><span className="font-semibold text-foreground">Stack:</span><span className="text-muted-foreground ml-2">React + TypeScript + Cloud Backend</span></div>
               <div><span className="font-semibold text-foreground">Architecture:</span><span className="text-muted-foreground ml-2">Serverless + Edge Functions</span></div>
             </div>
 
@@ -295,12 +295,12 @@ const TechRequirements: React.FC = () => {
               <div>
                 <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2"><Server className="h-4 w-4 text-secondary" /> Backend</h4>
                 <ul className="space-y-1 text-muted-foreground">
-                  <li>• Lovable Cloud (PostgreSQL)</li>
+                  <li>• Cloud PostgreSQL</li>
                   <li>• Edge Functions (Deno)</li>
                   <li>• Row-Level Security</li>
                   <li>• JWT Authentication</li>
                   <li>• Realtime WebSockets</li>
-                  <li>• Lovable AI Gateway</li>
+                  <li>• AI Gateway</li>
                 </ul>
               </div>
               <div>
