@@ -4,7 +4,8 @@ import WireframeScreen from '@/components/wireframe/WireframeScreen';
 import UserJourneyFlow from '@/components/wireframe/UserJourneyFlow';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Printer, ArrowRight } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Printer, ArrowRight, X } from 'lucide-react';
 
 const screens = [
   {
@@ -132,6 +133,7 @@ const navigationFlows = [
 
 const Wireframe: React.FC = () => {
   const [activeScreen, setActiveScreen] = useState<string | null>(null);
+  const [expandedScreen, setExpandedScreen] = useState<typeof screens[number] | null>(null);
 
   return (
     <Layout>
@@ -167,12 +169,51 @@ const Wireframe: React.FC = () => {
                   route={screen.route}
                   elements={screen.elements}
                   isActive={activeScreen === screen.title}
-                  onClick={() => setActiveScreen(activeScreen === screen.title ? null : screen.title)}
+                  onClick={() => setExpandedScreen(screen)}
                 />
               ))}
             </div>
           </CardContent>
         </Card>
+
+        {/* Expanded Screen Dialog */}
+        <Dialog open={!!expandedScreen} onOpenChange={(open) => !open && setExpandedScreen(null)}>
+          <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+            {expandedScreen && (
+              <>
+                <DialogHeader>
+                  <DialogTitle className="text-xl">{expandedScreen.title}</DialogTitle>
+                  <p className="text-sm text-muted-foreground font-mono">{expandedScreen.route}</p>
+                </DialogHeader>
+                <div className="mt-4">
+                  <WireframeScreen
+                    title={expandedScreen.title}
+                    route={expandedScreen.route}
+                    elements={expandedScreen.elements.map(el => ({
+                      ...el,
+                      height: `${parseInt(el.height || '20') * 2.5}px`,
+                    }))}
+                  />
+                </div>
+                <div className="mt-4 pt-4 border-t">
+                  <h4 className="font-semibold text-sm text-foreground mb-2">Navigation from this screen:</h4>
+                  <div className="space-y-1.5">
+                    {navigationFlows
+                      .filter(f => f.from === expandedScreen.title || f.to === expandedScreen.title)
+                      .map((flow, i) => (
+                        <div key={i} className="flex items-center gap-2 text-sm">
+                          <span className="px-2 py-0.5 rounded bg-cardano-blue/10 text-cardano-blue font-medium text-xs">{flow.from}</span>
+                          <ArrowRight className="h-3 w-3 text-cardano-teal" />
+                          <span className="px-2 py-0.5 rounded bg-cardano-teal/10 text-cardano-teal font-medium text-xs">{flow.to}</span>
+                          <span className="text-muted-foreground text-xs">— {flow.action}</span>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              </>
+            )}
+          </DialogContent>
+        </Dialog>
 
         {/* Navigation Flow Map */}
         <Card className="mb-8 print:border-none print:shadow-none print:break-before-page">
