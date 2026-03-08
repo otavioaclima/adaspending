@@ -90,7 +90,7 @@ const SpendingMap: React.FC<SpendingMapProps> = ({ height = "100%" }) => {
             <p className="text-gray-700 text-sm mb-1 font-semibold">Mapbox token not set</p>
             <p className="text-xs text-gray-500">
               Please set <code>VITE_MAPBOX_PUBLIC_TOKEN</code> in your environment variables.<br/>
-              See Lovable docs for details.
+              See project docs for details.
             </p>
           </div>
         </div>
