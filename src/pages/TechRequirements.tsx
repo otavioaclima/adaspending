@@ -113,7 +113,7 @@ const integrationRequirements = [
     items: [
       { name: 'Project Catalyst API', priority: 'Must', desc: 'Primary data source for proposals, fund rounds, voting results, and milestones. REST API with pagination support.' },
       { name: 'Cardano Blockchain Explorer', priority: 'Should', desc: 'On-chain transaction verification via Blockfrost or Koios API. Used to cross-reference treasury disbursements.' },
-      { name: 'IdeaScale Integration', priority: 'Should', desc: 'Deep links to original proposal submissions on IdeaScale platform. Metadata enrichment for proposal descriptions.' },
+      
     ],
   },
   {
