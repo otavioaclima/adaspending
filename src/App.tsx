@@ -16,6 +16,7 @@ import InformationArchitecture from "./pages/InformationArchitecture";
 import Wireframe from "./pages/Wireframe";
 import TechRequirements from "./pages/TechRequirements";
 import UserStories from "./pages/UserStories";
+import DesignSystem from "./pages/DesignSystem";
 import { AnalyticsProvider } from "./components/AnalyticsProvider";
 import Proposals from "./pages/Proposals";
 
@@ -43,6 +44,7 @@ const App = () => (
             <Route path="/wireframe" element={<Wireframe />} />
             <Route path="/tech-requirements" element={<TechRequirements />} />
             <Route path="/user-stories" element={<UserStories />} />
+            <Route path="/design-system" element={<DesignSystem />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
