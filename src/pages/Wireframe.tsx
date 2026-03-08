@@ -166,14 +166,13 @@ const Wireframe: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {screens.map((screen) => (
+              {screens.map((screen, idx) => (
                 <WireframeScreen
                   key={screen.route}
                   title={screen.title}
                   route={screen.route}
                   elements={screen.elements}
-                  isActive={activeScreen === screen.title}
-                  onClick={() => setExpandedIndex(screens.indexOf(screen))}
+                  onExpand={() => setExpandedIndex(idx)}
                 />
               ))}
             </div>
