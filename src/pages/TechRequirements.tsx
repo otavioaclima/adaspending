@@ -139,7 +139,7 @@ const integrationRequirements = [
     items: [
       { name: 'GitHub Integration', priority: 'Must', desc: 'Source code management with branch protection. Auto-commits on changes. Supports external IDE workflows.' },
       { name: 'Automated Deployment', priority: 'Must', desc: 'Frontend: publish via CI/CD pipeline. Backend: edge functions auto-deploy on push. Zero-downtime deployments.' },
-      { name: 'Custom Domain + SSL', priority: 'Must', desc: 'Custom domain (adaspending.com) with automatic SSL certificate provisioning and renewal via Lovable domains settings.' },
+      { name: 'Custom Domain + SSL', priority: 'Must', desc: 'Custom domain (adaspending.com) with automatic SSL certificate provisioning and renewal.' },
       { name: 'Environment Management', priority: 'Should', desc: 'Separate development/staging/production environments with isolated databases and environment-specific secrets.' },
     ],
   },
