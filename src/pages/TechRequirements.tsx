@@ -256,7 +256,7 @@ const TechRequirements: React.FC = () => {
               <div><span className="font-semibold text-foreground">Version:</span><span className="text-muted-foreground ml-2">1.0</span></div>
               <div><span className="font-semibold text-foreground">Date:</span><span className="text-muted-foreground ml-2">{new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span></div>
               <div><span className="font-semibold text-foreground">Methodology:</span><span className="text-muted-foreground ml-2">MoSCoW Prioritization</span></div>
-              <div><span className="font-semibold text-foreground">Stack:</span><span className="text-muted-foreground ml-2">React + TypeScript + Lovable Cloud</span></div>
+              <div><span className="font-semibold text-foreground">Stack:</span><span className="text-muted-foreground ml-2">React + TypeScript + Cloud Backend</span></div>
               <div><span className="font-semibold text-foreground">Architecture:</span><span className="text-muted-foreground ml-2">Serverless + Edge Functions</span></div>
             </div>
 
