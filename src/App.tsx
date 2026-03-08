@@ -14,6 +14,7 @@ import Teaser from "./pages/Teaser";
 import NotFound from "./pages/NotFound";
 import InformationArchitecture from "./pages/InformationArchitecture";
 import Wireframe from "./pages/Wireframe";
+import TechRequirements from "./pages/TechRequirements";
 import { AnalyticsProvider } from "./components/AnalyticsProvider";
 import Proposals from "./pages/Proposals";
 
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/governance/:id" element={<ProposalDetail />} />
             <Route path="/architecture" element={<InformationArchitecture />} />
             <Route path="/wireframe" element={<Wireframe />} />
+            <Route path="/tech-requirements" element={<TechRequirements />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
