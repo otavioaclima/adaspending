@@ -300,7 +300,7 @@ const TechRequirements: React.FC = () => {
                   <li>• Row-Level Security</li>
                   <li>• JWT Authentication</li>
                   <li>• Realtime WebSockets</li>
-                  <li>• Lovable AI Gateway</li>
+                  <li>• AI Gateway</li>
                 </ul>
               </div>
               <div>
