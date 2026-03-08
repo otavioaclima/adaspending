@@ -13,6 +13,7 @@ import Governance from "./pages/Governance";
 import Teaser from "./pages/Teaser";
 import NotFound from "./pages/NotFound";
 import InformationArchitecture from "./pages/InformationArchitecture";
+import Wireframe from "./pages/Wireframe";
 import { AnalyticsProvider } from "./components/AnalyticsProvider";
 import Proposals from "./pages/Proposals";
 
