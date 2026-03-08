@@ -12,6 +12,7 @@ import SpendingExplorer from "./pages/SpendingExplorer";
 import Governance from "./pages/Governance";
 import Teaser from "./pages/Teaser";
 import NotFound from "./pages/NotFound";
+import InformationArchitecture from "./pages/InformationArchitecture";
 import { AnalyticsProvider } from "./components/AnalyticsProvider";
 import Proposals from "./pages/Proposals";
 
