@@ -4,7 +4,8 @@ import WireframeScreen from '@/components/wireframe/WireframeScreen';
 import UserJourneyFlow from '@/components/wireframe/UserJourneyFlow';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Printer, ArrowRight } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Printer, ArrowRight, X } from 'lucide-react';
 
 const screens = [
   {
