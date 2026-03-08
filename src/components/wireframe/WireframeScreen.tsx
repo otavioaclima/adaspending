@@ -93,7 +93,7 @@ const WireframeScreen: React.FC<WireframeScreenProps> = ({ title, route, element
         <p className="text-xs font-semibold text-foreground">{title}</p>
         <p className="text-[9px] text-muted-foreground font-mono">{route}</p>
       </div>
-    </div>
+    </button>
   );
 };
 
