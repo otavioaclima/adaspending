@@ -193,6 +193,29 @@ const Wireframe: React.FC = () => {
                     <span className="text-xs text-muted-foreground">{expandedIndex + 1} / {screens.length}</span>
                   </div>
                 </DialogHeader>
+                {/* Prev / Next buttons - top */}
+                <div className="flex items-center justify-between mt-2 pb-3 border-b">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={goToPrev}
+                    disabled={expandedIndex === 0}
+                    className="gap-1"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    {expandedIndex > 0 ? screens[expandedIndex - 1].title : 'Anterior'}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={goToNext}
+                    disabled={expandedIndex === screens.length - 1}
+                    className="gap-1"
+                  >
+                    {expandedIndex < screens.length - 1 ? screens[expandedIndex + 1].title : 'Próximo'}
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
                 <div className="mt-4">
                   <WireframeScreen
                     title={expandedScreen.title}
@@ -217,29 +240,6 @@ const Wireframe: React.FC = () => {
                         </div>
                       ))}
                   </div>
-                </div>
-                {/* Prev / Next buttons */}
-                <div className="flex items-center justify-between mt-4 pt-4 border-t">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={goToPrev}
-                    disabled={expandedIndex === 0}
-                    className="gap-1"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                    {expandedIndex > 0 ? screens[expandedIndex - 1].title : 'Previous'}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={goToNext}
-                    disabled={expandedIndex === screens.length - 1}
-                    className="gap-1"
-                  >
-                    {expandedIndex < screens.length - 1 ? screens[expandedIndex + 1].title : 'Next'}
-                    <ChevronRight className="h-4 w-4" />
-                  </Button>
                 </div>
               </>
             )}
