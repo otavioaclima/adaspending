@@ -38,6 +38,7 @@ const App = () => (
             <Route path="/governance" element={<Governance />} />
             <Route path="/governance/:id" element={<ProposalDetail />} />
             <Route path="/architecture" element={<InformationArchitecture />} />
+            <Route path="/wireframe" element={<Wireframe />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
