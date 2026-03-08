@@ -157,7 +157,7 @@ const integrationRequirements = [
 ];
 
 const nonFunctionalRequirements = [
-  { name: 'Availability', target: '99.9% uptime', desc: 'Achieved via Lovable Cloud managed infrastructure with automatic failover and health checks.' },
+  { name: 'Availability', target: '99.9% uptime', desc: 'Achieved via managed cloud infrastructure with automatic failover and health checks.' },
   { name: 'Response Time', target: '< 200ms API, < 3s FCP', desc: 'API responses under 200ms (p95). First Contentful Paint under 3 seconds on 3G connections.' },
   { name: 'Scalability', target: '10,000+ concurrent users', desc: 'Serverless edge functions auto-scale. Database connection pooling via PgBouncer. CDN for static assets.' },
   { name: 'Data Freshness', target: '< 1 hour lag', desc: 'Catalyst data synchronized at minimum hourly intervals via CRON edge functions.' },
