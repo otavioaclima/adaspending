@@ -115,3 +115,32 @@
     @apply bg-cardano-blue text-white hover:bg-cardano-blue/90 hover:text-white;
   }
 }
+
+@media print {
+  header, footer, .md\\:hidden, .print\\:hidden {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt;
+  }
+  
+  main {
+    padding: 0 !important;
+    max-width: 100% !important;
+  }
+  
+  .print\\:break-after-page {
+    break-after: page;
+  }
+  
+  .print\\:break-inside-avoid {
+    break-inside: avoid;
+  }
+
+  .mind-map-node .mind-map-node {
+    display: block !important;
+  }
+}
