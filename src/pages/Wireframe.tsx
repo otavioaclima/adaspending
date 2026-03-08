@@ -133,6 +133,7 @@ const navigationFlows = [
 
 const Wireframe: React.FC = () => {
   const [activeScreen, setActiveScreen] = useState<string | null>(null);
+  const [expandedScreen, setExpandedScreen] = useState<typeof screens[number] | null>(null);
 
   return (
     <Layout>
