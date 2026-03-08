@@ -148,7 +148,7 @@ const integrationRequirements = [
     icon: Shield,
     items: [
       { name: 'HTTPS Everywhere', priority: 'Must', desc: 'All traffic encrypted via TLS 1.3. HSTS headers enforced. No mixed content allowed.' },
-      { name: 'Content Security Policy', priority: 'Should', desc: 'CSP headers to prevent XSS attacks. Whitelist for Mapbox, Lovable Cloud, and approved CDN domains.' },
+      { name: 'Content Security Policy', priority: 'Should', desc: 'CSP headers to prevent XSS attacks. Whitelist for Mapbox, Cloud backend, and approved CDN domains.' },
       { name: 'CORS Configuration', priority: 'Must', desc: 'Strict Cross-Origin Resource Sharing policies on edge functions. Only allow requests from adaspending.com and preview domains.' },
       { name: 'Data Privacy (LGPD/GDPR)', priority: 'Should', desc: 'Cookie consent banner, data retention policies, and user data export/deletion capabilities for regulatory compliance.' },
       { name: 'Dependency Scanning', priority: 'Should', desc: 'Regular npm audit for vulnerability detection. Automated alerts for critical/high severity issues in dependencies.' },
