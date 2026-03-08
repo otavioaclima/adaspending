@@ -100,7 +100,7 @@ const backendRequirements = [
     category: 'AI Integration',
     icon: Cpu,
     items: [
-      { name: 'Lovable AI Gateway', priority: 'Should', desc: 'Built-in AI models (Gemini, GPT) without API keys. Use for proposal summarization, spending anomaly detection, and natural language search.' },
+      { name: 'AI Gateway', priority: 'Should', desc: 'Built-in AI models (Gemini, GPT) without API keys. Use for proposal summarization, spending anomaly detection, and natural language search.' },
       { name: 'Supported Models', priority: 'Should', desc: 'google/gemini-2.5-flash (balanced), openai/gpt-5-mini (strong reasoning). Selection based on task complexity and latency requirements.' },
     ],
   },
