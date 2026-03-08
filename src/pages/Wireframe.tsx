@@ -5,7 +5,7 @@ import UserJourneyFlow from '@/components/wireframe/UserJourneyFlow';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Printer, ArrowRight, X } from 'lucide-react';
+import { Printer, ArrowRight, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const screens = [
   {
@@ -133,7 +133,11 @@ const navigationFlows = [
 
 const Wireframe: React.FC = () => {
   const [activeScreen, setActiveScreen] = useState<string | null>(null);
-  const [expandedScreen, setExpandedScreen] = useState<typeof screens[number] | null>(null);
+  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const expandedScreen = expandedIndex !== null ? screens[expandedIndex] : null;
+
+  const goToPrev = () => setExpandedIndex(i => i !== null && i > 0 ? i - 1 : i);
+  const goToNext = () => setExpandedIndex(i => i !== null && i < screens.length - 1 ? i + 1 : i);
 
   return (
     <Layout>
@@ -169,7 +173,7 @@ const Wireframe: React.FC = () => {
                   route={screen.route}
                   elements={screen.elements}
                   isActive={activeScreen === screen.title}
-                  onClick={() => setExpandedScreen(screen)}
+                  onClick={() => setExpandedIndex(screens.indexOf(screen))}
                 />
               ))}
             </div>
@@ -177,13 +181,18 @@ const Wireframe: React.FC = () => {
         </Card>
 
         {/* Expanded Screen Dialog */}
-        <Dialog open={!!expandedScreen} onOpenChange={(open) => !open && setExpandedScreen(null)}>
+        <Dialog open={expandedIndex !== null} onOpenChange={(open) => !open && setExpandedIndex(null)}>
           <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-            {expandedScreen && (
+            {expandedScreen && expandedIndex !== null && (
               <>
                 <DialogHeader>
-                  <DialogTitle className="text-xl">{expandedScreen.title}</DialogTitle>
-                  <p className="text-sm text-muted-foreground font-mono">{expandedScreen.route}</p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <DialogTitle className="text-xl">{expandedScreen.title}</DialogTitle>
+                      <p className="text-sm text-muted-foreground font-mono">{expandedScreen.route}</p>
+                    </div>
+                    <span className="text-xs text-muted-foreground">{expandedIndex + 1} / {screens.length}</span>
+                  </div>
                 </DialogHeader>
                 <div className="mt-4">
                   <WireframeScreen
@@ -209,6 +218,29 @@ const Wireframe: React.FC = () => {
                         </div>
                       ))}
                   </div>
+                </div>
+                {/* Prev / Next buttons */}
+                <div className="flex items-center justify-between mt-4 pt-4 border-t">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={goToPrev}
+                    disabled={expandedIndex === 0}
+                    className="gap-1"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    {expandedIndex > 0 ? screens[expandedIndex - 1].title : 'Previous'}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={goToNext}
+                    disabled={expandedIndex === screens.length - 1}
+                    className="gap-1"
+                  >
+                    {expandedIndex < screens.length - 1 ? screens[expandedIndex + 1].title : 'Next'}
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
                 </div>
               </>
             )}
