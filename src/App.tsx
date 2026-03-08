@@ -17,6 +17,7 @@ import Wireframe from "./pages/Wireframe";
 import TechRequirements from "./pages/TechRequirements";
 import UserStories from "./pages/UserStories";
 import DesignSystem from "./pages/DesignSystem";
+import UIDesign from "./pages/UIDesign";
 import { AnalyticsProvider } from "./components/AnalyticsProvider";
 import Proposals from "./pages/Proposals";
 
