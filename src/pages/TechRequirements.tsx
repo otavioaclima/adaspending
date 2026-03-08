@@ -69,7 +69,7 @@ const backendRequirements = [
     category: 'Database & Storage',
     icon: Database,
     items: [
-      { name: 'PostgreSQL (via Lovable Cloud)', priority: 'Must', desc: 'Primary relational database for all structured data: proposals, recipients, fund rounds, transactions, and milestones.' },
+      { name: 'PostgreSQL (Cloud Hosted)', priority: 'Must', desc: 'Primary relational database for all structured data: proposals, recipients, fund rounds, transactions, and milestones.' },
       { name: 'Row-Level Security (RLS)', priority: 'Must', desc: 'Fine-grained access control at the database level. All tables must have RLS policies to prevent unauthorized data access.' },
       { name: 'Database Migrations', priority: 'Must', desc: 'Version-controlled schema changes via SQL migrations. All DDL changes must go through the migration tool for auditability.' },
       { name: 'File Storage', priority: 'Should', desc: 'Cloud storage buckets for proposal attachments, recipient avatars, and exported reports. Secured with storage policies.' },
