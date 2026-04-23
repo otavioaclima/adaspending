@@ -8,7 +8,7 @@ type Props = {
   proposalsApproved: number;
 };
 
-const RecipientFundingStats = ({
+const VendorFundingStats = ({
   totalFunded,
   proposalsSubmitted,
   proposalsApproved,
@@ -66,4 +66,4 @@ const RecipientFundingStats = ({
   );
 };
 
-export default RecipientFundingStats;
+export default VendorFundingStats;

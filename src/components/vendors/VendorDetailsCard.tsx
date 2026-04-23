@@ -12,9 +12,11 @@ type Props = {
   capital?: string;
   address?: string;
   registrationNumber?: string;
+  intersectMemberId?: string;
+  intersectRegistrationStatus?: string;
 };
 
-const getRecipientTypeLabel = (type: string) => {
+const getVendorTypeLabel = (type: string) => {
   if (type === "organization") return "Organization";
   if (type === "team") return "Team";
   if (type === "individual") return "Individual";
@@ -42,7 +44,7 @@ const InfoItem = ({
     </div>
   ) : null;
 
-const RecipientDetailsCard = ({
+const VendorDetailsCard = ({
   type,
   location,
   website,
@@ -51,13 +53,15 @@ const RecipientDetailsCard = ({
   capital,
   address,
   registrationNumber,
+  intersectMemberId,
+  intersectRegistrationStatus,
 }: Props) => (
   <Card className="divide-y divide-muted">
     {/* Header and Description */}
     <CardHeader>
-      <CardTitle className="mb-1">About the Recipient</CardTitle>
+      <CardTitle className="mb-1">About the Vendor</CardTitle>
       <CardDescription>
-        {getRecipientTypeLabel(type)}
+        {getVendorTypeLabel(type)}
         {location ? ` in ${location}` : ""}.
       </CardDescription>
     </CardHeader>
@@ -67,7 +71,7 @@ const RecipientDetailsCard = ({
         <div className="text-gray-700">
           {description || (
             <span className="italic text-gray-400">
-              No description available for this recipient.
+              No description available for this vendor.
             </span>
           )}
         </div>
@@ -101,6 +105,23 @@ const RecipientDetailsCard = ({
           />
         </div>
       </div>
+      <div>
+        <h3 className="text-sm font-semibold text-gray-700 mb-2">Intersect Information</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <InfoItem
+            icon={<Users className="h-5 w-5 text-indigo-500" />}
+            label="Member ID"
+            value={intersectMemberId || "Pending"}
+            colorClass="bg-indigo-50"
+          />
+          <InfoItem
+            icon={<FileText className="h-5 w-5 text-teal-600" />}
+            label="Registration Status"
+            value={intersectRegistrationStatus || "Not Verified"}
+            colorClass="bg-teal-50"
+          />
+        </div>
+      </div>
       {website && (
         <div>
           <h3 className="text-sm font-semibold text-gray-700 mb-2">Website</h3>
@@ -118,5 +139,5 @@ const RecipientDetailsCard = ({
   </Card>
 );
 
-export default RecipientDetailsCard;
+export default VendorDetailsCard;
 

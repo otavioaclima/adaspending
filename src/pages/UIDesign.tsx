@@ -21,7 +21,7 @@ const MockHeader: React.FC<{ compact?: boolean }> = ({ compact }) => (
       <div className="text-white font-bold text-sm">₳ ADAspending</div>
       {!compact && (
         <div className="hidden sm:flex items-center gap-1">
-          {['Dashboard', 'Awards', 'Proposals', 'Recipients', 'Explorer', 'Governance'].map(link => (
+          {['Dashboard', 'Proposals', 'Proposals', 'Recipients', 'Explorer', 'Governance'].map(link => (
             <span key={link} className="text-white/70 text-[9px] px-2 py-0.5 rounded hover:bg-white/10">{link}</span>
           ))}
         </div>
@@ -46,7 +46,7 @@ const MockFooter: React.FC = () => (
       <div className="space-y-0.5">
         <div className="text-white/60 font-semibold">Data</div>
         <div>Explorer</div>
-        <div>Awards</div>
+        <div>Proposals</div>
       </div>
       <div className="space-y-0.5">
         <div className="text-white/60 font-semibold">Resources</div>
@@ -293,7 +293,7 @@ const screenDefinitions: ScreenDef[] = [
   },
   {
     title: 'Award Search',
-    route: '/awards',
+    route: '/proposals',
     description: 'Full-text search with multi-criteria filtering for precise award discovery.',
     render: () => (
       <div className="bg-background">

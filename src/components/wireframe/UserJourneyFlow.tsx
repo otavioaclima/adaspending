@@ -37,8 +37,8 @@ const journeys: { name: string; description: string; steps: JourneyStep[] }[] = 
     description: 'User searching for a specific award or topic',
     steps: [
       { id: '1', label: 'Any Page', description: 'Clicks search button', action: 'Navigates to Award Search', page: '/*' },
-      { id: '2', label: 'Award Search', description: 'Types search query', action: 'Applies filters', page: '/awards' },
-      { id: '3', label: 'Filtered Results', description: 'Reviews matching awards', action: 'Selects result', page: '/awards' },
+      { id: '2', label: 'Award Search', description: 'Types search query', action: 'Applies filters', page: '/proposals' },
+      { id: '3', label: 'Filtered Results', description: 'Reviews matching proposals', action: 'Selects result', page: '/proposals' },
       { id: '4', label: 'Proposal Detail', description: 'Reads full proposal', action: 'Views recipient', page: '/proposals/:id' },
       { id: '5', label: 'Recipient Profile', description: 'Reviews all their work', action: 'Journey complete', page: '/recipients/:id' },
     ],

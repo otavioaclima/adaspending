@@ -19,7 +19,7 @@ type Props = {
   totalFunded: number;
 };
 
-const RecipientAccountingTable = ({ transactionRows, totalFunded }: Props) => {
+const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
   const totalSpent = transactionRows.reduce(
     (acc, curr) => acc + (curr.spentAmount || 0),
     0
@@ -31,7 +31,7 @@ const RecipientAccountingTable = ({ transactionRows, totalFunded }: Props) => {
         Transparency & Accounting
       </h2>
       <p className="mb-4 text-yellow-900">
-        Track resources moved by the recipient, with transparency for auditing and traceability.
+        Track resources moved by the vendor, with transparency for auditing and traceability.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div>
@@ -113,4 +113,4 @@ const RecipientAccountingTable = ({ transactionRows, totalFunded }: Props) => {
   );
 };
 
-export default RecipientAccountingTable;
+export default VendorAccountingTable;

@@ -13,7 +13,7 @@ interface ProposalCardProps {
   requestedAmount: number;
   status: ProposalStatus;
   fundRound: string;
-  recipient: string;
+  vendor: string;
   className?: string;
 }
 
@@ -32,7 +32,7 @@ const ProposalCard = ({
   requestedAmount,
   status,
   fundRound,
-  recipient,
+  vendor,
   className,
 }: ProposalCardProps) => {
   return (
@@ -52,7 +52,7 @@ const ProposalCard = ({
         
         <div className="mt-4 flex justify-between items-center">
           <div className="text-sm text-gray-500">
-            <span className="font-medium">{recipient}</span>
+            <span className="font-medium">{vendor}</span>
           </div>
           <div className="text-cardano-blue font-bold">
             {requestedAmount.toLocaleString()} ADA

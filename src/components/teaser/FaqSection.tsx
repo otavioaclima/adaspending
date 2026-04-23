@@ -20,7 +20,7 @@ const FaqSection = () => {
     },
     {
       question: "How does ADAspending get its data?",
-      answer: "All data is sourced directly from the public Cardano blockchain. We monitor treasury transactions and categorize them to provide insights into how funds are being used across different industries and recipients."
+      answer: "All data is sourced directly from the public Cardano blockchain. We monitor treasury transactions and categorize them to provide insights into how funds are being used across different industries and vendors."
     },
     {
       question: "When will ADAspending launch?",

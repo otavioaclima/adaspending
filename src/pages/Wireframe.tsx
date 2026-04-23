@@ -38,7 +38,7 @@ const screens = [
   },
   {
     title: 'Award Search',
-    route: '/awards',
+    route: '/proposals',
     elements: [
       { type: 'header' as const, label: 'Header + Nav', height: '24px' },
       { type: 'search' as const, label: 'Search Bar', height: '28px' },

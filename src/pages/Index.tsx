@@ -10,6 +10,7 @@ import ProposalBudgetComparator from "@/components/dashboard/ProposalBudgetCompa
 import OverspendingPanel from "@/components/dashboard/OverspendingPanel";
 import TrackingAlerts from "@/components/dashboard/TrackingAlerts";
 import Thermometer from "@/components/dashboard/Thermometer";
+import IntersectProjectsTable from "@/components/dashboard/IntersectProjectsTable";
 
 const Index = () => {
   return (
@@ -26,6 +27,9 @@ const Index = () => {
       </section>
       <section className="mb-10">
         <TrackingAlerts />
+      </section>
+      <section className="mb-10">
+        <IntersectProjectsTable />
       </section>
       <FundRoundSection />
       <ChartsSection />

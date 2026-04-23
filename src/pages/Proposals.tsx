@@ -24,7 +24,7 @@ const Proposals = () => {
             requestedAmount={proposal.requestedAmount}
             status={proposal.status}
             fundRound={proposal.fundRound}
-            recipient={proposal.recipient}
+            vendor={proposal.recipient}
           />
         ))}
       </div>

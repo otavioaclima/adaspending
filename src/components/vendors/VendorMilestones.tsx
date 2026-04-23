@@ -21,11 +21,11 @@ type Props = {
   proposals: Proposal[];
 };
 
-const RecipientMilestones = ({ proposals }: Props) => (
+const VendorMilestones = ({ proposals }: Props) => (
   <div>
     <h2 className="font-bold text-lg mb-2">Project Progress (Milestones)</h2>
     {proposals.length === 0 ? (
-      <div className="text-gray-500 italic">No projects registered for this recipient.</div>
+      <div className="text-gray-500 italic">No projects registered for this vendor.</div>
     ) : (
       proposals.map((proposal) => (
         <div key={proposal.id} className="mb-6 border rounded-lg p-4 bg-gray-50">
@@ -90,4 +90,4 @@ const RecipientMilestones = ({ proposals }: Props) => (
   </div>
 );
 
-export default RecipientMilestones;
+export default VendorMilestones;

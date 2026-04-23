@@ -54,7 +54,7 @@ const mindMapData: TreeNode = {
     },
     {
       label: 'Award Search',
-      description: 'Search & filter awards',
+      description: 'Search & filter proposals',
       color: 'bg-cardano-teal',
       children: [
         { label: 'Search Bar', description: 'Full-text search' },

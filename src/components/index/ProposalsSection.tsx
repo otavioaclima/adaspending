@@ -16,7 +16,7 @@ const ProposalsSection = () => {
     <section className="mb-8">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold text-gray-900">Recent Proposals</h2>
-        <Link to="/awards" className="text-cardano-blue hover:text-cardano-blue/80 flex items-center text-sm font-medium">
+        <Link to="/proposals" className="text-cardano-blue hover:text-cardano-blue/80 flex items-center text-sm font-medium">
           View all proposals <ChevronRight className="h-4 w-4 ml-1" />
         </Link>
       </div>
@@ -31,7 +31,7 @@ const ProposalsSection = () => {
             requestedAmount={proposal.requestedAmount} 
             status={proposal.status} 
             fundRound={proposal.fundRound} 
-            recipient={proposal.recipient} 
+            vendor={proposal.recipient} 
           />
         ))}
       </div>

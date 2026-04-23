@@ -45,12 +45,12 @@ const sections = [
   {
     icon: Search,
     title: 'Award Search',
-    route: '/awards',
-    description: 'A powerful search interface for discovering specific treasury awards. Supports full-text search with multi-criteria filtering for precise results.',
+    route: '/proposals',
+    description: 'A powerful search interface for discovering specific treasury proposals. Supports full-text search with multi-criteria filtering for precise results.',
     subsections: [
       { name: 'Search Bar', desc: 'Full-text search across proposal titles, descriptions, and recipient names.' },
       { name: 'Filter Panel', desc: 'Multi-criteria filters including Category (DeFi, Education, Governance, etc.), Status (Funded, In Progress, Completed), Fund Round (F1–F13), and Amount Range.' },
-      { name: 'Results Grid', desc: 'Paginated card or table view of matching awards with key data visible at a glance.' },
+      { name: 'Results Grid', desc: 'Paginated card or table view of matching proposals with key data visible at a glance.' },
       { name: 'Sort Options', desc: 'Sort results by amount (asc/desc), date, status, or relevance.' },
     ],
   },

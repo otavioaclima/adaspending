@@ -27,7 +27,7 @@ const AboutSection = () => {
                 <div className="min-w-8 mt-1 mr-3 text-cardano-blue">
                   <Search className="h-6 w-6" />
                 </div>
-                <span className="text-gray-700">Searchable database of all proposals and recipients</span>
+                <span className="text-gray-700">Searchable database of all proposals and vendors</span>
               </li>
               <li className="flex items-start">
                 <div className="min-w-8 mt-1 mr-3 text-cardano-blue">
@@ -45,7 +45,7 @@ const AboutSection = () => {
                 <div className="min-w-8 mt-1 mr-3 text-cardano-blue">
                   <Link className="h-6 w-6" />
                 </div>
-                <span className="text-gray-700">Connections between projects, recipients, and outcomes</span>
+                <span className="text-gray-700">Connections between projects, vendors, and outcomes</span>
               </li>
               <li className="flex items-start">
                 <div className="min-w-8 mt-1 mr-3 text-cardano-blue">

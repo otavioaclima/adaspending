@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { BarChart3, PieChart as PieChartIcon, Map, FileText } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Layout from '@/components/layout/Layout';
 import { treasuryStats, fundRounds, proposals } from '@/data/mockData';
+import { getNetworkState, lovelaceToAda } from '@/services/cardanoscan';
 import { 
   BarChart, 
   Bar, 
@@ -33,6 +35,13 @@ const SpendingExplorer = () => {
   const [chartType, setChartType] = useState('category');
   const [timeframe, setTimeframe] = useState('all');
   
+  const { data: networkState } = useQuery({
+    queryKey: ['networkState'],
+    queryFn: getNetworkState,
+  });
+
+  const totalFundsAvailable = networkState ? lovelaceToAda(networkState.treasury) : treasuryStats.totalFundsAvailable;
+
   // Calculate category distribution
   const categoryData = treasuryStats.categoryDistribution;
   
@@ -110,7 +119,7 @@ const SpendingExplorer = () => {
             monthlyFunding={monthlyFunding}
             proposalScatterData={proposalScatterData}
           />
-          <DataSummarySection treasuryStats={treasuryStats} />
+          <DataSummarySection treasuryStats={{ ...treasuryStats, totalFundsAvailable }} />
         </TabsContent>
         
         <TabsContent value="map">

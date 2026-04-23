@@ -30,7 +30,7 @@ const FeaturesSection = () => {
             </div>
             <h3 className="text-xl font-semibold mb-3">Review Proposals</h3>
             <p className="text-gray-600">
-              Explore funded proposals with detailed information about recipients, requested amounts, and project outcomes.
+              Explore funded proposals with detailed information about vendors, requested amounts, and project outcomes.
             </p>
           </div>
           
@@ -50,7 +50,7 @@ const FeaturesSection = () => {
             </div>
             <h3 className="text-xl font-semibold mb-3">Search & Filter</h3>
             <p className="text-gray-600">
-              Easily search and filter through funding data by categories, recipients, and time periods to find exactly what you're looking for.
+              Easily search and filter through funding data by categories, vendors, and time periods to find exactly what you're looking for.
             </p>
           </div>
           

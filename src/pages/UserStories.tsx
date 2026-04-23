@@ -149,12 +149,12 @@ const epicGroups: { epic: string; icon: React.ElementType; description: string; 
   {
     epic: 'Award Search',
     icon: Search,
-    description: 'Stories related to discovering and filtering specific treasury awards.',
+    description: 'Stories related to discovering and filtering specific treasury proposals.',
     stories: [
       {
         id: 'US-009',
         persona: 'researcher',
-        story: 'As a researcher, I want to search awards by keyword so that I can find specific proposals related to my area of interest.',
+        story: 'As a researcher, I want to search proposals by keyword so that I can find specific proposals related to my area of interest.',
         acceptance: [
           'Full-text search across titles, descriptions, and recipient names',
           'Results update as user types (debounced 300ms)',
@@ -162,12 +162,12 @@ const epicGroups: { epic: string; icon: React.ElementType; description: string; 
           'Search query persisted in URL params',
         ],
         priority: 'must',
-        relatedPages: ['/awards'],
+        relatedPages: ['/proposals'],
       },
       {
         id: 'US-010',
         persona: 'researcher',
-        story: 'As a researcher, I want to filter awards by category, status, fund round, and amount range so that I can narrow results precisely.',
+        story: 'As a researcher, I want to filter proposals by category, status, fund round, and amount range so that I can narrow results precisely.',
         acceptance: [
           'Multi-select filters for Category (DeFi, Education, Governance, etc.)',
           'Status filter: Funded, In Progress, Completed',
@@ -177,7 +177,7 @@ const epicGroups: { epic: string; icon: React.ElementType; description: string; 
           'Active filters shown as removable badges',
         ],
         priority: 'must',
-        relatedPages: ['/awards'],
+        relatedPages: ['/proposals'],
       },
       {
         id: 'US-011',
@@ -189,7 +189,7 @@ const epicGroups: { epic: string; icon: React.ElementType; description: string; 
           'Sort persisted in URL params',
         ],
         priority: 'should',
-        relatedPages: ['/awards'],
+        relatedPages: ['/proposals'],
       },
     ],
   },
@@ -646,7 +646,7 @@ const UserStories: React.FC = () => {
                 {[
                   { page: '/ (Landing Page)', route: '/' },
                   { page: '/dashboard', route: '/dashboard' },
-                  { page: '/awards', route: '/awards' },
+                  { page: '/proposals', route: '/proposals' },
                   { page: '/proposals', route: '/proposals' },
                   { page: '/proposals/:id', route: '/proposals/:id' },
                   { page: '/recipients', route: '/recipients' },

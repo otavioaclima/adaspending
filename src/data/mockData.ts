@@ -43,6 +43,8 @@ export interface Recipient {
   capital?: string;
   address?: string;
   registrationNumber?: string;
+  intersectMemberId?: string;
+  intersectRegistrationStatus?: 'Verified' | 'Pending' | 'Not Registered';
 }
 
 export interface FundRound {
@@ -319,7 +321,9 @@ export const recipients: Recipient[] = [
     numberOfEmployees: 25,
     capital: "CHF 1,000,000",
     address: "Bahnhofstrasse 1, Zürich, Switzerland",
-    registrationNumber: "CH-020.3.456.789-0"
+    registrationNumber: "CH-020.3.456.789-0",
+    intersectMemberId: "INT-MEM-0042",
+    intersectRegistrationStatus: "Verified"
   },
   {
     id: "rec-002",
@@ -479,8 +483,10 @@ export const fundRounds: FundRound[] = [
 ];
 
 export const treasuryStats = {
-  totalFundsAvailable: 1000000000,
-  totalFundsAwarded: 56000000,
+  totalFundsAvailable: 1000000000, // Will be overridden by real API data in components
+  totalFundsAwarded: 350000000,
+  totalSpent: 343741205,
+  remainingBudget: 1790324.017,
   totalProposals: 4200,
   fundedProposals: 981,
   activeProposals: 523,

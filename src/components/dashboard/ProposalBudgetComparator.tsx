@@ -1,42 +1,41 @@
-
 import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
 import { treasuryStats, proposals } from "@/data/mockData";
+import { getNetworkState, lovelaceToAda } from "@/services/cardanoscan";
 import { BarChart3 } from "lucide-react";
 
 const ProposalBudgetComparator = () => {
-  // Total available budget
-  const totalBudget = treasuryStats.totalFundsAvailable;
-  // Total approved by proposals
-  const approvedSum = proposals
-    .filter((p) => p.status === "approved" || p.status === "completed")
-    .reduce((acc, p) => acc + (p.requestedAmount || 0), 0);
-  // Total actually spent (mock: completed proposals sum to spentAmount)
-  const spent = proposals
-    .filter((p) => p.status === "completed")
-    .reduce((acc, p) => acc + (p.spentAmount || p.requestedAmount || 0), 0);
+  // Budget for Intersect Treasury Contracts 1
+  const totalBudget = treasuryStats.totalFundsAwarded;
+  const spent = treasuryStats.totalSpent;
+  const remaining = treasuryStats.remainingBudget;
+  const activeBalance = spent + remaining;
+  const spentPercent = (spent / activeBalance) * 100;
 
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0">
-        <CardTitle>
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-lg font-bold">
           <BarChart3 className="inline-block h-5 w-5 mr-2 text-cardano-blue" />
-          Proposals vs Budget
+          Intersect Treasury Budget
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-2">
-          <div className="flex justify-between">
-            <span className="text-gray-600">Available Budget</span>
-            <span className="font-bold text-cardano-blue">{totalBudget.toLocaleString()} ADA</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-600">Total Approved</span>
-            <span className="font-bold text-green-600">{approvedSum.toLocaleString()} ADA</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-600">Total Spent</span>
-            <span className="font-bold text-cyan-700">{spent.toLocaleString()} ADA</span>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <div className="flex justify-between">
+              <span className="text-sm text-gray-600">Total Budget</span>
+              <span className="text-sm font-bold text-cardano-blue">{totalBudget.toLocaleString()} ADA</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-gray-600">Total Spent</span>
+              <span className="text-sm font-bold text-orange-600">{spent.toLocaleString()} ADA ({spentPercent.toFixed(2)}%)</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-gray-600">Remaining Budget</span>
+              <span className="text-sm font-bold text-green-600">{remaining.toLocaleString()} ADA</span>
+            </div>
           </div>
         </div>
       </CardContent>

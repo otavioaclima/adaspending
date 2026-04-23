@@ -15,18 +15,18 @@ import {
 import Layout from '@/components/layout/Layout';
 import { recipients } from '@/data/mockData';
 
-const RecipientCard = ({ recipient }: { recipient: typeof recipients[0] }) => {
-  const RecipientIcon = 
+const VendorCard = ({ recipient }: { recipient: typeof recipients[0] }) => {
+  const VendorIcon = 
     recipient.type === 'organization' ? Building :
     recipient.type === 'team' ? Users : User;
   
   return (
-    <Link to={`/recipients/${recipient.id}`}>
+    <Link to={`/vendors/${recipient.id}`}>
       <Card className="h-full hover:shadow-md transition-shadow">
         <CardContent className="p-4">
           <div className="flex items-center gap-3 mb-3">
             <div className="bg-cardano-blue/10 rounded-full w-10 h-10 flex items-center justify-center">
-              <RecipientIcon className="h-5 w-5 text-cardano-blue" />
+              <VendorIcon className="h-5 w-5 text-cardano-blue" />
             </div>
             <div>
               <h3 className="font-medium text-gray-900">{recipient.name}</h3>
@@ -147,7 +147,7 @@ const TransparencyCommunicationCard = () => (
   </div>
 );
 
-const Recipients = () => {
+const Vendors = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState('all');
   const [showFilters, setShowFilters] = useState(false);
@@ -166,7 +166,7 @@ const Recipients = () => {
     <div>
       <Layout>
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Recipients</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Vendors</h1>
           <p className="text-lg text-gray-600">
             Explore individuals, teams, and organizations that have received treasury funding
           </p>
@@ -180,7 +180,7 @@ const Recipients = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
                 className="pl-9"
-                placeholder="Search recipients by name..."
+                placeholder="Search vendors by name..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -208,7 +208,7 @@ const Recipients = () => {
               <CardContent className="pt-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                   <div>
-                    <label className="text-sm font-medium text-gray-700 mb-1 block">Recipient Type</label>
+                    <label className="text-sm font-medium text-gray-700 mb-1 block">Vendor Type</label>
                     <Select 
                       value={selectedType} 
                       onValueChange={setSelectedType}
@@ -283,7 +283,7 @@ const Recipients = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredRecipients.map(recipient => (
-            <RecipientCard key={recipient.id} recipient={recipient} />
+            <VendorCard key={recipient.id} recipient={recipient} />
           ))}
         </div>
         
@@ -292,7 +292,7 @@ const Recipients = () => {
             <div className="bg-gray-100 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
               <Users className="h-8 w-8 text-gray-400" />
             </div>
-            <h3 className="text-lg font-medium mb-2">No Recipients Found</h3>
+            <h3 className="text-lg font-medium mb-2">No Vendors Found</h3>
             <p className="text-gray-600 mb-6">Try adjusting your search or filters</p>
             <Button 
               variant="outline" 
@@ -310,4 +310,4 @@ const Recipients = () => {
   );
 };
 
-export default Recipients;
+export default Vendors;

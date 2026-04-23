@@ -8,13 +8,13 @@ type Props = {
   recipientProposals: any[];
 };
 
-const RecipientProposalsCard = ({ recipientProposals }: Props) => (
+const VendorProposalsCard = ({ recipientProposals }: Props) => (
   <Card>
     <CardHeader>
       <CardTitle>Proposals</CardTitle>
       <CardDescription>
         {recipientProposals.length}{" "}
-        {recipientProposals.length === 1 ? "proposal" : "proposals"} by this recipient
+        {recipientProposals.length === 1 ? "proposal" : "proposals"} by this vendor
       </CardDescription>
     </CardHeader>
     <CardContent>
@@ -29,18 +29,18 @@ const RecipientProposalsCard = ({ recipientProposals }: Props) => (
               requestedAmount={proposal.requestedAmount}
               status={proposal.status}
               fundRound={proposal.fundRound}
-              recipient={proposal.recipient}
+              vendor={proposal.recipient}
             />
           ))}
         </div>
       ) : (
         <div className="text-center py-8">
           <Award className="h-10 w-10 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500">No proposals found for this recipient.</p>
+          <p className="text-gray-500">No proposals found for this vendor.</p>
         </div>
       )}
     </CardContent>
   </Card>
 );
 
-export default RecipientProposalsCard;
+export default VendorProposalsCard;

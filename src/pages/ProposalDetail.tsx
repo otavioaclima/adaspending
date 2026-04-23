@@ -38,7 +38,7 @@ const ProposalDetail = () => {
           <h1 className="text-2xl font-bold mb-2">Proposal Not Found</h1>
           <p className="text-gray-600 mb-6">The proposal you're looking for doesn't exist or has been removed.</p>
           <Button asChild>
-            <Link to="/awards">Back to Awards</Link>
+            <Link to="/proposals">Back to Proposals</Link>
           </Button>
         </div>
       </Layout>
@@ -52,8 +52,8 @@ const ProposalDetail = () => {
   return (
     <Layout>
       <div className="mb-6">
-        <Link to="/awards" className="inline-flex items-center text-sm text-cardano-blue hover:underline mb-4">
-          <ArrowLeft className="h-4 w-4 mr-1" /> Back to Award Search
+        <Link to="/proposals" className="inline-flex items-center text-sm text-cardano-blue hover:underline mb-4">
+          <ArrowLeft className="h-4 w-4 mr-1" /> Back to Proposals
         </Link>
         
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -232,7 +232,7 @@ const ProposalDetail = () => {
               <CardTitle>Recipient</CardTitle>
             </CardHeader>
             <CardContent>
-              <Link to={`/recipients/${proposal.recipientId}`} className="block">
+              <Link to={`/vendors/${proposal.recipientId}`} className="block">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="bg-cardano-blue/10 rounded-full w-10 h-10 flex items-center justify-center">
                     <Users className="h-5 w-5 text-cardano-blue" />

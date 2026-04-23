@@ -2,16 +2,16 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Search, BarChart3, Award, Users, FileText, Vote } from 'lucide-react';
+import { Search, BarChart3, Award, Users, FileText, Vote, Briefcase } from 'lucide-react';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   
   const navigation = [
     { name: 'Overview', href: '/dashboard', icon: BarChart3 },
-    { name: 'Award Search', href: '/awards', icon: Search },
+    { name: 'Projects', href: '/projects', icon: Briefcase },
     { name: 'Proposals', href: '/proposals', icon: Award },
-    { name: 'Recipients', href: '/recipients', icon: Users },
+    { name: 'Vendors', href: '/vendors', icon: Users },
     { name: 'Spending Explorer', href: '/explorer', icon: FileText },
     { name: 'Governance', href: '/governance', icon: Vote },
   ];
@@ -111,15 +111,15 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 <h3 className="font-semibold text-gray-800 mb-2">Explore</h3>
                 <ul className="space-y-1">
                   <li><Link to="/" className="text-sm text-gray-600 hover:text-cardano-blue">Overview</Link></li>
-                  <li><Link to="/awards" className="text-sm text-gray-600 hover:text-cardano-blue">Award Search</Link></li>
                   <li><Link to="/proposals" className="text-sm text-gray-600 hover:text-cardano-blue">Proposals</Link></li>
+                  <li><Link to="/projects" className="text-sm text-gray-600 hover:text-cardano-blue">Projects</Link></li>
                 </ul>
               </div>
               
               <div>
                 <h3 className="font-semibold text-gray-800 mb-2">Data</h3>
                 <ul className="space-y-1">
-                  <li><Link to="/recipients" className="text-sm text-gray-600 hover:text-cardano-blue">Recipients</Link></li>
+                  <li><Link to="/vendors" className="text-sm text-gray-600 hover:text-cardano-blue">Vendors</Link></li>
                   <li><Link to="/explorer" className="text-sm text-gray-600 hover:text-cardano-blue">Spending Explorer</Link></li>
                   <li><Link to="/governance" className="text-sm text-gray-600 hover:text-cardano-blue">Governance</Link></li>
                 </ul>

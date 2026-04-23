@@ -16,10 +16,10 @@ const columns = [
   { key: "category", label: "Category" },
   { key: "requestedAmount", label: "Amount (ADA)" },
   { key: "status", label: "Status" },
-  { key: "recipient", label: "Recipient" },
+  { key: "vendor", label: "Vendor" },
 ];
 
-function getRecipientName(proposal: any) {
+function getVendorName(proposal: any) {
   return proposal.recipient?.name || proposal.recipientName || "-";
 }
 
@@ -37,9 +37,9 @@ export default function SpendingTable() {
 
   const sortedData = [...proposals].sort((a, b) => {
     let x = a[sortKey], y = b[sortKey];
-    if (sortKey === "recipient") {
-      x = getRecipientName(a);
-      y = getRecipientName(b);
+    if (sortKey === 'vendor') {
+      x = getVendorName(a);
+      y = getVendorName(b);
     }
     if (typeof x === "string" && typeof y === "string") return sortAsc ? x.localeCompare(y) : y.localeCompare(x);
     if (typeof x === "number" && typeof y === "number") return sortAsc ? x - y : y - x;
@@ -86,7 +86,7 @@ export default function SpendingTable() {
                   {p.status?.charAt(0).toUpperCase() + p.status?.slice(1)}
                 </span>
               </TableCell>
-              <TableCell className="max-w-[140px] truncate">{getRecipientName(p)}</TableCell>
+              <TableCell className="max-w-[140px] truncate">{getVendorName(p)}</TableCell>
             </TableRow>
           ))}
         </TableBody>

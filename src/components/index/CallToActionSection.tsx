@@ -12,19 +12,19 @@ const CallToActionSection = () => {
           Start Exploring Cardano's Treasury
         </h2>
         <p className="text-gray-600 mb-4 max-w-2xl mx-auto">
-          Search proposals, track recipients, analyze treasury spending, and engage with the Cardano community governance.
+          Search proposals, track vendors, analyze treasury spending, and engage with the Cardano community governance.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button asChild>
-            <Link to="/awards">
+            <Link to="/proposals">
               <Search className="h-4 w-4 mr-2" />
               Search Proposals
             </Link>
           </Button>
           <Button asChild variant="outline">
-            <Link to="/recipients">
+            <Link to="/vendors">
               <Users className="h-4 w-4 mr-2" />
-              View Recipients
+              View Vendors
             </Link>
           </Button>
           <Button asChild variant="secondary">

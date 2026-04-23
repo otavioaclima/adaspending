@@ -6,14 +6,14 @@ import { Button } from '@/components/ui/button';
 import Layout from '@/components/layout/Layout';
 import { recipients, proposals } from '@/data/mockData';
 
-import RecipientHeader from '@/components/recipients/RecipientHeader';
-import RecipientFundingStats from '@/components/recipients/RecipientFundingStats';
-import RecipientDetailsCard from '@/components/recipients/RecipientDetailsCard';
-import RecipientProposalsCard from '@/components/recipients/RecipientProposalsCard';
-import RecipientAccountingTable from '@/components/recipients/RecipientAccountingTable';
-import RecipientMilestones from '@/components/recipients/RecipientMilestones';
+import VendorHeader from '@/components/vendors/VendorHeader';
+import VendorFundingStats from '@/components/vendors/VendorFundingStats';
+import VendorDetailsCard from '@/components/vendors/VendorDetailsCard';
+import VendorProposalsCard from '@/components/vendors/VendorProposalsCard';
+import VendorAccountingTable from '@/components/vendors/VendorAccountingTable';
+import VendorMilestones from '@/components/vendors/VendorMilestones';
 
-const RecipientDetail = () => {
+const VendorDetail = () => {
   const { id } = useParams<{ id: string }>();
   const recipient = recipients.find(r => r.id === id);
 
@@ -21,10 +21,10 @@ const RecipientDetail = () => {
     return (
       <Layout>
         <div className="text-center py-12">
-          <h1 className="text-2xl font-bold mb-4">Recipient Not Found</h1>
-          <p className="text-gray-600 mb-6">The recipient you're looking for doesn't exist.</p>
+          <h1 className="text-2xl font-bold mb-4">Vendor Not Found</h1>
+          <p className="text-gray-600 mb-6">The vendor you're looking for doesn't exist.</p>
           <Button asChild>
-            <Link to="/recipients">Back to Recipients</Link>
+            <Link to="/vendors">Back to Vendors</Link>
           </Button>
         </div>
       </Layout>
@@ -49,10 +49,10 @@ const RecipientDetail = () => {
   return (
     <Layout>
       <div className="mb-6">
-        <Link to="/recipients" className="inline-flex items-center text-sm text-cardano-blue hover:underline mb-4">
-          <ArrowLeft className="h-4 w-4 mr-1" /> Back to Recipients
+        <Link to="/vendors" className="inline-flex items-center text-sm text-cardano-blue hover:underline mb-4">
+          <ArrowLeft className="h-4 w-4 mr-1" /> Back to Vendors
         </Link>
-        <RecipientHeader
+        <VendorHeader
           name={recipient.name}
           type={recipient.type}
           location={recipient.location}
@@ -62,7 +62,7 @@ const RecipientDetail = () => {
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <RecipientDetailsCard
+          <VendorDetailsCard
             type={recipient.type}
             location={recipient.location}
             website={recipient.website}
@@ -71,17 +71,19 @@ const RecipientDetail = () => {
             capital={recipient.capital}
             address={recipient.address}
             registrationNumber={recipient.registrationNumber}
+            intersectMemberId={recipient.intersectMemberId}
+            intersectRegistrationStatus={recipient.intersectRegistrationStatus}
           />
-          <RecipientProposalsCard recipientProposals={recipientProposals} />
-          <RecipientAccountingTable
+          <VendorProposalsCard recipientProposals={recipientProposals} />
+          <VendorAccountingTable
             transactionRows={transactionRows}
             totalFunded={recipient.totalFunded}
           />
-          <RecipientMilestones proposals={recipientProposals} />
+          <VendorMilestones proposals={recipientProposals} />
         </div>
         
         <div className="space-y-6">
-          <RecipientFundingStats
+          <VendorFundingStats
             totalFunded={recipient.totalFunded}
             proposalsSubmitted={recipient.proposalsSubmitted}
             proposalsApproved={recipient.proposalsApproved}
@@ -92,5 +94,5 @@ const RecipientDetail = () => {
   );
 };
 
-export default RecipientDetail;
+export default VendorDetail;
 
