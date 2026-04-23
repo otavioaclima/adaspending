@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { useToast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 
 const CtaSection = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -22,31 +21,17 @@ const CtaSection = () => {
     try {
       setIsSubmitting(true);
       
-      // Insert the email into the subscribers table
-      const { error } = await supabase
-        .from('newsletter_subscribers')
-        .insert([{ email: data.email }]);
-        
-      if (error) {
-        if (error.code === '23505') { // Unique constraint violation
-          toast({
-            title: "Already subscribed",
-            description: "This email is already subscribed to our newsletter.",
-            variant: "default",
-          });
-        } else {
-          throw error;
-        }
-      } else {
-        console.log('Email submitted:', data.email);
-        setSubmitted(true);
-        form.reset();
-        toast({
-          title: "Subscription successful",
-          description: "Thank you for subscribing to our newsletter!",
-          variant: "default",
-        });
-      }
+      // Simulating network delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      console.log('Email submitted (Mock):', data.email);
+      setSubmitted(true);
+      form.reset();
+      toast({
+        title: "Subscription successful",
+        description: "Thank you for subscribing to our newsletter!",
+        variant: "default",
+      });
     } catch (error) {
       console.error('Error subscribing:', error);
       toast({

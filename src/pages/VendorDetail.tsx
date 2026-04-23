@@ -9,7 +9,7 @@ import { recipients, proposals } from '@/data/mockData';
 import VendorHeader from '@/components/vendors/VendorHeader';
 import VendorFundingStats from '@/components/vendors/VendorFundingStats';
 import VendorDetailsCard from '@/components/vendors/VendorDetailsCard';
-import VendorProposalsCard from '@/components/vendors/VendorProposalsCard';
+
 import VendorAccountingTable from '@/components/vendors/VendorAccountingTable';
 import VendorMilestones from '@/components/vendors/VendorMilestones';
 
@@ -74,7 +74,7 @@ const VendorDetail = () => {
             intersectMemberId={recipient.intersectMemberId}
             intersectRegistrationStatus={recipient.intersectRegistrationStatus}
           />
-          <VendorProposalsCard recipientProposals={recipientProposals} />
+
           <VendorAccountingTable
             transactionRows={transactionRows}
             totalFunded={recipient.totalFunded}

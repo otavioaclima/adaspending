@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="container mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center mb-8">
           <div className="mb-6 md:mb-0">
-            <img src="/lovable-uploads/257db3dc-2214-4178-afd2-70760c3899c4.png" alt="ADAspending Graph Logo" className="h-16" />
+            <img src="/assets/257db3dc-2214-4178-afd2-70760c3899c4.png" alt="ADAspending Graph Logo" className="h-16" />
             
             <p className="mt-2 text-gray-400 text-sm">An open data source for tracking treasury spending on the Cardano blockchain.<br />
 Bringing transparency and accountability to community funds.</p>

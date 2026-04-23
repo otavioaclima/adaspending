@@ -4,7 +4,7 @@ import HeroSection from '@/components/index/HeroSection';
 import StatsSection from '@/components/index/StatsSection';
 import FundRoundSection from '@/components/index/FundRoundSection';
 import ChartsSection from '@/components/index/ChartsSection';
-import ProposalsSection from '@/components/index/ProposalsSection';
+
 import CallToActionSection from '@/components/index/CallToActionSection';
 import ProposalBudgetComparator from "@/components/dashboard/ProposalBudgetComparator";
 import OverspendingPanel from "@/components/dashboard/OverspendingPanel";
@@ -33,7 +33,7 @@ const Index = () => {
       </section>
       <FundRoundSection />
       <ChartsSection />
-      <ProposalsSection />
+
       <CallToActionSection />
     </Layout>
   );

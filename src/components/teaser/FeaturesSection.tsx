@@ -28,9 +28,9 @@ const FeaturesSection = () => {
             <div className="w-16 h-16 flex items-center justify-center bg-cardano-teal/10 text-cardano-teal rounded-full mb-4">
               <Award className="h-8 w-8" />
             </div>
-            <h3 className="text-xl font-semibold mb-3">Review Proposals</h3>
+            <h3 className="text-xl font-semibold mb-3">Review Projects</h3>
             <p className="text-gray-600">
-              Explore funded proposals with detailed information about vendors, requested amounts, and project outcomes.
+              Explore funded projects with detailed information about vendors, requested amounts, and project outcomes.
             </p>
           </div>
           

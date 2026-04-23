@@ -15,12 +15,12 @@ const HeroSection = () => {
         </h1>
         <p className="text-lg md:text-xl mb-6 opacity-90">
           ADAspending is an open data source for treasury spending on the Cardano blockchain.
-          Explore decentralized funding proposals, track progress, follow ADA flows, and understand how the community allocates public blockchain funds.
+          Explore decentralized funding, track progress, follow ADA flows, and understand how the community allocates public blockchain funds.
         </p>
         
         <div className="flex flex-col md:flex-row gap-4 max-w-xl">
           <div className="flex-grow">
-            <Input className="bg-white/20 border-white/30 placeholder:text-white/70 text-white" placeholder="Search proposals, vendors, or categories..." />
+            <Input className="bg-white/20 border-white/30 placeholder:text-white/70 text-white" placeholder="Search vendors or categories..." />
           </div>
           <Button className="bg-white text-cardano-blue hover:bg-white/90">
             <Search className="h-4 w-4 mr-2" />

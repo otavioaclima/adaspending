@@ -27,7 +27,7 @@ const AboutSection = () => {
                 <div className="min-w-8 mt-1 mr-3 text-cardano-blue">
                   <Search className="h-6 w-6" />
                 </div>
-                <span className="text-gray-700">Searchable database of all proposals and vendors</span>
+                <span className="text-gray-700">Searchable database of all projects and vendors</span>
               </li>
               <li className="flex items-start">
                 <div className="min-w-8 mt-1 mr-3 text-cardano-blue">
@@ -61,7 +61,7 @@ const AboutSection = () => {
               <img 
                 alt="Cardano Blockchain Technology" 
                 className="w-full h-auto object-contain max-h-[300px]" 
-                src="/lovable-uploads/af43cb7f-1898-49c4-8d04-6a7e036cee61.png" 
+                src="/assets/af43cb7f-1898-49c4-8d04-6a7e036cee61.png" 
               />
             </div>
             <p className="text-cardano-blue font-medium text-lg mt-4 text-center">Transparent governance for a decentralized future</p>

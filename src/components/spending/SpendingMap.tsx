@@ -15,9 +15,9 @@ const SpendingMap: React.FC<SpendingMapProps> = ({ height = "100%" }) => {
   const [token, setToken] = useState<string>(MAPBOX_DEFAULT_TOKEN);
 
   useEffect(() => {
-    // Buscar token de env do Supabase se houver, ou fallback para MAPBOX_DEFAULT_TOKEN
-    const supabaseToken = import.meta.env.VITE_MAPBOX_PUBLIC_TOKEN || MAPBOX_DEFAULT_TOKEN;
-    setToken(supabaseToken);
+    // Get Mapbox token from environment variables or fallback
+    const mapboxToken = import.meta.env.VITE_MAPBOX_PUBLIC_TOKEN || MAPBOX_DEFAULT_TOKEN;
+    setToken(mapboxToken);
   }, []);
 
   useEffect(() => {

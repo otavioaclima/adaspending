@@ -10,7 +10,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   const navigation = [
     { name: 'Overview', href: '/dashboard', icon: BarChart3 },
     { name: 'Projects', href: '/projects', icon: Briefcase },
-    { name: 'Proposals', href: '/proposals', icon: Award },
+
     { name: 'Vendors', href: '/vendors', icon: Users },
     { name: 'Spending Explorer', href: '/explorer', icon: FileText },
   ];
@@ -26,13 +26,13 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <Link to="/dashboard" className="flex items-center">
               {isHomePage ? (
                 <img 
-                  src="/lovable-uploads/257db3dc-2214-4178-afd2-70760c3899c4.png" 
+                  src="/assets/257db3dc-2214-4178-afd2-70760c3899c4.png" 
                   alt="Cardano Treasury Explorer" 
                   className="h-20 w-auto" 
                 />
               ) : (
                 <img
-                  src="/lovable-uploads/14b66eb5-72ae-42fe-94f7-70a49cc9ad69.png"
+                  src="/assets/14b66eb5-72ae-42fe-94f7-70a49cc9ad69.png"
                   alt="ADAspending Logo"
                   className="h-10 w-auto"
                 />
@@ -94,7 +94,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <div className="mb-4 md:mb-0">
               <div className="flex items-center justify-center md:justify-start space-x-2">
                 <img 
-                  src="/lovable-uploads/e4da4614-7cea-4f9c-853c-3f019f7932ca.png" 
+                  src="/assets/e4da4614-7cea-4f9c-853c-3f019f7932ca.png" 
                   alt="Cardano Treasury Explorer" 
                   className="h-8 w-auto"
                 />
@@ -110,7 +110,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 <h3 className="font-semibold text-gray-800 mb-2">Explore</h3>
                 <ul className="space-y-1">
                   <li><Link to="/" className="text-sm text-gray-600 hover:text-cardano-blue">Overview</Link></li>
-                  <li><Link to="/proposals" className="text-sm text-gray-600 hover:text-cardano-blue">Proposals</Link></li>
+
                   <li><Link to="/projects" className="text-sm text-gray-600 hover:text-cardano-blue">Projects</Link></li>
                 </ul>
               </div>

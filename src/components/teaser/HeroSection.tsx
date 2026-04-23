@@ -29,7 +29,7 @@ const HeroSection = () => {
   return <section className="relative bg-gradient-to-br from-[#131637] to-[#000111] py-12 px-4 md:py-24">
       <div className="container mx-auto text-center">
         <div className="flex flex-col items-center mb-8">
-          <img alt="ADAspending Graph Logo" className="h-28 md:h-28 mb-4 animate-fade-in object-contain w-auto max-w-full" src="/lovable-uploads/1b553c01-58c1-4454-8098-2be801352be8.png" />
+          <img alt="ADAspending Graph Logo" className="h-28 md:h-28 mb-4 animate-fade-in object-contain w-auto max-w-full" src="/assets/1b553c01-58c1-4454-8098-2be801352be8.png" />
         </div>
         
         <div className="h-20 md:h-24 flex items-center justify-center mb-8">
