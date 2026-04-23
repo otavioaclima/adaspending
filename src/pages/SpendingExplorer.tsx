@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Layout from '@/components/layout/Layout';
 import { treasuryStats, fundRounds, proposals } from '@/data/mockData';
-import { getNetworkState, lovelaceToAda } from '@/services/cexplorer';
+import { getNetworkState, lovelaceToAda } from '@/services/cardanoscan';
 import { 
   BarChart, 
   Bar, 
@@ -86,8 +86,8 @@ const SpendingExplorer = () => {
   return (
     <Layout>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Spending Explorer</h1>
-        <p className="text-lg text-gray-600">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Spending Explorer</h1>
+        <p className="text-lg text-gray-600 dark:text-gray-400">
           Visualize and analyze treasury spending patterns and distributions
         </p>
       </div>
@@ -130,7 +130,7 @@ const SpendingExplorer = () => {
                 Interactive map showing the global distribution of treasury funding (Mapbox Globe)
               </CardDescription>
             </CardHeader>
-            <CardContent className="h-96 flex items-center justify-center bg-gray-50">
+            <CardContent className="h-96 flex items-center justify-center bg-gray-50 dark:bg-gray-900/50">
               <SpendingMap height="340px" />
             </CardContent>
           </Card>
@@ -144,7 +144,7 @@ const SpendingExplorer = () => {
                 Detailed tabular data of proposals (sortable)
               </CardDescription>
             </CardHeader>
-            <CardContent className="h-auto bg-gray-50">
+            <CardContent className="h-auto bg-gray-50 dark:bg-gray-900/50">
               <SpendingTable />
             </CardContent>
           </Card>

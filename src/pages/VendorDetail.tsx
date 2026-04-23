@@ -36,11 +36,11 @@ const VendorDetail = () => {
     return (
       <Layout>
         <div className="text-center py-20">
-          <div className="bg-gray-100 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
-            <Building className="h-8 w-8 text-gray-400" />
+          <div className="bg-gray-100 dark:bg-gray-800 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
+            <Building className="h-8 w-8 text-gray-400 dark:text-gray-500" />
           </div>
-          <h1 className="text-2xl font-bold mb-4 text-gray-900">Vendor Not Found</h1>
-          <p className="text-gray-600 mb-6">We couldn't find any projects for "{vendorName}" in the Intersect Treasury.</p>
+          <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Vendor Not Found</h1>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">We couldn't find any projects for "{vendorName}" in the Intersect Treasury.</p>
           <Button asChild>
             <Link to="/vendors">Back to Vendors</Link>
           </Button>
@@ -67,16 +67,16 @@ const VendorDetail = () => {
           <ArrowLeft className="h-4 w-4 mr-1" /> Back to Vendors
         </Link>
         
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">
           <div className="flex items-center gap-4">
-            <div className="bg-cardano-blue/10 p-4 rounded-2xl text-cardano-blue">
+            <div className="bg-cardano-blue/10 dark:bg-cardano-blue/20 p-4 rounded-2xl text-cardano-blue">
               <Building className="h-8 w-8" />
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-100">Official Vendor</Badge>
+                <Badge variant="outline" className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border-blue-100 dark:border-blue-900/50">Official Vendor</Badge>
               </div>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{vendorName}</h1>
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{vendorName}</h1>
             </div>
           </div>
           <div className="flex gap-2">
@@ -89,12 +89,12 @@ const VendorDetail = () => {
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-            <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <Info className="h-5 w-5 text-cardano-blue" />
               Vendor Profile
             </h3>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
               {vendorName} is an active supplier for the Intersect Treasury Contracts 1. 
               They are currently managing {stats.projectCount} project(s) with a total allocation of ₳{stats.totalFunded.toLocaleString()}.
             </p>
@@ -107,12 +107,12 @@ const VendorDetail = () => {
         </div>
         
         <div className="space-y-6">
-          <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-            <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-6">Financial Summary</h3>
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">
+            <h3 className="text-sm font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-6">Financial Summary</h3>
             
             <div className="space-y-6">
               <div>
-                <p className="text-sm text-gray-500 mb-1">Total Allocated</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Allocated</p>
                 <p className="text-2xl font-bold text-cardano-blue flex items-center">
                   <Wallet className="h-5 w-5 mr-2" />
                   ₳{stats.totalFunded.toLocaleString()}
@@ -120,20 +120,20 @@ const VendorDetail = () => {
               </div>
               
               <div>
-                <p className="text-sm text-gray-500 mb-1">Total Spent</p>
-                <p className="text-2xl font-bold text-orange-600">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Spent</p>
+                <p className="text-2xl font-bold text-orange-600 dark:text-orange-500">
                   ₳{stats.amountSpent.toLocaleString()}
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-gray-50">
+              <div className="pt-4 border-t border-gray-50 dark:border-gray-700">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-500">Execution Progress</span>
-                  <span className="text-sm font-bold text-gray-900">
+                  <span className="text-sm text-gray-500 dark:text-gray-400">Execution Progress</span>
+                  <span className="text-sm font-bold text-gray-900 dark:text-white">
                     {((stats.amountSpent / stats.totalFunded) * 100).toFixed(1)}%
                   </span>
                 </div>
-                <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
                   <div 
                     className="bg-cardano-blue h-full" 
                     style={{ width: `${(stats.amountSpent / stats.totalFunded) * 100}%` }}
@@ -142,13 +142,13 @@ const VendorDetail = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-4 pt-4">
-                <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
-                  <p className="text-[10px] text-gray-400 uppercase font-bold mb-1">Projects</p>
-                  <p className="text-lg font-bold text-gray-900">{stats.projectCount}</p>
+                <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700">
+                  <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold mb-1">Projects</p>
+                  <p className="text-lg font-bold text-gray-900 dark:text-white">{stats.projectCount}</p>
                 </div>
-                <div className="bg-gray-50 p-3 rounded-xl border border-gray-100">
-                  <p className="text-[10px] text-gray-400 uppercase font-bold mb-1">Completed</p>
-                  <p className="text-lg font-bold text-green-600">{stats.completedCount}</p>
+                <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700">
+                  <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold mb-1">Completed</p>
+                  <p className="text-lg font-bold text-green-600 dark:text-green-500">{stats.completedCount}</p>
                 </div>
               </div>
             </div>

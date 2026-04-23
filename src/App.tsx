@@ -17,9 +17,15 @@ import UserStories from "./pages/UserStories";
 import DesignSystem from "./pages/DesignSystem";
 import UIDesign from "./pages/UIDesign";
 import { AnalyticsProvider } from "./components/AnalyticsProvider";
+import { ThemeProvider } from "./components/theme-provider";
 
 import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
+import Analytics from "./pages/Analytics";
+import TreasuryDonations from "./pages/TreasuryDonations";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Accessibility from "./pages/Accessibility";
+import About from "./pages/About";
 
 const queryClient = new QueryClient();
 
@@ -29,26 +35,33 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <AnalyticsProvider>
-          <Routes>
-            <Route path="/dashboard" element={<Index />} />
-            <Route path="/" element={<Teaser />} />
+        <ThemeProvider defaultTheme="light" storageKey="adaspending-theme">
+          <AnalyticsProvider>
+            <Routes>
+              <Route path="/dashboard" element={<Index />} />
+              <Route path="/" element={<Teaser />} />
 
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/projects/:id" element={<ProjectDetail />} />
-            <Route path="/vendors" element={<Vendors />} />
-            <Route path="/vendors/:id" element={<VendorDetail />} />
-            <Route path="/explorer" element={<SpendingExplorer />} />
-            <Route path="/architecture" element={<InformationArchitecture />} />
-            <Route path="/wireframe" element={<Wireframe />} />
-            <Route path="/tech-requirements" element={<TechRequirements />} />
-            <Route path="/user-stories" element={<UserStories />} />
-            <Route path="/design-system" element={<DesignSystem />} />
-            <Route path="/ui-design" element={<UIDesign />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AnalyticsProvider>
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/projects/:id" element={<ProjectDetail />} />
+              <Route path="/vendors" element={<Vendors />} />
+              <Route path="/vendors/:id" element={<VendorDetail />} />
+              <Route path="/explorer" element={<SpendingExplorer />} />
+              <Route path="/donations" element={<TreasuryDonations />} />
+              <Route path="/analytics" element={<Analytics />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/accessibility" element={<Accessibility />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/architecture" element={<InformationArchitecture />} />
+              <Route path="/wireframe" element={<Wireframe />} />
+              <Route path="/tech-requirements" element={<TechRequirements />} />
+              <Route path="/user-stories" element={<UserStories />} />
+              <Route path="/design-system" element={<DesignSystem />} />
+              <Route path="/ui-design" element={<UIDesign />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AnalyticsProvider>
+        </ThemeProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useQuery } from "@tanstack/react-query";
 import { treasuryStats, proposals } from "@/data/mockData";
-import { getNetworkState, lovelaceToAda } from "@/services/cexplorer";
+import { getNetworkState, lovelaceToAda } from "@/services/cardanoscan";
 
 const Thermometer = () => {
   const totalBudget = treasuryStats.totalFundsAwarded; // 350M
@@ -34,29 +34,29 @@ const Thermometer = () => {
       </CardHeader>
       <CardContent>
         <div>
-          <div className="flex justify-between text-xs text-gray-500 mb-1">
+          <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
             <span>Spent</span>
             <span className="font-bold text-orange-600">{spentPercent.toFixed(2)}%</span>
           </div>
-          <Progress value={spentPercent} className="h-2 bg-orange-100" />
+          <Progress value={spentPercent} className="h-2 bg-orange-100 dark:bg-orange-900/20" />
           
-          <div className="flex justify-between text-xs text-gray-500 mt-4 mb-1">
+          <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-4 mb-1">
             <span>Remaining</span>
             <span className="font-bold text-green-600">{remainingPercent.toFixed(2)}%</span>
           </div>
-          <Progress value={remainingPercent} className="h-2 bg-green-100" />
+          <Progress value={remainingPercent} className="h-2 bg-green-100 dark:bg-green-900/20" />
 
-          <div className="mt-4 pt-4 border-t border-gray-100 text-xs space-y-2">
+          <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-800 text-xs space-y-2">
             <div className="flex justify-between">
-              <span className="text-gray-500">Total Budget (Auth):</span>
+              <span className="text-gray-500 dark:text-gray-400">Total Budget (Auth):</span>
               <span className="font-semibold">{totalBudget.toLocaleString()} ADA</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Total Spent:</span>
+              <span className="text-gray-500 dark:text-gray-400">Total Spent:</span>
               <span className="font-semibold text-orange-600">{spent.toLocaleString()} ADA</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Remaining Budget:</span>
+              <span className="text-gray-500 dark:text-gray-400">Remaining Budget:</span>
               <span className="font-semibold text-green-600">{remaining.toLocaleString()} ADA</span>
             </div>
           </div>

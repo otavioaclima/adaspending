@@ -16,13 +16,13 @@ import { Link } from "react-router-dom";
 const getStatusColor = (status: string) => {
   switch (status.toLowerCase()) {
     case 'completed':
-      return 'bg-green-100 text-green-800 hover:bg-green-200';
+      return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/40';
     case 'paused':
-      return 'bg-amber-100 text-amber-800 hover:bg-amber-200';
+      return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-900/40';
     case 'in progress':
-      return 'bg-blue-100 text-blue-800 hover:bg-blue-200';
+      return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40';
     default:
-      return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
+      return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700';
   }
 };
 
@@ -36,10 +36,10 @@ const IntersectProjectsTable = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="rounded-md border">
+        <div className="rounded-md border dark:border-gray-800">
           <Table>
             <TableHeader>
-              <TableRow>
+              <TableRow className="dark:border-gray-800">
                 <TableHead className="w-[400px]">Project Name</TableHead>
                 <TableHead>Vendor</TableHead>
                 <TableHead className="text-right">Total Budget</TableHead>
@@ -49,13 +49,17 @@ const IntersectProjectsTable = () => {
             </TableHeader>
             <TableBody>
               {intersectProjects.map((project) => (
-                <TableRow key={project.id}>
-                  <TableCell className="font-medium">
+                <TableRow key={project.id} className="dark:border-gray-800">
+                  <TableCell className="font-medium text-gray-900 dark:text-gray-100">
                     <Link to={`/projects/${project.id}`} className="hover:text-cardano-blue hover:underline">
                       {project.projectName}
                     </Link>
                   </TableCell>
-                  <TableCell>{project.vendor}</TableCell>
+                  <TableCell className="text-gray-600 dark:text-gray-400">
+                    <div className="truncate max-w-[150px]" title={project.vendor}>
+                      {project.vendor}
+                    </div>
+                  </TableCell>
                   <TableCell className="text-right font-mono">
                     ₳{project.totalAmount.toLocaleString()}
                   </TableCell>

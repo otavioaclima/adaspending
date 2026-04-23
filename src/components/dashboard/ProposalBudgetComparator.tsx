@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { treasuryStats, proposals } from "@/data/mockData";
-import { getNetworkState, lovelaceToAda } from "@/services/cexplorer";
+import { getNetworkState, lovelaceToAda } from "@/services/cardanoscan";
 import { BarChart3 } from "lucide-react";
 
 const ProposalBudgetComparator = () => {
@@ -24,15 +24,15 @@ const ProposalBudgetComparator = () => {
         <div className="space-y-4">
           <div className="space-y-2">
             <div className="flex justify-between">
-              <span className="text-sm text-gray-600">Total Budget</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">Total Budget</span>
               <span className="text-sm font-bold text-cardano-blue">{totalBudget.toLocaleString()} ADA</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-gray-600">Total Spent</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">Total Spent</span>
               <span className="text-sm font-bold text-orange-600">{spent.toLocaleString()} ADA ({spentPercent.toFixed(2)}%)</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-gray-600">Remaining Budget</span>
+              <span className="text-sm text-gray-600 dark:text-gray-400">Remaining Budget</span>
               <span className="text-sm font-bold text-green-600">{remaining.toLocaleString()} ADA</span>
             </div>
           </div>

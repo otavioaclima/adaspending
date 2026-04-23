@@ -37,7 +37,7 @@ export default function ChartSection(props: ChartSectionProps) {
         <CardContent className="pt-6">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="w-full sm:w-1/2">
-              <label className="text-sm font-medium text-gray-700 mb-1 block">Chart Type</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-400 mb-1 block">Chart Type</label>
               <Select value={chartType} onValueChange={setChartType}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select chart type" />
@@ -51,7 +51,7 @@ export default function ChartSection(props: ChartSectionProps) {
               </Select>
             </div>
             <div className="w-full sm:w-1/2">
-              <label className="text-sm font-medium text-gray-700 mb-1 block">Time Frame</label>
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-400 mb-1 block">Time Frame</label>
               <Select value={timeframe} onValueChange={setTimeframe}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select time frame" />
@@ -102,7 +102,11 @@ export default function ChartSection(props: ChartSectionProps) {
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: number) => `${value}%`} />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
+                    itemStyle={{ color: 'var(--foreground)' }}
+                    formatter={(value: number) => `${value}%`} 
+                  />
                   <Legend />
                 </PieChart>
               </ResponsiveContainer>
@@ -114,11 +118,13 @@ export default function ChartSection(props: ChartSectionProps) {
                   data={fundingByRound}
                   margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis yAxisId="left" orientation="left" stroke="#0033AD" />
-                  <YAxis yAxisId="right" orientation="right" stroke="#1BAAD6" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-gray-200 dark:text-gray-700" />
+                  <XAxis dataKey="name" tick={{fill: 'currentColor'}} className="text-gray-400 dark:text-gray-500" />
+                  <YAxis yAxisId="left" orientation="left" stroke="#0033AD" tick={{fill: '#0033AD'}} />
+                  <YAxis yAxisId="right" orientation="right" stroke="#1BAAD6" tick={{fill: '#1BAAD6'}} />
                   <Tooltip 
+                    contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
+                    itemStyle={{ color: 'var(--foreground)' }}
                     formatter={(value: number, name: string) => [
                       name === 'budget' ? `${value.toLocaleString()} ADA` : value.toLocaleString(),
                       name === 'budget' ? 'Budget' : 
@@ -139,10 +145,14 @@ export default function ChartSection(props: ChartSectionProps) {
                   data={monthlyFunding}
                   margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip formatter={(value: number) => `${value.toLocaleString()} ADA`} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-gray-200 dark:text-gray-700" />
+                  <XAxis dataKey="month" tick={{fill: 'currentColor'}} className="text-gray-400 dark:text-gray-500" />
+                  <YAxis tick={{fill: 'currentColor'}} className="text-gray-400 dark:text-gray-500" />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
+                    itemStyle={{ color: 'var(--foreground)' }}
+                    formatter={(value: number) => `${value.toLocaleString()} ADA`} 
+                  />
                   <Line 
                     type="monotone" 
                     dataKey="amount" 
@@ -160,26 +170,32 @@ export default function ChartSection(props: ChartSectionProps) {
                 <ScatterChart
                   margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-gray-200 dark:text-gray-700" />
                   <XAxis 
                     dataKey="amount" 
                     name="Requested Amount (ADA)" 
                     type="number"
                     domain={['auto', 'auto']}
-                    label={{ value: 'Requested Amount (ADA)', position: 'insideBottomRight', offset: -10 }}
+                    tick={{fill: 'currentColor'}}
+                    className="text-gray-400 dark:text-gray-500"
+                    label={{ value: 'Requested Amount (ADA)', position: 'insideBottomRight', offset: -10, fill: 'currentColor' }}
                   />
                   <YAxis 
                     dataKey="votes" 
                     name="Yes Votes" 
                     type="number" 
-                    label={{ value: 'Yes Votes', angle: -90, position: 'insideLeft' }}
+                    tick={{fill: 'currentColor'}}
+                    className="text-gray-400 dark:text-gray-500"
+                    label={{ value: 'Yes Votes', angle: -90, position: 'insideLeft', fill: 'currentColor' }}
                   />
                   <ZAxis dataKey="name" name="Proposal" />
                   <Tooltip 
                     cursor={{ strokeDasharray: '3 3' }}
+                    contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
+                    itemStyle={{ color: 'var(--foreground)' }}
                     formatter={(value: any, name: string, props: any) => {
                       if (name === 'Requested Amount (ADA)') {
-                        return [`${value.toLocaleString()} ADA`, name];
+                        return [`₳ ${value.toLocaleString()}`, name];
                       }
                       if (name === 'Yes Votes') {
                         return [value.toLocaleString(), name];

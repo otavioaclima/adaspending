@@ -55,11 +55,11 @@ export default function SpendingTable() {
             {columns.map((col) => (
               <TableHead
                 key={col.key}
-                className="cursor-pointer select-none"
+                className="cursor-pointer select-none text-gray-900 dark:text-gray-300 font-bold"
                 onClick={() => handleSort(col.key)}
               >
                 {col.label}
-                <span className="ml-1 text-gray-400">
+                <span className="ml-1 text-gray-400 dark:text-gray-500">
                   {sortKey === col.key ? (sortAsc ? "▲" : "▼") : ""}
                 </span>
               </TableHead>
@@ -68,25 +68,25 @@ export default function SpendingTable() {
         </TableHeader>
         <TableBody>
           {sortedData.map((p, i) => (
-            <TableRow key={p.id ?? i}>
-              <TableCell className="font-medium text-primary max-w-[220px] truncate">{p.title}</TableCell>
-              <TableCell>{p.category}</TableCell>
-              <TableCell>{p.requestedAmount.toLocaleString()} ADA</TableCell>
+            <TableRow key={p.id ?? i} className="border-gray-100 dark:border-gray-800">
+              <TableCell className="font-medium text-primary dark:text-cardano-teal max-w-[220px] truncate">{p.title}</TableCell>
+              <TableCell className="text-gray-600 dark:text-gray-400">{p.category}</TableCell>
+              <TableCell className="text-gray-900 dark:text-gray-100 font-medium">{p.requestedAmount.toLocaleString()} ADA</TableCell>
               <TableCell>
                 <span
                   className={
                     "inline-block rounded px-2 py-0.5 text-xs font-semibold " +
                     (p.status === "approved"
-                      ? "bg-green-100 text-green-700"
+                      ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                       : p.status === "rejected"
-                      ? "bg-red-100 text-red-700"
-                      : "bg-gray-100 text-gray-700")
+                      ? "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                      : "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400")
                   }
                 >
                   {p.status?.charAt(0).toUpperCase() + p.status?.slice(1)}
                 </span>
               </TableCell>
-              <TableCell className="max-w-[140px] truncate">{getVendorName(p)}</TableCell>
+              <TableCell className="max-w-[140px] truncate text-gray-600 dark:text-gray-400 font-medium">{getVendorName(p)}</TableCell>
             </TableRow>
           ))}
         </TableBody>

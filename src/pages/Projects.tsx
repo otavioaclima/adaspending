@@ -100,18 +100,18 @@ const Projects = () => {
       <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl font-bold text-gray-900">Treasury Projects</h1>
-            <Badge variant="secondary" className="bg-cardano-blue/10 text-cardano-blue border-none h-6 px-3">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Treasury Projects</h1>
+            <Badge variant="secondary" className="bg-cardano-blue/10 dark:bg-cardano-blue/20 text-cardano-blue border-none h-6 px-3">
               {intersectProjects.length} Total
             </Badge>
           </div>
-          <p className="text-gray-600 max-w-3xl">
+          <p className="text-gray-600 dark:text-gray-400 max-w-3xl">
             Detailed overview of all projects funded through the Intersect Treasury Contracts 1.
             Track progress, budgets, and vendors for each initiative.
           </p>
         </div>
 
-        <div className="flex bg-white border border-gray-200 rounded-lg p-1 shadow-sm shrink-0">
+        <div className="flex bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-1 shadow-sm shrink-0">
           <Button
             variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
             size="sm"
@@ -134,14 +134,14 @@ const Projects = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm mb-8 flex flex-col lg:flex-row gap-4 items-end">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 flex flex-col lg:flex-row gap-4 items-end transition-colors">
         <div className="flex-1 w-full lg:w-auto">
-          <label className="text-xs font-bold text-gray-400 uppercase mb-1.5 block">Search Projects</label>
+          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">Search Projects</label>
           <div className="relative">
             <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               placeholder="Project name or vendor..."
-              className="pl-10 h-11 border-gray-200"
+              className="pl-10 h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -149,9 +149,9 @@ const Projects = () => {
         </div>
 
         <div className="w-full lg:w-48">
-          <label className="text-xs font-bold text-gray-400 uppercase mb-1.5 block">Status</label>
+          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">Status</label>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="h-11 border-gray-200">
+            <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
               <SelectValue placeholder="All Status" />
             </SelectTrigger>
             <SelectContent>
@@ -164,9 +164,9 @@ const Projects = () => {
         </div>
 
         <div className="w-full lg:w-48">
-          <label className="text-xs font-bold text-gray-400 uppercase mb-1.5 block">Budget Size</label>
+          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">Budget Size</label>
           <Select value={sizeFilter} onValueChange={setSizeFilter}>
-            <SelectTrigger className="h-11 border-gray-200">
+            <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
               <SelectValue placeholder="All Sizes" />
             </SelectTrigger>
             <SelectContent>
@@ -179,9 +179,9 @@ const Projects = () => {
         </div>
 
         <div className="w-full lg:w-56">
-          <label className="text-xs font-bold text-gray-400 uppercase mb-1.5 block">Vendor</label>
+          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">Vendor</label>
           <Select value={vendorFilter} onValueChange={setVendorFilter}>
-            <SelectTrigger className="h-11 border-gray-200">
+            <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
               <SelectValue placeholder="All Vendors" />
             </SelectTrigger>
             <SelectContent>
@@ -207,7 +207,7 @@ const Projects = () => {
         viewMode === 'grid' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProjects.map((project) => (
-              <Card key={project.id} className="flex flex-col h-full hover:shadow-lg transition-shadow border-gray-200">
+              <Card key={project.id} className="flex flex-col h-full hover:shadow-lg transition-shadow border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800/40">
                 <CardHeader className="pb-2">
                   <div className="flex justify-between items-start mb-2">
                     <Badge variant="outline" className={`${getStatusColor(project.status)} flex items-center`}>
@@ -223,8 +223,8 @@ const Projects = () => {
                 <CardContent className="flex-grow">
                   <div className="space-y-4">
                     <div>
-                      <p className="text-xs text-gray-400 uppercase font-semibold mb-1">Vendor</p>
-                      <p className="text-sm font-medium text-gray-700">{project.vendor}</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500 uppercase font-semibold mb-1">Vendor</p>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate" title={project.vendor}>{project.vendor}</p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 pt-2">
@@ -247,12 +247,12 @@ const Projects = () => {
                     {/* Progress bar */}
                     <div className="pt-2">
                       <div className="flex justify-between text-xs mb-1">
-                        <span className="text-gray-500">Execution</span>
-                        <span className="font-semibold text-gray-700">
+                        <span className="text-gray-500 dark:text-gray-400">Execution</span>
+                        <span className="font-semibold text-gray-700 dark:text-gray-300">
                           {((project.amountSpent / project.totalAmount) * 100).toFixed(0)}%
                         </span>
                       </div>
-                      <div className="w-full bg-gray-100 rounded-full h-1.5">
+                      <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
                         <div
                           className="bg-cardano-blue h-1.5 rounded-full"
                           style={{ width: `${(project.amountSpent / project.totalAmount) * 100}%` }}
@@ -273,10 +273,10 @@ const Projects = () => {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <div className="bg-white dark:bg-gray-800/40 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden transition-colors">
             <Table>
               <TableHeader>
-                <TableRow className="bg-gray-50/50">
+                <TableRow className="bg-gray-50/50 dark:bg-gray-900/50 border-gray-200 dark:border-gray-700">
                   <TableHead className="w-[120px]">Status</TableHead>
                   <TableHead className="w-[150px]">Project ID</TableHead>
                   <TableHead className="min-w-[250px]">Project Name</TableHead>
@@ -298,11 +298,13 @@ const Projects = () => {
                     <TableCell className="font-mono text-xs text-gray-500">
                       {project.id}
                     </TableCell>
-                    <TableCell className="font-semibold text-gray-900">
+                    <TableCell className="font-semibold text-gray-900 dark:text-gray-100">
                       {project.projectName}
                     </TableCell>
-                    <TableCell className="text-gray-600">
-                      {project.vendor}
+                    <TableCell className="text-gray-600 dark:text-gray-400">
+                      <div className="truncate max-w-[150px]" title={project.vendor}>
+                        {project.vendor}
+                      </div>
                     </TableCell>
                     <TableCell className="text-right font-bold text-cardano-blue">
                       {project.totalAmount.toLocaleString()}
@@ -312,10 +314,10 @@ const Projects = () => {
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col gap-1">
-                        <span className="text-[10px] font-semibold text-gray-500">
+                        <span className="text-[10px] font-semibold text-gray-500 dark:text-gray-400">
                           {((project.amountSpent / project.totalAmount) * 100).toFixed(0)}%
                         </span>
-                        <div className="w-full bg-gray-100 rounded-full h-1">
+                        <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1">
                           <div
                             className="bg-cardano-blue h-1 rounded-full"
                             style={{ width: `${(project.amountSpent / project.totalAmount) * 100}%` }}
