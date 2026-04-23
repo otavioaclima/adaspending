@@ -28,8 +28,8 @@ const journeys: { name: string; description: string; steps: JourneyStep[] }[] = 
       { id: '1', label: 'Dashboard', description: 'Quick overview', action: 'Navigates to Explorer', page: '/dashboard' },
       { id: '2', label: 'Spending Explorer', description: 'Views charts & map', action: 'Switches to data table', page: '/explorer' },
       { id: '3', label: 'Data Table', description: 'Sorts & filters data', action: 'Clicks specific award', page: '/explorer' },
-      { id: '4', label: 'Proposal Detail', description: 'Deep-dives into data', action: 'Checks governance context', page: '/proposals/:id' },
-      { id: '5', label: 'Governance', description: 'Reviews fund round context', action: 'Explores round proposals', page: '/governance' },
+      { id: '4', label: 'Proposal Detail', description: 'Deep-dives into data', action: 'Checks proposals context', page: '/proposals/:id' },
+      { id: '5', label: 'Proposals', description: 'Reviews fund round context', action: 'Explores round proposals', page: '/proposals' },
     ],
   },
   {

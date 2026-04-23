@@ -21,7 +21,7 @@ const MockHeader: React.FC<{ compact?: boolean }> = ({ compact }) => (
       <div className="text-white font-bold text-sm">₳ ADAspending</div>
       {!compact && (
         <div className="hidden sm:flex items-center gap-1">
-          {['Dashboard', 'Proposals', 'Proposals', 'Recipients', 'Explorer', 'Governance'].map(link => (
+          {['Dashboard', 'Proposals', 'Proposals', 'Recipients', 'Explorer', 'Proposals'].map(link => (
             <span key={link} className="text-white/70 text-[9px] px-2 py-0.5 rounded hover:bg-white/10">{link}</span>
           ))}
         </div>
@@ -50,7 +50,7 @@ const MockFooter: React.FC = () => (
       </div>
       <div className="space-y-0.5">
         <div className="text-white/60 font-semibold">Resources</div>
-        <div>Governance</div>
+        <div>Proposals</div>
         <div>FAQ</div>
       </div>
     </div>
@@ -160,7 +160,7 @@ const screenDefinitions: ScreenDef[] = [
             {[
               { icon: Search, name: 'Award Search', desc: 'Find any funded proposal' },
               { icon: BarChart3, name: 'Spending Analysis', desc: 'Charts, maps & tables' },
-              { icon: Vote, name: 'Governance', desc: 'Track fund rounds' },
+              { icon: Vote, name: 'Proposals', desc: 'Track fund rounds' },
               { icon: Users, name: 'Recipients', desc: 'Verify track records' },
             ].map((f, i) => (
               <div key={i} className="bg-card border rounded-md p-2 text-center">
@@ -267,7 +267,7 @@ const screenDefinitions: ScreenDef[] = [
                 {[
                   { c: 'DeFi', color: 'bg-cardano-teal' },
                   { c: 'Education', color: 'bg-cardano-blue' },
-                  { c: 'Governance', color: 'bg-cardano-coral' },
+                  { c: 'Proposals', color: 'bg-cardano-coral' },
                   { c: 'Other', color: 'bg-muted' },
                 ].map((item, i) => (
                   <div key={i} className="flex items-center gap-1">
@@ -363,7 +363,7 @@ const screenDefinitions: ScreenDef[] = [
           <div className="grid grid-cols-2 gap-2">
             <MockProposalCard title="Cardano DeFi Hub" category="DeFi" status="In Progress" amount="₳ 125K" />
             <MockProposalCard title="Education Portal" category="Education" status="Completed" amount="₳ 85K" />
-            <MockProposalCard title="Governance Tools" category="Governance" status="Funded" amount="₳ 64K" />
+            <MockProposalCard title="Proposals Tools" category="Proposals" status="Funded" amount="₳ 64K" />
             <MockProposalCard title="NFT Marketplace" category="DeFi" status="In Progress" amount="₳ 200K" />
             <MockProposalCard title="Wallet Integration" category="Developer" status="Completed" amount="₳ 45K" />
             <MockProposalCard title="Community Hub" category="Community" status="Funded" amount="₳ 30K" />
@@ -613,14 +613,14 @@ const screenDefinitions: ScreenDef[] = [
     ),
   },
   {
-    title: 'Governance',
-    route: '/governance',
-    description: 'Fund rounds, participation resources, and governance statistics.',
+    title: 'Proposals',
+    route: '/proposals',
+    description: 'Fund rounds, participation resources, and proposals statistics.',
     render: () => (
       <div className="bg-background">
         <MockHeader />
         <div className="px-3 py-3">
-          <div className="text-xs font-bold text-foreground mb-2">Governance</div>
+          <div className="text-xs font-bold text-foreground mb-2">Proposals</div>
           {/* Active Round */}
           <div className="bg-gradient-to-r from-cardano-blue/10 to-cardano-teal/10 border border-cardano-teal/20 rounded-md p-3 mb-3">
             <div className="flex items-center gap-1 mb-1">

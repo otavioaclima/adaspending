@@ -14,8 +14,8 @@ const FundRoundSection = () => {
     <section className="mb-8">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold text-gray-900">Current Fund Round</h2>
-        <Link to="/governance" className="text-cardano-blue hover:text-cardano-blue/80 flex items-center text-sm font-medium">
-          View all fund rounds <ChevronRight className="h-4 w-4 ml-1" />
+        <Link to="/proposals" className="text-cardano-blue hover:text-cardano-blue/80 flex items-center text-sm font-medium">
+          View all proposals <ChevronRight className="h-4 w-4 ml-1" />
         </Link>
       </div>
       
@@ -49,8 +49,8 @@ const FundRoundSection = () => {
           </div>
           
           <Button asChild className="w-full">
-            <Link to={`/governance/${latestFundRound.id}`}>
-              View Fund Round Details
+            <Link to="/proposals">
+              View Fund Round Proposals
             </Link>
           </Button>
         </CardContent>

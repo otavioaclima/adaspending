@@ -13,7 +13,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     { name: 'Proposals', href: '/proposals', icon: Award },
     { name: 'Vendors', href: '/vendors', icon: Users },
     { name: 'Spending Explorer', href: '/explorer', icon: FileText },
-    { name: 'Governance', href: '/governance', icon: Vote },
   ];
 
   const isHomePage = location.pathname === '/';
@@ -121,7 +120,6 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 <ul className="space-y-1">
                   <li><Link to="/vendors" className="text-sm text-gray-600 hover:text-cardano-blue">Vendors</Link></li>
                   <li><Link to="/explorer" className="text-sm text-gray-600 hover:text-cardano-blue">Spending Explorer</Link></li>
-                  <li><Link to="/governance" className="text-sm text-gray-600 hover:text-cardano-blue">Governance</Link></li>
                 </ul>
               </div>
               

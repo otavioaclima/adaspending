@@ -13,7 +13,7 @@ const sections = [
     description: 'The public-facing entry point of ADAspending.com. Designed to communicate the platform\'s value proposition to both newcomers and existing Cardano community members.',
     subsections: [
       { name: 'Hero Section', desc: 'Primary value proposition with animated logo and call-to-action button directing users to the Dashboard.' },
-      { name: 'Features Section', desc: 'Grid of key platform capabilities: Award Search, Spending Analysis, Governance Tracking, and Recipient Profiles.' },
+      { name: 'Features Section', desc: 'Grid of key platform capabilities: Award Search, Spending Analysis, Proposals Tracking, and Recipient Profiles.' },
       { name: 'Visual Elements', desc: 'Platform screenshots and interactive previews showcasing real data visualizations.' },
       { name: 'About Section', desc: 'Project mission, vision, and the problem it solves for the Cardano ecosystem.' },
       { name: 'How It Works', desc: 'Step-by-step guide: Search → Explore → Analyze → Participate.' },
@@ -49,7 +49,7 @@ const sections = [
     description: 'A powerful search interface for discovering specific treasury proposals. Supports full-text search with multi-criteria filtering for precise results.',
     subsections: [
       { name: 'Search Bar', desc: 'Full-text search across proposal titles, descriptions, and recipient names.' },
-      { name: 'Filter Panel', desc: 'Multi-criteria filters including Category (DeFi, Education, Governance, etc.), Status (Funded, In Progress, Completed), Fund Round (F1–F13), and Amount Range.' },
+      { name: 'Filter Panel', desc: 'Multi-criteria filters including Category (DeFi, Education, Proposals, etc.), Status (Funded, In Progress, Completed), Fund Round (F1–F13), and Amount Range.' },
       { name: 'Results Grid', desc: 'Paginated card or table view of matching proposals with key data visible at a glance.' },
       { name: 'Sort Options', desc: 'Sort results by amount (asc/desc), date, status, or relevance.' },
     ],
@@ -104,9 +104,9 @@ const sections = [
   },
   {
     icon: Vote,
-    title: 'Governance',
-    route: '/governance',
-    description: 'Cardano governance information hub. Tracks active, upcoming, and past fund rounds with resources for community participation.',
+    title: 'Proposals',
+    route: '/proposals',
+    description: 'Cardano proposals information hub. Tracks active, upcoming, and past fund rounds with resources for community participation.',
     subsections: [
       { name: 'Active Fund Round', desc: 'Current voting period details with participation stats and countdown.' },
       { name: 'Upcoming Rounds', desc: 'Scheduled future rounds with expected dates and focus areas.' },
@@ -258,7 +258,7 @@ const InformationArchitecture: React.FC = () => {
                 { from: 'Proposals', to: 'Recipients', relation: 'Each Proposal links to its Recipient profile' },
                 { from: 'Recipients', to: 'Proposals', relation: 'Recipient profiles list all their associated Proposals' },
                 { from: 'Spending Explorer', to: 'Proposals', relation: 'Data table entries link to Proposal details' },
-                { from: 'Governance', to: 'Proposals', relation: 'Fund round details connect to proposals within that round' },
+                { from: 'Proposals', to: 'Proposals', relation: 'Fund round details connect to proposals within that round' },
                 { from: 'Award Search', to: 'Proposals', relation: 'Search results navigate to Proposal Detail pages' },
                 { from: 'Landing Page', to: 'Dashboard', relation: 'CTA button navigates users into the main application' },
                 { from: 'Shared Layout', to: 'All Sections', relation: 'Header navigation and footer are present on all internal pages' },

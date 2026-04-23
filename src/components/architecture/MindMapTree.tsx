@@ -133,8 +133,8 @@ const mindMapData: TreeNode = {
       ],
     },
     {
-      label: 'Governance',
-      description: 'Cardano governance hub',
+      label: 'Proposals',
+      description: 'Cardano proposals hub',
       color: 'bg-cardano-teal',
       children: [
         { label: 'Active Fund Round', description: 'Current voting period' },
@@ -142,7 +142,7 @@ const mindMapData: TreeNode = {
         { label: 'Past Rounds', description: 'Historical results' },
         {
           label: 'Resources',
-          description: 'Governance tools & links',
+          description: 'Proposals tools & links',
           children: [
             { label: 'Voting Guide' },
             { label: 'Proposal Submission' },

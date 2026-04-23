@@ -8,7 +8,6 @@ import ProposalDetail from "./pages/ProposalDetail";
 import Vendors from "./pages/Vendors";
 import VendorDetail from "./pages/VendorDetail";
 import SpendingExplorer from "./pages/SpendingExplorer";
-import Governance from "./pages/Governance";
 import Teaser from "./pages/Teaser";
 import NotFound from "./pages/NotFound";
 import InformationArchitecture from "./pages/InformationArchitecture";
@@ -41,8 +40,6 @@ const App = () => (
             <Route path="/vendors" element={<Vendors />} />
             <Route path="/vendors/:id" element={<VendorDetail />} />
             <Route path="/explorer" element={<SpendingExplorer />} />
-            <Route path="/governance" element={<Governance />} />
-            <Route path="/governance/:id" element={<ProposalDetail />} />
             <Route path="/architecture" element={<InformationArchitecture />} />
             <Route path="/wireframe" element={<Wireframe />} />
             <Route path="/tech-requirements" element={<TechRequirements />} />

@@ -20,7 +20,7 @@ interface UserStory {
 const personaMap: Record<Persona, { label: string; description: string; icon: React.ElementType }> = {
   visitor: { label: 'New Visitor', description: 'First-time user exploring the platform to understand Cardano Treasury spending.', icon: Globe },
   researcher: { label: 'Community Researcher', description: 'Analyst or journalist investigating spending patterns and recipient accountability.', icon: BarChart3 },
-  voter: { label: 'Cardano Voter / DRep', description: 'Active community member who participates in governance and voting decisions.', icon: Vote },
+  voter: { label: 'Cardano Voter / DRep', description: 'Active community member who participates in proposals and voting decisions.', icon: Vote },
   admin: { label: 'Platform Administrator', description: 'Internal team member responsible for data accuracy and platform maintenance.', icon: ShieldCheck },
 };
 
@@ -169,7 +169,7 @@ const epicGroups: { epic: string; icon: React.ElementType; description: string; 
         persona: 'researcher',
         story: 'As a researcher, I want to filter proposals by category, status, fund round, and amount range so that I can narrow results precisely.',
         acceptance: [
-          'Multi-select filters for Category (DeFi, Education, Governance, etc.)',
+          'Multi-select filters for Category (DeFi, Education, Proposals, etc.)',
           'Status filter: Funded, In Progress, Completed',
           'Fund Round dropdown: F1–F13',
           'Amount range slider with min/max inputs',
@@ -336,33 +336,33 @@ const epicGroups: { epic: string; icon: React.ElementType; description: string; 
     ],
   },
   {
-    epic: 'Governance',
+    epic: 'Proposals',
     icon: Vote,
-    description: 'Stories related to governance information and community participation.',
+    description: 'Stories related to proposals information and community participation.',
     stories: [
       {
         id: 'US-021',
         persona: 'voter',
-        story: 'As a voter, I want to see active and upcoming fund rounds so that I can plan my participation in governance.',
+        story: 'As a voter, I want to see active and upcoming fund rounds so that I can plan my participation in proposals.',
         acceptance: [
           'Active round shows: name, voting period, countdown timer, participation stats',
           'Upcoming rounds list with expected dates and focus areas',
           'Past rounds with total allocated, proposals funded, participation rates',
         ],
         priority: 'must',
-        relatedPages: ['/governance'],
+        relatedPages: ['/proposals'],
       },
       {
         id: 'US-022',
         persona: 'voter',
-        story: 'As a voter, I want quick access to governance resources so that I can easily participate in the ecosystem.',
+        story: 'As a voter, I want quick access to proposals resources so that I can easily participate in the ecosystem.',
         acceptance: [
           'Resource links: Voting Guide, Proposal Submission, DRep Directory',
           'Each link opens in new tab with appropriate icon',
           'Resources section prominently placed',
         ],
         priority: 'should',
-        relatedPages: ['/governance'],
+        relatedPages: ['/proposals'],
       },
       {
         id: 'US-023',
@@ -375,7 +375,7 @@ const epicGroups: { epic: string; icon: React.ElementType; description: string; 
           'Comparison with previous rounds',
         ],
         priority: 'could',
-        relatedPages: ['/governance'],
+        relatedPages: ['/proposals'],
       },
     ],
   },
@@ -652,7 +652,7 @@ const UserStories: React.FC = () => {
                   { page: '/recipients', route: '/recipients' },
                   { page: '/recipients/:id', route: '/recipients/:id' },
                   { page: '/explorer', route: '/explorer' },
-                  { page: '/governance', route: '/governance' },
+                  { page: '/proposals', route: '/proposals' },
                   { page: 'All pages', route: 'All pages' },
                   { page: 'Backend', route: 'Backend' },
                 ].map((row) => {

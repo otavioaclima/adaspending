@@ -105,8 +105,8 @@ const screens = [
     ],
   },
   {
-    title: 'Governance',
-    route: '/governance',
+    title: 'Proposals',
+    route: '/proposals',
     elements: [
       { type: 'header' as const, label: 'Header + Nav', height: '24px' },
       { type: 'cards' as const, label: 'Active + Upcoming Rounds', cols: 2, height: '40px' },
@@ -127,7 +127,7 @@ const navigationFlows = [
   { from: 'Recipients', to: 'Recipient Detail', action: 'Card click' },
   { from: 'Recipient Detail', to: 'Proposal Detail', action: 'Proposals card click' },
   { from: 'Award Search', to: 'Proposal Detail', action: 'Result click' },
-  { from: 'Governance', to: 'Proposal Detail', action: 'Round proposal click' },
+  { from: 'Proposals', to: 'Proposal Detail', action: 'Round proposal click' },
   { from: 'Any Page', to: 'Award Search', action: 'Header search button' },
 ];
 
