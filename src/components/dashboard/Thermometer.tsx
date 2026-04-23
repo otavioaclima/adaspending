@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useQuery } from "@tanstack/react-query";
 import { treasuryStats, proposals } from "@/data/mockData";
-import { getNetworkState, lovelaceToAda } from "@/services/cardanoscan";
+import { getNetworkState, lovelaceToAda } from "@/services/cexplorer";
 
 const Thermometer = () => {
   const totalBudget = treasuryStats.totalFundsAwarded; // 350M

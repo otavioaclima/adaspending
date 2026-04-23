@@ -1,75 +1,89 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Users, Building, User, Filter, ChevronDown, X, MessageSquare, Info, Link2 } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Search, Users, Building, Filter, ChevronDown, ChevronUp, MessageSquare, Info, Link2, Wallet, Briefcase } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import Layout from '@/components/layout/Layout';
-import { recipients } from '@/data/mockData';
+import { intersectProjects } from '@/data/intersectData';
 
-const VendorCard = ({ recipient }: { recipient: typeof recipients[0] }) => {
-  const VendorIcon = 
-    recipient.type === 'organization' ? Building :
-    recipient.type === 'team' ? Users : User;
-  
+// Helper to get unique vendors and their aggregated stats
+const useVendorStats = () => {
+  return useMemo(() => {
+    const stats: Record<string, {
+      name: string;
+      totalFunded: number;
+      amountSpent: number;
+      projectCount: number;
+      statusCount: Record<string, number>;
+    }> = {};
+
+    intersectProjects.forEach(project => {
+      if (!stats[project.vendor]) {
+        stats[project.vendor] = {
+          name: project.vendor,
+          totalFunded: 0,
+          amountSpent: 0,
+          projectCount: 0,
+          statusCount: {}
+        };
+      }
+
+      const v = stats[project.vendor];
+      v.totalFunded += project.totalAmount;
+      v.amountSpent += project.amountSpent;
+      v.projectCount += 1;
+      v.statusCount[project.status] = (v.statusCount[project.status] || 0) + 1;
+    });
+
+    return Object.values(stats).sort((a, b) => b.totalFunded - a.totalFunded);
+  }, []);
+};
+
+const VendorCard = ({ vendor }: { vendor: any }) => {
   return (
-    <Link to={`/vendors/${recipient.id}`}>
-      <Card className="h-full hover:shadow-md transition-shadow">
-        <CardContent className="p-4">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="bg-cardano-blue/10 rounded-full w-10 h-10 flex items-center justify-center">
-              <VendorIcon className="h-5 w-5 text-cardano-blue" />
+    <Link to={`/vendors/${encodeURIComponent(vendor.name)}`}>
+      <Card className="h-full hover:shadow-lg transition-all border-gray-200 group">
+        <CardContent className="p-5">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="bg-cardano-blue/10 rounded-xl w-12 h-12 flex items-center justify-center group-hover:bg-cardano-blue group-hover:text-white transition-colors text-cardano-blue">
+              <Building className="h-6 w-6" />
             </div>
             <div>
-              <h3 className="font-medium text-gray-900">{recipient.name}</h3>
-              <p className="text-sm text-gray-500 capitalize">
-                {recipient.type === 'organization'
-                  ? 'Organization'
-                  : recipient.type === 'team'
-                    ? 'Team'
-                    : 'Individual'}
-              </p>
-            </div>
-          </div>
-          
-          {recipient.description && (
-            <p className="text-sm text-gray-600 mb-4 line-clamp-2">{recipient.description}</p>
-          )}
-
-          <div className="grid grid-cols-2 gap-2 mb-4">
-            <div>
-              <p className="text-xs text-gray-500">Total Funded</p>
-              <p className="font-bold text-cardano-blue">
-                {recipient.totalFunded.toLocaleString()} ADA
-              </p>
-            </div>
-            <div>
-              <p className="text-xs text-gray-500">Success Rate</p>
-              <p className="font-medium">
-                {recipient.proposalsSubmitted > 0 
-                  ? Math.round((recipient.proposalsApproved / recipient.proposalsSubmitted) * 100) 
-                  : 0}%
+              <h3 className="font-bold text-gray-900 group-hover:text-cardano-blue transition-colors leading-tight">
+                {vendor.name}
+              </h3>
+              <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">
+                Active Vendor
               </p>
             </div>
           </div>
 
-          <div className="flex justify-between text-sm">
-            <span className="text-gray-500">
-              {recipient.proposalsApproved} / {recipient.proposalsSubmitted} proposals
-            </span>
-            {recipient.location && (
-              <span className="text-gray-500">
-                {recipient.location}
-              </span>
-            )}
+          <div className="grid grid-cols-2 gap-4 mb-5 p-3 bg-gray-50 rounded-lg border border-gray-100">
+            <div>
+              <p className="text-[10px] text-gray-400 uppercase font-bold mb-1">Total Alocation</p>
+              <p className="text-sm font-bold text-gray-900 flex items-center">
+                <Wallet className="h-3 w-3 mr-1 text-cardano-blue" />
+                ₳{vendor.totalFunded.toLocaleString()}
+              </p>
+            </div>
+            <div>
+              <p className="text-[10px] text-gray-400 uppercase font-bold mb-1">Total Spent</p>
+              <p className="text-sm font-bold text-orange-600 flex items-center">
+                ₳{vendor.amountSpent.toLocaleString()}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex justify-between items-center text-sm">
+            <div className="flex items-center text-gray-600 font-medium">
+              <Briefcase className="h-4 w-4 mr-1.5 text-gray-400" />
+              {vendor.projectCount} {vendor.projectCount === 1 ? 'Project' : 'Projects'}
+            </div>
+            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-100">
+              {Object.keys(vendor.statusCount).length} Status Types
+            </Badge>
           </div>
         </CardContent>
       </Card>
@@ -77,236 +91,148 @@ const VendorCard = ({ recipient }: { recipient: typeof recipients[0] }) => {
   );
 };
 
-const TransparencyCommunicationCard = () => (
-  <div className="mb-8">
-    <Card className="p-0 border-blue-200 bg-blue-50">
-      <CardContent className="p-6 flex flex-col gap-4">
-        <h2 className="text-xl font-bold text-blue-900 flex items-center gap-2">
-          <Users className="h-5 w-5 text-blue-700" />
-          Transparency & Communication
-        </h2>
-        <div className="space-y-4">
-          <div className="flex items-start gap-3">
-            <Info className="h-5 w-5 text-blue-700 mt-1" />
+const TransparencyToggle = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="mb-8">
+      <Card className={`border-blue-200 transition-all ${isOpen ? 'bg-blue-50' : 'bg-white hover:bg-blue-50/30'}`}>
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-full p-4 flex items-center justify-between text-left focus:outline-none"
+        >
+          <div className="flex items-center gap-3">
+            <div className="bg-blue-100 p-2 rounded-lg text-blue-700">
+              <Users className="h-5 w-5" />
+            </div>
             <div>
-              <span className="font-semibold text-blue-800">For DReps:</span>
-              <span className="text-blue-900 ml-1">
-                Evaluate vendors based primarily on <b>competence</b>, <b>delivery capacity</b>, and <b>transparency</b>—not only the lowest price.
-              </span>
+              <h2 className="text-lg font-bold text-blue-900">Transparency & Communication</h2>
+              {!isOpen && <p className="text-sm text-blue-700/70">Click to expand community guidelines and resources for DReps</p>}
             </div>
           </div>
-          <div className="flex items-start gap-3">
-            <Link2 className="h-5 w-5 text-blue-700 mt-1" />
-            <div>
-              <span className="font-semibold text-blue-800">Market Benchmarks:</span>
-              <span className="text-blue-900 ml-1">
-                Check hourly rates and market prices before approving proposals.
-              </span>
-              <Button asChild variant="link" className="ml-2 p-0 h-5 text-blue-700 underline" size="sm">
-                <a href="https://www.linkedin.com/pulse/hourly-rates-worldwide-2023-statista/" target="_blank" rel="noopener noreferrer">
-                  See Benchmarks
-                </a>
-              </Button>
-            </div>
-          </div>
-          <div className="flex items-start gap-3">
-            <MessageSquare className="h-5 w-5 text-blue-700 mt-1" />
-            <div>
-              <span className="font-semibold text-blue-800">Direct Communication:</span>
-              <span className="text-blue-900 ml-1">
-                Connect directly with vendors and users in public channels.
-              </span>
-              <div className="flex gap-2 mt-2">
-                <Button asChild variant="outline" size="sm">
-                  <a href="https://discord.gg/cardano" target="_blank" rel="noopener noreferrer">
-                    Discord
-                  </a>
-                </Button>
-                <Button asChild variant="outline" size="sm">
-                  <a href="https://t.me/CardanoBR" target="_blank" rel="noopener noreferrer">
-                    Telegram
-                  </a>
-                </Button>
-                <Button asChild variant="outline" size="sm">
-                  <a href="https://forum.cardano.org/" target="_blank" rel="noopener noreferrer">
-                    Forum
+          {isOpen ? <ChevronUp className="h-5 w-5 text-blue-700" /> : <ChevronDown className="h-5 w-5 text-blue-700" />}
+        </button>
+
+        {isOpen && (
+          <CardContent className="px-6 pb-6 pt-0 border-t border-blue-100 flex flex-col gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 font-bold text-blue-900">
+                  <Info className="h-4 w-4 text-blue-700" />
+                  For DReps
+                </div>
+                <p className="text-sm text-blue-800 leading-relaxed">
+                  Evaluate vendors based primarily on <b>competence</b>, <b>delivery capacity</b>, and <b>transparency</b>—not only the lowest price.
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 font-bold text-blue-900">
+                  <Link2 className="h-4 w-4 text-blue-700" />
+                  Market Benchmarks
+                </div>
+                <p className="text-sm text-blue-800 leading-relaxed mb-2">
+                  Check hourly rates and market prices before approving proposals.
+                </p>
+                <Button asChild variant="link" className="p-0 h-auto text-blue-700 underline text-xs" size="sm">
+                  <a href="https://www.linkedin.com/pulse/hourly-rates-worldwide-2023-statista/" target="_blank" rel="noopener noreferrer">
+                    See Benchmarks
                   </a>
                 </Button>
               </div>
+
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 font-bold text-blue-900">
+                  <MessageSquare className="h-4 w-4 text-blue-700" />
+                  Direct Channels
+                </div>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  <Button asChild variant="outline" size="sm" className="bg-white h-7 text-[10px] px-2">
+                    <a href="https://discord.gg/cardano" target="_blank" rel="noopener noreferrer">Discord</a>
+                  </Button>
+                  <Button asChild variant="outline" size="sm" className="bg-white h-7 text-[10px] px-2">
+                    <a href="https://t.me/CardanoBR" target="_blank" rel="noopener noreferrer">Telegram</a>
+                  </Button>
+                  <Button asChild variant="outline" size="sm" className="bg-white h-7 text-[10px] px-2">
+                    <a href="https://forum.cardano.org/" target="_blank" rel="noopener noreferrer">Forum</a>
+                  </Button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="mt-2">
-          <span className="inline-flex items-center gap-2 font-medium text-blue-800">
-            <Info className="h-5 w-5 text-blue-700" />
-            Coming soon: Vendors will be able to add contacts and communication channels directly on the platform.
-          </span>
-        </div>
-      </CardContent>
-    </Card>
-  </div>
-);
+
+            <div className="mt-4 p-3 bg-blue-100/50 rounded-lg flex items-center gap-3">
+              <Info className="h-4 w-4 text-blue-700 shrink-0" />
+              <p className="text-xs font-medium text-blue-800">
+                Coming soon: Vendors will be able to add contacts and communication channels directly on the platform.
+              </p>
+            </div>
+          </CardContent>
+        )}
+      </Card>
+    </div>
+  );
+};
 
 const Vendors = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState('all');
-  const [showFilters, setShowFilters] = useState(false);
-  
-  const filteredRecipients = recipients.filter(recipient => {
-    if (searchTerm && !recipient.name.toLowerCase().includes(searchTerm.toLowerCase())) {
-      return false;
-    }
-    if (selectedType !== 'all' && recipient.type !== selectedType) {
-      return false;
-    }
-    return true;
-  });
-  
+  const vendors = useVendorStats();
+
+  const filteredVendors = useMemo(() => {
+    return vendors.filter(vendor =>
+      vendor.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [vendors, searchTerm]);
+
   return (
-    <div>
-      <Layout>
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Vendors</h1>
-          <p className="text-lg text-gray-600">
-            Explore individuals, teams, and organizations that have received treasury funding
+    <Layout>
+      <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-3xl font-bold text-gray-900">Vendors</h1>
+            <Badge variant="secondary" className="bg-cardano-blue/10 text-cardano-blue border-none h-6 px-3">
+              {vendors.length} Total
+            </Badge>
+          </div>
+          <p className="text-gray-600 max-w-2xl">
+            Directory of teams & organizations delivering projects for the Intersect Treasury Contracts 1.
           </p>
         </div>
-        
-        <TransparencyCommunicationCard />
 
-        <div className="mb-6">
-          <div className="flex flex-col md:flex-row gap-3 mb-4">
-            <div className="flex-grow relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input
-                className="pl-9"
-                placeholder="Search vendors by name..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <Button 
-              variant="outline" 
-              className="flex items-center gap-2"
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              <Filter className="h-4 w-4" />
-              <span>Filters</span>
-              {selectedType !== 'all' && (
-                <Badge variant="secondary" className="ml-1">1</Badge>
-              )}
-              <ChevronDown className={`h-4 w-4 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
-            </Button>
-            <Button>
-              <Search className="h-4 w-4 mr-2" />
-              Search
-            </Button>
-          </div>
-          
-          {showFilters && (
-            <Card className="mb-4">
-              <CardContent className="pt-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                  <div>
-                    <label className="text-sm font-medium text-gray-700 mb-1 block">Vendor Type</label>
-                    <Select 
-                      value={selectedType} 
-                      onValueChange={setSelectedType}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="All Types" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Types</SelectItem>
-                        <SelectItem value="individual">Individual</SelectItem>
-                        <SelectItem value="team">Team</SelectItem>
-                        <SelectItem value="organization">Organization</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  <div>
-                    <label className="text-sm font-medium text-gray-700 mb-1 block">Minimum Funding</label>
-                    <Input type="number" placeholder="Minimum funding in ADA" />
-                  </div>
-                  
-                  <div>
-                    <label className="text-sm font-medium text-gray-700 mb-1 block">Success Rate</label>
-                    <Select defaultValue="any">
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Any success rate" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="any">Any success rate</SelectItem>
-                        <SelectItem value="high">High (&gt;75%)</SelectItem>
-                        <SelectItem value="medium">Medium (25-75%)</SelectItem>
-                        <SelectItem value="low">Low (&lt;25%)</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                
-                <div className="flex justify-end">
-                  <Button 
-                    variant="ghost" 
-                    onClick={() => {
-                      setSelectedType('all');
-                    }} 
-                    className="flex items-center gap-1"
-                  >
-                    <X className="h-4 w-4" />
-                    Clear filters
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-          
-          {selectedType !== 'all' && (
-            <div className="flex flex-wrap gap-2 mb-4">
-              <Badge variant="outline" className="py-1 px-3 flex items-center gap-1">
-                Type: {selectedType === 'organization'
-                  ? 'Organization'
-                  : selectedType === 'team'
-                    ? 'Team'
-                    : selectedType === 'individual'
-                      ? 'Individual'
-                      : selectedType.charAt(0).toUpperCase() + selectedType.slice(1)}
-                <X 
-                  className="h-3 w-3 ml-1 cursor-pointer" 
-                  onClick={() => setSelectedType('all')}
-                />
-              </Badge>
-            </div>
-          )}
+        <div className="w-full md:w-80 relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Input
+            className="pl-9 h-11 border-gray-200"
+            placeholder="Search vendors by name..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredRecipients.map(recipient => (
-            <VendorCard key={recipient.id} recipient={recipient} />
-          ))}
-        </div>
-        
-        {filteredRecipients.length === 0 && (
-          <div className="text-center py-12">
-            <div className="bg-gray-100 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
-              <Users className="h-8 w-8 text-gray-400" />
-            </div>
-            <h3 className="text-lg font-medium mb-2">No Vendors Found</h3>
-            <p className="text-gray-600 mb-6">Try adjusting your search or filters</p>
-            <Button 
-              variant="outline" 
-              onClick={() => {
-                setSearchTerm('');
-                setSelectedType('all');
-              }}
-            >
-              Clear filters
-            </Button>
+      </div>
+
+      <TransparencyToggle />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        {filteredVendors.map(vendor => (
+          <VendorCard key={vendor.name} vendor={vendor} />
+        ))}
+      </div>
+
+      {filteredVendors.length === 0 && (
+        <div className="text-center py-20 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+          <div className="bg-white p-4 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4 shadow-sm">
+            <Users className="h-8 w-8 text-gray-300" />
           </div>
-        )}
-      </Layout>
-    </div>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">No Vendors Found</h3>
+          <p className="text-gray-600 mb-6">Try adjusting your search for "{searchTerm}"</p>
+          <Button
+            variant="outline"
+            onClick={() => setSearchTerm('')}
+          >
+            Clear Search
+          </Button>
+        </div>
+      )}
+    </Layout>
   );
 };
 

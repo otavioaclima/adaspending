@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { 
   ArrowLeft, 
@@ -7,11 +6,12 @@ import {
   CheckCircle, 
   Clock, 
   AlertCircle, 
-  Users, 
   Wallet, 
-  TrendingUp,
   Briefcase,
-  FileText
+  FileText,
+  Building,
+  DollarSign,
+  Calendar
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -46,13 +46,23 @@ const ProjectDetail = () => {
   const { id } = useParams<{ id: string }>();
   const project = intersectProjects.find(p => p.id === id);
   
+  const paymentDates = useMemo(() => {
+    if (!project || !project.milestones || project.milestones.length === 0) 
+      return { start: 'N/A', end: 'N/A' };
+    
+    return {
+      start: project.milestones[0].unlockDate,
+      end: project.milestones[project.milestones.length - 1].unlockDate
+    };
+  }, [project]);
+
   if (!project) {
     return (
       <Layout>
-        <div className="flex flex-col items-center justify-center py-12">
+        <div className="flex flex-col items-center justify-center py-20">
           <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
           <h1 className="text-2xl font-bold mb-2">Project Not Found</h1>
-          <p className="text-gray-600 mb-6">The project you're looking for doesn't exist in the Intersect Treasury database.</p>
+          <p className="text-gray-600 mb-6">The project you're looking for doesn't exist in the database.</p>
           <Button asChild>
             <Link to="/projects">Back to Projects</Link>
           </Button>
@@ -66,203 +76,238 @@ const ProjectDetail = () => {
   
   return (
     <Layout>
-      <div className="mb-6">
-        <Link to="/projects" className="inline-flex items-center text-sm text-cardano-blue hover:underline mb-4">
+      <div className="mb-8">
+        <Link to="/projects" className="inline-flex items-center text-sm text-cardano-blue hover:underline mb-6 font-medium">
           <ArrowLeft className="h-4 w-4 mr-1" /> Back to Projects
         </Link>
         
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <Badge variant="outline">Intersect Treasury Contract 1</Badge>
-              <Badge className={getStatusColor(project.status)}>
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-3">
+              <Badge variant="outline" className="bg-gray-50 border-gray-200">Intersect Treasury Contract 1</Badge>
+              <Badge className={`${getStatusColor(project.status)} border shadow-sm`}>
                 <StatusIcon className="h-3.5 w-3.5 mr-1" />
                 {project.status}
               </Badge>
-              <span className="text-xs text-gray-400 font-mono ml-2">ID: {project.id}</span>
+              <span className="text-xs text-gray-400 font-mono ml-2 px-2 py-0.5 bg-gray-100 rounded">ID: {project.id}</span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">{project.projectName}</h1>
+            <h1 className="text-3xl md:text-5xl font-black text-gray-900 leading-tight tracking-tight mb-2">
+              {project.projectName}
+            </h1>
+            <p className="text-gray-500 flex items-center font-medium">
+              Vendor: 
+              <Link to={`/vendors/${encodeURIComponent(project.vendor)}`} className="text-cardano-blue hover:underline ml-1.5 font-bold flex items-center">
+                {project.vendor}
+                <ExternalLink className="h-3 w-3 ml-1 opacity-50" />
+              </Link>
+            </p>
           </div>
           
-          <div className="flex gap-2">
-            <Button asChild variant="outline" size="sm">
-              <a href="https://treasury.sundae.fi/instances/9e65e4ed7d6fd86fc4827d2b45da6d2c601fb920e8bfd794b8ecc619?projectState=Active" target="_blank" rel="noopener noreferrer">
+          <div className="flex gap-2 shrink-0">
+            <Button asChild variant="outline" className="shadow-sm border-gray-200 hover:bg-gray-50">
+              <a href={`https://treasury.sundae.fi/instances/9e65e4ed7d6fd86fc4827d2b45da6d2c601fb920e8bfd794b8ecc619/project/${project.id}`} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-4 w-4 mr-2" />
-                View Source (Sundae)
+                Sundae Explorer
               </a>
             </Button>
           </div>
         </div>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
         {/* Main Content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-8">
           {/* Description Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Project Overview</CardTitle>
+          <Card className="border-gray-200 shadow-sm overflow-hidden">
+            <CardHeader className="bg-gray-50/50 border-b border-gray-100">
+              <CardTitle className="text-lg font-bold flex items-center gap-2">
+                <FileText className="h-5 w-5 text-cardano-blue" />
+                Project Overview
+              </CardTitle>
             </CardHeader>
-            <CardContent>
-              <p className="text-gray-700 leading-relaxed">
+            <CardContent className="pt-6">
+              <p className="text-gray-700 leading-relaxed text-lg whitespace-pre-wrap">
                 {project.description || "No detailed description available for this project."}
               </p>
             </CardContent>
           </Card>
 
-          {/* Financial Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Financial Execution</CardTitle>
-              <CardDescription>Budget and spending breakdown for this project</CardDescription>
+          {/* Progress Card */}
+          <Card className="border-gray-200 shadow-sm">
+            <CardHeader className="pb-2">
+              <div className="flex justify-between items-center">
+                <CardTitle className="text-lg font-bold">Execution Progress</CardTitle>
+                <span className="text-2xl font-black text-cardano-blue">{spentPercentage.toFixed(1)}%</span>
+              </div>
             </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-8">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Total Project Budget</h3>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-bold text-cardano-blue">₳{project.totalAmount.toLocaleString()}</span>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Total Amount Spent</h3>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-bold text-orange-600">₳{project.amountSpent.toLocaleString()}</span>
-                    <span className="text-sm font-medium text-gray-400">({spentPercentage.toFixed(1)}%)</span>
-                  </div>
+            <CardContent className="pt-2">
+              <div className="w-full bg-gray-100 rounded-full h-5 overflow-hidden shadow-inner border border-gray-200 p-0.5">
+                <div 
+                   className="bg-gradient-to-r from-cardano-blue to-blue-400 h-full rounded-full transition-all duration-1000 ease-in-out relative shadow-sm" 
+                  style={{ width: `${spentPercentage}%` }}
+                >
+                  <div className="absolute inset-0 bg-white/20 animate-pulse" />
                 </div>
               </div>
-              
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm font-medium">
-                  <span className="text-gray-600">Execution Progress</span>
-                  <span className="text-cardano-blue">{spentPercentage.toFixed(1)}%</span>
-                </div>
-                <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
-                  <div 
-                    className="bg-cardano-blue h-full transition-all duration-500 ease-out" 
-                    style={{ width: `${spentPercentage}%` }}
-                  />
-                </div>
+              <div className="flex justify-between mt-3 text-xs font-bold text-gray-400 uppercase tracking-widest px-1">
+                <span>Funds Allocated</span>
+                <span>Funds Distributed</span>
               </div>
             </CardContent>
           </Card>
 
-          {/* Milestones Card */}
+          {/* Milestones List */}
           {project.milestones && project.milestones.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Project Milestones</CardTitle>
-                <CardDescription>Payment schedule and evidence of completion</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-8">
-                  {project.milestones.map((milestone, index) => (
-                    <div key={milestone.id} className="relative pl-8">
-                      {/* Timeline Line */}
-                      {index < project.milestones!.length - 1 && (
-                        <div className="absolute left-[11px] top-6 bottom-[-32px] w-0.5 bg-gray-100" />
-                      )}
-                      
-                      {/* Milestone Dot */}
-                      <div className={`absolute left-0 top-1 w-6 h-6 rounded-full border-4 border-white shadow-sm flex items-center justify-center z-10 ${
-                        milestone.status.toLowerCase() === 'withdrawn' ? 'bg-green-500' : 'bg-gray-300'
-                      }`}>
-                        {milestone.status.toLowerCase() === 'withdrawn' && (
-                          <CheckCircle className="h-3 w-3 text-white" />
-                        )}
+            <div className="space-y-6">
+              <div className="flex items-center justify-between px-1">
+                <h3 className="text-2xl font-black text-gray-900 tracking-tight">Project Milestones</h3>
+                <Badge variant="outline" className="bg-white">{project.milestones.length} Phases</Badge>
+              </div>
+              
+              <div className="space-y-6 relative before:absolute before:left-6 before:top-4 before:bottom-4 before:w-0.5 before:bg-gray-100">
+                {project.milestones.map((milestone, index) => (
+                  <Card key={milestone.id} className={`border-gray-200 transition-all hover:shadow-lg relative overflow-hidden ${
+                    milestone.status.toLowerCase() === 'withdrawn' ? 'bg-white' : 'bg-gray-50/50 grayscale-[0.5]'
+                  }`}>
+                    <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${
+                      milestone.status.toLowerCase() === 'withdrawn' ? 'bg-green-500' : 'bg-gray-300'
+                    }`} />
+                    
+                    <CardContent className="p-6">
+                      <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-5">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{milestone.id}</span>
+                            <Badge variant="outline" className={
+                              milestone.status.toLowerCase() === 'withdrawn' 
+                                ? 'bg-green-50 text-green-700 border-green-200 font-bold' 
+                                : 'bg-gray-50 text-gray-600 font-bold'
+                            }>
+                              {milestone.status}
+                            </Badge>
+                          </div>
+                          <h4 className="text-xl font-bold text-gray-900 leading-tight">{milestone.title}</h4>
+                        </div>
+                        <div className="text-right shrink-0 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100 shadow-sm">
+                          <p className="text-xl font-black text-gray-900">₳{milestone.amount.toLocaleString()}</p>
+                          <div className="flex items-center justify-end text-[10px] text-gray-400 font-black uppercase tracking-tighter mt-1">
+                            <Calendar className="h-3 w-3 mr-1" />
+                            {milestone.unlockDate}
+                          </div>
+                        </div>
                       </div>
-
-                      <div className="space-y-3">
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                          <h4 className="text-base font-bold text-gray-900">{milestone.title}</h4>
-                          <Badge variant="outline" className={
-                            milestone.status.toLowerCase() === 'withdrawn' 
-                              ? 'bg-green-50 text-green-700 border-green-200' 
-                              : 'bg-gray-50 text-gray-600'
-                          }>
-                            {milestone.status}
-                          </Badge>
-                        </div>
-                        
-                        <p className="text-sm text-gray-600 leading-relaxed">{milestone.description}</p>
-                        
-                        <div className="flex flex-wrap gap-4 text-xs font-medium">
-                          <div className="flex items-center text-gray-500">
-                            <Wallet className="h-3.5 w-3.5 mr-1" />
-                            ₳{milestone.amount.toLocaleString()}
-                          </div>
-                          <div className="flex items-center text-gray-500">
-                            <Clock className="h-3.5 w-3.5 mr-1" />
-                            Unlock: {milestone.unlockDate}
-                          </div>
-                        </div>
-
-                        {milestone.evidence && (
-                          <div className="mt-3 p-3 bg-gray-50 rounded-lg border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                            <div className="flex items-center gap-2">
-                              <div className="p-2 bg-white rounded-md shadow-sm">
-                                <FileText className="h-4 w-4 text-blue-600" />
-                              </div>
-                              <span className="text-sm font-semibold text-gray-700">{milestone.evidence.title}</span>
+                      
+                      <div className="bg-gray-50/80 p-4 rounded-xl border border-gray-100 mb-6 text-gray-600 leading-relaxed text-sm">
+                        {milestone.description}
+                      </div>
+                      
+                      {milestone.evidence && (
+                        <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-5 border-t border-gray-100">
+                          <div className="flex items-center gap-3">
+                            <div className="p-2.5 bg-blue-50 rounded-xl">
+                              <FileText className="h-4 w-4 text-cardano-blue" />
                             </div>
-                            <div className="flex gap-2 w-full sm:w-auto">
-                              {milestone.evidence.transactionHash && (
-                                <Button asChild variant="ghost" size="sm" className="h-8 text-xs">
-                                  <a href={milestone.evidence.transactionLink} target="_blank" rel="noopener noreferrer">
-                                    <ExternalLink className="h-3 w-3 mr-1" />
-                                    TX Hash
-                                  </a>
-                                </Button>
-                              )}
-                              <Button asChild variant="outline" size="sm" className="h-8 text-xs bg-white">
-                                <a href={milestone.evidence.link} target="_blank" rel="noopener noreferrer">
-                                  <ExternalLink className="h-3 w-3 mr-1" />
-                                  View Evidence
+                            <span className="text-sm font-bold text-gray-700">{milestone.evidence.title}</span>
+                          </div>
+                          <div className="flex gap-2 w-full sm:w-auto">
+                            {milestone.evidence.transactionHash && (
+                              <Button asChild variant="ghost" size="sm" className="h-9 px-3 text-xs font-bold text-gray-500 hover:text-cardano-blue">
+                                <a href={milestone.evidence.transactionLink} target="_blank" rel="noopener noreferrer">
+                                  <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
+                                  TX Hash
                                 </a>
                               </Button>
-                            </div>
+                            )}
+                            <Button asChild variant="secondary" size="sm" className="h-9 px-4 font-bold bg-white border-gray-200 shadow-sm">
+                              <a href={milestone.evidence.link} target="_blank" rel="noopener noreferrer">
+                                <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
+                                Evidence
+                              </a>
+                            </Button>
                           </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
           )}
         </div>
         
-        {/* Sidebar */}
+        {/* Sidebar Summary */}
         <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Contract Details</CardTitle>
+          <Card className="border-gray-200 shadow-xl overflow-hidden sticky top-24 ring-1 ring-black/[0.03]">
+            <CardHeader className="bg-gray-900 text-white pb-6 pt-7">
+              <div className="flex items-center gap-2 opacity-50 mb-1">
+                <Briefcase className="h-3 w-3" />
+                <span className="text-[10px] font-black uppercase tracking-[0.3em]">Project Metrics</span>
+              </div>
+              <CardTitle className="text-xl font-bold tracking-tight">Financial Summary</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">Contract Instance</h3>
-                  <p className="text-xs font-mono text-gray-700 break-all p-2 bg-gray-50 rounded border">
-                    9e65e4ed7d6fd86fc4827d2b45da6d2c601fb920e8bfd794b8ecc619
-                  </p>
-                </div>
-                
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500 mb-1">Source</h3>
-                  <div className="flex items-center text-sm font-medium text-gray-900">
-                    <img src="/favicon.ico" className="h-4 w-4 mr-2 opacity-50" />
-                    Intersect MBO
+            <CardContent className="p-0">
+              <div className="divide-y divide-gray-100">
+                {/* Total Budget */}
+                <div className="p-6 bg-gradient-to-br from-white to-gray-50/50">
+                  <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest mb-2">Total Budget</p>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-black text-gray-900 tracking-tighter">₳{project.totalAmount.toLocaleString()}</span>
+                  </div>
+                  <div className="mt-3 flex items-center text-[10px] font-black text-green-600 bg-green-50 w-fit px-2.5 py-1.5 rounded-lg border border-green-100">
+                    <DollarSign className="h-3 w-3 mr-1.5" />
+                    CURRENCY: ADA
                   </div>
                 </div>
 
-                <Separator />
-                
-                <div className="pt-2">
-                  <p className="text-xs text-gray-500 leading-relaxed italic">
-                    This project was funded as part of the Intersect Treasury Contracts 1 budget (₳350M), 
-                    designed to pay vendors as they reach specific project milestones.
-                  </p>
+                {/* Vendor Link */}
+                <div className="p-6">
+                  <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest mb-3">Vendor</p>
+                  <Link to={`/vendors/${encodeURIComponent(project.vendor)}`} className="flex items-center gap-4 group p-3 bg-white border border-gray-100 rounded-2xl shadow-sm hover:border-cardano-blue hover:shadow-md transition-all">
+                    <div className="bg-cardano-blue/10 p-3 rounded-xl text-cardano-blue group-hover:bg-cardano-blue group-hover:text-white transition-colors">
+                      <Building className="h-6 w-6" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-base font-bold text-gray-900 truncate group-hover:text-cardano-blue transition-colors">
+                        {project.vendor}
+                      </p>
+                      <p className="text-[10px] font-black text-cardano-blue uppercase tracking-tighter mt-0.5">Official Partner</p>
+                    </div>
+                  </Link>
+                </div>
+
+                {/* Timeline */}
+                <div className="p-6">
+                  <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest mb-5">Payment Timeline</p>
+                  <div className="space-y-6 relative before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-100">
+                    <div className="flex gap-4 relative">
+                      <div className="w-4 h-4 rounded-full border-4 border-white bg-cardano-blue shadow-sm z-10" />
+                      <div>
+                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Payment Start</p>
+                        <p className="text-sm font-bold text-gray-900">{paymentDates.start}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-4 relative">
+                      <div className="w-4 h-4 rounded-full border-4 border-white bg-gray-200 shadow-sm z-10" />
+                      <div>
+                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-tighter">Payment End</p>
+                        <p className="text-sm font-bold text-gray-900">{paymentDates.end}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contract Source */}
+                <div className="p-6 bg-gray-50/80">
+                  <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest mb-3">Treasury Source</p>
+                  <div className="flex items-center gap-3 p-4 bg-white rounded-2xl border border-gray-200 shadow-sm">
+                    <div className="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center overflow-hidden shrink-0">
+                      <img src="/lovable-uploads/e4da4614-7cea-4f9c-853c-3f019f7932ca.png" className="w-7 h-7 object-contain brightness-0 invert" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-black text-gray-900">Intersect MBO</p>
+                      <p className="text-[10px] text-gray-500 font-bold uppercase tracking-tighter">Contract Instance 1</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </CardContent>

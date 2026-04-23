@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { treasuryStats, proposals } from "@/data/mockData";
-import { getNetworkState, lovelaceToAda } from "@/services/cardanoscan";
+import { getNetworkState, lovelaceToAda } from "@/services/cexplorer";
 import { BarChart3 } from "lucide-react";
 
 const ProposalBudgetComparator = () => {
@@ -10,8 +10,7 @@ const ProposalBudgetComparator = () => {
   const totalBudget = treasuryStats.totalFundsAwarded;
   const spent = treasuryStats.totalSpent;
   const remaining = treasuryStats.remainingBudget;
-  const activeBalance = spent + remaining;
-  const spentPercent = (spent / activeBalance) * 100;
+  const spentPercent = (spent / totalBudget) * 100;
 
   return (
     <Card>

@@ -22,13 +22,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { intersectProjects } from "@/data/intersectData";
-import { 
-  Briefcase, 
-  ArrowRight, 
-  Wallet, 
-  CheckCircle2, 
-  Clock, 
-  Search as SearchIcon, 
+import {
+  Briefcase,
+  ArrowRight,
+  Wallet,
+  CheckCircle2,
+  Clock,
+  Search as SearchIcon,
   FilterX,
   LayoutGrid,
   List
@@ -72,13 +72,13 @@ const Projects = () => {
   // Filter logic
   const filteredProjects = useMemo(() => {
     return intersectProjects.filter(project => {
-      const matchesSearch = project.projectName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                            project.vendor.toLowerCase().includes(searchTerm.toLowerCase());
-      
+      const matchesSearch = project.projectName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        project.vendor.toLowerCase().includes(searchTerm.toLowerCase());
+
       const matchesStatus = statusFilter === 'all' || project.status.toLowerCase() === statusFilter.toLowerCase();
-      
+
       const matchesVendor = vendorFilter === 'all' || project.vendor === vendorFilter;
-      
+
       let matchesSize = true;
       if (sizeFilter === 'small') matchesSize = project.totalAmount < 1000000;
       else if (sizeFilter === 'medium') matchesSize = project.totalAmount >= 1000000 && project.totalAmount <= 10000000;
@@ -97,28 +97,33 @@ const Projects = () => {
 
   return (
     <Layout>
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+      <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Intersect Treasury Projects</h1>
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-3xl font-bold text-gray-900">Treasury Projects</h1>
+            <Badge variant="secondary" className="bg-cardano-blue/10 text-cardano-blue border-none h-6 px-3">
+              {intersectProjects.length} Total
+            </Badge>
+          </div>
           <p className="text-gray-600 max-w-3xl">
-            Detailed overview of all projects funded through the Intersect Treasury Contracts 1. 
+            Detailed overview of all projects funded through the Intersect Treasury Contracts 1.
             Track progress, budgets, and vendors for each initiative.
           </p>
         </div>
-        
+
         <div className="flex bg-white border border-gray-200 rounded-lg p-1 shadow-sm shrink-0">
-          <Button 
-            variant={viewMode === 'grid' ? 'secondary' : 'ghost'} 
-            size="sm" 
+          <Button
+            variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
+            size="sm"
             className="px-3"
             onClick={() => setViewMode('grid')}
           >
             <LayoutGrid className="h-4 w-4 mr-2" />
             Grid
           </Button>
-          <Button 
-            variant={viewMode === 'list' ? 'secondary' : 'ghost'} 
-            size="sm" 
+          <Button
+            variant={viewMode === 'list' ? 'secondary' : 'ghost'}
+            size="sm"
             className="px-3"
             onClick={() => setViewMode('list')}
           >
@@ -134,8 +139,8 @@ const Projects = () => {
           <label className="text-xs font-bold text-gray-400 uppercase mb-1.5 block">Search Projects</label>
           <div className="relative">
             <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input 
-              placeholder="Project name or vendor..." 
+            <Input
+              placeholder="Project name or vendor..."
               className="pl-10 h-11 border-gray-200"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -188,8 +193,8 @@ const Projects = () => {
           </Select>
         </div>
 
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           className="h-11 px-4 text-gray-500 hover:text-red-600 hover:bg-red-50 flex items-center"
           onClick={resetFilters}
         >
@@ -221,7 +226,7 @@ const Projects = () => {
                       <p className="text-xs text-gray-400 uppercase font-semibold mb-1">Vendor</p>
                       <p className="text-sm font-medium text-gray-700">{project.vendor}</p>
                     </div>
-                    
+
                     <div className="grid grid-cols-2 gap-4 pt-2">
                       <div>
                         <p className="text-xs text-gray-400 uppercase font-semibold mb-1">Total Budget</p>
@@ -238,7 +243,7 @@ const Projects = () => {
                         </p>
                       </div>
                     </div>
-                    
+
                     {/* Progress bar */}
                     <div className="pt-2">
                       <div className="flex justify-between text-xs mb-1">
@@ -248,8 +253,8 @@ const Projects = () => {
                         </span>
                       </div>
                       <div className="w-full bg-gray-100 rounded-full h-1.5">
-                        <div 
-                          className="bg-cardano-blue h-1.5 rounded-full" 
+                        <div
+                          className="bg-cardano-blue h-1.5 rounded-full"
                           style={{ width: `${(project.amountSpent / project.totalAmount) * 100}%` }}
                         ></div>
                       </div>
@@ -311,8 +316,8 @@ const Projects = () => {
                           {((project.amountSpent / project.totalAmount) * 100).toFixed(0)}%
                         </span>
                         <div className="w-full bg-gray-100 rounded-full h-1">
-                          <div 
-                            className="bg-cardano-blue h-1 rounded-full" 
+                          <div
+                            className="bg-cardano-blue h-1 rounded-full"
                             style={{ width: `${(project.amountSpent / project.totalAmount) * 100}%` }}
                           ></div>
                         </div>

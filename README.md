@@ -1,39 +1,70 @@
 # ADAspending.com - Cardano Treasury Explorer
 
-An open data source for treasury spending on the Cardano blockchain. Explore decentralized funding, track progress, follow ADA flows, and understand how the community allocates public blockchain funds.
+ADAspending is a comprehensive transparency platform and open data source for tracking treasury spending on the Cardano blockchain. It provides community members, DReps, and stakeholders with detailed insights into how decentralized funds are allocated, utilized, and delivered.
 
-## How can I edit this code?
+## 🚀 Key Features
 
-### Use your preferred IDE
+- **Treasury Projects Tracker**: Detailed overview of all projects funded through the Intersect Treasury Contracts. Monitor execution progress, budget allocations, and delivery status.
+- **Vendor Directory**: A comprehensive list of official vendors and teams delivering projects. View financial summaries, project history, and competence benchmarks.
+- **Spending Explorer**: Analyze ADA flows and treasury distribution across different categories and time periods.
+- **Transparency & Governance**: Resources for DReps to evaluate proposals based on competence and delivery capacity, including market benchmarks and communication channels.
+- **Real-time Data**: Integrated with Cexplorer API, Intersect metrics, and Sundae Treasury data.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🛠️ Tech Stack
 
-Follow these steps:
+- **Frontend**: React 18 with TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+- **UI Components**: shadcn/ui (Radix UI)
+- **Icons**: Lucide React
+- **Data Visualization**: Recharts
+- **State Management**: React Query (TanStack Query)
 
-```sh
-# Step 1: Clone the repository
-git clone https://github.com/otavioaclima/adaspending.git
+## 💻 Getting Started
 
-# Step 2: Navigate to the project directory
-cd adaspending
+### Prerequisites
 
-# Step 3: Install the necessary dependencies
-npm i
+- [Node.js](https://nodejs.org/) (v18 or higher recommended)
+- [npm](https://www.npmjs.com/)
 
-# Step 4: Start the development server
-npm run dev
-```
+### Installation
 
-## What technologies are used for this project?
+1. **Clone the repository**
+   ```sh
+   git clone https://github.com/otavioaclima/adaspending.git
+   cd adaspending
+   ```
 
-This project is built with:
+2. **Install dependencies**
+   ```sh
+   npm install
+   ```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+3. **Set up Environment Variables**
+   Create a `.env` file in the root directory and add your Cexplorer API key:
+   ```env
+   VITE_CEXPLORER_API_KEY=your_api_key_here
+   ```
 
-## License
+4. **Start the development server**
+   ```sh
+   npm run dev
+   ```
 
-All data is sourced from the public Cardano blockchain.
+5. **Build for production**
+   ```sh
+   npm run build
+   ```
+
+## 📊 Data Sources
+
+ADAspending sources data directly from:
+- **Cardano Blockchain**: Real-time transaction data via Cexplorer API.
+- **Intersect Treasury**: Official project reporting and milestone tracking.
+- **Sundae Treasury**: Smart contract instance data for treasury management.
+
+Our goal is to maintain an impeccable record of community fund allocation for the benefit of the entire ecosystem.
+
+---
+
+© 2026 ADAspending.com | Empowering transparency in the Cardano ecosystem.

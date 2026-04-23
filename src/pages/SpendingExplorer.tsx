@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Layout from '@/components/layout/Layout';
 import { treasuryStats, fundRounds, proposals } from '@/data/mockData';
-import { getNetworkState, lovelaceToAda } from '@/services/cardanoscan';
+import { getNetworkState, lovelaceToAda } from '@/services/cexplorer';
 import { 
   BarChart, 
   Bar, 
