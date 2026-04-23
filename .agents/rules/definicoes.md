@@ -11,3 +11,7 @@ Quando fizer as alterações no projeto, pode fazer o commit pro Github, mas nã
 Quando eu pedir para fazer deploy, aí sim você faz o deploy no Github.
 
 Todas as implementações devem levar em conta para não afetar a velocidade, performance, lentidão no banco de dados e disponibilidade do site evitando erros de abertura 500 e 503, deixando o site sempre impecável e funcionando!
+
+A única informação que estamos buscando na API da Cexplorer é o Total Treasury Size e a ADA Circulating. 
+
+O restante das informações nós estamos trazendo da página da Sundae: https://treasury.sundae.fi/instances/9e65e4ed7d6fd86fc4827d2b45da6d2c601fb920e8bfd794b8ecc619?projectState=Active

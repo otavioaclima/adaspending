@@ -92,7 +92,7 @@ const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
                   <td className="px-3 py-2">
                     {trx.transactionHash ? (
                       <a
-                        href={`https://cardanoscan.io/transaction/${trx.transactionHash}`}
+                        href={`https://cexplorer.io/tx/${trx.transactionHash}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-600 underline break-all"

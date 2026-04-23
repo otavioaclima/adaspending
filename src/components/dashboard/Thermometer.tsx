@@ -10,10 +10,9 @@ const Thermometer = () => {
   const spent = treasuryStats.totalSpent; // 343M
   const remaining = treasuryStats.remainingBudget; // 1.79M
   
-  // The percentage provided (99.48%) is based on (Spent / (Spent + Remaining))
-  const activeBalance = spent + remaining;
-  const spentPercent = (spent / activeBalance) * 100;
-  const remainingPercent = (remaining / activeBalance) * 100;
+  const spentPercent = (spent / totalBudget) * 100;
+  const remainingPercent = (remaining / totalBudget) * 100;
+  const unallocatedPercent = 100 - spentPercent - remainingPercent;
 
   return (
     <Card>

@@ -296,6 +296,25 @@ const ProjectDetail = () => {
                   </div>
                 </div>
 
+                {/* Technical Details */}
+                <div className="p-6">
+                  <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest mb-4">Technical Details</p>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase mb-1">Instance ID</p>
+                      <p className="text-[11px] font-mono text-gray-600 bg-gray-50 p-2 rounded border border-gray-100 break-all">
+                        9e65e4ed7d6fd86fc4827d2b45da6d2c601fb920e8bfd794b8ecc619
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-gray-400 uppercase mb-1">Script Hash</p>
+                      <p className="text-[11px] font-mono text-gray-600 bg-gray-50 p-2 rounded border border-gray-100 break-all">
+                        addr1w8...4v6q (Treasury Contract)
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Contract Source */}
                 <div className="p-6 bg-gray-50/80">
                   <p className="text-[11px] font-black text-gray-400 uppercase tracking-widest mb-3">Treasury Source</p>
