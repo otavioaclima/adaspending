@@ -1,9 +1,8 @@
-
-import React from 'react';
 import { useTheme } from '@/components/theme-provider';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
-import { Sun, Moon, ChevronDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Sun, Moon, ChevronDown, ChevronRight } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,10 +12,21 @@ import {
 
 const TeaserHeader = () => {
   const { theme, setTheme } = useTheme();
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-50 py-6 px-4 md:px-12 flex justify-end items-center space-x-2 md:space-x-4">
+    <header className="absolute top-0 left-0 right-0 z-50 py-6 px-4 md:px-12 flex justify-between items-center">
+      <div className="hidden md:block">
+        {/* Placeholder for left side if needed, or just keep flex justify-between */}
+      </div>
+      
+      <div className="flex items-center space-x-2 md:space-x-4 ml-auto">
+        <Button asChild variant="outline" className="hidden sm:flex bg-white/5 border-white/20 text-white hover:bg-white/10 hover:text-white transition-all group">
+          <Link to="/overview">
+            {t('teaser.hero.start_exploring')}
+            <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button 
