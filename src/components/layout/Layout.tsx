@@ -2,12 +2,20 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Sun, Moon, BarChart3, Award, Users, FileText, Vote, Briefcase, Twitter, Mail, Heart, Info } from 'lucide-react';
+import { Sun, Moon, BarChart3, Award, Users, FileText, Vote, Briefcase, Twitter, Mail, Heart, Info, ChevronDown } from 'lucide-react';
 import { useTheme } from '@/components/theme-provider';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useState } from 'react';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const { theme, setTheme } = useTheme();
+  const [lang, setLang] = useState('EN');
 
   const navigation = [
     { name: 'Overview', href: '/dashboard', icon: BarChart3 },
@@ -68,6 +76,32 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </div>
 
           <div className="flex items-center space-x-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 gap-2 px-2">
+                  <span className="text-lg">{lang === 'EN' ? '🇺🇸' : '🇧🇷'}</span>
+                  <span className="text-xs font-bold">{lang}</span>
+                  <ChevronDown className="h-3 w-3 opacity-50" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-[#131637] border-gray-800 text-white">
+                <DropdownMenuItem 
+                  onClick={() => setLang('EN')}
+                  className="hover:bg-white/10 cursor-pointer flex items-center gap-2"
+                >
+                  <span className="text-lg">🇺🇸</span>
+                  <span>English (EN)</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => setLang('PT')}
+                  className="hover:bg-white/10 cursor-pointer flex items-center gap-2"
+                >
+                  <span className="text-lg">🇧🇷</span>
+                  <span>Português (PT)</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <Button 
               variant="ghost" 
               size="icon" 
