@@ -68,7 +68,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               <Link
                 key={item.name}
                 to={item.href}
-                className={`nav-link text-white hover:text-gray-200 ${location.pathname === item.href ? 'nav-link-active' : ''}`}
+                className={`nav-link !text-white hover:text-gray-200 ${location.pathname === item.href ? 'nav-link-active' : ''}`}
               >
                 {item.name}
               </Link>
@@ -78,7 +78,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <div className="flex items-center space-x-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 gap-2 px-2 focus-visible:ring-0 focus-visible:ring-offset-0">
+                <Button variant="ghost" size="sm" className="!text-white hover:bg-white/10 gap-2 px-2 focus-visible:ring-0 focus-visible:ring-offset-0">
                   <span className="text-lg">
                     {lang === 'EN' ? '🇺🇸' : lang === 'PT' ? '🇧🇷' : lang === 'ES' ? '🇪🇸' : '🇯🇵'}
                   </span>
@@ -122,7 +122,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               variant="ghost" 
               size="icon" 
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="text-white hover:bg-white/10"
+              className="!text-white hover:bg-white/10"
               title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
             >
               {theme === "dark" ? (
