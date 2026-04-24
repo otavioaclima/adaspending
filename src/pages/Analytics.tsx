@@ -52,6 +52,24 @@ const Analytics = () => {
     .sort((a, b) => b.amount - a.amount)
     .slice(0, 8);
 
+  // Cardano Treasury Spend data (USD Millions)
+  const treasurySpendData = [
+    { year: '2021', spend: 45 },
+    { year: '2022', spend: 60 },
+    { year: '2023', spend: 80 },
+    { year: '2024', spend: 128 },
+    { year: '2025*', spend: 250 },
+  ];
+
+  // ADA Average Price data (USD)
+  const adaPriceData = [
+    { year: '2021', price: 1.38 },
+    { year: '2022', price: 0.78 },
+    { year: '2023', price: 0.42 },
+    { year: '2024', price: 0.56 },
+    { year: '2025**', price: 0.62 },
+  ];
+
   return (
     <Layout>
       <div className="mb-8">
@@ -172,9 +190,9 @@ const Analytics = () => {
           <CardHeader>
             <div className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-green-600" />
-              <CardTitle>{t('analytics.top_vendors')}</CardTitle>
+              <CardTitle className="dark:text-white">{t('analytics.top_vendors')}</CardTitle>
             </div>
-            <CardDescription>{t('analytics.top_vendors_desc')}</CardDescription>
+            <CardDescription className="dark:text-gray-400">{t('analytics.top_vendors_desc')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-80">
@@ -193,6 +211,122 @@ const Analytics = () => {
                 </BarChart>
               </ResponsiveContainer>
             </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Cardano Treasury Spend & ADA Price Charts */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {/* Treasury Spend (USD) */}
+        <Card className="shadow-sm border-gray-100 dark:border-gray-800 transition-colors overflow-hidden">
+          <CardHeader className="bg-cardano-blue pb-3">
+            <CardTitle className="text-white text-center text-lg font-bold tracking-wide">
+              {t('analytics.treasury_spend_title')}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <p className="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase mb-4">{t('analytics.usd_millions')}</p>
+            <div className="h-72">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={treasurySpendData} barCategoryGap="20%">
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="text-gray-200 dark:text-gray-700" />
+                  <XAxis 
+                    dataKey="year" 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fill: 'currentColor', fontWeight: 700, fontSize: 13 }} 
+                    className="text-gray-600 dark:text-gray-400" 
+                  />
+                  <YAxis 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fill: 'currentColor', fontSize: 12 }} 
+                    className="text-gray-400 dark:text-gray-500"
+                    tickFormatter={(v) => `$${v}M`}
+                    domain={[0, 300]}
+                  />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)', borderRadius: '8px' }}
+                    itemStyle={{ color: 'var(--foreground)' }}
+                    formatter={(value: number) => [`$${value}M`, t('analytics.treasury_spend_title')]}
+                  />
+                  <Bar 
+                    dataKey="spend" 
+                    fill="#0033AD" 
+                    radius={[4, 4, 0, 0]}
+                    label={({ x, y, width, value, index }: any) => (
+                      <text x={x + width / 2} y={y - 8} textAnchor="middle" className="fill-gray-800 dark:fill-gray-200" fontSize={12} fontWeight={800}>
+                        ${value}M{index === 4 ? '*' : ''}
+                      </text>
+                    )}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="mt-2 flex items-start gap-2">
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/30 text-[10px] text-blue-700 dark:text-blue-400 font-bold px-2.5 py-1.5 rounded-lg">
+                2025 cap: 350M ADA (~$250M+ at ~$0.70)
+              </div>
+            </div>
+            <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-2 italic">{t('analytics.treasury_spend_note')}</p>
+          </CardContent>
+        </Card>
+
+        {/* ADA Price (USD) */}
+        <Card className="shadow-sm border-gray-100 dark:border-gray-800 transition-colors overflow-hidden">
+          <CardHeader className="bg-cardano-blue pb-3">
+            <CardTitle className="text-white text-center text-lg font-bold tracking-wide">
+              {t('analytics.ada_price_title')}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <p className="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase mb-4">{t('analytics.usd_label')}</p>
+            <div className="h-72">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={adaPriceData} barCategoryGap="20%">
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="text-gray-200 dark:text-gray-700" />
+                  <XAxis 
+                    dataKey="year" 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fill: 'currentColor', fontWeight: 700, fontSize: 13 }} 
+                    className="text-gray-600 dark:text-gray-400" 
+                  />
+                  <YAxis 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fill: 'currentColor', fontSize: 12 }} 
+                    className="text-gray-400 dark:text-gray-500"
+                    tickFormatter={(v) => `$${v.toFixed(2)}`}
+                    domain={[0, 3]}
+                    ticks={[0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0]}
+                  />
+                  <Tooltip 
+                    contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)', borderRadius: '8px' }}
+                    itemStyle={{ color: 'var(--foreground)' }}
+                    formatter={(value: number) => [`$${value.toFixed(2)}`, t('analytics.ada_price_title')]}
+                  />
+                  <Bar 
+                    dataKey="price" 
+                    fill="#1BAAD6" 
+                    radius={[4, 4, 0, 0]}
+                    label={({ x, y, width, value, index }: any) => (
+                      <g>
+                        <text x={x + width / 2} y={y - 8} textAnchor="middle" className="fill-[#1BAAD6]" fontSize={12} fontWeight={800}>
+                          ${value.toFixed(2)}
+                        </text>
+                        {index === 4 && (
+                          <text x={x + width / 2} y={y - 22} textAnchor="middle" className="fill-[#1BAAD6]" fontSize={9} fontWeight={700}>
+                            ({t('analytics.ytd')})
+                          </text>
+                        )}
+                      </g>
+                    )}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+            <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-2 italic">{t('analytics.ada_price_note')}</p>
           </CardContent>
         </Card>
       </div>
