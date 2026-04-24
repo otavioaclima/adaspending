@@ -11,15 +11,6 @@ const HeroSection = () => {
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-cardano-blue/20 rounded-full blur-[100px]" />
       <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-blue-600/10 rounded-full blur-[80px]" />
       
-      {/* Stylized Logo Icon in background */}
-      <div className="absolute right-[-5%] top-1/2 -translate-y-1/2 opacity-10 pointer-events-none hidden lg:block">
-        <img 
-          src="/assets/257db3dc-2214-4178-afd2-70760c3899c4.png" 
-          alt="" 
-          className="h-[400px] w-auto rotate-12"
-        />
-      </div>
-
       <div className="relative z-10 max-w-6xl mx-auto px-8 py-12 md:py-16 flex flex-col lg:flex-row items-center gap-10">
         <div className="lg:w-3/5 text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cardano-blue/20 border border-cardano-blue/30 text-cardano-blue text-xs font-bold mb-6">
@@ -61,12 +52,12 @@ const HeroSection = () => {
         </div>
 
         <div className="lg:w-2/5 hidden lg:flex justify-center">
-          <div className="relative">
-            <div className="absolute inset-0 bg-cardano-blue/20 blur-[40px] rounded-full"></div>
+          <div className="relative group">
+            <div className="absolute inset-0 bg-cardano-blue/20 blur-[60px] rounded-full group-hover:bg-cardano-blue/30 transition-all duration-700"></div>
             <img 
               src="/assets/257db3dc-2214-4178-afd2-70760c3899c4.png" 
               alt="Cardano Chart" 
-              className="relative h-48 w-auto filter drop-shadow-2xl brightness-110"
+              className="relative h-64 w-auto filter drop-shadow-2xl brightness-110 hover:scale-105 transition-transform duration-700 ease-out"
             />
           </div>
         </div>
