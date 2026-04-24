@@ -78,7 +78,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           <div className="flex items-center space-x-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 gap-2 px-2">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 gap-2 px-2 focus-visible:ring-0 focus-visible:ring-offset-0">
                   <span className="text-lg">
                     {lang === 'EN' ? '🇺🇸' : lang === 'PT' ? '🇧🇷' : lang === 'ES' ? '🇪🇸' : '🇯🇵'}
                   </span>
@@ -86,31 +86,31 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                   <ChevronDown className="h-3 w-3 opacity-50" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-[#131637] border-gray-800 text-white">
+              <DropdownMenuContent align="end" className="bg-[#131637] border-gray-800 text-white min-w-[140px]">
                 <DropdownMenuItem 
                   onClick={() => setLang('EN')}
-                  className="hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer flex items-center gap-2"
+                  className="hover:!bg-white/10 focus:!bg-white/10 !text-white cursor-pointer flex items-center gap-2"
                 >
                   <span className="text-lg">🇺🇸</span>
                   <span>English (EN)</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setLang('PT')}
-                  className="hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer flex items-center gap-2"
+                  className="hover:!bg-white/10 focus:!bg-white/10 !text-white cursor-pointer flex items-center gap-2"
                 >
                   <span className="text-lg">🇧🇷</span>
                   <span>Português (PT)</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setLang('ES')}
-                  className="hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer flex items-center gap-2"
+                  className="hover:!bg-white/10 focus:!bg-white/10 !text-white cursor-pointer flex items-center gap-2"
                 >
                   <span className="text-lg">🇪🇸</span>
                   <span>Español (ES)</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setLang('JP')}
-                  className="hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer flex items-center gap-2"
+                  className="hover:!bg-white/10 focus:!bg-white/10 !text-white cursor-pointer flex items-center gap-2"
                 >
                   <span className="text-lg">🇯🇵</span>
                   <span>日本語 (JP)</span>
