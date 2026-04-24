@@ -31,7 +31,9 @@ import {
   Search as SearchIcon,
   FilterX,
   LayoutGrid,
-  List
+  List,
+  ChevronUp,
+  ChevronDown
 } from "lucide-react";
 
 const getStatusIcon = (status: string) => {
@@ -62,6 +64,7 @@ const Projects = () => {
   const [sizeFilter, setSizeFilter] = useState('all');
   const [vendorFilter, setVendorFilter] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
 
   // Get unique vendors for the filter
   const vendors = useMemo(() => {
@@ -87,6 +90,31 @@ const Projects = () => {
       return matchesSearch && matchesStatus && matchesVendor && matchesSize;
     });
   }, [searchTerm, statusFilter, sizeFilter, vendorFilter]);
+
+  // Sort logic
+  const sortedProjects = useMemo(() => {
+    let sortableItems = [...filteredProjects];
+    if (sortConfig !== null) {
+      sortableItems.sort((a: any, b: any) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'asc' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sortableItems;
+  }, [filteredProjects, sortConfig]);
+
+  const requestSort = (key: string) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
 
   const resetFilters = () => {
     setSearchTerm('');
@@ -277,18 +305,48 @@ const Projects = () => {
             <Table>
               <TableHeader>
                 <TableRow className="bg-gray-50/50 dark:bg-gray-900/50 border-gray-200 dark:border-gray-700">
-                  <TableHead className="w-[120px]">Status</TableHead>
-                  <TableHead className="w-[150px]">Project ID</TableHead>
-                  <TableHead className="min-w-[250px]">Project Name</TableHead>
-                  <TableHead>Vendor</TableHead>
-                  <TableHead className="text-right">Budget (₳)</TableHead>
-                  <TableHead className="text-right">Spent (₳)</TableHead>
+                  <TableHead className="w-[120px] cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('status')}>
+                    <div className="flex items-center gap-1">
+                      Status
+                      {sortConfig?.key === 'status' ? (sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />) : null}
+                    </div>
+                  </TableHead>
+                  <TableHead className="w-[150px] cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('id')}>
+                    <div className="flex items-center gap-1">
+                      Project ID
+                      {sortConfig?.key === 'id' ? (sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />) : null}
+                    </div>
+                  </TableHead>
+                  <TableHead className="min-w-[250px] cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('projectName')}>
+                    <div className="flex items-center gap-1">
+                      Project Name
+                      {sortConfig?.key === 'projectName' ? (sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />) : null}
+                    </div>
+                  </TableHead>
+                  <TableHead className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('vendor')}>
+                    <div className="flex items-center gap-1">
+                      Vendor
+                      {sortConfig?.key === 'vendor' ? (sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />) : null}
+                    </div>
+                  </TableHead>
+                  <TableHead className="text-right cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('totalAmount')}>
+                    <div className="flex items-center justify-end gap-1">
+                      Budget (₳)
+                      {sortConfig?.key === 'totalAmount' ? (sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />) : null}
+                    </div>
+                  </TableHead>
+                  <TableHead className="text-right cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('amountSpent')}>
+                    <div className="flex items-center justify-end gap-1">
+                      Spent (₳)
+                      {sortConfig?.key === 'amountSpent' ? (sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />) : null}
+                    </div>
+                  </TableHead>
                   <TableHead className="w-[150px]">Execution</TableHead>
                   <TableHead className="text-right">Action</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredProjects.map((project) => (
+                {sortedProjects.map((project) => (
                   <TableRow key={project.id} className="hover:bg-gray-50/50 transition-colors">
                     <TableCell>
                       <Badge variant="outline" className={`${getStatusColor(project.status)} whitespace-nowrap`}>

@@ -187,6 +187,7 @@ const Vendors = () => {
   const [sizeFilter, setSizeFilter] = useState('all');
   const [countFilter, setCountFilter] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
   const vendors = useVendorStats();
 
   const filteredVendors = useMemo(() => {
@@ -206,6 +207,30 @@ const Vendors = () => {
       return matchesSearch && matchesSize && matchesCount;
     });
   }, [vendors, searchTerm, sizeFilter, countFilter]);
+
+  const sortedVendors = useMemo(() => {
+    let sortableItems = [...filteredVendors];
+    if (sortConfig !== null) {
+      sortableItems.sort((a: any, b: any) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'asc' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sortableItems;
+  }, [filteredVendors, sortConfig]);
+
+  const requestSort = (key: string) => {
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
 
   const resetFilters = () => {
     setSearchTerm('');
@@ -319,15 +344,35 @@ const Vendors = () => {
             <Table>
               <TableHeader className="bg-gray-50/50 dark:bg-gray-900/50">
                 <TableRow className="border-gray-100 dark:border-gray-800">
-                  <TableHead className="font-bold text-gray-900 dark:text-gray-300">Vendor Name</TableHead>
-                  <TableHead className="font-bold text-gray-900 dark:text-gray-300">Total Allocation</TableHead>
-                  <TableHead className="font-bold text-gray-900 dark:text-gray-300">Total Spent</TableHead>
-                  <TableHead className="font-bold text-gray-900 dark:text-gray-300">Projects</TableHead>
+                  <TableHead className="font-bold text-gray-900 dark:text-gray-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('name')}>
+                    <div className="flex items-center gap-1">
+                      Vendor Name
+                      {sortConfig?.key === 'name' ? (sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />) : null}
+                    </div>
+                  </TableHead>
+                  <TableHead className="font-bold text-gray-900 dark:text-gray-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('totalFunded')}>
+                    <div className="flex items-center gap-1">
+                      Total Allocation
+                      {sortConfig?.key === 'totalFunded' ? (sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />) : null}
+                    </div>
+                  </TableHead>
+                  <TableHead className="font-bold text-gray-900 dark:text-gray-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('amountSpent')}>
+                    <div className="flex items-center gap-1">
+                      Total Spent
+                      {sortConfig?.key === 'amountSpent' ? (sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />) : null}
+                    </div>
+                  </TableHead>
+                  <TableHead className="font-bold text-gray-900 dark:text-gray-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('projectCount')}>
+                    <div className="flex items-center gap-1">
+                      Projects
+                      {sortConfig?.key === 'projectCount' ? (sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />) : null}
+                    </div>
+                  </TableHead>
                   <TableHead className="font-bold text-gray-900 dark:text-gray-300">Status Types</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredVendors.map((vendor) => (
+                {sortedVendors.map((vendor) => (
                   <TableRow key={vendor.name} className="border-gray-100 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-gray-900/30">
                     <TableCell className="font-medium">
                       <Link 
