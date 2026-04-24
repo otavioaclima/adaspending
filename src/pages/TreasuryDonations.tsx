@@ -124,7 +124,7 @@ const TreasuryDonations = () => {
               variant={viewMode === 'donations' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('donations')}
-              className={viewMode === 'donations' ? 'bg-white dark:bg-cardano-blue shadow-sm dark:text-white' : 'text-gray-500 dark:text-gray-400'}
+              className={viewMode === 'donations' ? 'bg-cardano-blue text-white shadow-sm hover:bg-cardano-blue/90' : 'text-gray-500 dark:text-gray-400'}
             >
               {t('donations.recent_donations')}
             </Button>
@@ -132,7 +132,7 @@ const TreasuryDonations = () => {
               variant={viewMode === 'epochs' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('epochs')}
-              className={viewMode === 'epochs' ? 'bg-white dark:bg-cardano-blue shadow-sm dark:text-white' : 'text-gray-500 dark:text-gray-400'}
+              className={viewMode === 'epochs' ? 'bg-cardano-blue text-white shadow-sm hover:bg-cardano-blue/90' : 'text-gray-500 dark:text-gray-400'}
             >
               {t('donations.epoch_by_epoch')}
             </Button>

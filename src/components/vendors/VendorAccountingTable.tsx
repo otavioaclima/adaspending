@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Award } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export type TransactionRow = {
   id: string;
@@ -20,6 +20,7 @@ type Props = {
 };
 
 const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
+  const { t } = useLanguage();
   const totalSpent = transactionRows.reduce(
     (acc, curr) => acc + (curr.spentAmount || 0),
     0
@@ -28,55 +29,55 @@ const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
   return (
     <div className="bg-yellow-50 dark:bg-yellow-950/10 border border-yellow-200 dark:border-yellow-900/30 rounded-lg p-6">
       <h2 className="font-bold text-xl mb-2 text-yellow-700 flex items-center gap-2">
-        Transparency & Accounting
+        {t('accounting.title')}
       </h2>
       <p className="mb-4 text-yellow-900 dark:text-yellow-200/80">
-        Track resources moved by the vendor, with transparency for auditing and traceability.
+        {t('accounting.desc')}
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div>
-          <p className="text-sm text-gray-500">Total Received</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{t('accounting.total_received')}</p>
           <p className="font-bold text-cardano-blue dark:text-blue-400">
             ₳{totalFunded.toLocaleString()}
           </p>
         </div>
         <div>
-          <p className="text-sm text-gray-500">Total Spent</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{t('accounting.total_spent')}</p>
           <p className="font-bold text-yellow-700">₳{totalSpent.toLocaleString()}</p>
         </div>
         <div>
-          <p className="text-sm text-gray-500">Remaining</p>
-          <p className="font-bold text-gray-800">
+          <p className="text-sm text-gray-500 dark:text-gray-400">{t('accounting.remaining')}</p>
+          <p className="font-bold text-gray-800 dark:text-gray-200">
             ₳{(totalFunded - totalSpent).toLocaleString()}
           </p>
         </div>
       </div>
-      <div className="overflow-x-auto rounded-md border mt-4">
-        <table className="min-w-full divide-y divide-gray-200 text-sm">
-          <thead className="bg-gray-50">
+      <div className="overflow-x-auto rounded-md border dark:border-gray-700 mt-4">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+          <thead className="bg-gray-50 dark:bg-gray-800">
             <tr>
-              <th className="px-3 py-2 text-left font-semibold text-gray-700">Date</th>
-              <th className="px-3 py-2 text-left font-semibold text-gray-700">Title</th>
-              <th className="px-3 py-2 text-left font-semibold text-gray-700">Fund Round</th>
-              <th className="px-3 py-2 text-left font-semibold text-gray-700">Received</th>
-              <th className="px-3 py-2 text-left font-semibold text-gray-700">Spent</th>
-              <th className="px-3 py-2 text-left font-semibold text-gray-700">Status</th>
-              <th className="px-3 py-2 text-left font-semibold text-gray-700">Tx Hash</th>
+              <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{t('accounting.date')}</th>
+              <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{t('accounting.title_col')}</th>
+              <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{t('accounting.fund_round')}</th>
+              <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{t('accounting.received')}</th>
+              <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{t('accounting.spent')}</th>
+              <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{t('accounting.status')}</th>
+              <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{t('accounting.tx_hash')}</th>
             </tr>
           </thead>
           <tbody>
             {transactionRows.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-6 text-center text-gray-400 italic">
-                  No transactions recorded
+                <td colSpan={7} className="py-6 text-center text-gray-400 dark:text-gray-500 italic">
+                  {t('accounting.no_transactions')}
                 </td>
               </tr>
             ) : (
               transactionRows.map((trx) => (
-                <tr key={trx.id} className="bg-white hover:bg-gray-50 transition">
-                  <td className="px-3 py-2 whitespace-nowrap">{new Date(trx.updatedAt).toLocaleDateString()}</td>
-                  <td className="px-3 py-2">{trx.title}</td>
-                  <td className="px-3 py-2">{trx.fundRound}</td>
+                <tr key={trx.id} className="bg-white dark:bg-gray-800/50 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                  <td className="px-3 py-2 whitespace-nowrap text-gray-700 dark:text-gray-300">{new Date(trx.updatedAt).toLocaleDateString()}</td>
+                  <td className="px-3 py-2 text-gray-700 dark:text-gray-300">{trx.title}</td>
+                  <td className="px-3 py-2 text-gray-700 dark:text-gray-300">{trx.fundRound}</td>
                   <td className="px-3 py-2 text-cardano-blue dark:text-blue-400">₳{trx.fundedAmount.toLocaleString()}</td>
                   <td className="px-3 py-2 text-yellow-700">₳{trx.spentAmount.toLocaleString()}</td>
                   <td className="px-3 py-2 capitalize">
@@ -85,7 +86,7 @@ const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
                       trx.status === "rejected" ? "text-red-600 font-medium" :
                       trx.status === "completed" ? "text-purple-700 font-medium" :
                       trx.status === "active" ? "text-blue-700 font-medium" :
-                      "text-gray-700" }>
+                      "text-gray-700 dark:text-gray-300" }>
                       {trx.status}
                     </span>
                   </td>
@@ -100,7 +101,7 @@ const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
                         {trx.transactionHash.slice(0, 8)}...
                       </a>
                     ) : (
-                      <span className="text-gray-300">-</span>
+                      <span className="text-gray-300 dark:text-gray-600">-</span>
                     )}
                   </td>
                 </tr>

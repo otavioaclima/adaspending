@@ -86,7 +86,7 @@ const ProjectDetail = () => {
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-3">
-              <Badge variant="outline" className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 dark:text-gray-300">Intersect Treasury Contract 1</Badge>
+              <Badge variant="outline" className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 dark:text-gray-300">{t('fund.intersect_contracts')}</Badge>
               <Badge className={`${getStatusColor(project.status)} border shadow-sm`}>
                 <StatusIcon className="h-3.5 w-3.5 mr-1" />
                 {project.status}
@@ -97,7 +97,7 @@ const ProjectDetail = () => {
               {project.projectName}
             </h1>
             <p className="text-gray-500 dark:text-gray-400 flex items-center font-medium">
-              Vendor:
+              {t('project.vendor_label')}:
               <Link to={`/vendors/${encodeURIComponent(project.vendor)}`} className="text-cardano-blue hover:underline ml-1.5 font-bold flex items-center">
                 {project.vendor}
                 <ExternalLink className="h-3 w-3 ml-1 opacity-50" />
@@ -263,7 +263,7 @@ const ProjectDetail = () => {
 
                 {/* Vendor Link */}
                 <div className="p-6">
-                  <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">Vendor</p>
+                  <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">{t('project.vendor_label')}</p>
                   <Link to={`/vendors/${encodeURIComponent(project.vendor)}`} className="flex items-center gap-4 group p-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm hover:border-cardano-blue hover:shadow-md transition-all">
                     <div className="bg-cardano-blue/10 p-3 rounded-xl text-cardano-blue group-hover:bg-cardano-blue group-hover:text-white transition-colors">
                       <Building className="h-6 w-6" />
@@ -284,7 +284,7 @@ const ProjectDetail = () => {
                     <div className="flex gap-4 relative">
                       <div className="w-4 h-4 rounded-full border-4 border-white dark:border-gray-800 bg-cardano-blue shadow-sm z-10" />
                       <div>
-                        <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-tighter">Payment Start</p>
+                        <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-tighter">{t('project.payment_start')}</p>
                         <p className="text-sm font-bold text-gray-900 dark:text-white">{paymentDates.start}</p>
                       </div>
                     </div>
@@ -303,13 +303,13 @@ const ProjectDetail = () => {
                   <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">{t('project.technical_details')}</p>
                   <div className="space-y-3">
                     <div>
-                      <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">Instance ID</p>
+                      <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">{t('project.instance_id')}</p>
                       <p className="text-[11px] font-mono text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/50 p-2 rounded border border-gray-100 dark:border-gray-700 break-all">
                         9e65e4ed7d6fd86fc4827d2b45da6d2c601fb920e8bfd794b8ecc9
                       </p>
                     </div>
                     <div>
-                      <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">Script Hash</p>
+                      <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">{t('project.script_hash')}</p>
                       <p className="text-[11px] font-mono text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/50 p-2 rounded border border-gray-100 dark:border-gray-700 break-all">
                         addr1w8...4v6q (Treasury Contract)
                       </p>

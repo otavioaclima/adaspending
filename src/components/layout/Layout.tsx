@@ -103,31 +103,31 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
                   <ChevronDown className="h-3 w-3 opacity-50" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-[#131637] border-gray-800 text-white min-w-[140px]">
+              <DropdownMenuContent align="end" className="bg-[#131637] border-gray-800 min-w-[140px] [&_*]:text-white">
                 <DropdownMenuItem
                   onClick={() => setLanguage('EN')}
-                  className="hover:!bg-white/10 focus:!bg-white/10 !text-white cursor-pointer flex items-center gap-2"
+                  className="hover:!bg-white/10 focus:!bg-white/10 focus:!text-white !text-white cursor-pointer flex items-center gap-2"
                 >
                   <span className="text-lg">🇺🇸</span>
                   <span>English (EN)</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => setLanguage('PT')}
-                  className="hover:!bg-white/10 focus:!bg-white/10 !text-white cursor-pointer flex items-center gap-2"
+                  className="hover:!bg-white/10 focus:!bg-white/10 focus:!text-white !text-white cursor-pointer flex items-center gap-2"
                 >
                   <span className="text-lg">🇧🇷</span>
                   <span>Português (PT)</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => setLanguage('ES')}
-                  className="hover:!bg-white/10 focus:!bg-white/10 !text-white cursor-pointer flex items-center gap-2"
+                  className="hover:!bg-white/10 focus:!bg-white/10 focus:!text-white !text-white cursor-pointer flex items-center gap-2"
                 >
                   <span className="text-lg">🇪🇸</span>
                   <span>Español (ES)</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => setLanguage('JP')}
-                  className="hover:!bg-white/10 focus:!bg-white/10 !text-white cursor-pointer flex items-center gap-2"
+                  className="hover:!bg-white/10 focus:!bg-white/10 focus:!text-white !text-white cursor-pointer flex items-center gap-2"
                 >
                   <span className="text-lg">🇯🇵</span>
                   <span>日本語 (JP)</span>
