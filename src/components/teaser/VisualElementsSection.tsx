@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Briefcase, Users, ArrowUpRight, ArrowRight, PieChart as PieIcon, BarChart3, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const COLORS = ['#0033AD', '#1BAAD6', '#F59E0B', '#10B981', '#6366F1', '#EC4899', '#94A3B8'];
+const COLORS = ['hsl(var(--cardano-blue))', '#1BAAD6', '#F59E0B', '#10B981', '#6366F1', '#EC4899', '#94A3B8'];
 
 const VisualElementsSection = () => {
   const { t, language } = useLanguage();
@@ -94,7 +94,7 @@ const VisualElementsSection = () => {
     <section className="py-16 px-4 relative overflow-hidden dark:bg-black">
       {/* Blockchain background pattern */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
-        <div className="h-full w-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSIjMDAzM0FEIj48cGF0aCBkPSJNMzYgMjRhNiA2IDAgMSAwIDAgMTIgNiA2IDAgMCAwIDAtMTJ6bS0xMiAwYTYgNiAwIDEgMCAwIDEyIDYgNiAwIDAgMCAwLTEyem0wLTEyYTYgNiAwIDEgMCAwIDEyIDYgNiAwIDAgMCAwLTEyem0xMiAwYTYgNiAwIDEgMCAwIDEyIDYgNiAwIDAgMCAwLTEyem0xMiAwYTYgNiAwIDEgMCAwIDEyIDYgNiAwIDAgMCAwLTEyem0tMjQgMTJhNiA2IDAgMSAwIDAgMTIgNiA2IDAgMCAwIDAtMTJ6Ii8+PC9nPjwvc3ZnPg==')]"></div>
+        <div className="h-full w-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSIjMDAzM0FEIj48cGF0aCBkPSJNMzYgMjRhNiA2IDAgMSAwIDAgMTIgNiA2IDAgMCAwIDAtMTJ6bS0xMiAyYTYgNiAwIDEgMCAwIDEyIDYgNiAwIDAgMCAwLTEyem0wLTEyYTYgNiAwIDEgMCAwIDEyIDYgNiAwIDAgMCAwLTEyem0xMiAwYTYgNiAwIDEgMCAwIDEyIDYgNiAwIDAgMCAwLTEyem0xMiAwYTYgNiAwIDEgMCAwIDEyIDYgNiAwIDAgMCAwLTEyem0tMjQgMTJhNiA2IDAgMSAwIDAgMTIgNiA2IDAgMCAwIDAtMTJ6Ii8+PC9nPjwvc3ZnPg==')]"></div>
       </div>
       
       <div className="container mx-auto relative z-10">
@@ -205,7 +205,7 @@ const VisualElementsSection = () => {
                         return null;
                       }}
                     />
-                    <Bar dataKey="value" fill="#0033AD" radius={[0, 4, 4, 0]}>
+                    <Bar dataKey="value" fill="hsl(var(--cardano-blue))" radius={[0, 4, 4, 0]}>
                       <LabelList 
                         dataKey="percentage" 
                         position="right" 

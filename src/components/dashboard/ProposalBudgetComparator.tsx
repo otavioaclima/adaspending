@@ -34,11 +34,11 @@ const ProposalBudgetComparator = () => {
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">{t('stats.total_spent')}</span>
-              <span className="text-sm font-black text-orange-600">₳{spent.toLocaleString()} ({spentPercent.toFixed(2)}%)</span>
+              <span className="text-sm font-black text-orange-600 dark:text-orange-500">₳{spent.toLocaleString()} ({spentPercent.toFixed(2)}%)</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">{t('stats.remaining_budget')}</span>
-              <span className="text-sm font-black text-green-600">₳{remaining.toLocaleString()} ({remainingPercent.toFixed(2)}%)</span>
+              <span className="text-sm font-black text-green-600 dark:text-green-500">₳{remaining.toLocaleString()} ({remainingPercent.toFixed(2)}%)</span>
             </div>
           </div>
         </div>

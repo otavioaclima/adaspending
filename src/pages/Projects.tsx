@@ -189,8 +189,8 @@ const Projects = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 flex flex-col lg:flex-row gap-4 items-end transition-colors">
-        <div className="flex-1 w-full lg:w-auto">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 grid grid-cols-2 lg:flex lg:flex-row gap-x-3 gap-y-4 items-end transition-colors">
+        <div className="col-span-2 lg:flex-1 w-full lg:w-auto">
           <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">{t('projects.search_label')}</label>
           <div className="relative">
             <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -203,8 +203,8 @@ const Projects = () => {
           </div>
         </div>
 
-        <div className="w-full lg:w-48">
-          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">{t('projects.status_label')}</label>
+        <div className="col-span-1 w-full lg:w-48">
+          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('projects.status_label')}</label>
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
               <SelectValue placeholder={t('projects.all_status')} />
@@ -218,8 +218,8 @@ const Projects = () => {
           </Select>
         </div>
 
-        <div className="w-full lg:w-48">
-          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">{t('projects.budget_size')}</label>
+        <div className="col-span-1 w-full lg:w-48">
+          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('projects.budget_size')}</label>
           <Select value={sizeFilter} onValueChange={setSizeFilter}>
             <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
               <SelectValue placeholder={t('projects.all_sizes')} />
@@ -233,8 +233,8 @@ const Projects = () => {
           </Select>
         </div>
 
-        <div className="w-full lg:w-56">
-          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">{t('projects.all_vendors')}</label>
+        <div className="col-span-1 w-full lg:w-56">
+          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('projects.all_vendors')}</label>
           <Select value={vendorFilter} onValueChange={setVendorFilter}>
             <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
               <SelectValue placeholder={t('projects.all_vendors')} />
@@ -250,8 +250,8 @@ const Projects = () => {
           </Select>
         </div>
 
-        <div className="w-full lg:w-48">
-          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">{t('projects.order_by')}</label>
+        <div className="col-span-1 w-full lg:w-48">
+          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('projects.order_by')}</label>
           <Select value={sortFilter} onValueChange={setSortFilter}>
             <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
               <SelectValue placeholder={t('projects.order_by')} />
@@ -265,14 +265,16 @@ const Projects = () => {
           </Select>
         </div>
 
-        <Button
-          variant="ghost"
-          className="h-11 px-4 text-gray-500 hover:text-red-600 hover:bg-red-50 flex items-center"
-          onClick={resetFilters}
-        >
-          <FilterX className="h-4 w-4 mr-2" />
-          {t('projects.reset')}
-        </Button>
+        <div className="col-span-2 lg:col-span-1 flex justify-center lg:justify-start">
+          <Button
+            variant="ghost"
+            className="h-11 px-4 text-gray-500 hover:text-red-600 hover:bg-red-50 flex items-center w-full lg:w-auto"
+            onClick={resetFilters}
+          >
+            <FilterX className="h-4 w-4 mr-2" />
+            {t('projects.reset')}
+          </Button>
+        </div>
       </div>
 
       {filteredProjects.length > 0 ? (

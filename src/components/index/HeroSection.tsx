@@ -8,11 +8,12 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 const HeroSection = () => {
   const { t } = useLanguage();
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#0a0c2e] to-[#020412] rounded-3xl text-white mb-10 shadow-2xl border border-white/5">
       {/* Decorative background elements */}
-      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-cardano-blue/20 rounded-full blur-[100px]" />
-      <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-blue-600/10 rounded-full blur-[80px]" />
+      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px]" />
+      <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-cardano-blue/5 rounded-full blur-[80px]" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-8 py-12 md:py-16 flex flex-col lg:flex-row items-center gap-10">
         <div className="lg:w-3/5 text-left">
@@ -32,7 +33,7 @@ const HeroSection = () => {
             {t('hero.subtitle')}
           </p>
 
-          <div className="w-full max-w-md flex flex-col md:flex-row gap-2 p-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl">
+          <div className="w-full max-w-md flex flex-col md:flex-row gap-2 p-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl transition-all hover:border-white/20">
             <div className="flex-grow flex items-center px-3">
               <Search className="h-4 w-4 text-gray-400 mr-2" />
               <Input
@@ -49,20 +50,18 @@ const HeroSection = () => {
             <TrendingUp className="h-3 w-3 text-blue-400" />
             <span>{t('hero.trending')}</span>
             <button className="hover:text-blue-400 transition-colors">#IOG</button>
-            <button className="hover:text-blue-400 transition-colors">#Cardano Foundation</button>
-            <button className="hover:text-blue-400 transition-colors">#Intersct</button>
-            <button className="hover:text-blue-400 transition-colors">#Midgard</button>
+            <button className="hover:text-blue-400 transition-colors">#Cardano CF</button>
+            <button className="hover:text-blue-400 transition-colors">#Intersect</button>
             <button className="hover:text-blue-400 transition-colors">#Builder DAO</button>
           </div>
         </div>
 
         <div className="lg:w-2/5 hidden lg:flex justify-center">
-          <div className="relative group">
-            <div className="absolute inset-0 bg-cardano-blue/20 blur-[60px] rounded-full group-hover:bg-cardano-blue/30 transition-all duration-700"></div>
+          <div className="relative group animate-float">
             <img
-              src="/assets/hero-chart.png"
+              src="/assets/hero-chart-new-transparent.png"
               alt="Cardano Chart"
-              className="relative h-64 w-auto filter drop-shadow-2xl brightness-110 hover:scale-105 transition-transform duration-700 ease-out"
+              className="relative w-full max-w-[400px] h-auto transition-all duration-1000 ease-out brightness-110 filter drop-shadow-[0_10px_30px_rgba(37,99,235,0.2)]"
             />
           </div>
         </div>

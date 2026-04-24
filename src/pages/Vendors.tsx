@@ -102,89 +102,6 @@ const VendorCard = ({ vendor }: { vendor: any }) => {
   );
 };
 
-const TransparencyToggle = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { t } = useLanguage();
-
-  return (
-    <div className="mb-8">
-      <Card className={`border-blue-200 dark:border-blue-900/50 transition-all ${isOpen ? 'bg-blue-50 dark:bg-blue-900/20' : 'bg-white dark:bg-gray-800/40 hover:bg-blue-50/30 dark:hover:bg-blue-900/10'}`}>
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="w-full p-4 flex items-center justify-between text-left focus:outline-none"
-        >
-          <div className="flex items-center gap-3">
-            <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-lg text-blue-700 dark:text-blue-400">
-              <Users className="h-5 w-5" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-blue-900 dark:text-blue-300">{t('vendors.transparency_title')}</h2>
-              {!isOpen && <p className="text-sm text-blue-700/70 dark:text-blue-400/60">{t('vendors.transparency_subtitle')}</p>}
-            </div>
-          </div>
-          {isOpen ? <ChevronUp className="h-5 w-5 text-blue-700 dark:text-blue-400" /> : <ChevronDown className="h-5 w-5 text-blue-700 dark:text-blue-400" />}
-        </button>
-
-        {isOpen && (
-          <CardContent className="px-6 pb-6 pt-0 border-t border-blue-100 dark:border-blue-900/30 flex flex-col gap-5">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 font-bold text-blue-900 dark:text-blue-300">
-                  <Info className="h-4 w-4 text-blue-700 dark:text-blue-400" />
-                  {t('vendors.for_dreps')}
-                </div>
-                <p className="text-sm text-blue-800 dark:text-blue-400/80 leading-relaxed">
-                  {t('vendors.for_dreps_desc')}
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 font-bold text-blue-900 dark:text-blue-300">
-                  <Link2 className="h-4 w-4 text-blue-700 dark:text-blue-400" />
-                  {t('vendors.benchmarks')}
-                </div>
-                <p className="text-sm text-blue-800 dark:text-blue-400/80 leading-relaxed mb-2">
-                  {t('vendors.benchmarks_desc')}
-                </p>
-                <Button asChild variant="link" className="p-0 h-auto text-blue-700 dark:text-blue-400 underline text-xs" size="sm">
-                  <a href="https://www.linkedin.com/pulse/hourly-rates-worldwide-2023-statista/" target="_blank" rel="noopener noreferrer">
-                    {t('vendors.see_benchmarks')}
-                  </a>
-                </Button>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 font-bold text-blue-900 dark:text-blue-300">
-                  <MessageSquare className="h-4 w-4 text-blue-700 dark:text-blue-400" />
-                  {t('vendors.direct_channels')}
-                </div>
-                <div className="flex flex-wrap gap-2 pt-1">
-                  <Button asChild variant="outline" size="sm" className="bg-white dark:bg-gray-900 h-7 text-[10px] px-2 border-gray-200 dark:border-gray-700">
-                    <a href="https://discord.gg/cardano" target="_blank" rel="noopener noreferrer">Discord</a>
-                  </Button>
-                  <Button asChild variant="outline" size="sm" className="bg-white dark:bg-gray-900 h-7 text-[10px] px-2 border-gray-200 dark:border-gray-700">
-                    <a href="https://t.me/CardanoBR" target="_blank" rel="noopener noreferrer">Telegram</a>
-                  </Button>
-                  <Button asChild variant="outline" size="sm" className="bg-white dark:bg-gray-900 h-7 text-[10px] px-2 border-gray-200 dark:border-gray-700">
-                    <a href="https://forum.cardano.org/" target="_blank" rel="noopener noreferrer">Forum</a>
-                  </Button>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-4 p-3 bg-blue-100/50 dark:bg-blue-900/30 rounded-lg flex items-center gap-3">
-              <Info className="h-4 w-4 text-blue-700 dark:text-blue-400 shrink-0" />
-              <p className="text-xs font-medium text-blue-800 dark:text-blue-300">
-                {t('vendors.coming_soon')}
-              </p>
-            </div>
-          </CardContent>
-        )}
-      </Card>
-    </div>
-  );
-};
-
 const Vendors = () => {
   const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
@@ -296,8 +213,8 @@ const Vendors = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 flex flex-col lg:flex-row gap-4 items-end transition-colors">
-        <div className="flex-1 w-full lg:w-auto">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 grid grid-cols-2 lg:flex lg:flex-row gap-x-3 gap-y-4 items-end transition-colors">
+        <div className="col-span-2 lg:flex-1 w-full lg:w-auto">
           <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">{t('vendors.search_label')}</label>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -310,8 +227,8 @@ const Vendors = () => {
           </div>
         </div>
 
-        <div className="w-full lg:w-48">
-          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">{t('vendors.total_allocation')}</label>
+        <div className="col-span-1 w-full lg:w-48">
+          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('vendors.total_allocation')}</label>
           <Select value={sizeFilter} onValueChange={setSizeFilter}>
             <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white">
               <SelectValue placeholder={t('projects.all_sizes')} />
@@ -325,8 +242,8 @@ const Vendors = () => {
           </Select>
         </div>
 
-        <div className="w-full lg:w-48">
-          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">{t('vendors.projects_label')}</label>
+        <div className="col-span-1 w-full lg:w-48">
+          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('vendors.projects_label')}</label>
           <Select value={countFilter} onValueChange={setCountFilter}>
             <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white">
               <SelectValue placeholder={t('vendors.all_counts')} />
@@ -340,8 +257,8 @@ const Vendors = () => {
           </Select>
         </div>
 
-        <div className="w-full lg:w-48">
-          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">{t('projects.order_by')}</label>
+        <div className="col-span-1 w-full lg:w-48">
+          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('projects.order_by')}</label>
           <Select value={sortFilter} onValueChange={setSortFilter}>
             <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white">
               <SelectValue placeholder={t('projects.order_by')} />
@@ -356,17 +273,17 @@ const Vendors = () => {
           </Select>
         </div>
 
-        <Button
-          variant="ghost"
-          className="h-11 px-4 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center"
-          onClick={resetFilters}
-        >
-          <FilterX className="h-4 w-4 mr-2" />
-          {t('projects.reset')}
-        </Button>
+        <div className="col-span-1 lg:col-span-1 flex justify-center lg:justify-start">
+          <Button
+            variant="ghost"
+            className="h-11 px-4 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center w-full lg:w-auto"
+            onClick={resetFilters}
+          >
+            <FilterX className="h-4 w-4 mr-2" />
+            {t('projects.reset')}
+          </Button>
+        </div>
       </div>
-
-      <TransparencyToggle />
 
       {filteredVendors.length > 0 && (
         viewMode === 'grid' ? (

@@ -55,7 +55,7 @@ const HeroSection = () => {
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mb-20 sm:mb-24">
-          <Button asChild size="lg" className="bg-white text-cardano-blue hover:bg-white/90 px-8 py-6 text-lg font-bold shadow-xl transition-all hover:scale-105">
+          <Button asChild size="lg" className="bg-white text-[#0033AD] hover:bg-white/90 px-8 py-6 text-lg font-bold shadow-xl transition-all hover:scale-105">
             <Link to="/overview">
               {t('teaser.hero.start_exploring')}
               <ChevronRight className="h-5 w-5 ml-2" />

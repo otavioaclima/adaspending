@@ -36,7 +36,7 @@ import {
 
 const Analytics = () => {
   const { t } = useLanguage();
-  const COLORS = ['#0033AD', '#1BAAD6', '#FF9F43', '#28C76F', '#EA5455', '#7367F0'];
+  const COLORS = ['hsl(var(--cardano-blue))', '#1BAAD6', '#FF9F43', '#28C76F', '#EA5455', '#7367F0'];
 
   // Calculate project status distribution
   const statusCounts = intersectProjects.reduce((acc: any, project) => {
@@ -110,25 +110,25 @@ const Analytics = () => {
       </div>
 
       {/* Quick Stats Grid - Cleaner and more consistent */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-10">
+      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-10">
         <StatCard 
           title={t('stats.total_projects')} 
           value={totalProjects} 
-          icon={<Briefcase className="h-5 w-5" />} 
-          className="bg-cardano-blue/10 dark:bg-cardano-blue/20 border-cardano-blue/30 dark:border-cardano-blue/40" 
+          icon={<Briefcase className="h-4 w-4 text-cardano-blue" />} 
+          className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md" 
         />
         <StatCard 
           title={t('stats.total_vendors')} 
           value={uniqueVendors} 
-          icon={<Users className="h-5 w-5" />} 
-          className="bg-cardano-teal/10 dark:bg-cardano-teal/20 border-cardano-teal/30 dark:border-cardano-teal/40" 
+          icon={<Users className="h-4 w-4 text-cardano-teal" />} 
+          className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md" 
         />
         <StatCard 
           title={t('stats.intersect_budget')} 
           value="₳345,531,529" 
           usdValue="214,229,548"
-          icon={<Wallet className="h-5 w-5" />} 
-          className="bg-purple-50 dark:bg-purple-900/10 border-purple-200 dark:border-purple-800/30" 
+          icon={<Wallet className="h-4 w-4 text-purple-400" />} 
+          className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md" 
         />
         <StatCard 
           title={t('stats.total_spent')} 
@@ -136,8 +136,8 @@ const Analytics = () => {
           usdValue="213,119,546"
           change="99.48%"
           positive={true}
-          icon={<Globe className="h-5 w-5" />} 
-          className="bg-orange-50 dark:bg-orange-900/10 border-orange-200 dark:border-orange-800/30" 
+          icon={<Globe className="h-4 w-4 text-orange-400" />} 
+          className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md" 
         />
         <StatCard 
           title={t('stats.remaining_budget')} 
@@ -145,8 +145,8 @@ const Analytics = () => {
           usdValue="1,110,001"
           change="0.52%"
           positive={false}
-          icon={<TrendingUp className="h-5 w-5" />} 
-          className="bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800/30" 
+          icon={<TrendingUp className="h-4 w-4 text-green-400" />} 
+          className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md" 
         />
       </div>
 
@@ -395,7 +395,7 @@ const Analytics = () => {
                   />
                   <Bar 
                     dataKey="spend" 
-                    fill="#0033AD" 
+                    fill="hsl(var(--cardano-blue))" 
                     radius={[4, 4, 0, 0]}
                     label={({ x, y, width, value, index }: any) => (
                       <text x={x + width / 2} y={y - 8} textAnchor="middle" className="fill-gray-800 dark:fill-gray-200" fontSize={12} fontWeight={800}>

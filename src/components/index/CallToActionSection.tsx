@@ -19,7 +19,7 @@ const CallToActionSection = () => {
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button asChild>
-            <Link to="/proposals">
+            <Link to="/projects">
               <Search className="h-4 w-4 mr-2" />
               {t('cta.search_proposals')}
             </Link>

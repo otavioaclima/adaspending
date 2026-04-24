@@ -43,6 +43,9 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --cardano-blue: 222 100% 45%;
+    --cardano-teal: 194 78% 55%;
   }
 
   .dark {
@@ -81,6 +84,9 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --cardano-blue: 215 95% 65%;
+    --cardano-teal: 190 90% 60%;
   }
 }
 
@@ -142,5 +148,48 @@
 
   .mind-map-node .mind-map-node {
     display: block !important;
+  }
+}
+
+@layer utilities {
+  .animate-spin-slow {
+    animation: spin 8s linear infinite;
+  }
+  
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-soft-pulse {
+    animation: soft-pulse 4s ease-in-out infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes soft-pulse {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1) blur(40px);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.2) blur(60px);
   }
 }

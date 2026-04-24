@@ -65,8 +65,8 @@ export default {
 				},
 				// Cardano specific colors
 				cardano: {
-					blue: '#0033AD',
-					teal: '#1BAAD6',
+					blue: 'hsl(var(--cardano-blue))',
+					teal: 'hsl(var(--cardano-teal))',
 					coral: '#FF5733',
 					light: '#F0F7FA',
 					dark: '#1A1F2C',

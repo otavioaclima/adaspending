@@ -200,7 +200,7 @@ const IntersectProjectsTable = () => {
                       variant={currentPage === pageNum ? "default" : "outline"}
                       size="sm"
                       onClick={() => setCurrentPage(pageNum)}
-                      className={`h-9 w-9 p-0 font-bold ${currentPage === pageNum ? 'bg-cardano-blue hover:bg-cardano-blue/90' : ''}`}
+                      className={`h-9 w-9 p-0 font-bold ${currentPage === pageNum ? 'bg-cardano-blue dark:bg-blue-600 hover:bg-cardano-blue/90 dark:hover:bg-blue-500' : ''}`}
                     >
                       {pageNum}
                     </Button>

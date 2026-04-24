@@ -137,9 +137,9 @@ const SpendingExplorer = () => {
 
   return (
     <Layout fullWidth>
-      <div className="flex h-[calc(100vh-120px)] bg-white dark:bg-gray-950 overflow-hidden border-t border-gray-100 dark:border-gray-800">
+      <div className="flex flex-col lg:flex-row lg:h-[calc(100vh-120px)] bg-white dark:bg-gray-950 overflow-y-auto lg:overflow-hidden border-t border-gray-100 dark:border-gray-800">
         {/* Site Sidebar Style */}
-        <div className="w-64 bg-[#000111] text-white flex flex-col shrink-0 border-r border-gray-800">
+        <div className="w-full lg:w-64 bg-[#000111] text-white flex flex-col shrink-0 border-r border-gray-800">
           <div className="p-4 border-b border-gray-800/50">
             <Button variant="ghost" className="w-full justify-start text-gray-400 hover:text-white hover:bg-white/5 gap-3 font-medium text-sm">
               <Home className="h-4 w-4" />
@@ -207,16 +207,16 @@ const SpendingExplorer = () => {
             </div>
           </div>
 
-          <div className="p-5 border-t border-gray-800 text-[10px] text-gray-600 leading-relaxed font-medium italic shrink-0">
+          <div className="p-5 border-t border-gray-800 text-[10px] text-gray-600 leading-relaxed font-medium italic shrink-0 hidden lg:block">
             {t('explorer.unofficial_disclaimer')}
           </div>
         </div>
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col bg-[#fcfdfe] dark:bg-gray-950 overflow-hidden">
+        <div className="flex-1 flex flex-col bg-[#fcfdfe] dark:bg-gray-950 lg:overflow-hidden min-h-[500px]">
           {/* Header */}
-          <div className="px-8 pt-6 pb-4 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shrink-0">
-            <div className="flex justify-between items-end mb-4">
+          <div className="px-4 lg:px-8 pt-6 pb-4 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shrink-0">
+            <div className="flex flex-col lg:flex-row justify-between lg:items-end gap-4 mb-4">
               <div>
                 <h2 className="text-xl font-black text-gray-900 dark:text-white mb-0.5 flex items-center gap-3">
                   {t('explorer.spending_by')} {breakdown === 'vendor' ? t('explorer.breakdown_vendor') : t('explorer.breakdown_project')}
@@ -228,8 +228,8 @@ const SpendingExplorer = () => {
                   {selectedYear} {t('explorer.budget_patterns')}
                 </p>
               </div>
-              <div className="text-right">
-                <div className="flex items-center justify-end gap-1.5 text-[8px] font-black text-gray-400 uppercase tracking-[0.2em] mb-0.5">
+              <div className="text-left lg:text-right">
+                <div className="flex items-center lg:justify-end gap-1.5 text-[8px] font-black text-gray-400 uppercase tracking-[0.2em] mb-0.5">
                   {t('explorer.official_allocated')}
                   <Info className="h-2.5 w-2.5" />
                 </div>
@@ -239,12 +239,12 @@ const SpendingExplorer = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between pt-4 border-t border-gray-50 gap-4">
               <div className="flex items-center gap-6">
-                <div className="flex items-center gap-3">
-                  <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('explorer.breakdown_label')}:</span>
+                <div className="flex items-center gap-3 w-full lg:w-auto">
+                  <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">{t('explorer.breakdown_label')}:</span>
                   <Select value={breakdown} onValueChange={(v: any) => setBreakdown(v)}>
-                    <SelectTrigger className="w-[160px] h-8 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-[11px] font-bold shadow-sm">
+                    <SelectTrigger className="w-full lg:w-[160px] h-8 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-[11px] font-bold shadow-sm">
                       <SelectValue placeholder={t('explorer.select_breakdown')} />
                     </SelectTrigger>
                     <SelectContent>
@@ -286,15 +286,14 @@ const SpendingExplorer = () => {
             </div>
           </div>
 
-          {/* Visualization Content */}
-          <div className="p-6 flex-1 overflow-hidden flex flex-col">
+          <div className="p-4 lg:p-6 flex-1 lg:overflow-hidden flex flex-col min-h-[500px] lg:min-h-0">
             {viewMode === 'treemap' ? (
-              <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 dark:border-gray-800 overflow-hidden flex-1 p-6">
+              <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 dark:border-gray-800 overflow-hidden flex-1 p-2 lg:p-6 h-[450px] lg:h-full min-h-[400px] lg:min-h-0">
                 <ResponsiveContainer width="100%" height="100%">
                   <Treemap
                     data={chartData}
                     dataKey="value"
-                    aspectRatio={16 / 9}
+                    aspectRatio={window.innerWidth < 768 ? 4 / 3 : 16 / 9}
                     stroke="#fff"
                     content={<CustomizedContent />}
                   >

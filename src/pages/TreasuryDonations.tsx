@@ -58,7 +58,7 @@ const TreasuryDonations = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
         <Card className="border-red-100 dark:border-red-900/50 bg-red-50/30 dark:bg-red-900/10">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-red-600 dark:text-red-400 uppercase tracking-wider flex items-center gap-2">

@@ -50,14 +50,14 @@ const Thermometer = () => {
               <span className="text-gray-500 dark:text-gray-400 font-medium">{t('thermometer.total_disbursed')}:</span>
               <div className="flex items-center gap-2">
                 <span className="font-black text-orange-600 dark:text-orange-500">₳{totalPaid.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
-                <span className="text-[10px] text-gray-400 font-bold">({paidPercent.toFixed(1)}%)</span>
+                <span className="text-[10px] text-gray-400 dark:text-gray-500 font-bold">({paidPercent.toFixed(1)}%)</span>
               </div>
             </div>
             <div className="flex justify-between items-center text-xs">
               <span className="text-gray-500 dark:text-gray-400 font-medium">{t('thermometer.pending_payment')}:</span>
               <div className="flex items-center gap-2">
                 <span className="font-black text-green-600 dark:text-green-500">₳{totalPending.toLocaleString(undefined, { maximumFractionDigits: 0 })}</span>
-                <span className="text-[10px] text-gray-400 font-bold">({pendingPercent.toFixed(1)}%)</span>
+                <span className="text-[10px] text-gray-400 dark:text-gray-500 font-bold">({pendingPercent.toFixed(1)}%)</span>
               </div>
             </div>
           </div>
