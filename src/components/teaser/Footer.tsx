@@ -15,7 +15,7 @@ const Footer = () => {
             <Link to="/">
               <img src="/assets/257db3dc-2214-4178-afd2-70760c3899c4.png" alt="ADAspending Graph Logo" className="h-16 hover:opacity-90 transition-opacity" />
             </Link>
-            <p className="mt-2 text-gray-400 text-sm max-w-md">
+            <p className="mt-2 text-gray-400 text-sm max-w-xl">
               {t('teaser.footer.description')}
             </p>
           </div>
