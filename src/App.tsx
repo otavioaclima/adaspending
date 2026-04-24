@@ -28,6 +28,8 @@ import Accessibility from "./pages/Accessibility";
 import About from "./pages/About";
 
 import { LanguageProvider } from "./contexts/LanguageContext";
+import FeedbackModal from "./components/layout/FeedbackModal";
+import ScrollToTop from "./components/layout/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +40,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollToTop />
           <ThemeProvider defaultTheme="light" storageKey="adaspending-theme">
             <AnalyticsProvider>
               <Routes>
@@ -63,6 +66,7 @@ const App = () => (
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              <FeedbackModal />
             </AnalyticsProvider>
           </ThemeProvider>
         </BrowserRouter>
