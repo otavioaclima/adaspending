@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { 
-  ArrowLeft, 
-  ExternalLink, 
-  CheckCircle, 
-  Clock, 
-  AlertCircle, 
-  Wallet, 
+import {
+  ArrowLeft,
+  ExternalLink,
+  CheckCircle,
+  Clock,
+  AlertCircle,
+  Wallet,
   Briefcase,
   FileText,
   Building,
@@ -45,11 +45,11 @@ const getStatusColor = (status: string) => {
 const ProjectDetail = () => {
   const { id } = useParams<{ id: string }>();
   const project = intersectProjects.find(p => p.id === id);
-  
+
   const paymentDates = useMemo(() => {
-    if (!project || !project.milestones || project.milestones.length === 0) 
+    if (!project || !project.milestones || project.milestones.length === 0)
       return { start: 'N/A', end: 'N/A' };
-    
+
     return {
       start: project.milestones[0].unlockDate,
       end: project.milestones[project.milestones.length - 1].unlockDate
@@ -70,17 +70,17 @@ const ProjectDetail = () => {
       </Layout>
     );
   }
-  
+
   const StatusIcon = getStatusIcon(project.status);
   const spentPercentage = (project.amountSpent / project.totalAmount) * 100;
-  
+
   return (
     <Layout>
       <div className="mb-8">
         <Link to="/projects" className="inline-flex items-center text-sm text-cardano-blue hover:underline mb-6 font-medium">
           <ArrowLeft className="h-4 w-4 mr-1" /> Back to Projects
         </Link>
-        
+
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-3">
@@ -95,14 +95,14 @@ const ProjectDetail = () => {
               {project.projectName}
             </h1>
             <p className="text-gray-500 dark:text-gray-400 flex items-center font-medium">
-              Vendor: 
+              Vendor:
               <Link to={`/vendors/${encodeURIComponent(project.vendor)}`} className="text-cardano-blue hover:underline ml-1.5 font-bold flex items-center">
                 {project.vendor}
                 <ExternalLink className="h-3 w-3 ml-1 opacity-50" />
               </Link>
             </p>
           </div>
-          
+
           <div className="flex gap-2 shrink-0">
             <Button asChild variant="outline" className="shadow-sm border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 dark:text-gray-300">
               <a href={`https://treasury.sundae.fi/instances/9e65e4ed7d6fd86fc4827d2b45da6d2c601fb920e8bfd794b8ecc619/project/${project.id}`} target="_blank" rel="noopener noreferrer">
@@ -113,7 +113,7 @@ const ProjectDetail = () => {
           </div>
         </div>
       </div>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-8">
@@ -142,8 +142,8 @@ const ProjectDetail = () => {
             </CardHeader>
             <CardContent className="pt-2">
               <div className="w-full bg-gray-100 dark:bg-gray-900 rounded-full h-5 overflow-hidden shadow-inner border border-gray-200 dark:border-gray-700 p-0.5">
-                <div 
-                   className="bg-gradient-to-r from-cardano-blue to-blue-400 h-full rounded-full transition-all duration-1000 ease-in-out relative shadow-sm" 
+                <div
+                  className="bg-gradient-to-r from-cardano-blue to-blue-400 h-full rounded-full transition-all duration-1000 ease-in-out relative shadow-sm"
                   style={{ width: `${spentPercentage}%` }}
                 >
                   <div className="absolute inset-0 bg-white/20 animate-pulse" />
@@ -163,24 +163,22 @@ const ProjectDetail = () => {
                 <h3 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">Project Milestones</h3>
                 <Badge variant="outline" className="bg-white dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700">{project.milestones.length} Phases</Badge>
               </div>
-              
+
               <div className="space-y-6 relative before:absolute before:left-6 before:top-4 before:bottom-4 before:w-0.5 before:bg-gray-100 dark:before:bg-gray-800">
                 {project.milestones.map((milestone, index) => (
-                  <Card key={milestone.id} className={`border-gray-200 dark:border-gray-800 transition-all hover:shadow-lg relative overflow-hidden ${
-                    milestone.status.toLowerCase() === 'withdrawn' ? 'bg-white dark:bg-gray-800/60' : 'bg-gray-50/50 dark:bg-gray-900/40 grayscale-[0.5]'
-                  }`}>
-                    <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${
-                      milestone.status.toLowerCase() === 'withdrawn' ? 'bg-green-500' : 'bg-gray-300'
-                    }`} />
-                    
+                  <Card key={milestone.id} className={`border-gray-200 dark:border-gray-800 transition-all hover:shadow-lg relative overflow-hidden ${milestone.status.toLowerCase() === 'withdrawn' ? 'bg-white dark:bg-gray-800/60' : 'bg-gray-50/50 dark:bg-gray-900/40 grayscale-[0.5]'
+                    }`}>
+                    <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${milestone.status.toLowerCase() === 'withdrawn' ? 'bg-green-500' : 'bg-gray-300'
+                      }`} />
+
                     <CardContent className="p-6">
                       <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-5">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{milestone.id}</span>
                             <Badge variant="outline" className={
-                              milestone.status.toLowerCase() === 'withdrawn' 
-                                ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border-green-200 dark:border-green-900/50 font-bold' 
+                              milestone.status.toLowerCase() === 'withdrawn'
+                                ? 'bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-400 border-green-200 dark:border-green-900/50 font-bold'
                                 : 'bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 font-bold'
                             }>
                               {milestone.status}
@@ -196,13 +194,13 @@ const ProjectDetail = () => {
                           </div>
                         </div>
                       </div>
-                      
+
                       {milestone.description && (
                         <div className="bg-gray-50/80 dark:bg-gray-900/80 p-4 rounded-xl border border-gray-100 dark:border-gray-700 mb-6 text-gray-600 dark:text-gray-400 leading-relaxed text-sm whitespace-pre-wrap">
                           {milestone.description}
                         </div>
                       )}
-                      
+
                       {milestone.evidence && (
                         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-5 border-t border-gray-100 dark:border-gray-700">
                           <div className="flex items-center gap-3">
@@ -220,10 +218,10 @@ const ProjectDetail = () => {
                                 </a>
                               </Button>
                             )}
-                            <Button asChild variant="secondary" size="sm" className="h-9 px-4 font-bold bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 shadow-sm dark:text-gray-300">
+                            <Button asChild variant="default" size="sm" className="h-9 px-4 font-bold bg-cardano-blue hover:bg-cardano-blue/90 shadow-md text-white">
                               <a href={milestone.evidence.link} target="_blank" rel="noopener noreferrer">
                                 <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-                                Evidence
+                                View Evidence
                               </a>
                             </Button>
                           </div>
@@ -236,7 +234,7 @@ const ProjectDetail = () => {
             </div>
           )}
         </div>
-        
+
         {/* Sidebar Summary */}
         <div className="space-y-6">
           <Card className="border-gray-200 dark:border-gray-800 shadow-xl overflow-hidden sticky top-24 ring-1 ring-black/[0.03] dark:ring-white/[0.03] bg-white dark:bg-gray-800">
@@ -305,7 +303,7 @@ const ProjectDetail = () => {
                     <div>
                       <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">Instance ID</p>
                       <p className="text-[11px] font-mono text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/50 p-2 rounded border border-gray-100 dark:border-gray-700 break-all">
-                        9e65e4ed7d6fd86fc4827d2b45da6d2c601fb920e8bfd794b8ecc619
+                        9e65e4ed7d6fd86fc4827d2b45da6d2c601fb920e8bfd794b8ecc9
                       </p>
                     </div>
                     <div>
