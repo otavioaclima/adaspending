@@ -193,3 +193,19 @@
     transform: scale(1.2) blur(60px);
   }
 }
+
+.cardano-icon {
+  width: 14px;
+  height: 14px;
+  background-color: hsl(var(--cardano-blue));
+  -webkit-mask-image: url(/assets/cardano-logo.svg);
+  mask-image: url(/assets/cardano-logo.svg);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.dark .cardano-icon {
+  background-color: white;
+}

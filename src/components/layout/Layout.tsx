@@ -57,7 +57,7 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
       {/* Disclaimer Top Bar */}
       <div className="bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 py-1.5 px-4 text-center transition-colors shrink-0">
         <div className="container mx-auto flex items-center justify-center gap-2">
-          <img src="/assets/cardano.ico" alt="Cardano logo" className="w-4 h-4 opacity-80" />
+          <div className="cardano-icon shrink-0" />
           <p className="text-[10px] md:text-[11px] font-medium text-gray-500 dark:text-gray-400">
             {t('layout.disclaimer')}
           </p>
