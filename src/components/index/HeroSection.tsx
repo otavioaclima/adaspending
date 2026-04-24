@@ -48,11 +48,11 @@ const HeroSection = () => {
           <div className="flex flex-wrap items-center gap-2 mt-4 text-[10px] uppercase tracking-wider font-bold text-gray-500">
             <TrendingUp className="h-3 w-3 text-blue-400" />
             <span>{t('hero.trending')}</span>
-            <button className="hover:text-cardano-blue transition-colors">#IOG</button>
-            <button className="hover:text-cardano-blue transition-colors">#Cardano Foundation</button>
-            <button className="hover:text-cardano-blue transition-colors">#Intersct</button>
-            <button className="hover:text-cardano-blue transition-colors">#Midgard</button>
-            <button className="hover:text-cardano-blue transition-colors">#Builder DAO</button>
+            <button className="hover:text-blue-400 transition-colors">#IOG</button>
+            <button className="hover:text-blue-400 transition-colors">#Cardano Foundation</button>
+            <button className="hover:text-blue-400 transition-colors">#Intersct</button>
+            <button className="hover:text-blue-400 transition-colors">#Midgard</button>
+            <button className="hover:text-blue-400 transition-colors">#Builder DAO</button>
           </div>
         </div>
 
