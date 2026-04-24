@@ -18,6 +18,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useLanguage } from '@/contexts/LanguageContext';
+import Footer from './Footer';
 
 const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fullWidth?: boolean }) => {
   const location = useLocation();
@@ -240,88 +241,7 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
         {children}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-gray-100 dark:bg-gray-900 border-t dark:border-gray-800 py-8 transition-colors">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-4 md:mb-0">
-              <Link to="/" className="flex items-center justify-center md:justify-start space-x-2">
-                {/* Light mode logo (dark text) */}
-                <img
-                  src="/assets/e4da4614-7cea-4f9c-853c-3f019f7932ca.png"
-                  alt="Cardano Treasury Explorer"
-                  className="h-8 w-auto dark:hidden"
-                />
-                {/* Dark mode logo (white text) */}
-                <img
-                  src="/assets/14b66eb5-72ae-42fe-94f7-70a49cc9ad69.png"
-                  alt="Cardano Treasury Explorer"
-                  className="h-8 w-auto hidden dark:block"
-                />
-                {/* ADAspending text removed */}
-              </Link>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 max-w-xl">
-                {t('footer.description').split('. ').map((sentence, i, arr) => (
-                  <span key={i}>
-                    {sentence}{i < arr.length - 1 ? '.' : ''}
-                    {i < arr.length - 1 && <br />}
-                  </span>
-                ))}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div>
-                <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">{t('footer.explore')}</h3>
-                <ul className="space-y-1">
-                  <li><Link to="/overview" className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue">{t('nav.overview')}</Link></li>
-
-                  <li><Link to="/projects" className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue">{t('nav.projects')}</Link></li>
-                  <li><Link to="/vendors" className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue">{t('nav.vendors')}</Link></li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">{t('footer.data')}</h3>
-                <ul className="space-y-1">
-                  <li><Link to="/explorer" className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue">{t('nav.explorer')}</Link></li>
-                  <li><Link to="/donations" className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue">{t('nav.donations')}</Link></li>
-                  <li><Link to="/analytics" className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue">{t('nav.analytics')}</Link></li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">{t('footer.resources')}</h3>
-                <ul className="space-y-1">
-                  <li><Link to="/about" className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue">{t('nav.about')}</Link></li>
-                  <li><Link to="/privacy" className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue">{t('footer.privacy')}</Link></li>
-                  <li><Link to="/accessibility" className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue">{t('footer.accessibility')}</Link></li>
-                </ul>
-              </div>
-
-              <div>
-                <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">{t('footer.contact')}</h3>
-                <ul className="space-y-2">
-                  <li>
-                    <a
-                      href="mailto:hello@adaspending.com"
-                      className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue flex items-center gap-2"
-                    >
-                      <Mail size={14} />
-                      {t('footer.email')}
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-8 pt-4 border-t border-gray-200 dark:border-gray-800 text-center text-sm text-gray-600 dark:text-gray-500">
-            <p>© {new Date().getFullYear()} ADAspending.com. {t('footer.copyright')}</p>
-            <p className="mt-1">{t('footer.opensource')}</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
       {/* Floating Feedback Modal */}
       {showFeedbackModal && (
         <div className="fixed bottom-6 right-6 z-[100] max-w-[320px] bg-cardano-blue text-white p-5 rounded-2xl shadow-2xl border border-white/20 animate-in fade-in slide-in-from-bottom-5 duration-500">

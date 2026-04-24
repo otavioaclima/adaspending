@@ -1,4 +1,4 @@
-# ADAspending.com - Cardano Treasury Explorer
+# ADAspending.com - Cardano Treasury Explorer v1
 
 ADAspending is a comprehensive transparency platform and open data source for tracking treasury spending on the Cardano blockchain. It provides community members, DReps, and stakeholders with detailed insights into how decentralized funds are allocated, utilized, and delivered.
 

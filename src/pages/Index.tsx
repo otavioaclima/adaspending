@@ -5,7 +5,7 @@ import StatsSection from '@/components/index/StatsSection';
 import FundRoundSection from '@/components/index/FundRoundSection';
 import ChartsSection from '@/components/index/ChartsSection';
 
-import CallToActionSection from '@/components/index/CallToActionSection';
+
 import ProposalBudgetComparator from "@/components/dashboard/ProposalBudgetComparator";
 import OverspendingPanel from "@/components/dashboard/OverspendingPanel";
 import TrackingAlerts from "@/components/dashboard/TrackingAlerts";
@@ -41,7 +41,7 @@ const Index = () => {
       <FundRoundSection />
       <ChartsSection />
 
-      <CallToActionSection />
+
     </Layout>
   );
 };

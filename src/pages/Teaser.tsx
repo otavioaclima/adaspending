@@ -8,7 +8,6 @@ import AboutSection from '@/components/teaser/AboutSection';
 import WhoWeAreSection from '@/components/teaser/WhoWeAreSection';
 import HowItWorksSection from '@/components/teaser/HowItWorksSection';
 import FaqSection from '@/components/teaser/FaqSection';
-import CtaSection from '@/components/teaser/CtaSection';
 import Footer from '@/components/teaser/Footer';
 
 const Teaser = () => {
@@ -22,7 +21,6 @@ const Teaser = () => {
       <HowItWorksSection />
       <WhoWeAreSection />
       <FaqSection />
-      <CtaSection />
       <Footer />
     </div>
   );
