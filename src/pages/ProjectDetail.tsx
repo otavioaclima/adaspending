@@ -197,9 +197,11 @@ const ProjectDetail = () => {
                         </div>
                       </div>
                       
-                      <div className="bg-gray-50/80 dark:bg-gray-900/80 p-4 rounded-xl border border-gray-100 dark:border-gray-700 mb-6 text-gray-600 dark:text-gray-400 leading-relaxed text-sm">
-                        {milestone.description}
-                      </div>
+                      {milestone.description && (
+                        <div className="bg-gray-50/80 dark:bg-gray-900/80 p-4 rounded-xl border border-gray-100 dark:border-gray-700 mb-6 text-gray-600 dark:text-gray-400 leading-relaxed text-sm whitespace-pre-wrap">
+                          {milestone.description}
+                        </div>
+                      )}
                       
                       {milestone.evidence && (
                         <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-5 border-t border-gray-100 dark:border-gray-700">
