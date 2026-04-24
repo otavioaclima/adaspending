@@ -79,7 +79,9 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 gap-2 px-2">
-                  <span className="text-lg">{lang === 'EN' ? '🇺🇸' : '🇧🇷'}</span>
+                  <span className="text-lg">
+                    {lang === 'EN' ? '🇺🇸' : lang === 'PT' ? '🇧🇷' : lang === 'ES' ? '🇪🇸' : '🇯🇵'}
+                  </span>
                   <span className="text-xs font-bold">{lang}</span>
                   <ChevronDown className="h-3 w-3 opacity-50" />
                 </Button>
@@ -98,6 +100,20 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
                 >
                   <span className="text-lg">🇧🇷</span>
                   <span>Português (PT)</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => setLang('ES')}
+                  className="hover:bg-white/10 cursor-pointer flex items-center gap-2"
+                >
+                  <span className="text-lg">🇪🇸</span>
+                  <span>Español (ES)</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => setLang('JP')}
+                  className="hover:bg-white/10 cursor-pointer flex items-center gap-2"
+                >
+                  <span className="text-lg">🇯🇵</span>
+                  <span>日本語 (JP)</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
