@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -30,6 +31,7 @@ import About from "./pages/About";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import FeedbackModal from "./components/layout/FeedbackModal";
 import ScrollToTop from "./components/layout/ScrollToTop";
+import BackToTop from "./components/layout/BackToTop";
 
 const queryClient = new QueryClient();
 
@@ -67,6 +69,7 @@ const App = () => (
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <FeedbackModal />
+              <BackToTop />
             </AnalyticsProvider>
           </ThemeProvider>
         </BrowserRouter>
