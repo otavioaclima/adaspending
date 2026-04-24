@@ -1,3 +1,4 @@
+import React from 'react';
 import { useTheme } from '@/components/theme-provider';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
@@ -73,16 +74,17 @@ const TeaserHeader = () => {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        className="text-white hover:bg-white/10 transition-colors"
-        title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-      >
-        {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-        <span className="sr-only">Toggle theme</span>
-      </Button>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          className="text-white hover:bg-white/10 transition-colors"
+          title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </div>
     </header>
   );
 };
