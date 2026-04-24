@@ -5,8 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const CtaSection = () => {
+  const { t } = useLanguage();
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -28,15 +30,15 @@ const CtaSection = () => {
       setSubmitted(true);
       form.reset();
       toast({
-        title: "Subscription successful",
-        description: "Thank you for subscribing to our newsletter!",
+        title: t('teaser.cta.success_title'),
+        description: t('teaser.cta.success_desc'),
         variant: "default",
       });
     } catch (error) {
       console.error('Error subscribing:', error);
       toast({
-        title: "Subscription failed",
-        description: "There was an error subscribing. Please try again later.",
+        title: t('teaser.cta.fail_title'),
+        description: t('teaser.cta.fail_desc'),
         variant: "destructive",
       });
     } finally {
@@ -48,11 +50,11 @@ const CtaSection = () => {
     <section className="bg-cardano-blue py-20 px-4">
       <div className="container mx-auto max-w-3xl text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">
-          Stay Tuned
+          {t('teaser.cta.title')}
         </h2>
         
         <p className="text-xl text-white/90 mb-8">
-          Be the first to know when ADAspending launches. Subscribe to our newsletter for updates on the platform release.
+          {t('teaser.cta.subtitle')}
         </p>
         
         <div className="max-w-md mx-auto">
@@ -60,7 +62,7 @@ const CtaSection = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <div className="flex flex-col sm:flex-row gap-2">
                 <Input
-                  placeholder="Enter your email address"
+                  placeholder={t('teaser.cta.input_placeholder')}
                   className="bg-white/10 border-white/30 text-white placeholder:text-white/70"
                   {...form.register('email', { required: true, pattern: /^\S+@\S+$/i })}
                   disabled={isSubmitting}
@@ -70,17 +72,17 @@ const CtaSection = () => {
                   className="bg-white text-cardano-blue hover:bg-white/90"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? 'Subscribing...' : 'Subscribe'}
+                  {isSubmitting ? t('teaser.cta.subscribing') : t('teaser.cta.subscribe')}
                   {!isSubmitting && <ChevronRight className="ml-1 h-4 w-4" />}
                 </Button>
               </div>
               {form.formState.errors.email && (
-                <p className="text-red-300 text-sm">Please enter a valid email address</p>
+                <p className="text-red-300 text-sm">{t('teaser.cta.invalid_email')}</p>
               )}
             </form>
           ) : (
             <div className="bg-white/10 p-4 rounded-md">
-              <p className="text-white">Thank you for subscribing! We'll notify you when ADAspending launches.</p>
+              <p className="text-white">{t('teaser.cta.success_msg')}</p>
             </div>
           )}
         </div>

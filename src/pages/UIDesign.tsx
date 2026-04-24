@@ -200,7 +200,7 @@ const screenDefinitions: ScreenDef[] = [
   },
   {
     title: 'Dashboard',
-    route: '/dashboard',
+    route: '/overview',
     description: 'Central analytics hub with stats, charts, alerts, and proposal overview.',
     render: () => (
       <div className="bg-background">
@@ -734,7 +734,7 @@ const UIDesign: React.FC = () => {
         <div className="mb-6">
           <h2 className="text-2xl font-bold text-foreground mb-2">Screen Mockups</h2>
           <p className="text-muted-foreground text-sm">
-            Click "Ampliar" on any screen to view it in full size with navigation between screens.
+            Click "Zoom" on any screen to view it in full size with navigation between screens.
           </p>
         </div>
 
@@ -769,7 +769,7 @@ const UIDesign: React.FC = () => {
                     className="flex items-center gap-1 px-2 py-1 rounded bg-cardano-blue text-white text-[10px] font-medium hover:bg-cardano-blue/80 transition-colors shrink-0"
                   >
                     <Maximize2 className="h-3 w-3" />
-                    Ampliar
+                    Zoom
                   </button>
                 </div>
               </div>
@@ -850,10 +850,10 @@ const UIDesign: React.FC = () => {
                 <div className="flex items-center justify-between mt-2 pb-3 border-b">
                   <Button variant="outline" size="sm" onClick={goToPrev} disabled={expandedIndex === 0} className="text-xs gap-1">
                     <ChevronLeft className="h-3 w-3" />
-                    {expandedIndex !== null && expandedIndex > 0 ? screenDefinitions[expandedIndex - 1].title : 'Anterior'}
+                    {expandedIndex !== null && expandedIndex > 0 ? screenDefinitions[expandedIndex - 1].title : 'Previous'}
                   </Button>
                   <Button variant="outline" size="sm" onClick={goToNext} disabled={expandedIndex === screenDefinitions.length - 1} className="text-xs gap-1">
-                    {expandedIndex !== null && expandedIndex < screenDefinitions.length - 1 ? screenDefinitions[expandedIndex + 1].title : 'Próximo'}
+                    {expandedIndex !== null && expandedIndex < screenDefinitions.length - 1 ? screenDefinitions[expandedIndex + 1].title : 'Next'}
                     <ChevronRight className="h-3 w-3" />
                   </Button>
                 </div>

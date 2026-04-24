@@ -1,6 +1,7 @@
 
 import React from 'react';
 import Layout from '@/components/layout/Layout';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { 
   BarChart, 
@@ -23,6 +24,7 @@ import { intersectProjects } from '@/data/intersectData';
 import { BarChart3, TrendingUp, PieChart as PieChartIcon, Activity } from 'lucide-react';
 
 const Analytics = () => {
+  const { t } = useLanguage();
   const COLORS = ['#0033AD', '#1BAAD6', '#FF9F43', '#28C76F', '#EA5455', '#7367F0'];
 
   // Calculate project status distribution
@@ -53,8 +55,8 @@ const Analytics = () => {
   return (
     <Layout>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Treasury Analytics</h1>
-        <p className="text-gray-600 dark:text-gray-400">Deep dive into Cardano Treasury spending, project distribution, and financial metrics.</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t('analytics.title')}</h1>
+        <p className="text-gray-600 dark:text-gray-400">{t('analytics.description')}</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -63,9 +65,9 @@ const Analytics = () => {
           <CardHeader>
             <div className="flex items-center gap-2">
               <PieChartIcon className="h-5 w-5 text-cardano-blue" />
-              <CardTitle>Funding by Category</CardTitle>
+              <CardTitle>{t('analytics.funding_category')}</CardTitle>
             </div>
-            <CardDescription>Distribution of approved proposals by ecosystem category</CardDescription>
+            <CardDescription>{t('analytics.funding_category_desc')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-80">
@@ -101,9 +103,9 @@ const Analytics = () => {
           <CardHeader>
             <div className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5 text-cardano-teal" />
-              <CardTitle>Historical Fund Rounds</CardTitle>
+              <CardTitle>{t('analytics.historical_rounds')}</CardTitle>
             </div>
-            <CardDescription>Budget allocation and proposal volume per fund round</CardDescription>
+            <CardDescription>{t('analytics.historical_rounds_desc')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-80">
@@ -117,8 +119,8 @@ const Analytics = () => {
                     contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
                     itemStyle={{ color: 'var(--foreground)' }}
                   />
-                  <Bar yAxisId="left" dataKey="totalBudget" name="Budget (ADA)" fill="#0033AD" radius={[4, 4, 0, 0]} />
-                  <Bar yAxisId="right" dataKey="proposals" name="Proposals" fill="#1BAAD6" radius={[4, 4, 0, 0]} />
+                  <Bar yAxisId="left" dataKey="totalBudget" name={`${t('projects.budget_label')} (ADA)`} fill="#0033AD" radius={[4, 4, 0, 0]} />
+                  <Bar yAxisId="right" dataKey="proposals" name={t('analytics.proposals')} fill="#1BAAD6" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -132,9 +134,9 @@ const Analytics = () => {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Activity className="h-5 w-5 text-orange-500" />
-              <CardTitle>Project Status Breakdown</CardTitle>
+              <CardTitle>{t('analytics.status_breakdown')}</CardTitle>
             </div>
-            <CardDescription>Current delivery status of Intersect Treasury projects</CardDescription>
+            <CardDescription>{t('analytics.status_breakdown_desc')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-80">
@@ -170,9 +172,9 @@ const Analytics = () => {
           <CardHeader>
             <div className="flex items-center gap-2">
               <TrendingUp className="h-5 w-5 text-green-600" />
-              <CardTitle>Top Vendors by Budget</CardTitle>
+              <CardTitle>{t('analytics.top_vendors')}</CardTitle>
             </div>
-            <CardDescription>Vendors with the highest total ADA allocation</CardDescription>
+            <CardDescription>{t('analytics.top_vendors_desc')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-80">
@@ -184,7 +186,7 @@ const Analytics = () => {
                   <Tooltip 
                     contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
                     itemStyle={{ color: 'var(--foreground)' }}
-                    formatter={(value: number) => [`₳${value.toLocaleString()}`, 'Total Budget']}
+                    formatter={(value: number) => [`₳${value.toLocaleString()}`, t('projects.budget_label')]}
                     cursor={{fill: 'transparent'}}
                   />
                   <Bar dataKey="amount" fill="#7367F0" radius={[0, 4, 4, 0]} barSize={20} />

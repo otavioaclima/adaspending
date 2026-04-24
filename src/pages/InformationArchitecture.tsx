@@ -17,7 +17,7 @@ const sections = [
       { name: 'Visual Elements', desc: 'Platform screenshots and interactive previews showcasing real data visualizations.' },
       { name: 'About Section', desc: 'Project mission, vision, and the problem it solves for the Cardano ecosystem.' },
       { name: 'How It Works', desc: 'Step-by-step guide: Search → Explore → Analyze → Participate.' },
-      { name: 'Who We Are (Quem Somos)', desc: 'Team profiles and community involvement.' },
+      { name: 'Who We Are', desc: 'Team profiles and community involvement.' },
       { name: 'FAQ', desc: 'Accordion-based frequently asked questions addressing common queries.' },
       { name: 'CTA Section', desc: 'Final call-to-action encouraging exploration or newsletter signup.' },
       { name: 'Footer', desc: 'Social links, legal information, and community resources.' },
@@ -26,7 +26,7 @@ const sections = [
   {
     icon: LayoutDashboard,
     title: 'Dashboard (Overview)',
-    route: '/dashboard',
+    route: '/overview',
     description: 'The central analytics hub providing a comprehensive snapshot of Cardano Treasury spending. Combines high-level statistics with detailed analysis panels.',
     subsections: [
       { name: 'Hero / Search Bar', desc: 'Welcome message with a prominent search field for quick access to any proposal or recipient.' },

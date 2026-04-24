@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Separator } from "@/components/ui/separator";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type Props = {
   totalFunded: number;
@@ -13,6 +14,7 @@ const VendorFundingStats = ({
   proposalsSubmitted,
   proposalsApproved,
 }: Props) => {
+  const { t } = useLanguage();
   const rejectedProposals = proposalsSubmitted - proposalsApproved;
   const successRate =
     proposalsSubmitted > 0
@@ -22,7 +24,7 @@ const VendorFundingStats = ({
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-sm text-gray-500 mb-1">Total Funding Received</p>
+        <p className="text-sm text-gray-500 mb-1">{t('vendors.total_funding')}</p>
         <p className="text-2xl font-bold text-cardano-blue">
           {totalFunded.toLocaleString()} ADA
         </p>
@@ -30,22 +32,22 @@ const VendorFundingStats = ({
       <Separator />
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <p className="text-sm text-gray-500 mb-1">Proposals Submitted</p>
+          <p className="text-sm text-gray-500 mb-1">{t('vendors.proposals_submitted')}</p>
           <p className="text-xl font-bold text-gray-900">{proposalsSubmitted}</p>
         </div>
         <div>
-          <p className="text-sm text-gray-500 mb-1">Proposals Approved</p>
+          <p className="text-sm text-gray-500 mb-1">{t('vendors.proposals_approved')}</p>
           <p className="text-xl font-bold text-green-600">{proposalsApproved}</p>
         </div>
       </div>
       <Separator />
       <div>
-        <p className="text-sm text-gray-500 mb-1">Rejected Proposals</p>
+        <p className="text-sm text-gray-500 mb-1">{t('vendors.rejected_proposals')}</p>
         <p className="font-medium text-red-500">{rejectedProposals}</p>
       </div>
       <Separator />
       <div>
-        <p className="text-sm text-gray-500 mb-1">Success Rate</p>
+        <p className="text-sm text-gray-500 mb-1">{t('vendors.success_rate')}</p>
         <div className="flex items-center gap-2">
           <div className="w-full bg-gray-200 rounded-full h-4">
             <div

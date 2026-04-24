@@ -7,7 +7,7 @@ interface SpendingMapProps {
   height?: string;
 }
 
-const MAPBOX_DEFAULT_TOKEN = ""; // (fallback vazio se não achar a env variable)
+const MAPBOX_DEFAULT_TOKEN = ""; // (empty fallback if env variable not found)
 
 const SpendingMap: React.FC<SpendingMapProps> = ({ height = "100%" }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -47,7 +47,7 @@ const SpendingMap: React.FC<SpendingMapProps> = ({ height = "100%" }) => {
       });
     });
 
-    // Efeito de rotação automática do globo
+    // Automatic globe rotation effect
     const secondsPerRevolution = 240;
     const maxSpinZoom = 5;
     const slowSpinZoom = 3;
@@ -76,7 +76,7 @@ const SpendingMap: React.FC<SpendingMapProps> = ({ height = "100%" }) => {
     map.current.on("moveend", () => { spinGlobe(); });
     spinGlobe();
 
-    // Limpeza ao desmontar
+    // Cleanup on unmount
     return () => {
       map.current?.remove();
     };

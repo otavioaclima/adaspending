@@ -18,6 +18,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Layout from '@/components/layout/Layout';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { intersectProjects } from '@/data/intersectData';
 
 const getStatusIcon = (status: string) => {
@@ -43,6 +44,7 @@ const getStatusColor = (status: string) => {
 };
 
 const ProjectDetail = () => {
+  const { t } = useLanguage();
   const { id } = useParams<{ id: string }>();
   const project = intersectProjects.find(p => p.id === id);
 
@@ -61,10 +63,10 @@ const ProjectDetail = () => {
       <Layout>
         <div className="flex flex-col items-center justify-center py-20">
           <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
-          <h1 className="text-2xl font-bold mb-2 dark:text-white">Project Not Found</h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">The project you're looking for doesn't exist in the database.</p>
+          <h1 className="text-2xl font-bold mb-2 dark:text-white">{t('project.not_found')}</h1>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">{t('project.not_found_desc')}</p>
           <Button asChild>
-            <Link to="/projects">Back to Projects</Link>
+            <Link to="/projects">{t('project.back_to_projects')}</Link>
           </Button>
         </div>
       </Layout>
@@ -78,7 +80,7 @@ const ProjectDetail = () => {
     <Layout>
       <div className="mb-8">
         <Link to="/projects" className="inline-flex items-center text-sm text-cardano-blue hover:underline mb-6 font-medium">
-          <ArrowLeft className="h-4 w-4 mr-1" /> Back to Projects
+          <ArrowLeft className="h-4 w-4 mr-1" /> {t('project.back_to_projects')}
         </Link>
 
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
@@ -107,7 +109,7 @@ const ProjectDetail = () => {
             <Button asChild variant="outline" className="shadow-sm border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 dark:text-gray-300">
               <a href={`https://treasury.sundae.fi/instances/9e65e4ed7d6fd86fc4827d2b45da6d2c601fb920e8bfd794b8ecc619/project/${project.id}`} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-4 w-4 mr-2" />
-                Sundae Explorer
+                {t('project.sundae_explorer')}
               </a>
             </Button>
           </div>
@@ -122,12 +124,12 @@ const ProjectDetail = () => {
             <CardHeader className="bg-gray-50/50 dark:bg-gray-900/50 border-b border-gray-100 dark:border-gray-700">
               <CardTitle className="text-lg font-bold flex items-center gap-2 dark:text-white">
                 <FileText className="h-5 w-5 text-cardano-blue" />
-                Project Overview
+                {t('project.overview')}
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
               <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg whitespace-pre-wrap">
-                {project.description || "No detailed description available for this project."}
+                {project.description || t('project.no_description')}
               </p>
             </CardContent>
           </Card>
@@ -136,7 +138,7 @@ const ProjectDetail = () => {
           <Card className="border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-gray-800/40">
             <CardHeader className="pb-2">
               <div className="flex justify-between items-center">
-                <CardTitle className="text-lg font-bold dark:text-white">Execution Progress</CardTitle>
+                <CardTitle className="text-lg font-bold dark:text-white">{t('project.execution_progress')}</CardTitle>
                 <span className="text-2xl font-black text-cardano-blue">{spentPercentage.toFixed(1)}%</span>
               </div>
             </CardHeader>
@@ -150,8 +152,8 @@ const ProjectDetail = () => {
                 </div>
               </div>
               <div className="flex justify-between mt-3 text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest px-1">
-                <span>Funds Allocated</span>
-                <span>Funds Distributed</span>
+                <span>{t('project.funds_allocated')}</span>
+                <span>{t('project.funds_distributed')}</span>
               </div>
             </CardContent>
           </Card>
@@ -160,8 +162,8 @@ const ProjectDetail = () => {
           {project.milestones && project.milestones.length > 0 && (
             <div className="space-y-6">
               <div className="flex items-center justify-between px-1">
-                <h3 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">Project Milestones</h3>
-                <Badge variant="outline" className="bg-white dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700">{project.milestones.length} Phases</Badge>
+                <h3 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">{t('project.milestones')}</h3>
+                <Badge variant="outline" className="bg-white dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700">{t('project.phases').replace('{count}', project.milestones.length.toString())}</Badge>
               </div>
 
               <div className="space-y-6 relative before:absolute before:left-6 before:top-4 before:bottom-4 before:w-0.5 before:bg-gray-100 dark:before:bg-gray-800">
@@ -221,7 +223,7 @@ const ProjectDetail = () => {
                             <Button asChild variant="default" size="sm" className="h-9 px-4 font-bold bg-cardano-blue hover:bg-cardano-blue/90 shadow-md text-white">
                               <a href={milestone.evidence.link} target="_blank" rel="noopener noreferrer">
                                 <ExternalLink className="h-3.5 w-3.5 mr-1.5" />
-                                View Evidence
+                                {t('project.view_evidence')}
                               </a>
                             </Button>
                           </div>
@@ -241,15 +243,15 @@ const ProjectDetail = () => {
             <CardHeader className="bg-gray-900 text-white pb-6 pt-7">
               <div className="flex items-center gap-2 opacity-50 mb-1">
                 <Briefcase className="h-3 w-3" />
-                <span className="text-[10px] font-black uppercase tracking-[0.3em]">Project Metrics</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.3em]">{t('project.metrics')}</span>
               </div>
-              <CardTitle className="text-xl font-bold tracking-tight">Financial Summary</CardTitle>
+              <CardTitle className="text-xl font-bold tracking-tight">{t('project.financial_summary')}</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <div className="divide-y divide-gray-100 dark:divide-gray-700">
                 {/* Total Budget */}
                 <div className="p-6 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-900/50">
-                  <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Total Budget</p>
+                  <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">{t('project.total_budget')}</p>
                   <div className="flex items-baseline gap-2">
                     <span className="text-3xl font-black text-gray-900 dark:text-white tracking-tighter">₳{project.totalAmount.toLocaleString()}</span>
                   </div>
@@ -270,14 +272,14 @@ const ProjectDetail = () => {
                       <p className="text-base font-bold text-gray-900 dark:text-white truncate group-hover:text-cardano-blue transition-colors">
                         {project.vendor}
                       </p>
-                      <p className="text-[10px] font-black text-cardano-blue uppercase tracking-tighter mt-0.5">Official Partner</p>
+                      <p className="text-[10px] font-black text-cardano-blue uppercase tracking-tighter mt-0.5">{t('project.official_partner')}</p>
                     </div>
                   </Link>
                 </div>
 
                 {/* Timeline */}
                 <div className="p-6">
-                  <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-5">Payment Timeline</p>
+                  <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-5">{t('project.payment_timeline')}</p>
                   <div className="space-y-6 relative before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-100 dark:before:bg-gray-700">
                     <div className="flex gap-4 relative">
                       <div className="w-4 h-4 rounded-full border-4 border-white dark:border-gray-800 bg-cardano-blue shadow-sm z-10" />
@@ -289,7 +291,7 @@ const ProjectDetail = () => {
                     <div className="flex gap-4 relative">
                       <div className="w-4 h-4 rounded-full border-4 border-white dark:border-gray-800 bg-gray-200 dark:bg-gray-600 shadow-sm z-10" />
                       <div>
-                        <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-tighter">Payment End</p>
+                        <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-tighter">{t('project.payment_end')}</p>
                         <p className="text-sm font-bold text-gray-900 dark:text-white">{paymentDates.end}</p>
                       </div>
                     </div>
@@ -298,7 +300,7 @@ const ProjectDetail = () => {
 
                 {/* Technical Details */}
                 <div className="p-6">
-                  <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">Technical Details</p>
+                  <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">{t('project.technical_details')}</p>
                   <div className="space-y-3">
                     <div>
                       <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">Instance ID</p>
@@ -317,8 +319,8 @@ const ProjectDetail = () => {
 
                 {/* Contract Source */}
                 <div className="p-6 bg-gray-50/80 dark:bg-gray-900/30">
-                  <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">Treasury Source</p>
-                  <div className="flex items-center gap-3 p-4 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                  <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">{t('project.treasury_source')}</p>
+                  <Link to="/" className="flex items-center gap-3 p-4 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm hover:opacity-90 transition-opacity">
                     <div className="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center overflow-hidden shrink-0">
                       <img src="/assets/e4da4614-7cea-4f9c-853c-3f019f7932ca.png" className="w-7 h-7 object-contain brightness-0 invert" />
                     </div>
@@ -326,7 +328,7 @@ const ProjectDetail = () => {
                       <p className="text-xs font-black text-gray-900 dark:text-white">Intersect MBO</p>
                       <p className="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-tighter">Contract Instance 1</p>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               </div>
             </CardContent>

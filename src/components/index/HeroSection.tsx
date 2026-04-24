@@ -1,10 +1,13 @@
 
 import React from 'react';
-import { Search } from 'lucide-react';
+import { Search, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
+import { useLanguage } from '@/contexts/LanguageContext';
+
 const HeroSection = () => {
+  const { t } = useLanguage();
   return (
     <section className="relative overflow-hidden bg-[#000111] rounded-3xl text-white mb-10 shadow-2xl">
       {/* Decorative background elements */}
@@ -18,16 +21,15 @@ const HeroSection = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
             </span>
-            LIVE BLOCKCHAIN DATA
+            {t('hero.live_data')}
           </div>
 
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold mb-4 tracking-tight leading-tight">
-            Cardano <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cardano-blue">Treasury</span> Explorer
+            {t('hero.title_part1')} <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cardano-blue">{t('hero.title_part2')}</span> {t('hero.title_part3')}
           </h1>
 
           <p className="text-base md:text-lg mb-8 text-gray-400 leading-relaxed max-w-xl">
-            Real-time transparency and deep insights into the Cardano community funds.
-            Track every ADA flow from the mainnet directly.
+            {t('hero.subtitle')}
           </p>
 
           <div className="w-full max-w-md flex flex-col md:flex-row gap-2 p-1.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl">
@@ -35,21 +37,21 @@ const HeroSection = () => {
               <Search className="h-4 w-4 text-gray-400 mr-2" />
               <Input
                 className="bg-transparent border-none focus-visible:ring-0 placeholder:text-gray-500 text-white text-base h-10"
-                placeholder="Search vendors or projects..."
+                placeholder={t('hero.search_placeholder')}
               />
             </div>
             <Button className="bg-cardano-blue hover:bg-blue-600 text-white px-6 h-10 rounded-lg font-bold transition-all text-sm">
-              Search
+              {t('hero.search_button')}
             </Button>
           </div>
 
-          <div className="flex flex-wrap gap-3 mt-4 text-[10px] uppercase tracking-wider font-bold text-gray-500">
-            <span>Trending:</span>
+          <div className="flex flex-wrap items-center gap-2 mt-4 text-[10px] uppercase tracking-wider font-bold text-gray-500">
+            <TrendingUp className="h-3 w-3 text-blue-400" />
+            <span>{t('hero.trending')}</span>
             <button className="hover:text-cardano-blue transition-colors">#IOG</button>
             <button className="hover:text-cardano-blue transition-colors">#Cardano Foundation</button>
             <button className="hover:text-cardano-blue transition-colors">#Intersct</button>
             <button className="hover:text-cardano-blue transition-colors">#Midgard</button>
-            <button className="hover:text-cardano-blue transition-colors">#Catalyst</button>
             <button className="hover:text-cardano-blue transition-colors">#Builder DAO</button>
           </div>
         </div>

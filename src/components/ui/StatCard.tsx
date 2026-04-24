@@ -5,27 +5,25 @@ import { cn } from '@/lib/utils';
 interface StatCardProps {
   title: string;
   value: string | number;
+  usdValue?: string;
   change?: string;
   positive?: boolean;
   icon?: React.ReactNode;
   className?: string;
 }
 
-const StatCard = ({ title, value, change, positive, icon, className }: StatCardProps) => {
+const StatCard = ({ title, value, usdValue, change, positive, icon, className }: StatCardProps) => {
   return (
-    <div className={cn("stat-card", className)}>
-      <div className="flex justify-between items-start">
-        <h3 className="text-sm font-medium text-gray-500">{title}</h3>
-        {icon && <div className="text-gray-400">{icon}</div>}
+    <div className={cn("stat-card flex flex-col justify-between", className)}>
+      <div className="flex justify-between items-start mb-2">
+        <h3 className="text-[10px] font-black text-gray-500/70 dark:text-gray-400/70 uppercase tracking-widest leading-none">{title}</h3>
+        {icon && <div className="text-gray-400 dark:text-gray-500 opacity-80">{icon}</div>}
       </div>
-      <div className="flex items-end justify-between">
-        <div className="text-2xl font-bold">{value}</div>
-        {change && (
-          <div className={cn(
-            "text-xs font-medium flex items-center",
-            positive ? "text-green-600" : "text-red-600"
-          )}>
-            {positive ? "↑" : "↓"} {change}
+      <div className="space-y-1">
+        <div className="text-xl font-black text-gray-900 dark:text-white tracking-tight leading-none">{value}</div>
+        {usdValue && (
+          <div className="text-[11px] font-bold text-gray-500/80 dark:text-gray-400/80 tracking-tight">
+            ≈ ${usdValue}
           </div>
         )}
       </div>

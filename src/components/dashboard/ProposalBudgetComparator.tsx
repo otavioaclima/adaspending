@@ -1,39 +1,44 @@
 import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { useQuery } from "@tanstack/react-query";
-import { treasuryStats, proposals } from "@/data/mockData";
-import { getNetworkState, lovelaceToAda } from "@/services/cardanoscan";
+import { intersectProjects } from "@/data/intersectData";
 import { BarChart3 } from "lucide-react";
 
+import { useLanguage } from "@/contexts/LanguageContext";
+
 const ProposalBudgetComparator = () => {
-  // Budget for Intersect Treasury Contracts 1
-  const totalBudget = treasuryStats.totalFundsAwarded;
-  const spent = treasuryStats.totalSpent;
-  const remaining = treasuryStats.remainingBudget;
+  const { t } = useLanguage();
+  // Treasury constants - Consistent with StatsSection and Thermometer
+  const totalBudget = 345531529;
+  const baselineSpent = 168789504;
+  const trackedSpent = intersectProjects.reduce((sum, p) => sum + p.amountSpent, 0);
+  const spent = baselineSpent + trackedSpent;
+  const remaining = totalBudget - spent;
+  
   const spentPercent = (spent / totalBudget) * 100;
+  const remainingPercent = (remaining / totalBudget) * 100;
 
   return (
-    <Card>
+    <Card className="border-none shadow-md bg-white dark:bg-gray-800 transition-colors">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-lg font-bold">
           <BarChart3 className="inline-block h-5 w-5 mr-2 text-cardano-blue" />
-          Intersect Treasury Budget
+          {t('overview.intersect_treasury_budget')}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span className="text-sm text-gray-600 dark:text-gray-400">Total Budget</span>
-              <span className="text-sm font-bold text-cardano-blue">{totalBudget.toLocaleString()} ADA</span>
+        <div className="space-y-4 pt-2">
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">{t('overview.total_budget')}</span>
+              <span className="text-sm font-black text-cardano-blue">₳{totalBudget.toLocaleString()}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-sm text-gray-600 dark:text-gray-400">Total Spent</span>
-              <span className="text-sm font-bold text-orange-600">{spent.toLocaleString()} ADA ({spentPercent.toFixed(2)}%)</span>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">{t('stats.total_spent')}</span>
+              <span className="text-sm font-black text-orange-600">₳{spent.toLocaleString()} ({spentPercent.toFixed(2)}%)</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-sm text-gray-600 dark:text-gray-400">Remaining Budget</span>
-              <span className="text-sm font-bold text-green-600">{remaining.toLocaleString()} ADA</span>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">{t('stats.remaining_budget')}</span>
+              <span className="text-sm font-black text-green-600">₳{remaining.toLocaleString()} ({remainingPercent.toFixed(2)}%)</span>
             </div>
           </div>
         </div>

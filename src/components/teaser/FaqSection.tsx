@@ -7,37 +7,40 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const FaqSection = () => {
+  const { t } = useLanguage();
+
   const faqs = [
     {
-      question: "What is ADAspending?",
-      answer: "ADAspending is an open data source for tracking treasury spending on the Cardano blockchain. We provide transparency and accountability for community funds by making all spending data accessible and easy to understand."
+      question: t('teaser.faq.q1.q'),
+      answer: t('teaser.faq.q1.a')
     },
     {
-      question: "Is ADAspending an open-source project?",
-      answer: "ADAspending is a 100% open-source project."
+      question: t('teaser.faq.q2.q'),
+      answer: t('teaser.faq.q2.a')
     },
     {
-      question: "How does ADAspending get its data?",
-      answer: "All data is sourced directly from the public Cardano blockchain. We monitor treasury transactions and categorize them to provide insights into how funds are being used across different industries and vendors."
+      question: t('teaser.faq.q3.q'),
+      answer: t('teaser.faq.q3.a')
     },
     {
-      question: "When will ADAspending launch?",
-      answer: "ADAspending is currently in development and will be launching soon. Follow us on social media to stay updated on our progress and launch date."
+      question: t('teaser.faq.q4.q'),
+      answer: t('teaser.faq.q4.a')
     },
     {
-      question: "Can I contribute to ADAspending?",
-      answer: "Absolutely! ADAspending is a 100% open-source project. Once we launch, you can contribute to our codebase, suggest features, or help improve our data categorization."
+      question: t('teaser.faq.q5.q'),
+      answer: t('teaser.faq.q5.a')
     },
     {
-      question: "How can I use ADAspending data?",
-      answer: "Once launched, you'll be able to search and explore Cardano treasury spending by industry and recipient, track funding across time and categories, and analyze the allocation of community funds for greater transparency."
+      question: t('teaser.faq.q6.q'),
+      answer: t('teaser.faq.q6.a')
     }
   ];
 
   return (
-    <section className="py-16 px-4 bg-gray-50">
+    <section className="py-16 px-4 bg-gray-50 dark:bg-black">
       <div className="container mx-auto max-w-4xl">
         <div className="text-center mb-12">
           <div className="flex justify-center mb-4">
@@ -45,20 +48,20 @@ const FaqSection = () => {
               <HelpCircle className="h-8 w-8 text-cardano-blue" />
             </div>
           </div>
-          <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Find answers to common questions about ADAspending and how it brings transparency to Cardano's treasury.
+          <h2 className="text-3xl font-bold mb-4 dark:text-white">{t('teaser.faq.title')}</h2>
+          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            {t('teaser.faq.description')}
           </p>
         </div>
         
-        <div className="bg-white rounded-lg shadow-md">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border dark:border-gray-700">
           <Accordion type="single" collapsible className="w-full" defaultValue="item-0">
             {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-left px-6 text-gray-800 hover:text-cardano-blue">
+              <AccordionItem key={index} value={`item-${index}`} className="border-b dark:border-gray-700 last:border-none">
+                <AccordionTrigger className="text-left px-6 text-gray-800 dark:text-gray-200 hover:text-cardano-blue dark:hover:text-cardano-blue">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="px-6 text-gray-600">
+                <AccordionContent className="px-6 text-gray-600 dark:text-gray-400">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

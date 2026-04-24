@@ -15,7 +15,7 @@ const journeys: { name: string; description: string; steps: JourneyStep[] }[] = 
     description: 'First-time user discovering the platform',
     steps: [
       { id: '1', label: 'Landing Page', description: 'Sees value proposition', action: 'Clicks "Explore Dashboard"', page: '/' },
-      { id: '2', label: 'Dashboard', description: 'Views stats & overview', action: 'Browses proposals grid', page: '/dashboard' },
+      { id: '2', label: 'Dashboard', description: 'Views stats & overview', action: 'Browses proposals grid', page: '/overview' },
       { id: '3', label: 'Proposals', description: 'Explores funded projects', action: 'Clicks a proposal card', page: '/proposals' },
       { id: '4', label: 'Proposal Detail', description: 'Reviews milestones & budget', action: 'Clicks recipient link', page: '/proposals/:id' },
       { id: '5', label: 'Recipient Profile', description: 'Checks track record', action: 'Views accounting table', page: '/recipients/:id' },
@@ -25,7 +25,7 @@ const journeys: { name: string; description: string; steps: JourneyStep[] }[] = 
     name: 'Researcher Journey',
     description: 'Community member analyzing spending patterns',
     steps: [
-      { id: '1', label: 'Dashboard', description: 'Quick overview', action: 'Navigates to Explorer', page: '/dashboard' },
+      { id: '1', label: 'Dashboard', description: 'Quick overview', action: 'Navigates to Explorer', page: '/overview' },
       { id: '2', label: 'Spending Explorer', description: 'Views charts & map', action: 'Switches to data table', page: '/explorer' },
       { id: '3', label: 'Data Table', description: 'Sorts & filters data', action: 'Clicks specific award', page: '/explorer' },
       { id: '4', label: 'Proposal Detail', description: 'Deep-dives into data', action: 'Checks proposals context', page: '/proposals/:id' },

@@ -24,7 +24,7 @@ const screens = [
   },
   {
     title: 'Dashboard',
-    route: '/dashboard',
+    route: '/overview',
     elements: [
       { type: 'header' as const, label: 'Header + Nav', height: '24px' },
       { type: 'hero' as const, label: 'Hero / Search Bar', height: '36px' },
@@ -203,7 +203,7 @@ const Wireframe: React.FC = () => {
                     className="gap-1"
                   >
                     <ChevronLeft className="h-4 w-4" />
-                    {expandedIndex > 0 ? screens[expandedIndex - 1].title : 'Anterior'}
+                    {expandedIndex > 0 ? screens[expandedIndex - 1].title : 'Previous'}
                   </Button>
                   <Button
                     variant="outline"
@@ -212,7 +212,7 @@ const Wireframe: React.FC = () => {
                     disabled={expandedIndex === screens.length - 1}
                     className="gap-1"
                   >
-                    {expandedIndex < screens.length - 1 ? screens[expandedIndex + 1].title : 'Próximo'}
+                    {expandedIndex < screens.length - 1 ? screens[expandedIndex + 1].title : 'Next'}
                     <ChevronRight className="h-4 w-4" />
                   </Button>
                 </div>

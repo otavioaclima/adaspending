@@ -27,43 +27,47 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Accessibility from "./pages/Accessibility";
 import About from "./pages/About";
 
+import { LanguageProvider } from "./contexts/LanguageContext";
+
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <ThemeProvider defaultTheme="light" storageKey="adaspending-theme">
-          <AnalyticsProvider>
-            <Routes>
-              <Route path="/dashboard" element={<Index />} />
-              <Route path="/" element={<Teaser />} />
+    <LanguageProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <ThemeProvider defaultTheme="light" storageKey="adaspending-theme">
+            <AnalyticsProvider>
+              <Routes>
+                <Route path="/overview" element={<Index />} />
+                <Route path="/" element={<Teaser />} />
 
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/projects/:id" element={<ProjectDetail />} />
-              <Route path="/vendors" element={<Vendors />} />
-              <Route path="/vendors/:id" element={<VendorDetail />} />
-              <Route path="/explorer" element={<SpendingExplorer />} />
-              <Route path="/donations" element={<TreasuryDonations />} />
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/privacy" element={<PrivacyPolicy />} />
-              <Route path="/accessibility" element={<Accessibility />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/architecture" element={<InformationArchitecture />} />
-              <Route path="/wireframe" element={<Wireframe />} />
-              <Route path="/tech-requirements" element={<TechRequirements />} />
-              <Route path="/user-stories" element={<UserStories />} />
-              <Route path="/design-system" element={<DesignSystem />} />
-              <Route path="/ui-design" element={<UIDesign />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </AnalyticsProvider>
-        </ThemeProvider>
-      </BrowserRouter>
-    </TooltipProvider>
+                <Route path="/projects" element={<Projects />} />
+                <Route path="/projects/:id" element={<ProjectDetail />} />
+                <Route path="/vendors" element={<Vendors />} />
+                <Route path="/vendors/:id" element={<VendorDetail />} />
+                <Route path="/explorer" element={<SpendingExplorer />} />
+                <Route path="/donations" element={<TreasuryDonations />} />
+                <Route path="/analytics" element={<Analytics />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/accessibility" element={<Accessibility />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/architecture" element={<InformationArchitecture />} />
+                <Route path="/wireframe" element={<Wireframe />} />
+                <Route path="/tech-requirements" element={<TechRequirements />} />
+                <Route path="/user-stories" element={<UserStories />} />
+                <Route path="/design-system" element={<DesignSystem />} />
+                <Route path="/ui-design" element={<UIDesign />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </AnalyticsProvider>
+          </ThemeProvider>
+        </BrowserRouter>
+      </TooltipProvider>
+    </LanguageProvider>
   </QueryClientProvider>
 );
 

@@ -42,7 +42,7 @@ const epicGroups: { epic: string; icon: React.ElementType; description: string; 
         story: 'As a new visitor, I want to see a clear value proposition on the landing page so that I understand what ADAspending.com does and why it matters.',
         acceptance: [
           'Hero section displays headline, description, and CTA button',
-          'CTA navigates to Dashboard (/dashboard)',
+          'CTA navigates to Dashboard (/overview)',
           'Page loads in under 2 seconds on 3G connection',
           'Content is accessible (WCAG 2.1 AA)',
         ],
@@ -91,7 +91,7 @@ const epicGroups: { epic: string; icon: React.ElementType; description: string; 
           'Loading skeleton displayed while data fetches',
         ],
         priority: 'must',
-        relatedPages: ['/dashboard'],
+        relatedPages: ['/overview'],
       },
       {
         id: 'US-005',
@@ -104,7 +104,7 @@ const epicGroups: { epic: string; icon: React.ElementType; description: string; 
           'Data sourced from proposals API/database',
         ],
         priority: 'must',
-        relatedPages: ['/dashboard'],
+        relatedPages: ['/overview'],
       },
       {
         id: 'US-006',
@@ -116,7 +116,7 @@ const epicGroups: { epic: string; icon: React.ElementType; description: string; 
           'Tooltip shows exact amounts',
         ],
         priority: 'should',
-        relatedPages: ['/dashboard'],
+        relatedPages: ['/overview'],
       },
       {
         id: 'US-007',
@@ -129,7 +129,7 @@ const epicGroups: { epic: string; icon: React.ElementType; description: string; 
           'Dismissible alerts with persistence via localStorage',
         ],
         priority: 'should',
-        relatedPages: ['/dashboard'],
+        relatedPages: ['/overview'],
       },
       {
         id: 'US-008',
@@ -142,7 +142,7 @@ const epicGroups: { epic: string; icon: React.ElementType; description: string; 
           'Minimum 2 characters to trigger search',
         ],
         priority: 'must',
-        relatedPages: ['/dashboard'],
+        relatedPages: ['/overview'],
       },
     ],
   },
@@ -645,7 +645,7 @@ const UserStories: React.FC = () => {
               <tbody>
                 {[
                   { page: '/ (Landing Page)', route: '/' },
-                  { page: '/dashboard', route: '/dashboard' },
+                  { page: '/overview', route: '/overview' },
                   { page: '/proposals', route: '/proposals' },
                   { page: '/proposals', route: '/proposals' },
                   { page: '/proposals/:id', route: '/proposals/:id' },
