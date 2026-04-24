@@ -13,10 +13,10 @@ const HeroSection = () => {
       
       <div className="relative z-10 max-w-6xl mx-auto px-8 py-12 md:py-16 flex flex-col lg:flex-row items-center gap-10">
         <div className="lg:w-3/5 text-left">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cardano-blue/20 border border-cardano-blue/30 text-cardano-blue text-xs font-bold mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] font-bold mb-6 tracking-wider">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cardano-blue opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-cardano-blue"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
             </span>
             LIVE BLOCKCHAIN DATA
           </div>
