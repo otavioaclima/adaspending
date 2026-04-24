@@ -27,7 +27,7 @@ const TeaserHeader = () => {
             <Button 
               variant="ghost" 
               size="sm" 
-              className="text-white hover:bg-white/10 gap-2 px-3 focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors"
+              className="text-white hover:bg-white/10 hover:text-white gap-2 px-3 focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors"
             >
               <span className="text-lg leading-none">
                 {language === 'EN' ? '🇺🇸' : language === 'PT' ? '🇧🇷' : language === 'ES' ? '🇪🇸' : '🇯🇵'}
@@ -72,7 +72,7 @@ const TeaserHeader = () => {
           variant="ghost"
           size="icon"
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="text-white hover:bg-white/10 transition-colors"
+          className="text-white hover:bg-white/10 hover:text-white transition-colors"
           title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
         >
           {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
