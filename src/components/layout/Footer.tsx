@@ -34,9 +34,31 @@ const Footer = () => {
                 </span>
               ))}
             </p>
+            <div className="flex flex-col md:flex-row gap-4 mt-6">
+              <a
+                href="mailto:hello@adaspending.com"
+                className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue flex items-center gap-2 transition-colors group"
+              >
+                <div className="bg-cardano-blue/10 p-1.5 rounded-lg group-hover:bg-cardano-blue/20 transition-colors">
+                  <Mail size={14} className="text-cardano-blue" />
+                </div>
+                {t('footer.email')}
+              </a>
+              <a
+                href="https://x.com/ADAspending_com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue flex items-center gap-2 transition-colors group"
+              >
+                <div className="bg-cardano-blue/10 p-1.5 rounded-lg group-hover:bg-cardano-blue/20 transition-colors">
+                  <Twitter size={14} className="text-cardano-blue" />
+                </div>
+                Twitter (X)
+              </a>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div>
               <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-3 text-sm uppercase tracking-wider">{t('footer.explore')}</h3>
               <ul className="space-y-2">
@@ -72,32 +94,6 @@ const Footer = () => {
                 <li><a href="https://cardanofoundation.org/" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue transition-colors">Cardano Foundation</a></li>
                 <li><a href="https://governancespace.com/" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue transition-colors">Governance Space</a></li>
                 <li><a href="https://cardanofeed.com/" target="_blank" rel="noopener noreferrer" className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue transition-colors">Cardano Feed</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-3 text-sm uppercase tracking-wider">{t('footer.contact')}</h3>
-              <ul className="space-y-3">
-                <li>
-                  <a
-                    href="mailto:hello@adaspending.com"
-                    className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue flex items-center gap-2 transition-colors"
-                  >
-                    <Mail size={14} className="text-cardano-blue" />
-                    {t('footer.email')}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://x.com/ADAspending_com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-gray-600 dark:text-gray-400 hover:text-cardano-blue flex items-center gap-2 transition-colors"
-                  >
-                    <Twitter size={14} className="text-cardano-blue" />
-                    Twitter (X)
-                  </a>
-                </li>
               </ul>
             </div>
           </div>
