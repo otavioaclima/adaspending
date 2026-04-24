@@ -1,0 +1,12 @@
+
+- [x] Truncate Vendor names in project tables
+- [x] Dark Mode Polish - Dashboard (Main)
+- [x] Dark Mode Polish - Institutional Pages (Initial)
+- [x] Dark Mode Polish - Vendors & Detail
+- [x] Dark Mode Polish - Project Detail
+- [x] Dark Mode Polish - Spending Explorer
+- [x] Dark Mode Polish - Legal Pages
+- [x] Final Layout Adjustments (Footer)
+- [x] Vendors Page: Add Grid/List view toggle
+- [x] Header: Add Language Selector with flags
+- [x] Home Page: Modernize Hero Section with premium design
