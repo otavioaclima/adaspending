@@ -1,11 +1,19 @@
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Users, Building, Filter, ChevronDown, ChevronUp, MessageSquare, Info, Link2, Wallet, Briefcase, FilterX } from 'lucide-react';
+import { Search, Users, Building, Filter, ChevronDown, ChevronUp, MessageSquare, Info, Link2, Wallet, Briefcase, FilterX, LayoutGrid, List as ListIcon } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import Layout from '@/components/layout/Layout';
 import { intersectProjects } from '@/data/intersectData';
 
@@ -178,6 +186,7 @@ const Vendors = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sizeFilter, setSizeFilter] = useState('all');
   const [countFilter, setCountFilter] = useState('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const vendors = useVendorStats();
 
   const filteredVendors = useMemo(() => {
@@ -206,16 +215,39 @@ const Vendors = () => {
 
   return (
     <Layout>
-      <div className="mb-8">
-        <div className="flex items-center gap-3 mb-2">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Vendors</h1>
-          <Badge variant="secondary" className="bg-cardano-blue/10 text-cardano-blue border-none h-6 px-3">
-            {vendors.length} Total
-          </Badge>
+      <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Vendors</h1>
+            <Badge variant="secondary" className="bg-cardano-blue/10 text-cardano-blue border-none h-6 px-3">
+              {vendors.length} Total
+            </Badge>
+          </div>
+          <p className="text-gray-600 dark:text-gray-400 max-w-2xl">
+            Directory of teams & organizations delivering projects for the Intersect Treasury Contracts 1.
+          </p>
         </div>
-        <p className="text-gray-600 dark:text-gray-400 max-w-2xl">
-          Directory of teams & organizations delivering projects for the Intersect Treasury Contracts 1.
-        </p>
+
+        <div className="flex bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-1 shadow-sm shrink-0">
+          <Button
+            variant={viewMode === 'grid' ? 'secondary' : 'ghost'}
+            size="sm"
+            className="px-3"
+            onClick={() => setViewMode('grid')}
+          >
+            <LayoutGrid className="h-4 w-4 mr-2" />
+            Grid
+          </Button>
+          <Button
+            variant={viewMode === 'list' ? 'secondary' : 'ghost'}
+            size="sm"
+            className="px-3"
+            onClick={() => setViewMode('list')}
+          >
+            <ListIcon className="h-4 w-4 mr-2" />
+            List
+          </Button>
+        </div>
       </div>
 
       {/* Filter Bar */}
@@ -275,11 +307,61 @@ const Vendors = () => {
 
       <TransparencyToggle />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        {filteredVendors.map(vendor => (
-          <VendorCard key={vendor.name} vendor={vendor} />
-        ))}
-      </div>
+      {filteredVendors.length > 0 && (
+        viewMode === 'grid' ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {filteredVendors.map(vendor => (
+              <VendorCard key={vendor.name} vendor={vendor} />
+            ))}
+          </div>
+        ) : (
+          <Card className="border-gray-200 dark:border-gray-800 mb-12 overflow-hidden bg-white dark:bg-gray-800/40">
+            <Table>
+              <TableHeader className="bg-gray-50/50 dark:bg-gray-900/50">
+                <TableRow className="border-gray-100 dark:border-gray-800">
+                  <TableHead className="font-bold text-gray-900 dark:text-gray-300">Vendor Name</TableHead>
+                  <TableHead className="font-bold text-gray-900 dark:text-gray-300">Total Allocation</TableHead>
+                  <TableHead className="font-bold text-gray-900 dark:text-gray-300">Total Spent</TableHead>
+                  <TableHead className="font-bold text-gray-900 dark:text-gray-300">Projects</TableHead>
+                  <TableHead className="font-bold text-gray-900 dark:text-gray-300">Status Types</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredVendors.map((vendor) => (
+                  <TableRow key={vendor.name} className="border-gray-100 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-gray-900/30">
+                    <TableCell className="font-medium">
+                      <Link 
+                        to={`/vendors/${encodeURIComponent(vendor.name)}`}
+                        className="text-cardano-blue hover:underline font-bold truncate max-w-[250px] block"
+                        title={vendor.name}
+                      >
+                        {vendor.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-gray-900 dark:text-gray-100 font-medium">
+                      ₳{vendor.totalFunded.toLocaleString()}
+                    </TableCell>
+                    <TableCell className="text-orange-600 dark:text-orange-500 font-medium">
+                      ₳{vendor.amountSpent.toLocaleString()}
+                    </TableCell>
+                    <TableCell className="text-gray-600 dark:text-gray-400">
+                      <div className="flex items-center gap-1.5">
+                        <Briefcase className="h-3.5 w-3.5 text-gray-400" />
+                        {vendor.projectCount}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border-blue-100 dark:border-blue-900/50">
+                        {Object.keys(vendor.statusCount).length} Types
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Card>
+        )
+      )}
 
       {filteredVendors.length === 0 && (
         <div className="text-center py-20 bg-gray-50 dark:bg-gray-800/40 rounded-2xl border border-dashed border-gray-200 dark:border-gray-700 transition-colors">
