@@ -101,7 +101,7 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
           <div className="flex items-center space-x-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="!text-white hover:bg-white/10 gap-2 px-2 focus-visible:ring-0 focus-visible:ring-offset-0">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 hover:text-white gap-2 px-2 focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors">
                   <span className="text-lg">
                     {language === 'EN' ? '🇺🇸' : language === 'PT' ? '🇧🇷' : language === 'ES' ? '🇪🇸' : '🇯🇵'}
                   </span>
@@ -146,7 +146,7 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
                 variant="ghost"
                 size="icon"
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="!text-white hover:bg-white/10"
+                className="text-white hover:bg-white/10 hover:text-white transition-colors"
                 title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
               >
                 {theme === "dark" ? (
@@ -161,7 +161,7 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
             <div className="md:hidden">
               <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="!text-white hover:bg-white/10">
+                  <Button variant="ghost" size="icon" className="text-white hover:bg-white/10 hover:text-white transition-colors">
                     <Menu className="h-6 w-6" />
                   </Button>
                 </SheetTrigger>
