@@ -43,7 +43,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       </div>
 
       {/* Header */}
-      <header className="bg-gradient-to-r from-[#131637] to-[#000111] border-b border-gray-800 sticky top-0 z-10">
+      <header className="bg-gradient-to-r from-[#131637] to-[#000111] border-b border-gray-800 sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <Link to="/dashboard" className="flex items-center">
