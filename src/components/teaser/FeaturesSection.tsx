@@ -10,7 +10,9 @@ const FeaturesSection = () => {
     <section id="features" className="py-20 px-4 bg-gray-50 dark:bg-gray-900/50">
       <div className="container mx-auto">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white">
-          {t('teaser.features.title')}
+          {t('teaser.features.title_before')}
+          <span className="text-cardano-blue dark:text-blue-400">{t('teaser.features.title_highlight')}</span>
+          {t('teaser.features.title_after')}
         </h2>
         <p className="text-gray-600 dark:text-gray-400 text-center max-w-3xl mx-auto mb-12">
           {t('teaser.features.subtitle')}
