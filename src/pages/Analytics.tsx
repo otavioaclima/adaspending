@@ -106,8 +106,9 @@ const Analytics = () => {
                     ))}
                   </Pie>
                   <Tooltip 
-                    contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
-                    itemStyle={{ color: 'var(--foreground)' }}
+                    contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
+                    itemStyle={{ color: '#f3f4f6' }}
+                    labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
                     formatter={(value: number) => `${value}%`} 
                   />
                 </PieChart>
@@ -134,8 +135,14 @@ const Analytics = () => {
                   <YAxis yAxisId="left" orientation="left" stroke="#0033AD" axisLine={false} tickLine={false} tick={{fill: '#0033AD'}} />
                   <YAxis yAxisId="right" orientation="right" stroke="#1BAAD6" axisLine={false} tickLine={false} tick={{fill: '#1BAAD6'}} />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
-                    itemStyle={{ color: 'var(--foreground)' }}
+                    contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
+                    itemStyle={{ color: '#f3f4f6' }}
+                    labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
+                    formatter={(value: number, name: string) => {
+                      if (name.includes('ADA')) return [`₳${value.toLocaleString()}`, t('projects.budget_label')];
+                      return [value.toLocaleString(), name];
+                    }}
+                    cursor={{ fill: 'rgba(0,51,173,0.08)' }}
                   />
                   <Bar yAxisId="left" dataKey="totalBudget" name={`${t('projects.budget_label')} (ADA)`} fill="#0033AD" radius={[4, 4, 0, 0]} />
                   <Bar yAxisId="right" dataKey="proposals" name={t('analytics.proposals')} fill="#1BAAD6" radius={[4, 4, 0, 0]} />
@@ -176,8 +183,9 @@ const Analytics = () => {
                     ))}
                   </Pie>
                   <Tooltip 
-                    contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
-                    itemStyle={{ color: 'var(--foreground)' }}
+                    contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
+                    itemStyle={{ color: '#f3f4f6' }}
+                    labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -202,10 +210,11 @@ const Analytics = () => {
                   <XAxis type="number" hide />
                   <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={100} tick={{fill: 'currentColor'}} className="text-gray-400 dark:text-gray-500" />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
-                    itemStyle={{ color: 'var(--foreground)' }}
+                    contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
+                    itemStyle={{ color: '#f3f4f6' }}
+                    labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
                     formatter={(value: number) => [`₳${value.toLocaleString()}`, t('projects.budget_label')]}
-                    cursor={{fill: 'transparent'}}
+                    cursor={{fill: 'rgba(115,103,240,0.08)'}}
                   />
                   <Bar dataKey="amount" fill="#7367F0" radius={[0, 4, 4, 0]} barSize={20} />
                 </BarChart>
@@ -246,9 +255,11 @@ const Analytics = () => {
                     domain={[0, 300]}
                   />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)', borderRadius: '8px' }}
-                    itemStyle={{ color: 'var(--foreground)' }}
+                    contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
+                    itemStyle={{ color: '#f3f4f6' }}
+                    labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
                     formatter={(value: number) => [`$${value}M`, t('analytics.treasury_spend_title')]}
+                    cursor={{ fill: 'rgba(0,51,173,0.08)' }}
                   />
                   <Bar 
                     dataKey="spend" 
@@ -302,9 +313,11 @@ const Analytics = () => {
                     ticks={[0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0]}
                   />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)', borderRadius: '8px' }}
-                    itemStyle={{ color: 'var(--foreground)' }}
+                    contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
+                    itemStyle={{ color: '#f3f4f6' }}
+                    labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
                     formatter={(value: number) => [`$${value.toFixed(2)}`, t('analytics.ada_price_title')]}
+                    cursor={{ fill: 'rgba(27,170,214,0.08)' }}
                   />
                   <Bar 
                     dataKey="price" 

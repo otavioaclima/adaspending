@@ -199,8 +199,13 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
                 />
                 {/* ADAspending text removed */}
               </Link>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                {t('footer.description')}
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 max-w-sm">
+                {t('footer.description').split('. ').map((sentence, i, arr) => (
+                  <span key={i}>
+                    {sentence}{i < arr.length - 1 ? '.' : ''}
+                    {i < arr.length - 1 && <br />}
+                  </span>
+                ))}
               </p>
             </div>
 
