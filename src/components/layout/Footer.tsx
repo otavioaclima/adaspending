@@ -26,7 +26,7 @@ const Footer = () => {
                 className="h-8 w-auto hidden dark:block"
               />
             </Link>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 max-w-md">
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 max-w-xl">
               {t('footer.description').split('. ').map((sentence, i, arr) => (
                 <span key={i}>
                   {sentence}{i < arr.length - 1 ? '.' : ''}
