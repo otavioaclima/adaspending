@@ -89,28 +89,28 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
               <DropdownMenuContent align="end" className="bg-[#131637] border-gray-800 text-white">
                 <DropdownMenuItem 
                   onClick={() => setLang('EN')}
-                  className="hover:bg-white/10 cursor-pointer flex items-center gap-2"
+                  className="hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer flex items-center gap-2"
                 >
                   <span className="text-lg">🇺🇸</span>
                   <span>English (EN)</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setLang('PT')}
-                  className="hover:bg-white/10 cursor-pointer flex items-center gap-2"
+                  className="hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer flex items-center gap-2"
                 >
                   <span className="text-lg">🇧🇷</span>
                   <span>Português (PT)</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setLang('ES')}
-                  className="hover:bg-white/10 cursor-pointer flex items-center gap-2"
+                  className="hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer flex items-center gap-2"
                 >
                   <span className="text-lg">🇪🇸</span>
                   <span>Español (ES)</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={() => setLang('JP')}
-                  className="hover:bg-white/10 cursor-pointer flex items-center gap-2"
+                  className="hover:bg-white/10 focus:bg-white/10 focus:text-white cursor-pointer flex items-center gap-2"
                 >
                   <span className="text-lg">🇯🇵</span>
                   <span>日本語 (JP)</span>
