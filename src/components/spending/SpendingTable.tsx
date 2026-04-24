@@ -14,7 +14,7 @@ import {
 const columns = [
   { key: "title", label: "Title" },
   { key: "category", label: "Category" },
-  { key: "requestedAmount", label: "Amount (ADA)" },
+  { key: "requestedAmount", label: "Amount (₳)" },
   { key: "status", label: "Status" },
   { key: "vendor", label: "Vendor" },
 ];
@@ -71,7 +71,7 @@ export default function SpendingTable() {
             <TableRow key={p.id ?? i} className="border-gray-100 dark:border-gray-800">
               <TableCell className="font-medium text-primary dark:text-cardano-teal max-w-[220px] truncate">{p.title}</TableCell>
               <TableCell className="text-gray-600 dark:text-gray-400">{p.category}</TableCell>
-              <TableCell className="text-gray-900 dark:text-gray-100 font-medium">{p.requestedAmount.toLocaleString()} ADA</TableCell>
+              <TableCell className="text-gray-900 dark:text-gray-100 font-medium">₳{p.requestedAmount.toLocaleString()}</TableCell>
               <TableCell>
                 <span
                   className={

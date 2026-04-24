@@ -137,7 +137,7 @@ const SpendingExplorer = () => {
 
   return (
     <Layout fullWidth>
-      <div className="flex h-[calc(100vh-120px)] bg-white overflow-hidden border-t border-gray-100">
+      <div className="flex h-[calc(100vh-120px)] bg-white dark:bg-gray-950 overflow-hidden border-t border-gray-100 dark:border-gray-800">
         {/* Site Sidebar Style */}
         <div className="w-64 bg-[#000111] text-white flex flex-col shrink-0 border-r border-gray-800">
           <div className="p-4 border-b border-gray-800/50">
@@ -213,12 +213,12 @@ const SpendingExplorer = () => {
         </div>
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col bg-[#fcfdfe] overflow-hidden">
+        <div className="flex-1 flex flex-col bg-[#fcfdfe] dark:bg-gray-950 overflow-hidden">
           {/* Header */}
-          <div className="px-8 pt-6 pb-4 bg-white border-b border-gray-100 shrink-0">
+          <div className="px-8 pt-6 pb-4 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shrink-0">
             <div className="flex justify-between items-end mb-4">
               <div>
-                <h2 className="text-xl font-black text-gray-900 mb-0.5 flex items-center gap-3">
+                <h2 className="text-xl font-black text-gray-900 dark:text-white mb-0.5 flex items-center gap-3">
                   {t('explorer.spending_by')} {breakdown === 'vendor' ? t('explorer.breakdown_vendor') : t('explorer.breakdown_project')}
                   <Badge variant="secondary" className="bg-gray-100 text-gray-500 font-black text-[10px] h-5">
                     {chartData.length} {t('explorer.items')}
@@ -233,7 +233,7 @@ const SpendingExplorer = () => {
                   {t('explorer.official_allocated')}
                   <Info className="h-2.5 w-2.5" />
                 </div>
-                <div className="text-2xl font-black text-[#0033ad] tracking-tighter">
+                <div className="text-2xl font-black text-[#0033ad] dark:text-blue-400 tracking-tighter">
                   ₳{OFFICIAL_TOTAL_ALLOCATED.toLocaleString()}
                 </div>
               </div>
@@ -244,7 +244,7 @@ const SpendingExplorer = () => {
                 <div className="flex items-center gap-3">
                   <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{t('explorer.breakdown_label')}:</span>
                   <Select value={breakdown} onValueChange={(v: any) => setBreakdown(v)}>
-                    <SelectTrigger className="w-[160px] h-8 border-gray-200 bg-white text-[11px] font-bold shadow-sm">
+                    <SelectTrigger className="w-[160px] h-8 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-[11px] font-bold shadow-sm">
                       <SelectValue placeholder={t('explorer.select_breakdown')} />
                     </SelectTrigger>
                     <SelectContent>
@@ -263,12 +263,12 @@ const SpendingExplorer = () => {
                 </div>
               </div>
 
-              <div className="flex bg-gray-50 p-1 rounded-lg border border-gray-100 shadow-inner">
+              <div className="flex bg-gray-50 dark:bg-gray-800 p-1 rounded-lg border border-gray-100 dark:border-gray-700 shadow-inner">
                 <Button
                   size="sm"
                   variant="ghost"
                   onClick={() => setViewMode('treemap')}
-                  className={`h-8 px-4 font-black text-[11px] transition-all ${viewMode === 'treemap' ? 'bg-white shadow-sm text-cardano-blue' : 'text-gray-400 hover:text-gray-600'}`}
+                  className={`h-8 px-4 font-black text-[11px] transition-all ${viewMode === 'treemap' ? 'bg-white dark:bg-gray-700 shadow-sm text-cardano-blue dark:text-blue-400' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
                 >
                   <LayoutGrid className="h-3.5 w-3.5 mr-2" />
                   {t('explorer.map_view')}
@@ -277,7 +277,7 @@ const SpendingExplorer = () => {
                   size="sm"
                   variant="ghost"
                   onClick={() => setViewMode('table')}
-                  className={`h-8 px-4 font-black text-[11px] transition-all ${viewMode === 'table' ? 'bg-white shadow-sm text-cardano-blue' : 'text-gray-400 hover:text-gray-600'}`}
+                  className={`h-8 px-4 font-black text-[11px] transition-all ${viewMode === 'table' ? 'bg-white dark:bg-gray-700 shadow-sm text-cardano-blue dark:text-blue-400' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
                 >
                   <List className="h-3.5 w-3.5 mr-2" />
                   {t('explorer.list_view')}
@@ -289,7 +289,7 @@ const SpendingExplorer = () => {
           {/* Visualization Content */}
           <div className="p-6 flex-1 overflow-hidden flex flex-col">
             {viewMode === 'treemap' ? (
-              <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 overflow-hidden flex-1 p-6">
+              <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 dark:border-gray-800 overflow-hidden flex-1 p-6">
                 <ResponsiveContainer width="100%" height="100%">
                   <Treemap
                     data={chartData}
@@ -327,7 +327,7 @@ const SpendingExplorer = () => {
                 </ResponsiveContainer>
               </div>
             ) : (
-              <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 overflow-hidden flex-1 overflow-y-auto">
+              <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 dark:border-gray-800 overflow-hidden flex-1 overflow-y-auto">
                 <IntersectProjectsTable />
               </div>
             )}

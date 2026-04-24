@@ -34,7 +34,7 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-[#131637] to-[#000111] py-12 px-4 md:py-24 min-h-[80vh] flex items-center">
+    <section className="relative bg-gradient-to-br from-[#0a0c2e] to-[#020412] py-12 px-4 md:py-24 min-h-[80vh] flex items-center">
       <div className="container mx-auto text-center">
         <Link to="/" className="flex flex-col items-center mb-8">
           <img 

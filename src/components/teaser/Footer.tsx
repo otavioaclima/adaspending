@@ -43,6 +43,9 @@ const Footer = () => {
               <p>{t('teaser.footer.opensource')}</p>
             </div>
             <div className="flex space-x-6">
+              <a href="https://cardanofeed.com/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors text-sm">
+                Cardano Feed
+              </a>
               <a href="https://cardano.org/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors text-sm">
                 Cardano
               </a>

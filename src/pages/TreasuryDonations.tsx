@@ -119,12 +119,12 @@ const TreasuryDonations = () => {
       <Card className="dark:bg-gray-800/40 dark:border-gray-800 transition-colors">
         <CardHeader className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <CardTitle className="dark:text-white">{t('donations.history_title')}</CardTitle>
-          <div className="flex bg-gray-100 dark:bg-gray-900/50 p-1 rounded-lg">
+          <div className="flex bg-gray-100 dark:bg-gray-800 p-1 rounded-lg border border-gray-200 dark:border-gray-700">
             <Button
               variant={viewMode === 'donations' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('donations')}
-              className={viewMode === 'donations' ? 'bg-white dark:bg-gray-800 shadow-sm' : ''}
+              className={viewMode === 'donations' ? 'bg-white dark:bg-cardano-blue shadow-sm dark:text-white' : 'text-gray-500 dark:text-gray-400'}
             >
               {t('donations.recent_donations')}
             </Button>
@@ -132,7 +132,7 @@ const TreasuryDonations = () => {
               variant={viewMode === 'epochs' ? 'default' : 'ghost'}
               size="sm"
               onClick={() => setViewMode('epochs')}
-              className={viewMode === 'epochs' ? 'bg-white dark:bg-gray-800 shadow-sm' : ''}
+              className={viewMode === 'epochs' ? 'bg-white dark:bg-cardano-blue shadow-sm dark:text-white' : 'text-gray-500 dark:text-gray-400'}
             >
               {t('donations.epoch_by_epoch')}
             </Button>

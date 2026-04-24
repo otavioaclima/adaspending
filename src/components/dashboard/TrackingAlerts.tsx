@@ -28,7 +28,7 @@ const ProjectShowcaseCard = ({ project, color }: { project: IntersectProject, co
             <span className="truncate font-medium">{project.vendor}</span>
           </div>
           <div className="flex items-center justify-between pt-1 border-t border-gray-100 dark:border-gray-800">
-            <div className="flex items-center text-[11px] font-bold text-cardano-blue">
+            <div className="flex items-center text-[11px] font-bold text-cardano-blue dark:text-blue-400">
               <Wallet className="h-3.5 w-3.5 mr-1.5 shrink-0" />
               <span>₳{project.totalAmount.toLocaleString()}</span>
             </div>

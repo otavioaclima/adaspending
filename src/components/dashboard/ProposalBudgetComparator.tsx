@@ -20,7 +20,7 @@ const ProposalBudgetComparator = () => {
   return (
     <Card className="border-none shadow-md bg-white dark:bg-gray-800 transition-colors">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-lg font-bold">
+        <CardTitle className="text-lg font-bold dark:text-white">
           <BarChart3 className="inline-block h-5 w-5 mr-2 text-cardano-blue" />
           {t('overview.intersect_treasury_budget')}
         </CardTitle>
@@ -30,7 +30,7 @@ const ProposalBudgetComparator = () => {
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">{t('overview.total_budget')}</span>
-              <span className="text-sm font-black text-cardano-blue">₳{totalBudget.toLocaleString()}</span>
+              <span className="text-sm font-black text-cardano-blue dark:text-blue-300">₳{totalBudget.toLocaleString()}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">{t('stats.total_spent')}</span>

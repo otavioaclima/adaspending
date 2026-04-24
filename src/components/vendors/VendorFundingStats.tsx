@@ -25,8 +25,8 @@ const VendorFundingStats = ({
     <div className="space-y-6">
       <div>
         <p className="text-sm text-gray-500 mb-1">{t('vendors.total_funding')}</p>
-        <p className="text-2xl font-bold text-cardano-blue">
-          {totalFunded.toLocaleString()} ADA
+        <p className="text-2xl font-bold text-cardano-blue dark:text-blue-300">
+          ₳{totalFunded.toLocaleString()}
         </p>
       </div>
       <Separator />

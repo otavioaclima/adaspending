@@ -36,7 +36,7 @@ const FundRoundSection = () => {
                 <Wallet className="h-5 w-5 text-cardano-blue" />
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('explorer.total_allocation')}</p>
-              <p className="text-2xl font-black text-cardano-blue">
+              <p className="text-2xl font-black text-cardano-blue dark:text-blue-300">
                 ₳{totalBudget.toLocaleString()}
               </p>
             </div>

@@ -185,10 +185,17 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <Link to="/" className="flex items-center justify-center md:justify-start space-x-2">
+                {/* Light mode logo (dark text) */}
                 <img
                   src="/assets/e4da4614-7cea-4f9c-853c-3f019f7932ca.png"
                   alt="Cardano Treasury Explorer"
-                  className="h-8 w-auto"
+                  className="h-8 w-auto dark:hidden"
+                />
+                {/* Dark mode logo (white text) */}
+                <img
+                  src="/assets/14b66eb5-72ae-42fe-94f7-70a49cc9ad69.png"
+                  alt="Cardano Treasury Explorer"
+                  className="h-8 w-auto hidden dark:block"
                 />
                 {/* ADAspending text removed */}
               </Link>

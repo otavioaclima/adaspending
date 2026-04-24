@@ -11,10 +11,10 @@ const CallToActionSection = () => {
   return (
     <section className="mb-8">
       <div className="bg-gradient-to-r from-cardano-blue/10 to-cardano-teal/10 rounded-lg p-6 text-center">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-3">
           {t('cta.title')}
         </h2>
-        <p className="text-gray-600 mb-4 max-w-2xl mx-auto">
+        <p className="text-gray-600 dark:text-gray-300 mb-4 max-w-2xl mx-auto">
           {t('cta.subtitle')}
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">

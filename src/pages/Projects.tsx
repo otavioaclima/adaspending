@@ -302,7 +302,7 @@ const Projects = () => {
                     <div className="grid grid-cols-2 gap-4 pt-2">
                       <div>
                         <p className="text-xs text-gray-400 uppercase font-semibold mb-1">{t('projects.budget_label')}</p>
-                        <p className="text-sm font-bold text-cardano-blue flex items-center">
+                        <p className="text-sm font-bold text-cardano-blue dark:text-blue-300 flex items-center">
                           <Wallet className="h-3 w-3 mr-1" />
                           ₳{project.totalAmount.toLocaleString()}
                         </p>
@@ -408,7 +408,7 @@ const Projects = () => {
                         {project.vendor}
                       </div>
                     </TableCell>
-                    <TableCell className="text-right font-bold text-cardano-blue">
+                    <TableCell className="text-right font-bold text-cardano-blue dark:text-blue-300">
                       {project.totalAmount.toLocaleString()}
                     </TableCell>
                     <TableCell className="text-right font-bold text-orange-600">
@@ -429,7 +429,7 @@ const Projects = () => {
                     </TableCell>
                     <TableCell className="text-right">
                       <Link to={`/projects/${project.id}`}>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-cardano-blue">
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-cardano-blue dark:text-blue-300">
                           <ArrowRight className="h-4 w-4" />
                         </Button>
                       </Link>

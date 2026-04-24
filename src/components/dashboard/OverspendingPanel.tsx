@@ -18,7 +18,7 @@ const OverspendingPanel = () => {
   return (
     <Card className="border-none shadow-md bg-white dark:bg-gray-800 transition-colors">
       <CardHeader className="flex flex-row items-center space-y-0 justify-between pb-2">
-        <CardTitle className="text-lg font-bold flex items-center">
+        <CardTitle className="text-lg font-bold flex items-center dark:text-white">
           <AlertTriangle className="h-5 w-5 text-red-500 mr-2" />
           {t('overspending.attention_alerts')}
         </CardTitle>

@@ -2,8 +2,10 @@ import React, { useMemo } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LabelList } from 'recharts';
 import { intersectProjects } from '@/data/intersectData';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const ChartsSection = () => {
+  const { t } = useLanguage();
   const COLORS = ['#0033AD', '#1BAAD6', '#F59E0B', '#10B981', '#6366F1', '#EC4899', '#94A3B8'];
 
   const statusData = useMemo(() => {
@@ -37,8 +39,8 @@ const ChartsSection = () => {
         {/* Status Distribution */}
         <Card className="border-none shadow-md bg-white dark:bg-gray-800 transition-colors">
           <CardHeader>
-            <CardTitle className="dark:text-white">Projects by Status</CardTitle>
-            <CardDescription className="dark:text-gray-400">Numerical distribution of initiatives across different delivery states</CardDescription>
+            <CardTitle className="dark:text-white">{t('charts.projects_by_status')}</CardTitle>
+            <CardDescription className="dark:text-gray-400">{t('charts.projects_by_status_desc')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-64">
@@ -60,7 +62,7 @@ const ChartsSection = () => {
                   </Pie>
                   <Tooltip 
                     contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
-                    formatter={(value: number) => [`${value} Projects`, 'Count']} 
+                    formatter={(value: number) => [`${value} ${t('charts.projects')}`, 'Count']} 
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -71,8 +73,8 @@ const ChartsSection = () => {
         {/* Top Vendors */}
         <Card className="border-none shadow-md bg-white dark:bg-gray-800 transition-colors">
           <CardHeader>
-            <CardTitle className="dark:text-white">Top Vendors by Allocation</CardTitle>
-            <CardDescription className="dark:text-gray-400">Vendors with the highest total funding and their share of the allocated budget</CardDescription>
+            <CardTitle className="dark:text-white">{t('charts.top_vendors')}</CardTitle>
+            <CardDescription className="dark:text-gray-400">{t('charts.top_vendors_desc')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-64">
@@ -116,7 +118,7 @@ const ChartsSection = () => {
                                 ₳{data.totalBudget.toLocaleString()}
                               </p>
                               <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-                                {data.percentage.toFixed(1)}% of total allocated
+                                {data.percentage.toFixed(1)}% {t('charts.of_total')}
                               </p>
                             </div>
                           </div>

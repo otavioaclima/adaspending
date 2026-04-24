@@ -1753,7 +1753,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "EX-000-01",
     "projectName": "PSSC Fund Test 2",
-    "vendor": "addr1q8rjaatvmmakqz3jek68uvlwjs4c9ckqfnl404a3yjrnrnlaepuyxvahzd69cnrvm4ssk6wj3ucy3sgtvyfxccp8mn5sfxt6e2",
+    "vendor": "CardanoScan",
     "totalAmount": 10.0,
     "amountSpent": 10.0,
     "status": "Completed",
@@ -1773,7 +1773,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "ER-0004b-25",
     "projectName": "Product Research (1of2)",
-    "vendor": "addr1q8kmt82cgxnv4dapm8926uz50t58cy4vg0mdmcv3mdmq7e489jcdt3fvg0zfvywehy0vzvvxyzgsfkjwcnhsq62ay2fq5c6lpc",
+    "vendor": "Product Research Team",
     "totalAmount": 80000.0,
     "amountSpent": 80000.0,
     "status": "Completed",
@@ -2667,7 +2667,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "EG-0001-25-02",
     "projectName": "AdaStat.net Cardano blockchain explorer (2 of 2)",
-    "vendor": "addr1qyjk85v68tmpy9afm8l3k536sa98ktna5hknxlq3sdl2daall4ts4vx7py55p4whtyr3d3s5rgw7rdztv7jzqg4am7squssllz",
+    "vendor": "AdaStat.net",
     "totalAmount": 59716.0,
     "amountSpent": 0.0,
     "status": "In Progress",
@@ -2741,7 +2741,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "EG-0001-25",
     "projectName": "AdaStat.net Cardano blockchain explorer (1 of 2)",
-    "vendor": "addr1qyjk85v68tmpy9afm8l3k536sa98ktna5hknxlq3sdl2daall4ts4vx7py55p4whtyr3d3s5rgw7rdztv7jzqg4am7squssllz",
+    "vendor": "AdaStat.net",
     "totalAmount": 152284.0,
     "amountSpent": 63951.0,
     "status": "In Progress",
@@ -3052,7 +3052,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "EC-0022-25,EC-0015-25,ER-0005-25",
     "projectName": "MLabs- Core Tool Maintenance: Cardano.nix & Plutarch, Research towards Tooling for Elliptical Curves",
-    "vendor": "addr1q86nycg8kryrkvskcdktvsup3gdmwnlk6z376rml5qfvccda0gvtkuuq7ypygj4ztfrvvemch6hd8ua42ccywcxkt4gqtznf6s",
+    "vendor": "Blockfrost",
     "totalAmount": 393042.0,
     "amountSpent": 189619.0,
     "status": "Paused",
@@ -3393,7 +3393,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "EC-0019-25",
     "projectName": "BloxBean Java Tools Maintenance and Enhancement",
-    "vendor": "addr1q8jwgfgsykah9kawn7ve7lam7wrey4jery5yrn5xfuc23vhd332ffcu6l2jmzc22fym9szkejlt3cszkf53kd425gq6saxvzdt",
+    "vendor": "MeshJS",
     "totalAmount": 99600.0,
     "amountSpent": 59760.0,
     "status": "In Progress",
@@ -3707,7 +3707,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "EC-0014-25",
     "projectName": "Harmonic Laboratories: Gerolamo - Cardano Node in typescript",
-    "vendor": "addr1q9a80rmurvk388224szqxtdfn723yt2hmh2f3z7gkw2srczevw9gj6c93r2900smfyks6dyqayvra7hhectfuh35lhqqex327p",
+    "vendor": "UTxO Alliance",
     "totalAmount": 578571.0,
     "amountSpent": 483106.83,
     "status": "Paused",
@@ -4415,7 +4415,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "EC-0009-25",
     "projectName": "zkFold ZK Rollup",
-    "vendor": "addr1q8phtw2jlcwfxg8mhusvy7wuzxechtam5ehg4xqc7s8ut4r2lnqksm9q37dmlpjuyf2vp3qlarg5nrx56peqqwmme3gs9vp2d3",
+    "vendor": "Cardano Foundation",
     "totalAmount": 1161000.0,
     "amountSpent": 851610.0,
     "status": "In Progress",

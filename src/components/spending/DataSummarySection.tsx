@@ -20,14 +20,14 @@ export default function DataSummarySection({ treasuryStats }: DataSummarySection
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-4 bg-cardano-blue/10 dark:bg-cardano-blue/20 rounded-lg">
             <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Total Treasury Size</h3>
-            <p className="text-2xl font-bold text-cardano-blue">
-              {treasuryStats.totalFundsAvailable.toLocaleString()} ADA
+            <p className="text-2xl font-bold text-cardano-blue dark:text-blue-300">
+              ₳{treasuryStats.totalFundsAvailable.toLocaleString()}
             </p>
           </div>
           <div className="p-4 bg-cardano-teal/10 dark:bg-cardano-teal/20 rounded-lg">
             <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1">Total Funds Awarded</h3>
             <p className="text-2xl font-bold text-cardano-teal">
-              {treasuryStats.totalFundsAwarded.toLocaleString()} ADA
+              ₳{treasuryStats.totalFundsAwarded.toLocaleString()}
             </p>
           </div>
           <div className="p-4 bg-green-100 dark:bg-green-900/20 rounded-lg">

@@ -73,13 +73,13 @@ const IntersectProjectsTable = () => {
 
   const SortIcon = ({ columnKey }: { columnKey: keyof typeof intersectProjects[0] }) => {
     if (sortConfig.key !== columnKey) return <ArrowUpDown className="ml-2 h-4 w-4 opacity-30" />;
-    return sortConfig.direction === 'asc' ? <ArrowUp className="ml-2 h-4 w-4 text-cardano-blue" /> : <ArrowDown className="ml-2 h-4 w-4 text-cardano-blue" />;
+    return sortConfig.direction === 'asc' ? <ArrowUp className="ml-2 h-4 w-4 text-cardano-blue dark:text-blue-400" /> : <ArrowDown className="ml-2 h-4 w-4 text-cardano-blue dark:text-blue-400" />;
   };
 
   return (
     <Card className="w-full border-none shadow-xl bg-white dark:bg-gray-800/50 backdrop-blur-sm transition-all overflow-hidden">
       <CardHeader className="pb-4">
-        <CardTitle className="text-2xl font-black tracking-tight">Intersect Treasury Projects</CardTitle>
+        <CardTitle className="text-2xl font-black tracking-tight dark:text-white">Intersect Treasury Projects</CardTitle>
         <CardDescription className="font-medium text-gray-500 dark:text-gray-400">
           Detailed list of projects funded by Intersect Treasury Contracts 1
         </CardDescription>
@@ -140,7 +140,7 @@ const IntersectProjectsTable = () => {
               {paginatedProjects.map((project) => (
                 <TableRow key={project.id} className="border-gray-50 dark:border-gray-800/50 hover:bg-blue-50/30 dark:hover:bg-blue-900/10 transition-colors">
                   <TableCell className="py-4">
-                    <Link to={`/projects/${project.id}`} className="font-bold text-gray-900 dark:text-gray-100 hover:text-cardano-blue transition-colors line-clamp-2">
+                    <Link to={`/projects/${project.id}`} className="font-bold text-gray-900 dark:text-gray-100 hover:text-cardano-blue dark:hover:text-blue-400 transition-colors line-clamp-2">
                       {project.projectName}
                     </Link>
                   </TableCell>

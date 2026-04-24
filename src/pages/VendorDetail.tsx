@@ -63,13 +63,13 @@ const VendorDetail = () => {
   return (
     <Layout>
       <div className="mb-6">
-        <Link to="/vendors" className="inline-flex items-center text-sm text-cardano-blue hover:underline mb-4">
+        <Link to="/vendors" className="inline-flex items-center text-sm text-cardano-blue dark:text-blue-300 hover:underline mb-4">
           <ArrowLeft className="h-4 w-4 mr-1" /> Back to Vendors
         </Link>
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">
           <div className="flex items-center gap-4">
-            <div className="bg-cardano-blue/10 dark:bg-cardano-blue/20 p-4 rounded-2xl text-cardano-blue">
+            <div className="bg-cardano-blue/10 dark:bg-cardano-blue/20 p-4 rounded-2xl text-cardano-blue dark:text-blue-300">
               <Building className="h-8 w-8" />
             </div>
             <div>
@@ -113,7 +113,7 @@ const VendorDetail = () => {
             <div className="space-y-6">
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">Total Allocated</p>
-                <p className="text-2xl font-bold text-cardano-blue flex items-center">
+                <p className="text-2xl font-bold text-cardano-blue dark:text-blue-300 flex items-center">
                   <Wallet className="h-5 w-5 mr-2" />
                   ₳{stats.totalFunded.toLocaleString()}
                 </p>

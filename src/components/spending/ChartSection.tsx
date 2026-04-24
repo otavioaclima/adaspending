@@ -126,13 +126,13 @@ export default function ChartSection(props: ChartSectionProps) {
                     contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
                     itemStyle={{ color: 'var(--foreground)' }}
                     formatter={(value: number, name: string) => [
-                      name === 'budget' ? `${value.toLocaleString()} ADA` : value.toLocaleString(),
+                      name === 'budget' ? `₳${value.toLocaleString()}` : value.toLocaleString(),
                       name === 'budget' ? 'Budget' : 
                       name === 'proposals' ? 'Total Proposals' : 'Approved Proposals'
                     ]}
                   />
                   <Legend />
-                  <Bar yAxisId="left" dataKey="budget" name="Budget (ADA)" fill="#0033AD" />
+                  <Bar yAxisId="left" dataKey="budget" name="Budget (₳)" fill="#0033AD" />
                   <Bar yAxisId="right" dataKey="proposals" name="Total Proposals" fill="#1BAAD6" />
                   <Bar yAxisId="right" dataKey="approvedProposals" name="Approved Proposals" fill="#00C49F" />
                 </BarChart>
@@ -151,7 +151,7 @@ export default function ChartSection(props: ChartSectionProps) {
                   <Tooltip 
                     contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
                     itemStyle={{ color: 'var(--foreground)' }}
-                    formatter={(value: number) => `${value.toLocaleString()} ADA`} 
+                    formatter={(value: number) => `₳${value.toLocaleString()}`} 
                   />
                   <Line 
                     type="monotone" 
@@ -173,12 +173,12 @@ export default function ChartSection(props: ChartSectionProps) {
                   <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="text-gray-200 dark:text-gray-700" />
                   <XAxis 
                     dataKey="amount" 
-                    name="Requested Amount (ADA)" 
+                    name="Requested Amount (₳)" 
                     type="number"
                     domain={['auto', 'auto']}
                     tick={{fill: 'currentColor'}}
                     className="text-gray-400 dark:text-gray-500"
-                    label={{ value: 'Requested Amount (ADA)', position: 'insideBottomRight', offset: -10, fill: 'currentColor' }}
+                    label={{ value: 'Requested Amount (₳)', position: 'insideBottomRight', offset: -10, fill: 'currentColor' }}
                   />
                   <YAxis 
                     dataKey="votes" 
@@ -194,7 +194,7 @@ export default function ChartSection(props: ChartSectionProps) {
                     contentStyle={{ backgroundColor: 'var(--card)', borderColor: 'var(--border)', color: 'var(--foreground)' }}
                     itemStyle={{ color: 'var(--foreground)' }}
                     formatter={(value: any, name: string, props: any) => {
-                      if (name === 'Requested Amount (ADA)') {
+                      if (name === 'Requested Amount (₳)') {
                         return [`₳ ${value.toLocaleString()}`, name];
                       }
                       if (name === 'Yes Votes') {

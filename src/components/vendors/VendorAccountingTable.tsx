@@ -26,28 +26,28 @@ const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
   );
 
   return (
-    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+    <div className="bg-yellow-50 dark:bg-yellow-950/10 border border-yellow-200 dark:border-yellow-900/30 rounded-lg p-6">
       <h2 className="font-bold text-xl mb-2 text-yellow-700 flex items-center gap-2">
         Transparency & Accounting
       </h2>
-      <p className="mb-4 text-yellow-900">
+      <p className="mb-4 text-yellow-900 dark:text-yellow-200/80">
         Track resources moved by the vendor, with transparency for auditing and traceability.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div>
           <p className="text-sm text-gray-500">Total Received</p>
-          <p className="font-bold text-cardano-blue">
-            {totalFunded.toLocaleString()} ADA
+          <p className="font-bold text-cardano-blue dark:text-blue-400">
+            ₳{totalFunded.toLocaleString()}
           </p>
         </div>
         <div>
           <p className="text-sm text-gray-500">Total Spent</p>
-          <p className="font-bold text-yellow-700">{totalSpent.toLocaleString()} ADA</p>
+          <p className="font-bold text-yellow-700">₳{totalSpent.toLocaleString()}</p>
         </div>
         <div>
           <p className="text-sm text-gray-500">Remaining</p>
           <p className="font-bold text-gray-800">
-            {(totalFunded - totalSpent).toLocaleString()} ADA
+            ₳{(totalFunded - totalSpent).toLocaleString()}
           </p>
         </div>
       </div>
@@ -77,8 +77,8 @@ const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
                   <td className="px-3 py-2 whitespace-nowrap">{new Date(trx.updatedAt).toLocaleDateString()}</td>
                   <td className="px-3 py-2">{trx.title}</td>
                   <td className="px-3 py-2">{trx.fundRound}</td>
-                  <td className="px-3 py-2 text-cardano-blue">{trx.fundedAmount.toLocaleString()} ADA</td>
-                  <td className="px-3 py-2 text-yellow-700">{trx.spentAmount.toLocaleString()} ADA</td>
+                  <td className="px-3 py-2 text-cardano-blue dark:text-blue-400">₳{trx.fundedAmount.toLocaleString()}</td>
+                  <td className="px-3 py-2 text-yellow-700">₳{trx.spentAmount.toLocaleString()}</td>
                   <td className="px-3 py-2 capitalize">
                     <span className={
                       trx.status === "approved" ? "text-green-700 font-medium" :

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { BarChart3, TrendingUp, Award, FileText } from 'lucide-react';
+import { BarChart3, TrendingUp, Users, FileText } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getTreasuryAmount, getAdaPrice } from '@/services/cardanoscan';
@@ -29,8 +29,9 @@ const StatsSection = () => {
   const fundedProposals = intersectProjects.filter(p => p.status !== 'Paused').length;
 
   // Format numbers with commas
-  const formatNumber = (num: number) => {
-    return num.toLocaleString(language === 'JP' ? 'ja-JP' : language === 'PT' ? 'pt-BR' : language === 'ES' ? 'es-ES' : 'en-US');
+  const formatNumber = (num: number | undefined | null) => {
+    if (num === undefined || num === null || isNaN(num)) return '0';
+    return num.toLocaleString(language === 'JP' ? 'ja-JP' : language === 'PT' ? 'pt-BR' : language === 'ES' ? 'es-ES' : 'en-US', { maximumFractionDigits: 0 });
   };
 
   // Format currency
@@ -59,8 +60,8 @@ const StatsSection = () => {
                 <Skeleton className="h-8 w-24" />
               ) : (
                 <>
-                  <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatCurrency(cardanoscanTreasury || 0)}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">{formatNumber(cardanoscanTreasury || 0)} ADA</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-white">₳{formatNumber(cardanoscanTreasury || 0)}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{formatCurrency(cardanoscanTreasury || 0)}</p>
                 </>
               )}
             </div>
@@ -75,8 +76,8 @@ const StatsSection = () => {
               <TrendingUp className="h-5 w-5 text-cardano-teal" />
             </div>
             <div className="space-y-1">
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatCurrency(INTERSECT_TOTAL_BUDGET)}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">{formatNumber(INTERSECT_TOTAL_BUDGET)} ADA</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">₳{formatNumber(INTERSECT_TOTAL_BUDGET)}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{formatCurrency(INTERSECT_TOTAL_BUDGET)}</p>
             </div>
           </CardContent>
         </Card>
@@ -94,15 +95,15 @@ const StatsSection = () => {
           </CardContent>
         </Card>
 
-        {/* Funded Proposals Card */}
+        {/* Total Vendors Card */}
         <Card className="bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 overflow-hidden shadow-sm hover:shadow-md transition-all">
           <CardContent className="p-4">
             <div className="flex justify-between items-start mb-2">
-              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('teaser.stats.funded_proposals')}</h3>
-              <Award className="h-5 w-5 text-cardano-coral" />
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('stats.total_vendors')}</h3>
+              <Users className="h-5 w-5 text-cardano-coral" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900 dark:text-white">{formatNumber(fundedProposals)}</p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">38</p>
             </div>
           </CardContent>
         </Card>
