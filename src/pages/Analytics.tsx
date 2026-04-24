@@ -17,11 +17,22 @@ import {
   LineChart,
   Line,
   AreaChart,
-  Area
+  Area,
+  LabelList
 } from 'recharts';
-import { treasuryStats, fundRounds } from '@/data/mockData';
+import { treasuryStats } from '@/data/mockData';
 import { intersectProjects } from '@/data/intersectData';
-import { BarChart3, TrendingUp, PieChart as PieChartIcon, Activity } from 'lucide-react';
+import StatCard from '@/components/ui/StatCard';
+import { 
+  BarChart3, 
+  TrendingUp, 
+  PieChart as PieChartIcon, 
+  Activity, 
+  Briefcase, 
+  Users, 
+  Wallet, 
+  Globe 
+} from 'lucide-react';
 
 const Analytics = () => {
   const { t } = useLanguage();
@@ -46,11 +57,24 @@ const Analytics = () => {
 
   const vendorData = Object.keys(vendorSpending)
     .map(vendor => ({
-      name: vendor,
-      amount: vendorSpending[vendor]
+      name: vendor.length > 25 ? vendor.substring(0, 25) + '...' : vendor,
+      fullName: vendor,
+      amount: vendorSpending[vendor],
+      percent: (vendorSpending[vendor] / 345531529) * 100
     }))
     .sort((a, b) => b.amount - a.amount)
     .slice(0, 8);
+
+  // Calculate top projects by budget
+  const topProjectsData = [...intersectProjects]
+    .sort((a, b) => b.totalAmount - a.totalAmount)
+    .slice(0, 8)
+    .map(project => ({
+      name: project.projectName.length > 25 ? project.projectName.substring(0, 25) + '...' : project.projectName,
+      fullName: project.projectName,
+      amount: project.totalAmount,
+      percent: (project.totalAmount / 345531529) * 100
+    }));
 
   // Cardano Treasury Spend data (USD Millions)
   const treasurySpendData = [
@@ -70,22 +94,75 @@ const Analytics = () => {
     { year: '2025**', price: 0.62 },
   ];
 
+  // Quick stats calculations
+  const totalProjects = intersectProjects.length;
+  const uniqueVendors = new Set(intersectProjects.map(p => p.vendor)).size;
+  const totalAllocated = 345531529;
+  const totalSpent = intersectProjects.reduce((sum, p) => sum + p.amountSpent, 0) + 168789504;
+  const avgBudget = intersectProjects.reduce((sum, p) => sum + p.totalAmount, 0) / totalProjects;
+  const allocationPercent = (totalSpent / totalAllocated) * 100;
+
   return (
     <Layout>
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t('analytics.title')}</h1>
-        <p className="text-gray-600 dark:text-gray-400">{t('analytics.description')}</p>
+        <p className="text-gray-600 dark:text-gray-400 max-w-3xl">{t('analytics.description')}</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      {/* Quick Stats Grid - Cleaner and more consistent */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-10">
+        <StatCard 
+          title={t('stats.total_projects')} 
+          value={totalProjects} 
+          icon={<Briefcase className="h-5 w-5" />} 
+          className="bg-cardano-blue/10 dark:bg-cardano-blue/20 border-cardano-blue/30 dark:border-cardano-blue/40" 
+        />
+        <StatCard 
+          title={t('stats.total_vendors')} 
+          value={uniqueVendors} 
+          icon={<Users className="h-5 w-5" />} 
+          className="bg-cardano-teal/10 dark:bg-cardano-teal/20 border-cardano-teal/30 dark:border-cardano-teal/40" 
+        />
+        <StatCard 
+          title={t('stats.intersect_budget')} 
+          value="₳345,531,529" 
+          usdValue="214,229,548"
+          icon={<Wallet className="h-5 w-5" />} 
+          className="bg-purple-50 dark:bg-purple-900/10 border-purple-200 dark:border-purple-800/30" 
+        />
+        <StatCard 
+          title={t('stats.total_spent')} 
+          value="₳343,741,204" 
+          usdValue="213,119,546"
+          change="99.48%"
+          positive={true}
+          icon={<Globe className="h-5 w-5" />} 
+          className="bg-orange-50 dark:bg-orange-900/10 border-orange-200 dark:border-orange-800/30" 
+        />
+        <StatCard 
+          title={t('stats.remaining_budget')} 
+          value="₳1,790,324" 
+          usdValue="1,110,001"
+          change="0.52%"
+          positive={false}
+          icon={<TrendingUp className="h-5 w-5" />} 
+          className="bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800/30" 
+        />
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
         {/* Category Distribution */}
-        <Card className="shadow-sm border-gray-100 dark:border-gray-800 transition-colors">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <PieChartIcon className="h-5 w-5 text-cardano-blue" />
-              <CardTitle>{t('analytics.funding_category')}</CardTitle>
+        <Card className="cardano-card transition-all hover:shadow-xl group">
+          <CardHeader className="border-b border-cardano-teal/10 pb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-cardano-blue/10 dark:bg-cardano-blue/20 rounded-lg">
+                <PieChartIcon className="h-6 w-6 text-cardano-blue" />
+              </div>
+              <div>
+                <CardTitle className="text-xl font-black">{t('analytics.funding_category')}</CardTitle>
+                <CardDescription className="font-medium">{t('analytics.funding_category_desc')}</CardDescription>
+              </div>
             </div>
-            <CardDescription>{t('analytics.funding_category_desc')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-80">
@@ -117,35 +194,58 @@ const Analytics = () => {
           </CardContent>
         </Card>
 
-        {/* Historical Fund Rounds */}
-        <Card className="shadow-sm border-gray-100 dark:border-gray-800 transition-colors">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <BarChart3 className="h-5 w-5 text-cardano-teal" />
-              <CardTitle>{t('analytics.historical_rounds')}</CardTitle>
+        {/* Top Projects by Budget */}
+        <Card className="cardano-card transition-all hover:shadow-xl">
+          <CardHeader className="border-b border-cardano-teal/10 pb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-cardano-teal/10 dark:bg-cardano-teal/20 rounded-lg">
+                <BarChart3 className="h-6 w-6 text-cardano-teal" />
+              </div>
+              <div>
+                <CardTitle className="text-xl font-black">{t('analytics.top_projects')}</CardTitle>
+                <CardDescription className="font-medium">{t('analytics.top_projects_desc')}</CardDescription>
+              </div>
             </div>
-            <CardDescription>{t('analytics.historical_rounds_desc')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={fundRounds}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="text-gray-200 dark:text-gray-700" />
-                  <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: 'currentColor'}} className="text-gray-400 dark:text-gray-500" />
-                  <YAxis yAxisId="left" orientation="left" stroke="#0033AD" axisLine={false} tickLine={false} tick={{fill: '#0033AD'}} />
-                  <YAxis yAxisId="right" orientation="right" stroke="#1BAAD6" axisLine={false} tickLine={false} tick={{fill: '#1BAAD6'}} />
+                <BarChart layout="vertical" data={topProjectsData}>
+                  <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="currentColor" className="text-gray-200 dark:text-gray-700" />
+                  <XAxis type="number" hide />
+                  <YAxis 
+                    dataKey="name" 
+                    type="category" 
+                    axisLine={false} 
+                    tickLine={false} 
+                    width={150} 
+                    tick={{fill: 'currentColor', fontSize: 11}} 
+                    className="text-gray-400 dark:text-gray-500" 
+                  />
                   <Tooltip 
                     contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
                     itemStyle={{ color: '#f3f4f6' }}
                     labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
-                    formatter={(value: number, name: string) => {
-                      if (name.includes('ADA')) return [`₳${value.toLocaleString()}`, t('projects.budget_label')];
-                      return [value.toLocaleString(), name];
-                    }}
-                    cursor={{ fill: 'rgba(0,51,173,0.08)' }}
+                    formatter={(value: number) => [`₳${value.toLocaleString()}`, t('projects.budget_label')]}
+                    labelFormatter={(label, payload) => payload[0]?.payload?.fullName || label}
+                    cursor={{fill: 'rgba(27,170,214,0.08)'}}
                   />
-                  <Bar yAxisId="left" dataKey="totalBudget" name={`${t('projects.budget_label')} (ADA)`} fill="#0033AD" radius={[4, 4, 0, 0]} />
-                  <Bar yAxisId="right" dataKey="proposals" name={t('analytics.proposals')} fill="#1BAAD6" radius={[4, 4, 0, 0]} />
+                  <Bar 
+                    dataKey="amount" 
+                    fill="#1BAAD6" 
+                    radius={[0, 4, 4, 0]} 
+                    barSize={20}
+                  >
+                    <LabelList 
+                      dataKey="percent" 
+                      position="right" 
+                      formatter={(v: number) => `${v.toFixed(1)}%`}
+                      fill="currentColor"
+                      fontSize={10}
+                      fontWeight={700}
+                      dx={5}
+                    />
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -153,15 +253,19 @@ const Analytics = () => {
         </Card>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
         {/* Project Status Breakdown */}
-        <Card className="shadow-sm border-gray-100 dark:border-gray-800 transition-colors">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-orange-500" />
-              <CardTitle>{t('analytics.status_breakdown')}</CardTitle>
+        <Card className="cardano-card transition-all hover:shadow-xl">
+          <CardHeader className="border-b border-cardano-teal/10 pb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-orange-500/10 dark:bg-orange-500/20 rounded-lg">
+                <Activity className="h-6 w-6 text-orange-500" />
+              </div>
+              <div>
+                <CardTitle className="text-xl font-black">{t('analytics.status_breakdown')}</CardTitle>
+                <CardDescription className="font-medium">{t('analytics.status_breakdown_desc')}</CardDescription>
+              </div>
             </div>
-            <CardDescription>{t('analytics.status_breakdown_desc')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-80">
@@ -194,13 +298,17 @@ const Analytics = () => {
         </Card>
 
         {/* Top Vendors by Budget */}
-        <Card className="shadow-sm border-gray-100 dark:border-gray-800 transition-colors">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-green-600" />
-              <CardTitle className="dark:text-white">{t('analytics.top_vendors')}</CardTitle>
+        <Card className="cardano-card transition-all hover:shadow-xl">
+          <CardHeader className="border-b border-cardano-teal/10 pb-4">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-green-600/10 dark:bg-green-600/20 rounded-lg">
+                <TrendingUp className="h-6 w-6 text-green-600" />
+              </div>
+              <div>
+                <CardTitle className="text-xl font-black">{t('analytics.top_vendors')}</CardTitle>
+                <CardDescription className="font-medium">{t('analytics.top_vendors_desc')}</CardDescription>
+              </div>
             </div>
-            <CardDescription className="dark:text-gray-400">{t('analytics.top_vendors_desc')}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-80">
@@ -208,15 +316,39 @@ const Analytics = () => {
                 <BarChart layout="vertical" data={vendorData}>
                   <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="currentColor" className="text-gray-200 dark:text-gray-700" />
                   <XAxis type="number" hide />
-                  <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} width={100} tick={{fill: 'currentColor'}} className="text-gray-400 dark:text-gray-500" />
+                  <YAxis 
+                    dataKey="name" 
+                    type="category" 
+                    axisLine={false} 
+                    tickLine={false} 
+                    width={150} 
+                    tick={{fill: 'currentColor', fontSize: 11}} 
+                    className="text-gray-400 dark:text-gray-500" 
+                  />
                   <Tooltip 
                     contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
                     itemStyle={{ color: '#f3f4f6' }}
                     labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
                     formatter={(value: number) => [`₳${value.toLocaleString()}`, t('projects.budget_label')]}
+                    labelFormatter={(label, payload) => payload[0]?.payload?.fullName || label}
                     cursor={{fill: 'rgba(115,103,240,0.08)'}}
                   />
-                  <Bar dataKey="amount" fill="#7367F0" radius={[0, 4, 4, 0]} barSize={20} />
+                  <Bar 
+                    dataKey="amount" 
+                    fill="#7367F0" 
+                    radius={[0, 4, 4, 0]} 
+                    barSize={20}
+                  >
+                    <LabelList 
+                      dataKey="percent" 
+                      position="right" 
+                      formatter={(v: number) => `${v.toFixed(1)}%`}
+                      fill="currentColor"
+                      fontSize={10}
+                      fontWeight={700}
+                      dx={5}
+                    />
+                  </Bar>
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -225,11 +357,11 @@ const Analytics = () => {
       </div>
 
       {/* Cardano Treasury Spend & ADA Price Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         {/* Treasury Spend (USD) */}
-        <Card className="shadow-sm border-gray-100 dark:border-gray-800 transition-colors overflow-hidden">
-          <CardHeader className="bg-cardano-blue pb-3">
-            <CardTitle className="text-white text-center text-lg font-bold tracking-wide">
+        <Card className="cardano-card transition-all hover:shadow-xl overflow-hidden border-none">
+          <CardHeader className="bg-cardano-blue py-6">
+            <CardTitle className="text-white text-center text-xl font-black tracking-tight">
               {t('analytics.treasury_spend_title')}
             </CardTitle>
           </CardHeader>
@@ -284,9 +416,9 @@ const Analytics = () => {
         </Card>
 
         {/* ADA Price (USD) */}
-        <Card className="shadow-sm border-gray-100 dark:border-gray-800 transition-colors overflow-hidden">
-          <CardHeader className="bg-cardano-blue pb-3">
-            <CardTitle className="text-white text-center text-lg font-bold tracking-wide">
+        <Card className="cardano-card transition-all hover:shadow-xl overflow-hidden border-none">
+          <CardHeader className="bg-cardano-blue py-6">
+            <CardTitle className="text-white text-center text-xl font-black tracking-tight">
               {t('analytics.ada_price_title')}
             </CardTitle>
           </CardHeader>
