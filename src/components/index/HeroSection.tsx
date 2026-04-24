@@ -49,7 +49,8 @@ const HeroSection = () => {
             <button className="hover:text-cardano-blue transition-colors">#Cardano Foundation</button>
             <button className="hover:text-cardano-blue transition-colors">#Intersct</button>
             <button className="hover:text-cardano-blue transition-colors">#Midgard</button>
-
+            <button className="hover:text-cardano-blue transition-colors">#Catalyst</button>
+            <button className="hover:text-cardano-blue transition-colors">#Builder DAO</button>
           </div>
         </div>
 
@@ -57,7 +58,7 @@ const HeroSection = () => {
           <div className="relative group">
             <div className="absolute inset-0 bg-cardano-blue/20 blur-[60px] rounded-full group-hover:bg-cardano-blue/30 transition-all duration-700"></div>
             <img
-              src="/assets/257db3dc-2214-4178-afd2-70760c3899c4.png"
+              src="/assets/hero-chart.png"
               alt="Cardano Chart"
               className="relative h-64 w-auto filter drop-shadow-2xl brightness-110 hover:scale-105 transition-transform duration-700 ease-out"
             />
