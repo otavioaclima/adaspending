@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Sun, Moon, BarChart3, Award, Users, FileText, Vote, Briefcase, Twitter, Mail, Heart, Info, ChevronDown, ExternalLink, X } from 'lucide-react';
+import { Sun, Moon, BarChart3, Award, Users, FileText, Vote, Briefcase, Twitter, Mail, Heart, Info, ChevronDown, ExternalLink, X, Menu } from 'lucide-react';
 import { useTheme } from '@/components/theme-provider';
 import {
   DropdownMenu,
@@ -10,6 +10,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fullWidth?: boolean }) => {
@@ -17,6 +24,7 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
   const { theme, setTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     const dismissed = localStorage.getItem('adaspending-feedback-dismissed');
@@ -133,44 +141,99 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="!text-white hover:bg-white/10"
-              title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-            >
-              {theme === "dark" ? (
-                <Sun className="h-[1.2rem] w-[1.2rem] transition-all" />
-              ) : (
-                <Moon className="h-[1.2rem] w-[1.2rem] transition-all" />
-              )}
-              <span className="sr-only">Toggle theme</span>
-            </Button>
+            <div className="hidden md:block">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="!text-white hover:bg-white/10"
+                title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              >
+                {theme === "dark" ? (
+                  <Sun className="h-[1.2rem] w-[1.2rem] transition-all" />
+                ) : (
+                  <Moon className="h-[1.2rem] w-[1.2rem] transition-all" />
+                )}
+                <span className="sr-only">Toggle theme</span>
+              </Button>
+            </div>
+
+            <div className="md:hidden">
+              <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="!text-white hover:bg-white/10">
+                    <Menu className="h-6 w-6" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="bg-[#131637] border-gray-800 text-white p-0 overflow-y-auto">
+                  <SheetHeader className="p-6 border-b border-gray-800">
+                    <SheetTitle className="text-white text-left flex items-center gap-3">
+                      <img 
+                        src="/assets/14b66eb5-72ae-42fe-94f7-70a49cc9ad69.png" 
+                        className="h-8 w-auto" 
+                        alt="Logo" 
+                      />
+                      <span className="font-bold tracking-tight text-xl">{t('layout.menu')}</span>
+                    </SheetTitle>
+                  </SheetHeader>
+                  
+                  <nav className="flex flex-col p-4 gap-1">
+                    {navigation.map((item) => (
+                      <Link
+                        key={item.href}
+                        to={item.href}
+                        onClick={() => setIsMenuOpen(false)}
+                        className={`flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-200 group ${
+                          location.pathname === item.href 
+                            ? 'bg-cardano-blue text-white shadow-lg shadow-cardano-blue/20' 
+                            : 'text-white/70 hover:bg-white/5 hover:text-white'
+                        }`}
+                      >
+                        <item.icon className={`h-5 w-5 transition-transform duration-200 group-hover:scale-110 ${
+                          location.pathname === item.href ? 'text-white' : 'text-white/50'
+                        }`} />
+                        <span className="font-semibold text-[15px]">{item.name}</span>
+                      </Link>
+                    ))}
+                  </nav>
+
+                  <div className="mt-4 pt-6 border-t border-gray-800 px-6 pb-8">
+                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/30 mb-4 px-1">{t('layout.theme')}</p>
+                    <div className="grid grid-cols-2 gap-3 bg-black/20 p-1.5 rounded-2xl border border-white/5">
+                       <Button 
+                         variant="ghost" 
+                         className={`flex items-center justify-center gap-2 h-11 rounded-xl transition-all duration-300 ${
+                           theme === 'light' 
+                             ? 'bg-white text-[#131637] shadow-lg' 
+                             : 'text-white/60 hover:text-white hover:bg-white/5'
+                         }`}
+                         onClick={() => setTheme('light')}
+                       >
+                         <Sun className="h-4 w-4" />
+                         <span className="text-xs font-bold uppercase tracking-wider">{t('layout.light_mode')}</span>
+                       </Button>
+                       <Button 
+                         variant="ghost" 
+                         className={`flex items-center justify-center gap-2 h-11 rounded-xl transition-all duration-300 ${
+                           theme === 'dark' 
+                             ? 'bg-white text-[#131637] shadow-lg' 
+                             : 'text-white/60 hover:text-white hover:bg-white/5'
+                         }`}
+                         onClick={() => setTheme('dark')}
+                       >
+                         <Moon className="h-4 w-4" />
+                         <span className="text-xs font-bold uppercase tracking-wider">{t('layout.dark_mode')}</span>
+                       </Button>
+                    </div>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* Mobile Navigation */}
-      <div className="md:hidden border-b bg-white shrink-0">
-        <div className="container mx-auto p-2 overflow-x-auto text-center">
-          <div className="flex space-x-2">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className={`inline-flex items-center px-3 py-2 text-sm font-medium rounded-md whitespace-nowrap
-                  ${location.pathname === item.href
-                    ? 'bg-cardano-blue text-white'
-                    : 'text-gray-700 hover:bg-cardano-blue/10 hover:text-cardano-blue'}`}
-              >
-                <item.icon className="h-4 w-4 mr-2" />
-                {item.name}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
+
 
       {/* Main Content */}
       <main className={`flex-grow ${fullWidth ? 'w-full' : 'container mx-auto px-4 py-6'}`}>
