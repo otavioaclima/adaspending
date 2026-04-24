@@ -9,7 +9,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 const FundRoundSection = () => {
   const { t } = useLanguage();
-  const totalBudget = intersectProjects.reduce((sum, p) => sum + p.totalAmount, 0);
+  const totalAllocation = 343741204; // Official Intersect allocated funds
   const totalProjects = intersectProjects.length;
   const uniqueVendors = new Set(intersectProjects.map(p => p.vendor)).size;
 
@@ -37,7 +37,7 @@ const FundRoundSection = () => {
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('explorer.total_allocation')}</p>
               <p className="text-2xl font-black text-cardano-blue dark:text-blue-300">
-                ₳{totalBudget.toLocaleString()}
+                ₳{totalAllocation.toLocaleString()}
               </p>
             </div>
             <div className="text-center p-6 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700 transition-colors">
