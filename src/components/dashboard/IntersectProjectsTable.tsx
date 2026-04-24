@@ -14,6 +14,7 @@ import { intersectProjects } from "@/data/intersectData";
 import { Link } from "react-router-dom";
 import { ArrowUpDown, ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type SortConfig = {
   key: keyof typeof intersectProjects[0] | null;
@@ -34,6 +35,7 @@ const getStatusColor = (status: string) => {
 };
 
 const IntersectProjectsTable = () => {
+  const { t } = useLanguage();
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: null, direction: 'asc' });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
@@ -79,9 +81,9 @@ const IntersectProjectsTable = () => {
   return (
     <Card className="w-full border-none shadow-xl bg-white dark:bg-gray-800/50 backdrop-blur-sm transition-all overflow-hidden">
       <CardHeader className="pb-4">
-        <CardTitle className="text-2xl font-black tracking-tight dark:text-white">Intersect Treasury Projects</CardTitle>
+        <CardTitle className="text-2xl font-black tracking-tight dark:text-white">{t('table.intersect_title')}</CardTitle>
         <CardDescription className="font-medium text-gray-500 dark:text-gray-400">
-          Detailed list of projects funded by Intersect Treasury Contracts 1
+          {t('table.intersect_desc')}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -94,7 +96,7 @@ const IntersectProjectsTable = () => {
                   onClick={() => handleSort('projectName')}
                 >
                   <div className="flex items-center text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                    Project Name
+                    {t('table.project_name')}
                     <SortIcon columnKey="projectName" />
                   </div>
                 </TableHead>
@@ -103,7 +105,7 @@ const IntersectProjectsTable = () => {
                   onClick={() => handleSort('vendor')}
                 >
                   <div className="flex items-center text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                    Vendor
+                    {t('table.vendor')}
                     <SortIcon columnKey="vendor" />
                   </div>
                 </TableHead>
@@ -112,7 +114,7 @@ const IntersectProjectsTable = () => {
                   onClick={() => handleSort('totalAmount')}
                 >
                   <div className="flex items-center justify-end text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                    Total Budget
+                    {t('table.total_budget')}
                     <SortIcon columnKey="totalAmount" />
                   </div>
                 </TableHead>
@@ -121,7 +123,7 @@ const IntersectProjectsTable = () => {
                   onClick={() => handleSort('amountSpent')}
                 >
                   <div className="flex items-center justify-end text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                    Spent
+                    {t('table.spent')}
                     <SortIcon columnKey="amountSpent" />
                   </div>
                 </TableHead>
@@ -130,7 +132,7 @@ const IntersectProjectsTable = () => {
                   onClick={() => handleSort('status')}
                 >
                   <div className="flex items-center justify-center text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                    Status
+                    {t('table.status')}
                     <SortIcon columnKey="status" />
                   </div>
                 </TableHead>
@@ -169,7 +171,7 @@ const IntersectProjectsTable = () => {
         {/* Pagination Controls */}
         <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-            Showing <span className="text-gray-900 dark:text-white font-bold">{startIndex + 1}</span> to <span className="text-gray-900 dark:text-white font-bold">{Math.min(startIndex + itemsPerPage, totalItems)}</span> of <span className="text-gray-900 dark:text-white font-bold">{totalItems}</span> projects
+            {t('table.showing')} <span className="text-gray-900 dark:text-white font-bold">{startIndex + 1}</span> {t('table.to')} <span className="text-gray-900 dark:text-white font-bold">{Math.min(startIndex + itemsPerPage, totalItems)}</span> {t('table.of')} <span className="text-gray-900 dark:text-white font-bold">{totalItems}</span> {t('table.projects')}
           </p>
           
           <div className="flex items-center gap-2">
