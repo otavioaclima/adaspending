@@ -374,9 +374,9 @@ const ProjectDetail = () => {
                       ≈ ${ (project.totalAmount * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }) } USD
                     </span>
                   </div>
-                  <div className="mt-3 flex items-center text-[10px] font-black text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 w-fit px-2.5 py-1.5 rounded-lg border border-green-100 dark:border-green-900/30">
+                  <div className="mt-3 flex items-center text-[10px] font-black text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 w-fit px-2.5 py-1.5 rounded-lg border border-green-100 dark:border-green-900/30 uppercase">
                     <DollarSign className="h-3 w-3 mr-1.5" />
-                    CURRENCY: ADA
+                    {t('project.currency_label')}: ADA
                   </div>
                 </div>
 
