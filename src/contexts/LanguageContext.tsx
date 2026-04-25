@@ -533,6 +533,8 @@ const translations: Record<Language, Record<string, string>> = {
     'project.usd_conversion_tooltip': 'The value is converted using the current ADA market price, not the price at the time of receipt.',
     'project.share': 'Share',
     'project.link_copied': 'Link copied to clipboard',
+    'project.views': 'Views',
+    'project.total_views': 'Total Views',
   },
   PT: {
     'nav.overview': 'Visão Geral',
@@ -1054,6 +1056,8 @@ const translations: Record<Language, Record<string, string>> = {
     'project.usd_conversion_tooltip': 'O valor está sendo convertido pelo preço atual da ADA, e não na data do recebimento do recurso.',
     'project.share': 'Compartilhar',
     'project.link_copied': 'Link copiado para a área de transferência',
+    'project.views': 'Visualizações',
+    'project.total_views': 'Total de Visualizações',
   },
   ES: {
     'nav.overview': 'Resumen',
@@ -1576,6 +1580,8 @@ const translations: Record<Language, Record<string, string>> = {
     'project.usd_conversion_tooltip': 'El valor se convierte utilizando el precio de mercado actual de ADA, no el precio en el momento de la recepción.',
     'project.share': 'Compartir',
     'project.link_copied': 'Enlace copiado al portapapeles',
+    'project.views': 'Visualizaciones',
+    'project.total_views': 'Total de Visualizaciones',
   },
   JP: {
     'nav.overview': '概要',
@@ -2097,6 +2103,8 @@ const translations: Record<Language, Record<string, string>> = {
     'project.usd_conversion_tooltip': '値は資金受領時ではなく、現在のADA市場価格を使用して換算されています。',
     'project.share': '共有',
     'project.link_copied': 'リンクをクリップボードにコピーしました',
+    'project.views': '閲覧数',
+    'project.total_views': '合計閲覧数',
   }
 };
 
