@@ -20,6 +20,7 @@ import { Separator } from '@/components/ui/separator';
 import Layout from '@/components/layout/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { intersectProjects } from '@/data/intersectData';
+import { getVendorProfile } from '@/data/vendorProfiles';
 
 const getStatusIcon = (status: string) => {
   switch (status.toLowerCase()) {
@@ -265,7 +266,23 @@ const ProjectDetail = () => {
                 <div className="p-6">
                   <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">{t('project.vendor_label')}</p>
                   <Link to={`/vendors/${encodeURIComponent(project.vendor)}`} className="flex items-center gap-4 group p-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm hover:border-cardano-blue hover:shadow-md transition-all">
-                    <div className="bg-cardano-blue/10 p-3 rounded-xl text-cardano-blue group-hover:bg-cardano-blue group-hover:text-white transition-colors">
+                    {/* Vendor logo or fallback icon */}
+                    {(() => {
+                      const p = getVendorProfile(project.vendor);
+                      return p?.logo ? (
+                        <img
+                          src={p.logo}
+                          alt={`${project.vendor} logo`}
+                          className="w-12 h-12 rounded-xl object-cover border border-gray-100 dark:border-gray-700 shadow-sm shrink-0"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                            const next = (e.target as HTMLImageElement).nextElementSibling as HTMLElement | null;
+                            if (next) next.style.display = 'flex';
+                          }}
+                        />
+                      ) : null;
+                    })()}
+                    <div className={`bg-cardano-blue/10 p-3 rounded-xl text-cardano-blue group-hover:bg-cardano-blue group-hover:text-white transition-colors ${getVendorProfile(project.vendor)?.logo ? 'hidden' : ''}`}>
                       <Building className="h-6 w-6" />
                     </div>
                     <div className="flex-1 min-w-0">

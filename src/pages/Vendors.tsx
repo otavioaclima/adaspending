@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/table";
 import Layout from '@/components/layout/Layout';
 import { intersectProjects } from '@/data/intersectData';
+import { getVendorProfile } from '@/data/vendorProfiles';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 // Helper to get unique vendors and their aggregated stats
@@ -53,12 +54,28 @@ const useVendorStats = () => {
 
 const VendorCard = ({ vendor }: { vendor: any }) => {
   const { t } = useLanguage();
+  const profile = getVendorProfile(vendor.name);
   return (
     <Link to={`/vendors/${encodeURIComponent(vendor.name)}`}>
       <Card className="h-full hover:shadow-lg transition-all border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800/40 group">
         <CardContent className="p-5">
           <div className="flex items-center gap-4 mb-4">
-            <div className="bg-cardano-blue/10 dark:bg-cardano-blue/20 rounded-xl w-12 h-12 flex items-center justify-center group-hover:bg-cardano-blue group-hover:text-white transition-colors text-cardano-blue">
+            {/* Vendor logo or fallback icon */}
+            {profile?.logo ? (
+              <img
+                src={profile.logo}
+                alt={`${vendor.name} logo`}
+                className="w-12 h-12 rounded-xl object-cover border border-gray-100 dark:border-gray-700 shadow-sm shrink-0"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = 'none';
+                  const next = (e.target as HTMLImageElement).nextElementSibling as HTMLElement | null;
+                  if (next) next.style.display = 'flex';
+                }}
+              />
+            ) : null}
+            <div
+              className={`bg-cardano-blue/10 dark:bg-cardano-blue/20 rounded-xl w-12 h-12 items-center justify-center group-hover:bg-cardano-blue group-hover:text-white transition-colors text-cardano-blue shrink-0 ${profile?.logo ? 'hidden' : 'flex'}`}
+            >
               <Building className="h-6 w-6" />
             </div>
             <div>
@@ -328,12 +345,30 @@ const Vendors = () => {
                 {sortedVendors.map((vendor) => (
                   <TableRow key={vendor.name} className="border-gray-100 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-gray-900/30">
                     <TableCell className="font-medium">
-                      <Link 
+                      <Link
                         to={`/vendors/${encodeURIComponent(vendor.name)}`}
-                        className="text-cardano-blue hover:underline font-bold truncate max-w-[250px] block"
+                        className="flex items-center gap-3 group"
                         title={vendor.name}
                       >
-                        {vendor.name}
+                        {/* Logo or icon in list view */}
+                        {(() => {
+                          const p = getVendorProfile(vendor.name);
+                          return p?.logo ? (
+                            <img
+                              src={p.logo}
+                              alt={vendor.name}
+                              className="w-7 h-7 rounded-lg object-cover border border-gray-100 dark:border-gray-700 shrink-0"
+                              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                            />
+                          ) : (
+                            <div className="w-7 h-7 rounded-lg bg-cardano-blue/10 dark:bg-cardano-blue/20 flex items-center justify-center shrink-0">
+                              <Building className="h-4 w-4 text-cardano-blue" />
+                            </div>
+                          );
+                        })()}
+                        <span className="text-cardano-blue hover:underline font-bold truncate max-w-[220px] block">
+                          {vendor.name}
+                        </span>
                       </Link>
                     </TableCell>
                     <TableCell className="text-gray-900 dark:text-gray-100 font-medium">
