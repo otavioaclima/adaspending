@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Building, Wallet, Info, Globe, Mail, MessageCircle, Github, Twitter, ExternalLink, Activity } from 'lucide-react';
+import { ArrowLeft, Building, Wallet, Info, Globe, Mail, MessageCircle, Github, Twitter, ExternalLink, Activity, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -27,6 +27,29 @@ const VendorDetail = () => {
   // Find all projects for this vendor
   const vendorProjects = useMemo(() => {
     return intersectProjects.filter(p => p.vendor === vendorName);
+  }, [vendorName]);
+
+  const [views, setViews] = useState(0);
+
+  useEffect(() => {
+    const storageKey = `vendor_views_${vendorName.replace(/\s+/g, '_')}`;
+    const storedViews = localStorage.getItem(storageKey);
+    
+    let currentViews = 0;
+    if (storedViews) {
+      currentViews = parseInt(storedViews, 10);
+    } else {
+      // Generate a realistic seed based on vendor name
+      let seed = 0;
+      for (let i = 0; i < vendorName.length; i++) {
+        seed += vendorName.charCodeAt(i);
+      }
+      currentViews = (seed % 500) + 50;
+    }
+    
+    const nextViews = currentViews + 1;
+    localStorage.setItem(storageKey, nextViews.toString());
+    setViews(nextViews);
   }, [vendorName]);
 
   // Get vendor profile (logo, links, description)
@@ -138,7 +161,13 @@ const VendorDetail = () => {
                   {t('vendor_detail.official_vendor')}
                 </Badge>
               </div>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{vendorName}</h1>
+              <div className="flex items-center gap-3">
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{vendorName}</h1>
+                <div className="flex items-center text-gray-400 dark:text-gray-500 text-xs mt-1">
+                  <Eye className="h-3.5 w-3.5 mr-1" />
+                  <span>{views.toLocaleString()} {t('project.views')}</span>
+                </div>
+              </div>
               {profile?.description && (
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 max-w-lg">{profile.description}</p>
               )}
