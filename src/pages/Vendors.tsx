@@ -79,7 +79,7 @@ const VendorCard = ({ vendor }: { vendor: any }) => {
               <Building className="h-6 w-6" />
             </div>
             <div>
-              <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-cardano-blue transition-colors leading-tight truncate max-w-[200px]" title={vendor.name}>
+              <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-cardano-blue transition-colors leading-tight truncate max-w-[300px]" title={vendor.name}>
                 {vendor.name}
               </h3>
               <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">
@@ -366,7 +366,7 @@ const Vendors = () => {
                             </div>
                           );
                         })()}
-                        <span className="text-cardano-blue hover:underline font-bold truncate max-w-[220px] block">
+                        <span className="text-cardano-blue hover:underline font-bold truncate max-w-[450px] block">
                           {vendor.name}
                         </span>
                       </Link>
