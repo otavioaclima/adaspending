@@ -1,4 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import en from '@/data/translations/en';
+import pt from '@/data/translations/pt';
+import es from '@/data/translations/es';
+import jp from '@/data/translations/jp';
 
 export type Language = 'EN' | 'PT' | 'ES' | 'JP';
 
@@ -12,39 +16,27 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 type Translations = Record<string, string>;
 
-const translationLoaders: Record<Language, () => Promise<{ default: Translations }>> = {
-  EN: () => import('@/data/translations/en'),
-  PT: () => import('@/data/translations/pt'),
-  ES: () => import('@/data/translations/es'),
-  JP: () => import('@/data/translations/jp'),
+const translationsMap: Record<Language, Translations> = {
+  EN: en,
+  PT: pt,
+  ES: es,
+  JP: jp,
 };
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguage] = useState<Language>(() => {
     return (localStorage.getItem('adaspending-lang') as Language) || 'EN';
   });
-  const [translations, setTranslations] = useState<Translations | null>(null);
-  const [fallbackTranslations, setFallbackTranslations] = useState<Translations | null>(null);
 
   useEffect(() => {
     localStorage.setItem('adaspending-lang', language);
-    
-    // Load current language
-    translationLoaders[language]().then(module => {
-      setTranslations(module.default);
-    }).catch(err => console.error(`Failed to load translations for ${language}:`, err));
-
-    // Load EN as fallback if not already loaded
-    if (language !== 'EN' && !fallbackTranslations) {
-      translationLoaders['EN']().then(module => {
-        setFallbackTranslations(module.default);
-      }).catch(err => console.error('Failed to load fallback translations (EN):', err));
-    }
-  }, [language, fallbackTranslations]);
+  }, [language]);
 
   const t = (key: string): string => {
-    if (!translations) return key;
-    return translations[key] ?? fallbackTranslations?.[key] ?? key;
+    const currentTranslations = translationsMap[language];
+    const fallbackTranslations = translationsMap['EN'];
+    
+    return currentTranslations[key] ?? fallbackTranslations[key] ?? key;
   };
 
   return (
