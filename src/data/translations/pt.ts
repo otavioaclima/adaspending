@@ -246,7 +246,7 @@ export default {
   'about.a1': 'Os dados de gastos on-chain são atualizados a cada 24 horas. Os metadados de projetos e marcos são sincronizados várias vezes ao dia para garantir a precisão.',
   'about.q2': 'Posso sugerir um novo recurso?',
   'about.a2': 'Com certeza! Somos um projeto de código aberto. Você pode contribuir diretamente no GitHub ou entrar em contato conosco através de nossos canais comunitários.',
-  'layout.disclaimer': 'Rastreando os dados do Tesouro Cardano diretamente de contratos inteligentes na blockchain.',
+  'layout.disclaimer': 'Rastreando os dados do Tesouro Cardano diretamente da blockchain.',
   'footer.description': 'Uma fonte de dados aberta para os gastos do tesouro na blockchain Cardano. Trazendo transparência e prestação de contas aos fundos da comunidade.',
   'footer.explore': 'Explorar',
   'footer.data': 'Dados',

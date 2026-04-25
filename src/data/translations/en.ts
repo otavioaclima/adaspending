@@ -245,7 +245,7 @@ export default {
   'about.a1': 'On-chain spending data is updated every 24 hours. Metadata for projects and milestones is synced multiple times per day to ensure accuracy.',
   'about.q2': 'Can I suggest a new feature?',
   'about.a2': 'Absolutely! We are an open-source project. You can contribute directly on GitHub or reach out to us through our community channels.',
-  'layout.disclaimer': 'Tracking Cardano Treasury data directly from smart contracts on blockchain.',
+  'layout.disclaimer': 'Tracking Cardano Treasury data directly from the blockchain.',
   'footer.description': 'An open data source for treasury spending on the Cardano blockchain. Bringing transparency and accountability to community funds.',
   'footer.explore': 'Explore',
   'footer.data': 'Data',

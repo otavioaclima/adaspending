@@ -39,7 +39,7 @@ const HeroSection = () => {
         <Link to="/" className="flex flex-col items-center mb-8">
           <img 
             alt="ADAspending Graph Logo" 
-            className="h-40 md:h-56 mb-10 animate-fade-in animate-float object-contain w-auto max-w-[85%] drop-shadow-[0_0_40px_rgba(0,51,173,0.5)] dark:drop-shadow-[0_0_50px_rgba(59,130,246,0.4)] hover:scale-105 transition-all duration-1000" 
+            className="h-52 md:h-24 mb-10 animate-fade-in animate-float object-contain w-auto max-w-[90%] drop-shadow-[0_0_40px_rgba(0,51,173,0.5)] dark:drop-shadow-[0_0_50px_rgba(59,130,246,0.4)] hover:scale-105 transition-all duration-1000" 
             src="/assets/1b553c01-58c1-4454-8098-2be801352be8.png" 
             fetchpriority="high"
             loading="eager"

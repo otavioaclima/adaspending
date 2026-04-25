@@ -192,7 +192,6 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
                         className="h-8 w-auto" 
                         alt="Logo" 
                       />
-                      <span className="font-bold tracking-tight text-xl">{t('layout.menu')}</span>
                     </SheetTitle>
                   </SheetHeader>
                   
@@ -202,10 +201,10 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
                         key={item.href}
                         to={item.href}
                         onClick={() => setIsMenuOpen(false)}
-                        className={`flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-200 group ${
+                        className={`flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-200 group active:scale-[0.98] focus:outline-none focus:bg-white/10 ${
                           location.pathname === item.href 
                             ? 'bg-cardano-blue text-white shadow-lg shadow-cardano-blue/20' 
-                            : 'text-white/70 hover:bg-white/5 hover:text-white'
+                            : 'text-white hover:bg-white/5 active:bg-white/10'
                         }`}
                       >
                         <item.icon className={`h-5 w-5 transition-transform duration-200 group-hover:scale-110 ${
