@@ -41,6 +41,7 @@ const HeroSection = () => {
             alt="ADAspending Graph Logo" 
             className="h-28 md:h-28 mb-4 animate-fade-in object-contain w-auto max-w-full hover:opacity-90 transition-opacity" 
             src="/assets/1b553c01-58c1-4454-8098-2be801352be8.png" 
+            fetchpriority="high"
           />
         </Link>
 

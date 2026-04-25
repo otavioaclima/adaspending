@@ -85,6 +85,8 @@ const Footer = () => {
                 src="/assets/14b66eb5-72ae-42fe-94f7-70a49cc9ad69.png"
                 alt="ADAspending Logo"
                 className="h-10 w-auto"
+                loading="lazy"
+                decoding="async"
               />
             </Link>
             <p className="text-white/60 text-sm leading-relaxed mb-8 max-w-sm">
