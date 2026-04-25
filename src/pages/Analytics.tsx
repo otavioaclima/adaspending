@@ -102,6 +102,36 @@ const Analytics = () => {
   const avgBudget = intersectProjects.reduce((sum, p) => sum + p.totalAmount, 0) / totalProjects;
   const allocationPercent = (totalSpent / totalAllocated) * 100;
 
+  // Aggregate aggregate payments data
+  const chartData = useMemo(() => {
+    const monthlyData: Record<string, { amount: number }> = {};
+    
+    intersectProjects.forEach(project => {
+      if (project.milestones) {
+        project.milestones.forEach(milestone => {
+          if (milestone.status.toLowerCase() === 'withdrawn') {
+            const date = new Date(milestone.unlockDate);
+            if (!isNaN(date.getTime())) {
+              const monthYear = date.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+              if (!monthlyData[monthYear]) {
+                monthlyData[monthYear] = { amount: 0 };
+              }
+              monthlyData[monthYear].amount += milestone.amount;
+            }
+          }
+        });
+      }
+    });
+
+    return Object.keys(monthlyData)
+      .map(key => ({
+        date: key,
+        amount: monthlyData[key].amount,
+        timestamp: new Date(key).getTime()
+      }))
+      .sort((a, b) => a.timestamp - b.timestamp);
+  }, []);
+
   return (
     <Layout>
       <div className="mb-8">
@@ -355,6 +385,65 @@ const Analytics = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Global Payments Over Time Chart */}
+      <Card className="cardano-card transition-all hover:shadow-xl mb-12">
+        <CardHeader className="border-b border-cardano-teal/10 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-cardano-blue/10 dark:bg-cardano-blue/20 rounded-lg">
+              <Activity className="h-6 w-6 text-cardano-blue" />
+            </div>
+            <div>
+              <CardTitle className="text-xl font-black">{t('analytics.payments_over_time')}</CardTitle>
+              <CardDescription className="font-medium">{t('analytics.payments_over_time_desc')}</CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-8">
+          <div className="h-[400px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={chartData}>
+                <defs>
+                  <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="hsl(var(--cardano-blue))" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="hsl(var(--cardano-blue))" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="text-gray-100 dark:text-gray-700" />
+                <XAxis 
+                  dataKey="date" 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{ fill: 'currentColor', fontSize: 12, fontWeight: 600 }} 
+                  className="text-gray-400 dark:text-gray-500"
+                />
+                <YAxis 
+                  axisLine={false} 
+                  tickLine={false} 
+                  tick={{ fill: 'currentColor', fontSize: 12 }} 
+                  className="text-gray-400 dark:text-gray-500"
+                  tickFormatter={(v) => `₳${v >= 1000000 ? (v/1000000).toFixed(1) + 'M' : (v/1000).toFixed(0) + 'k'}`}
+                />
+                <Tooltip 
+                  contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
+                  itemStyle={{ color: '#f3f4f6', fontWeight: 600 }}
+                  labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 6 }}
+                  formatter={(value: number) => [`₳${value.toLocaleString()}`, t('analytics.amount_spent')]}
+                />
+                <Area 
+                  type="monotone" 
+                  dataKey="amount" 
+                  stroke="hsl(var(--cardano-blue))" 
+                  strokeWidth={3}
+                  fillOpacity={1} 
+                  fill="url(#colorAmount)" 
+                  animationDuration={1500}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Cardano Treasury Spend & ADA Price Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
