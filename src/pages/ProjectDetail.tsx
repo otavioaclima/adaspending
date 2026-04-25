@@ -136,20 +136,26 @@ const ProjectDetail = () => {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-3">
               <Badge variant="outline" className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 dark:text-gray-300">{t('fund.intersect_contracts')}</Badge>
-              <TooltipProvider>
-                <UITooltip>
-                  <TooltipTrigger asChild>
-                    <Badge className={`${getStatusColor(project.status)} border shadow-sm cursor-help`}>
-                      <StatusIcon className="h-3.5 w-3.5 mr-1" />
-                      {project.status}
-                      <HelpCircle className="h-3 w-3 ml-1.5 opacity-60" />
-                    </Badge>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p className="max-w-xs">{t('project.status_tooltip')}</p>
-                  </TooltipContent>
-                </UITooltip>
-              </TooltipProvider>
+              <div className="flex items-center gap-2">
+                <Badge className={`${getStatusColor(project.status)} border shadow-sm`}>
+                  <StatusIcon className="h-3.5 w-3.5 mr-1" />
+                  {project.status}
+                </Badge>
+                <TooltipProvider>
+                  <UITooltip>
+                    <TooltipTrigger asChild>
+                      <button className="text-gray-400 hover:text-cardano-blue dark:hover:text-blue-400 transition-colors p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
+                        <HelpCircle className="h-4 w-4" />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-gray-900 text-white border-gray-800 shadow-2xl max-w-xs p-3 backdrop-blur-md">
+                      <p className="text-xs font-medium leading-relaxed">
+                        {t(`status.${project.status.toLowerCase().replace(' ', '_')}_tooltip` as any) || t('project.status_tooltip')}
+                      </p>
+                    </TooltipContent>
+                  </UITooltip>
+                </TooltipProvider>
+              </div>
             </div>
             <h1 className="text-2xl md:text-4xl font-black text-gray-900 dark:text-white leading-tight tracking-tight mb-2">
               {project.projectName}
