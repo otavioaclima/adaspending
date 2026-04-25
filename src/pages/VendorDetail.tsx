@@ -1,8 +1,18 @@
 import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Building, Wallet, Info, Globe, Mail, MessageCircle, Github, Twitter, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Building, Wallet, Info, Globe, Mail, MessageCircle, Github, Twitter, ExternalLink, Activity } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { 
+  AreaChart, 
+  Area, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer 
+} from 'recharts';
 import Layout from '@/components/layout/Layout';
 import { intersectProjects } from '@/data/intersectData';
 import { getVendorProfile } from '@/data/vendorProfiles';
@@ -31,6 +41,38 @@ const VendorDetail = () => {
       projectCount: vendorProjects.length,
       completedCount: vendorProjects.filter(p => p.status.toLowerCase() === 'completed').length,
     };
+  }, [vendorProjects]);
+
+  // Aggregate transaction data over time
+  const chartData = useMemo(() => {
+    if (vendorProjects.length === 0) return [];
+
+    const monthlyData: Record<string, number> = {};
+    
+    vendorProjects.forEach(project => {
+      if (project.milestones) {
+        project.milestones.forEach(milestone => {
+          if (milestone.status.toLowerCase() === 'withdrawn') {
+            const date = new Date(milestone.unlockDate);
+            if (!isNaN(date.getTime())) {
+              const monthYear = date.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+              monthlyData[monthYear] = (monthlyData[monthYear] || 0) + milestone.amount;
+            }
+          }
+        });
+      }
+    });
+
+    // Convert to array and sort by date
+    const sortedData = Object.keys(monthlyData)
+      .map(key => ({
+        date: key,
+        amount: monthlyData[key],
+        timestamp: new Date(key).getTime()
+      }))
+      .sort((a, b) => a.timestamp - b.timestamp);
+
+    return sortedData;
   }, [vendorProjects]);
 
   if (vendorProjects.length === 0 || !stats) {
@@ -162,6 +204,66 @@ const VendorDetail = () => {
                 .replace('{total}', stats.totalFunded.toLocaleString())}
             </p>
           </div>
+
+          {/* Transactions Over Time Chart */}
+          {chartData.length > 0 && (
+            <Card className="border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-gray-800/40 transition-colors">
+              <CardHeader className="border-b border-gray-100 dark:border-gray-700 pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-cardano-blue/10 dark:bg-cardano-blue/20 rounded-lg">
+                    <Activity className="h-5 w-5 text-cardano-blue" />
+                  </div>
+                  <div>
+                    <CardTitle className="text-lg font-bold dark:text-white">{t('vendor_detail.transactions_over_time')}</CardTitle>
+                    <CardDescription className="text-xs">{t('vendor_detail.transactions_over_time_desc')}</CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <div className="h-72">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={chartData}>
+                      <defs>
+                        <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="hsl(var(--cardano-blue))" stopOpacity={0.3}/>
+                          <stop offset="95%" stopColor="hsl(var(--cardano-blue))" stopOpacity={0}/>
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="text-gray-100 dark:text-gray-700" />
+                      <XAxis 
+                        dataKey="date" 
+                        axisLine={false} 
+                        tickLine={false} 
+                        tick={{ fill: 'currentColor', fontSize: 11 }} 
+                        className="text-gray-400 dark:text-gray-500"
+                      />
+                      <YAxis 
+                        axisLine={false} 
+                        tickLine={false} 
+                        tick={{ fill: 'currentColor', fontSize: 11 }} 
+                        className="text-gray-400 dark:text-gray-500"
+                        tickFormatter={(v) => `₳${v >= 1000 ? (v/1000).toFixed(0) + 'k' : v}`}
+                      />
+                      <Tooltip 
+                        contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
+                        itemStyle={{ color: '#f3f4f6' }}
+                        labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
+                        formatter={(value: number) => [`₳${value.toLocaleString()}`, t('projects.budget_label')]}
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey="amount" 
+                        stroke="hsl(var(--cardano-blue))" 
+                        strokeWidth={3}
+                        fillOpacity={1} 
+                        fill="url(#colorAmount)" 
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           <VendorAccountingTable transactionRows={transactionRows} totalFunded={stats.totalFunded} />
         </div>

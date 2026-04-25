@@ -94,7 +94,7 @@ const ProjectDetail = () => {
               </Badge>
               <span className="text-xs text-gray-400 dark:text-gray-500 font-mono ml-2 px-2 py-0.5 bg-gray-100 dark:bg-gray-800 rounded">ID: {project.id}</span>
             </div>
-            <h1 className="text-3xl md:text-5xl font-black text-gray-900 dark:text-white leading-tight tracking-tight mb-2">
+            <h1 className="text-2xl md:text-4xl font-black text-gray-900 dark:text-white leading-tight tracking-tight mb-2">
               {project.projectName}
             </h1>
             <p className="text-gray-500 dark:text-gray-400 flex items-center font-medium">
