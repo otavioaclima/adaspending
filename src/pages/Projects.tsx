@@ -290,7 +290,7 @@ const Projects = () => {
                     </Badge>
                     <span className="text-xs text-gray-500 font-mono">{project.id}</span>
                   </div>
-                  <CardTitle className="text-xl line-clamp-2 min-h-[3.5rem] leading-tight">
+                  <CardTitle className="text-xl line-clamp-2 overflow-hidden h-[3.5rem] leading-tight">
                     {project.projectName}
                   </CardTitle>
                 </CardHeader>
