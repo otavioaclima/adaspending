@@ -7,11 +7,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React, { Suspense, lazy } from "react";
 
 // Lazy load pages
-const Index = lazy(() => import("./pages/Index"));
+import Index from "./pages/Index";
+import Teaser from "./pages/Teaser";
+
+// Lazy load other pages
 const Vendors = lazy(() => import("./pages/Vendors"));
 const VendorDetail = lazy(() => import("./pages/VendorDetail"));
 const SpendingExplorer = lazy(() => import("./pages/SpendingExplorer"));
-const Teaser = lazy(() => import("./pages/Teaser"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const InformationArchitecture = lazy(() => import("./pages/InformationArchitecture"));
 const Wireframe = lazy(() => import("./pages/Wireframe"));
@@ -38,11 +40,8 @@ const queryClient = new QueryClient();
 
 // Elegant loading fallback
 const LoadingFallback = () => (
-  <div className="fixed inset-0 flex items-center justify-center bg-[#000111] z-[100]">
-    <div className="flex flex-col items-center">
-      <div className="w-12 h-12 border-4 border-cardano-blue border-t-transparent rounded-full animate-spin mb-4" />
-      <p className="text-white/50 text-xs font-bold uppercase tracking-[0.2em] animate-pulse">Loading Experience</p>
-    </div>
+  <div className="fixed inset-0 flex items-center justify-center bg-white/20 dark:bg-black/20 backdrop-blur-[2px] z-[100]">
+    <div className="w-8 h-8 border-2 border-cardano-blue border-t-transparent rounded-full animate-spin" />
   </div>
 );
 
