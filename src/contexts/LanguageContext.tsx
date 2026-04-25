@@ -476,6 +476,8 @@ const translations: Record<Language, Record<string, string>> = {
     'layout.theme': 'Theme',
     'layout.light_mode': 'Light Mode',
     'layout.dark_mode': 'Dark Mode',
+    'project.status_tooltip': 'Current delivery status of the project according to Intersect Treasury records.',
+    'project.usd_conversion_tooltip': 'The value is converted using the current ADA market price, not the price at the time of receipt.',
   },
   PT: {
     'nav.overview': 'Visão Geral',
@@ -940,6 +942,8 @@ const translations: Record<Language, Record<string, string>> = {
     'layout.theme': 'Tema',
     'layout.light_mode': 'Modo Claro',
     'layout.dark_mode': 'Modo Escuro',
+    'project.status_tooltip': 'Status atual de entrega do projeto conforme registros do Tesouro Intersect.',
+    'project.usd_conversion_tooltip': 'O valor está sendo convertido pelo preço atual da ADA, e não na data do recebimento do recurso.',
   },
   ES: {
     'nav.overview': 'Resumen',
@@ -1404,7 +1408,9 @@ const translations: Record<Language, Record<string, string>> = {
     'layout.menu': 'Menú',
     'layout.theme': 'Tema',
     'layout.light_mode': 'Modo Claro',
-    'layout.dark_mode': 'Modo Oscuro',
+    'layout.dark_mode': 'Modo Escuro',
+    'project.status_tooltip': 'Estado actual de entrega del proyecto según los registros del Tesoro de Intersect.',
+    'project.usd_conversion_tooltip': 'El valor se convierte utilizando el precio de mercado actual de ADA, no el precio en el momento de la recepción.',
   },
   JP: {
     'nav.overview': '概要',
@@ -1869,6 +1875,8 @@ const translations: Record<Language, Record<string, string>> = {
     'layout.theme': 'テーマ',
     'layout.light_mode': 'ライトモード',
     'layout.dark_mode': 'ダークモード',
+    'project.status_tooltip': 'Intersect財務記録によるプロジェクトの現在の配信ステータス。',
+    'project.usd_conversion_tooltip': '値は資金受領時ではなく、現在のADA市場価格を使用して換算されています。',
   }
 };
 

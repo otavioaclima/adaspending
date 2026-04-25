@@ -12,7 +12,8 @@ import {
   Building,
   DollarSign,
   Calendar,
-  Activity
+  Activity,
+  HelpCircle
 } from 'lucide-react';
 import { 
   AreaChart, 
@@ -32,6 +33,12 @@ import Layout from '@/components/layout/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { intersectProjects } from '@/data/intersectData';
 import { getVendorProfile } from '@/data/vendorProfiles';
+import { 
+  Tooltip as UITooltip, 
+  TooltipContent, 
+  TooltipProvider, 
+  TooltipTrigger 
+} from '@/components/ui/tooltip';
 
 const getStatusIcon = (status: string) => {
   switch (status.toLowerCase()) {
@@ -129,22 +136,34 @@ const ProjectDetail = () => {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-3">
               <Badge variant="outline" className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 dark:text-gray-300">{t('fund.intersect_contracts')}</Badge>
-              <Badge className={`${getStatusColor(project.status)} border shadow-sm`}>
-                <StatusIcon className="h-3.5 w-3.5 mr-1" />
-                {project.status}
-              </Badge>
-              <span className="text-xs text-gray-400 dark:text-gray-500 font-mono ml-2 px-2 py-0.5 bg-gray-100 dark:bg-gray-800 rounded">ID: {project.id}</span>
+              <TooltipProvider>
+                <UITooltip>
+                  <TooltipTrigger asChild>
+                    <Badge className={`${getStatusColor(project.status)} border shadow-sm cursor-help`}>
+                      <StatusIcon className="h-3.5 w-3.5 mr-1" />
+                      {project.status}
+                      <HelpCircle className="h-3 w-3 ml-1.5 opacity-60" />
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p className="max-w-xs">{t('project.status_tooltip')}</p>
+                  </TooltipContent>
+                </UITooltip>
+              </TooltipProvider>
             </div>
             <h1 className="text-2xl md:text-4xl font-black text-gray-900 dark:text-white leading-tight tracking-tight mb-2">
               {project.projectName}
             </h1>
-            <p className="text-gray-500 dark:text-gray-400 flex items-center font-medium">
-              {t('project.vendor_label')}:
-              <Link to={`/vendors/${encodeURIComponent(project.vendor)}`} className="text-cardano-blue hover:underline ml-1.5 font-bold flex items-center">
-                {project.vendor}
-                <ExternalLink className="h-3 w-3 ml-1 opacity-50" />
-              </Link>
-            </p>
+            <div className="flex flex-wrap items-center gap-y-2">
+              <p className="text-gray-500 dark:text-gray-400 flex items-center font-medium mr-3">
+                {t('project.vendor_label')}:
+                <Link to={`/vendors/${encodeURIComponent(project.vendor)}`} className="text-cardano-blue hover:underline ml-1.5 font-bold flex items-center">
+                  {project.vendor}
+                  <ExternalLink className="h-3 w-3 ml-1 opacity-50" />
+                </Link>
+              </p>
+              <span className="text-xs text-gray-400 dark:text-gray-500 font-mono px-2 py-0.5 bg-gray-100 dark:bg-gray-800 rounded">ID: {project.id}</span>
+            </div>
           </div>
 
           <div className="flex gap-2 shrink-0">
@@ -370,9 +389,19 @@ const ProjectDetail = () => {
                   <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">{t('project.total_budget')}</p>
                   <div className="flex flex-col">
                     <span className="text-3xl font-black text-gray-900 dark:text-white tracking-tighter">₳{project.totalAmount.toLocaleString()}</span>
-                    <span className="text-sm font-bold text-gray-500 dark:text-gray-400 mt-1 opacity-80">
-                      ≈ ${ (project.totalAmount * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }) } USD
-                    </span>
+                    <TooltipProvider>
+                      <UITooltip>
+                        <TooltipTrigger asChild>
+                          <span className="text-sm font-bold text-gray-500 dark:text-gray-400 mt-1 opacity-80 flex items-center cursor-help w-fit">
+                            ≈ ${ (project.totalAmount * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }) } USD
+                            <HelpCircle className="h-3 w-3 ml-1.5 opacity-60" />
+                          </span>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p className="max-w-xs">{t('project.usd_conversion_tooltip')}</p>
+                        </TooltipContent>
+                      </UITooltip>
+                    </TooltipProvider>
                   </div>
                   <div className="mt-3 flex items-center text-[10px] font-black text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 w-fit px-2.5 py-1.5 rounded-lg border border-green-100 dark:border-green-900/30 uppercase">
                     <DollarSign className="h-3 w-3 mr-1.5" />

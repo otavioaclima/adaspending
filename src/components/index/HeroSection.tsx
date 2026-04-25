@@ -15,8 +15,8 @@ const HeroSection = () => {
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px]" />
       <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-cardano-blue/5 rounded-full blur-[80px]" />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-8 py-12 md:py-16 flex flex-col lg:flex-row items-center gap-10">
-        <div className="lg:w-3/5 text-left">
+      <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 py-10 md:py-16 flex flex-col lg:flex-row items-center gap-10">
+        <div className="lg:w-3/5 flex flex-col items-center lg:items-start text-center lg:text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] font-bold mb-6 tracking-wider">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
@@ -46,7 +46,7 @@ const HeroSection = () => {
             </Button>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 mt-4 text-[10px] uppercase tracking-wider font-bold text-gray-500">
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mt-4 text-[10px] uppercase tracking-wider font-bold text-gray-500">
             <TrendingUp className="h-3 w-3 text-blue-400" />
             <span>{t('hero.trending')}</span>
             <button className="hover:text-blue-400 transition-colors">#IOG</button>
@@ -56,12 +56,14 @@ const HeroSection = () => {
           </div>
         </div>
 
-        <div className="lg:w-2/5 hidden lg:flex justify-center">
-          <div className="relative group animate-float">
+        <div className="lg:w-2/5 flex justify-center w-full lg:mt-0 mt-2">
+          <div className="relative group animate-float max-w-[260px] md:max-w-[400px]">
             <img
               src="/assets/hero-chart-new-transparent.png"
               alt="Cardano Chart"
-              className="relative w-full max-w-[400px] h-auto transition-all duration-1000 ease-out brightness-110 filter drop-shadow-[0_10px_30px_rgba(37,99,235,0.2)]"
+              className="relative w-full h-auto transition-all duration-1000 ease-out brightness-110 filter drop-shadow-[0_0_30px_rgba(37,99,235,0.4)] dark:drop-shadow-[0_0_40px_rgba(59,130,246,0.3)] hover:scale-105"
+              loading="eager"
+              fetchpriority="high"
             />
           </div>
         </div>
