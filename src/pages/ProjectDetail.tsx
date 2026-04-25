@@ -440,7 +440,7 @@ const ProjectDetail = () => {
                     <div>
                       <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">{t('project.instance_id')}</p>
                       <p className="text-[11px] font-mono text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/50 p-2 rounded border border-gray-100 dark:border-gray-700 break-all">
-                        9e65e4ed7d6fd86fc4827d2b45da6d2c601fb920e8bfd794b8ecc9
+                        9e65e4...ecc9
                       </p>
                     </div>
                     <div>
