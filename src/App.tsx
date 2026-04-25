@@ -26,6 +26,7 @@ const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
 const Analytics = lazy(() => import("./pages/Analytics"));
 const TreasuryDonations = lazy(() => import("./pages/TreasuryDonations"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
 const Accessibility = lazy(() => import("./pages/Accessibility"));
 const About = lazy(() => import("./pages/About"));
 
@@ -68,6 +69,7 @@ const App = () => (
                   <Route path="/donations" element={<TreasuryDonations />} />
                   <Route path="/analytics" element={<Analytics />} />
                   <Route path="/privacy" element={<PrivacyPolicy />} />
+                  <Route path="/cookies" element={<CookiePolicy />} />
                   <Route path="/accessibility" element={<Accessibility />} />
                   <Route path="/about" element={<About />} />
                   <Route path="/architecture" element={<InformationArchitecture />} />

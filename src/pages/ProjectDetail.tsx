@@ -13,7 +13,12 @@ import {
   DollarSign,
   Calendar,
   Activity,
-  HelpCircle
+  HelpCircle,
+  Twitter,
+  Linkedin,
+  Send,
+  Share2,
+  Link as LinkIcon
 } from 'lucide-react';
 import { 
   AreaChart, 
@@ -39,6 +44,7 @@ import {
   TooltipProvider, 
   TooltipTrigger 
 } from '@/components/ui/tooltip';
+import { toast } from "sonner";
 
 const getStatusIcon = (status: string) => {
   switch (status.toLowerCase()) {
@@ -125,6 +131,14 @@ const ProjectDetail = () => {
       .sort((a, b) => a.timestamp - b.timestamp);
   }, [project]);
 
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast.success(t('project.link_copied'));
+  };
+
+  const shareTitle = `${project.projectName} - Cardano Treasury Explorer`;
+  const shareUrl = window.location.href;
+
   return (
     <Layout>
       <div className="mb-8">
@@ -172,8 +186,40 @@ const ProjectDetail = () => {
             </div>
           </div>
 
-          <div className="flex gap-2 shrink-0">
-            <Button asChild variant="outline" className="shadow-sm border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 dark:text-gray-300">
+          <div className="flex flex-wrap gap-2 shrink-0 items-center">
+            <div className="flex items-center gap-1.5 mr-2 px-3 py-1.5 bg-gray-50 dark:bg-gray-800/50 rounded-full border border-gray-200 dark:border-gray-700">
+              <span className="text-[10px] font-black uppercase tracking-tighter text-gray-400 dark:text-gray-500 mr-1">{t('project.share')}</span>
+              <button 
+                onClick={() => window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${encodeURIComponent(shareUrl)}`, '_blank')}
+                className="p-1.5 text-gray-500 hover:text-black dark:hover:text-white transition-colors"
+                title="X (Twitter)"
+              >
+                <Twitter className="h-4 w-4" />
+              </button>
+              <button 
+                onClick={() => window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`, '_blank')}
+                className="p-1.5 text-gray-500 hover:text-blue-700 transition-colors"
+                title="LinkedIn"
+              >
+                <Linkedin className="h-4 w-4" />
+              </button>
+              <button 
+                onClick={() => window.open(`https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`, '_blank')}
+                className="p-1.5 text-gray-500 hover:text-blue-500 transition-colors"
+                title="Telegram"
+              >
+                <Send className="h-4 w-4" />
+              </button>
+              <button 
+                onClick={handleCopyLink}
+                className="p-1.5 text-gray-500 hover:text-cardano-blue transition-colors"
+                title="Copy Link"
+              >
+                <LinkIcon className="h-4 w-4" />
+              </button>
+            </div>
+
+            <Button asChild variant="outline" className="shadow-sm border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 dark:text-gray-300 rounded-full">
               <a href={`https://treasury.sundae.fi/instances/9e65e4ed7d6fd86fc4827d2b45da6d2c601fb920e8bfd794b8ecc619/project/${project.id}`} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-4 w-4 mr-2" />
                 {t('project.sundae_explorer')}

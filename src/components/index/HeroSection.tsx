@@ -65,7 +65,7 @@ const HeroSection = () => {
                 onKeyDown={handleKeyDown}
               />
             </div>
-            <Button 
+            <Button
               className="bg-cardano-blue hover:bg-blue-600 text-white px-6 h-10 rounded-lg font-bold transition-all text-sm"
               onClick={handleSearch}
             >
@@ -77,7 +77,7 @@ const HeroSection = () => {
             <TrendingUp className="h-3 w-3 text-blue-400" />
             <span>{t('hero.trending')}</span>
             <button onClick={() => handleTrendingClick('IOG')} className="hover:text-blue-400 transition-colors">#IOG</button>
-            <button onClick={() => handleTrendingClick('Cardano CF')} className="hover:text-blue-400 transition-colors">#Cardano CF</button>
+            <button onClick={() => handleTrendingClick('Cardano Foundation')} className="hover:text-blue-400 transition-colors">#Cardano CF</button>
             <button onClick={() => handleTrendingClick('Intersect')} className="hover:text-blue-400 transition-colors">#Intersect</button>
             <button onClick={() => handleTrendingClick('Builder DAO')} className="hover:text-blue-400 transition-colors">#Builder DAO</button>
           </div>
