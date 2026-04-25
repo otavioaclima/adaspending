@@ -33,19 +33,8 @@ import {
   LayoutGrid,
   List,
   ChevronUp,
-  ChevronDown,
-  Activity
+  ChevronDown
 } from "lucide-react";
-import { 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer,
-  Legend
-} from 'recharts';
 
 const getStatusIcon = (status: string) => {
   switch (status.toLowerCase()) {
@@ -162,38 +151,6 @@ const Projects = () => {
     setVendorFilter('all');
   };
 
-  // Aggregate global chart data
-  const chartData = useMemo(() => {
-    const monthlyData: Record<string, { milestones: number, payments: number }> = {};
-    
-    intersectProjects.forEach(project => {
-      if (project.milestones) {
-        project.milestones.forEach(milestone => {
-          const date = new Date(milestone.unlockDate);
-          if (!isNaN(date.getTime())) {
-            const monthYear = date.toLocaleString('en-US', { month: 'short', year: '2-digit' });
-            if (!monthlyData[monthYear]) {
-              monthlyData[monthYear] = { milestones: 0, payments: 0 };
-            }
-            monthlyData[monthYear].milestones += milestone.amount;
-            if (milestone.status.toLowerCase() === 'withdrawn') {
-              monthlyData[monthYear].payments += milestone.amount;
-            }
-          }
-        });
-      }
-    });
-
-    return Object.keys(monthlyData)
-      .map(key => ({
-        date: key,
-        milestones: monthlyData[key].milestones,
-        payments: monthlyData[key].payments,
-        timestamp: new Date(key).getTime()
-      }))
-      .sort((a, b) => a.timestamp - b.timestamp);
-  }, []);
-
   return (
     <Layout>
       <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -230,78 +187,6 @@ const Projects = () => {
           </Button>
         </div>
       </div>
-
-      {/* Global Timeline Chart */}
-      <Card className="border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-gray-800/40 mb-8 transition-colors">
-        <CardHeader className="border-b border-gray-100 dark:border-gray-700 pb-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-cardano-blue/10 dark:bg-cardano-blue/20 rounded-lg">
-              <Activity className="h-5 w-5 text-cardano-blue" />
-            </div>
-            <div>
-              <CardTitle className="text-lg font-bold dark:text-white">{t('projects.chart_title')}</CardTitle>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="pt-6">
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={chartData}>
-                <defs>
-                  <linearGradient id="colorMilestones" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(var(--cardano-blue))" stopOpacity={0.1}/>
-                    <stop offset="95%" stopColor="hsl(var(--cardano-blue))" stopOpacity={0}/>
-                  </linearGradient>
-                  <linearGradient id="colorPayments" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#22c55e" stopOpacity={0.1}/>
-                    <stop offset="95%" stopColor="#22c55e" stopOpacity={0}/>
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="text-gray-100 dark:text-gray-700" />
-                <XAxis 
-                  dataKey="date" 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{ fill: 'currentColor', fontSize: 11 }} 
-                  className="text-gray-400 dark:text-gray-500"
-                />
-                <YAxis 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{ fill: 'currentColor', fontSize: 11 }} 
-                  className="text-gray-400 dark:text-gray-500"
-                  tickFormatter={(v) => `₳${v >= 1000000 ? (v/1000000).toFixed(1) + 'M' : (v/1000).toFixed(0) + 'k'}`}
-                />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
-                  itemStyle={{ color: '#f3f4f6' }}
-                  labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
-                  formatter={(value: number) => [`₳${value.toLocaleString()}`, '']}
-                />
-                <Legend iconType="circle" />
-                <Area 
-                  type="monotone" 
-                  dataKey="milestones" 
-                  name={t('projects.milestones_label')}
-                  stroke="hsl(var(--cardano-blue))" 
-                  strokeWidth={2}
-                  fillOpacity={1} 
-                  fill="url(#colorMilestones)" 
-                />
-                <Area 
-                  type="monotone" 
-                  dataKey="payments" 
-                  name={t('projects.payments_label')}
-                  stroke="#22c55e" 
-                  strokeWidth={2}
-                  fillOpacity={1} 
-                  fill="url(#colorPayments)" 
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Filter Bar */}
       <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 grid grid-cols-2 lg:flex lg:flex-row gap-x-3 gap-y-4 items-end transition-colors">
