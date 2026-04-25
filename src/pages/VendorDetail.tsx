@@ -278,16 +278,26 @@ const VendorDetail = () => {
             <div className="space-y-6">
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('vendor_detail.total_allocated')}</p>
-                <p className="text-2xl font-bold text-cardano-blue dark:text-blue-300 flex items-center">
-                  <Wallet className="h-5 w-5 mr-2" />
-                  ₳{stats.totalFunded.toLocaleString()}
-                </p>
+                <div className="flex flex-col">
+                  <p className="text-2xl font-bold text-cardano-blue dark:text-blue-300 flex items-center">
+                    <Wallet className="h-5 w-5 mr-2" />
+                    ₳{stats.totalFunded.toLocaleString()}
+                  </p>
+                  <p className="text-xs font-bold text-gray-400 dark:text-gray-500 ml-7 opacity-80">
+                    ≈ ${ (stats.totalFunded * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }) } USD
+                  </p>
+                </div>
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('vendor_detail.total_spent')}</p>
-                <p className="text-2xl font-bold text-orange-600 dark:text-orange-500">
-                  ₳{stats.amountSpent.toLocaleString()}
-                </p>
+                <div className="flex flex-col">
+                  <p className="text-2xl font-bold text-orange-600 dark:text-orange-500">
+                    ₳{stats.amountSpent.toLocaleString()}
+                  </p>
+                  <p className="text-xs font-bold text-gray-400 dark:text-gray-500 opacity-80">
+                    ≈ ${ (stats.amountSpent * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }) } USD
+                  </p>
+                </div>
               </div>
               <div className="pt-4 border-t border-gray-50 dark:border-gray-700">
                 <div className="flex justify-between items-center mb-2">

@@ -253,8 +253,11 @@ const ProjectDetail = () => {
                 {/* Total Budget */}
                 <div className="p-6 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-900/50">
                   <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">{t('project.total_budget')}</p>
-                  <div className="flex items-baseline gap-2">
+                  <div className="flex flex-col">
                     <span className="text-3xl font-black text-gray-900 dark:text-white tracking-tighter">₳{project.totalAmount.toLocaleString()}</span>
+                    <span className="text-sm font-bold text-gray-500 dark:text-gray-400 mt-1 opacity-80">
+                      ≈ ${ (project.totalAmount * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }) } USD
+                    </span>
                   </div>
                   <div className="mt-3 flex items-center text-[10px] font-black text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 w-fit px-2.5 py-1.5 rounded-lg border border-green-100 dark:border-green-900/30">
                     <DollarSign className="h-3 w-3 mr-1.5" />
