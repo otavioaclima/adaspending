@@ -22,6 +22,8 @@ import {
   Eye,
   ChevronRight,
   ChevronLeft,
+  ChevronDown,
+  ChevronUp,
   ClipboardCheck
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
@@ -49,6 +51,150 @@ import {
   TooltipProvider, 
   TooltipTrigger 
 } from '@/components/ui/tooltip';
+
+// --- Sub-component for Milestone Row to manage its own expansion state ---
+const MilestoneRow = ({ milestone, index, t, defaultExpanded }: { 
+  milestone: any; 
+  index: number; 
+  t: any; 
+  defaultExpanded?: boolean;
+}) => {
+  const [expanded, setExpanded] = useState(defaultExpanded || false);
+  const isWithdrawn = milestone.status.toLowerCase() === 'withdrawn';
+  
+  return (
+    <React.Fragment>
+      <tr 
+        className={cn(
+          "group cursor-pointer hover:bg-gray-50/50 dark:hover:bg-gray-800/30 transition-colors",
+          expanded && "bg-gray-50/30 dark:bg-gray-800/20"
+        )}
+        onClick={() => setExpanded(!expanded)}
+      >
+        <td className="px-6 py-4 w-[80px] whitespace-nowrap">
+          <span className="text-[10px] font-black text-gray-400 dark:text-gray-600">{milestone.id}</span>
+        </td>
+        <td className="px-6 py-4">
+          <p className="text-sm font-bold text-gray-900 dark:text-white group-hover:text-cardano-blue transition-colors">
+            {milestone.title}
+          </p>
+        </td>
+        <td className="px-6 py-4">
+          <div className="flex items-center text-xs text-gray-600 dark:text-gray-400 font-medium whitespace-nowrap">
+            {milestone.unlockDate} (UTC)
+          </div>
+        </td>
+        <td className="px-6 py-4">
+          <Badge variant="outline" className={cn(
+            "text-[10px] h-5 px-2 font-bold uppercase",
+            isWithdrawn 
+              ? 'bg-green-50/50 dark:bg-green-900/10 text-green-700 dark:text-green-400 border-green-100 dark:border-green-900/30' 
+              : 'bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700'
+          )}>
+            {milestone.status}
+          </Badge>
+        </td>
+        <td className="px-6 py-4">
+          <span className={cn(
+            "text-xs font-bold",
+            milestone.evidenceStatus?.toLowerCase().includes('past due') ? "text-amber-600 dark:text-amber-500" : "text-gray-500 dark:text-gray-400"
+          )}>
+            {milestone.evidenceStatus || (milestone.evidence ? 'Submitted' : 'None')}
+          </span>
+        </td>
+        <td className="px-6 py-4 text-right whitespace-nowrap">
+          <p className="text-sm font-black text-gray-900 dark:text-white">
+            ₳{milestone.amount.toLocaleString()}
+          </p>
+        </td>
+        <td className="px-6 py-4 text-right">
+          <button className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+            {expanded ? <ChevronUp className="h-4 w-4 text-gray-400" /> : <ChevronDown className="h-4 w-4 text-gray-400" />}
+          </button>
+        </td>
+      </tr>
+      
+      {expanded && (
+        <tr className="bg-gray-50/20 dark:bg-gray-900/10">
+          <td colSpan={7} className="px-6 py-4 border-t border-gray-100 dark:border-gray-800 shadow-inner">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {/* Acceptance Criteria Box */}
+              <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 shadow-sm">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="p-1.5 bg-cardano-blue/10 dark:bg-cardano-blue/20 rounded-lg">
+                    <ClipboardCheck className="h-3.5 w-3.5 text-cardano-blue" />
+                  </div>
+                  <h5 className="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">{t('project.acceptance_criteria')}</h5>
+                </div>
+                <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
+                  {milestone.acceptanceCriteria || milestone.description}
+                </p>
+              </div>
+
+              {/* Evidence Submissions Box */}
+              <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 shadow-sm">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="p-1.5 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
+                    <FileText className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
+                  </div>
+                  <h5 className="text-[11px] font-black uppercase tracking-widest text-gray-900 dark:text-white">{t('project.evidence_submissions')}</h5>
+                </div>
+                
+                {milestone.evidence ? (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-3 p-3 rounded-lg border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30 group/evidence hover:border-cardano-blue transition-all">
+                      <div className="p-2 bg-white dark:bg-gray-900 rounded-lg shadow-sm group-hover/evidence:scale-105 transition-transform">
+                        <FileText className="h-4 w-4 text-gray-400 dark:text-gray-500 group-hover/evidence:text-cardano-blue" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className="text-xs font-bold text-gray-900 dark:text-white truncate">
+                            {milestone.evidence.title}
+                          </span>
+                          <a 
+                            href={milestone.evidence.link} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-cardano-blue hover:underline text-[10px] font-bold inline-flex items-center"
+                          >
+                            Link <ExternalLink className="h-2.5 w-2.5 ml-1" />
+                          </a>
+                        </div>
+                        <div className="flex items-center flex-wrap gap-x-3 gap-y-1">
+                          <span className="text-[9px] font-bold text-gray-400 dark:text-gray-500 uppercase">
+                            {milestone.unlockDate} (UTC)
+                          </span>
+                          {milestone.evidence.transactionHash && (
+                            <div className="flex items-center gap-1">
+                              <div className="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700" />
+                              <a 
+                                href={milestone.evidence.transactionLink} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-[9px] font-mono text-gray-400 dark:text-gray-500 hover:text-cardano-blue border-b border-dotted border-gray-300 dark:border-gray-700"
+                              >
+                                {milestone.evidence.transactionHash.substring(0, 6)}...{milestone.evidence.transactionHash.substring(58)}
+                              </a>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center py-4 text-center bg-gray-50/50 dark:bg-gray-800/30 rounded-lg border border-dashed border-gray-200 dark:border-gray-700">
+                    <HelpCircle className="h-5 w-5 text-gray-300 dark:text-gray-700 mb-1" />
+                    <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">{t('project.no_evidence')}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </td>
+        </tr>
+      )}
+    </React.Fragment>
+  );
+};
 import { toast } from "sonner";
 
 const getStatusIcon = (status: string) => {
@@ -452,9 +598,6 @@ const ProjectDetail = () => {
             </CardContent>
           </Card>
 
-          {/* Milestone Overview Timeline */}
-          <MilestoneTimeline milestones={project.milestones || []} t={t} />
-
           {/* Project Timeline Chart */}
           {chartData.length > 0 && (
             <Card className="border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-gray-800/40 mb-8 transition-colors">
@@ -529,95 +672,44 @@ const ProjectDetail = () => {
             </Card>
           )}
 
-          {/* Milestones List */}
+          {/* Milestone Overview Timeline */}
+          <MilestoneTimeline milestones={project.milestones || []} t={t} />
+
+          {/* Milestones Table Section */}
           {project.milestones && project.milestones.length > 0 && (
             <div className="space-y-6">
-              <div className="flex items-center gap-4 px-1 mb-8">
+              <div className="flex items-center gap-4 px-1 mb-6">
                 <h3 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">{t('project.milestones')}</h3>
                 <Badge variant="outline" className="bg-white dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 h-7">{t('project.phases').replace('{count}', project.milestones.length.toString())}</Badge>
               </div>
 
-              <div className="space-y-6 relative before:absolute before:left-6 before:top-4 before:bottom-4 before:w-0.5 before:bg-gray-100 dark:before:bg-gray-800">
-                {project.milestones.map((milestone, index) => (
-                  <Card key={milestone.id} className={`border-gray-200 dark:border-gray-800 transition-all hover:shadow-md relative overflow-hidden ${milestone.status.toLowerCase() === 'withdrawn' ? 'bg-white dark:bg-gray-800/60' : 'bg-gray-50/40 dark:bg-gray-900/20 grayscale-[0.3]'
-                    }`}>
-                    <div className={`absolute left-0 top-0 bottom-0 w-1 ${milestone.status.toLowerCase() === 'withdrawn' ? 'bg-green-500' : 'bg-gray-300'
-                      }`} />
-
-                    <CardContent className="p-4">
-                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-3">
-                        <div className="flex items-center gap-3">
-                          <span className="text-[10px] font-black text-gray-400 uppercase tracking-[0.1em]">{milestone.id}</span>
-                          <h4 className="text-base font-bold text-gray-900 dark:text-white">{milestone.title}</h4>
-                          <Badge variant="outline" className={cn(
-                            "text-[9px] h-4.5 px-1.5 font-bold uppercase",
-                            milestone.status.toLowerCase() === 'withdrawn'
-                              ? 'bg-green-50/50 dark:bg-green-900/10 text-green-700 dark:text-green-400 border-green-100 dark:border-green-900/30'
-                              : 'bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700'
-                          )}>
-                            {milestone.status}
-                          </Badge>
-                        </div>
-                        <div className="flex items-center gap-3 ml-auto sm:ml-0">
-                           <div className="flex items-center text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase">
-                            <Calendar className="h-3 w-3 mr-1 opacity-60" />
-                            {milestone.unlockDate}
-                          </div>
-                          <p className="text-base font-black text-gray-900 dark:text-white">₳{milestone.amount.toLocaleString()}</p>
-                        </div>
-                      </div>
-
-                      {milestone.description && (
-                        <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2 hover:line-clamp-none transition-all cursor-default">
-                          {milestone.description}
-                        </p>
-                      )}
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-3 border-t border-gray-50 dark:border-gray-800/50">
-                        {milestone.acceptanceCriteria && (
-                          <div className="flex items-start gap-2 text-xs">
-                            <ClipboardCheck className="h-3.5 w-3.5 text-cardano-blue/60 mt-0.5 shrink-0" />
-                            <div>
-                              <span className="text-[9px] font-black uppercase tracking-tighter text-gray-400 block mb-0.5">{t('project.acceptance_criteria')}</span>
-                              <p className="text-gray-700 dark:text-gray-300 font-medium leading-tight">{milestone.acceptanceCriteria}</p>
-                            </div>
-                          </div>
-                        )}
-
-                        {milestone.evidence && (
-                          <div className="flex items-center justify-between bg-gray-50/50 dark:bg-gray-900/30 p-2 rounded-lg border border-gray-100/50 dark:border-gray-800/50 ml-auto w-full md:w-auto min-w-[240px]">
-                            <div className="flex items-center gap-2">
-                              <FileText className="h-3.5 w-3.5 text-cardano-blue/70" />
-                              <div className="flex flex-col">
-                                <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300 truncate max-w-[120px]">{milestone.evidence.title}</span>
-                                {milestone.evidenceStatus && (
-                                  <Badge variant="outline" className={`text-[8px] h-3.5 px-1 py-0 font-black uppercase border-0 ${getEvidenceStatusColor(milestone.evidenceStatus)}`}>
-                                    {milestone.evidenceStatus}
-                                  </Badge>
-                                )}
-                              </div>
-                            </div>
-                            <div className="flex gap-1">
-                              {milestone.evidence.transactionHash && (
-                                <Button asChild variant="ghost" size="icon" className="h-7 w-7 text-gray-400 hover:text-cardano-blue" title="TX Hash">
-                                  <a href={milestone.evidence.transactionLink} target="_blank" rel="noopener noreferrer">
-                                    <LinkIcon className="h-3 w-3" />
-                                  </a>
-                                </Button>
-                              )}
-                              <Button asChild variant="outline" size="sm" className="h-7 px-2 text-[10px] font-bold border-cardano-blue/20 text-cardano-blue hover:bg-cardano-blue hover:text-white transition-all">
-                                <a href={milestone.evidence.link} target="_blank" rel="noopener noreferrer">
-                                  <ExternalLink className="h-3 w-3 mr-1" />
-                                  {t('project.view_evidence')}
-                                </a>
-                              </Button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+              <div className="border border-gray-200 dark:border-gray-800 rounded-2xl overflow-hidden bg-white dark:bg-gray-900 shadow-sm">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-800">
+                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 w-[40px]">#</th>
+                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">{t('project.milestone_name')}</th>
+                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">{t('project.unlock_date')}</th>
+                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">{t('project.status_label')}</th>
+                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">{t('project.evidence_label')}</th>
+                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 text-right">{t('project.amount_label')}</th>
+                        <th className="px-6 py-4 w-[60px]"></th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                      {project.milestones.map((milestone, index) => (
+                        <MilestoneRow 
+                          key={milestone.id} 
+                          milestone={milestone} 
+                          index={index} 
+                          t={t} 
+                          defaultExpanded={index === 0}
+                        />
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}

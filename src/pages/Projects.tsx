@@ -288,15 +288,15 @@ const Projects = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {sortedProjects.map((project) => (
               <Card key={project.id} className="flex flex-col h-full hover:shadow-lg transition-shadow border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800/40">
-                <CardHeader className="pb-2">
+                <CardHeader className="p-5 pb-2">
                   <div className="flex justify-between items-start mb-2">
-                    <Badge variant="outline" className={`${getStatusColor(project.status)} flex items-center`}>
+                    <Badge variant="outline" className={`${getStatusColor(project.status)} flex items-center text-[10px] py-0 h-5`}>
                       {getStatusIcon(project.status)}
                       {t(`status.${project.status.toLowerCase().replace(' ', '_')}`) || project.status}
                     </Badge>
-                    <span className="text-xs text-gray-500 font-mono">{project.id}</span>
+                    <span className="text-[10px] text-gray-400 font-mono">{project.id}</span>
                   </div>
-                  <CardTitle className="text-xl line-clamp-2 overflow-hidden h-[3.5rem] leading-tight">
+                  <CardTitle className="text-lg font-bold line-clamp-2 overflow-hidden h-[2.8rem] leading-tight text-gray-900 dark:text-white">
                     {project.projectName}
                   </CardTitle>
                 </CardHeader>

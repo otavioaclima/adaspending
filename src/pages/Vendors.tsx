@@ -52,6 +52,14 @@ const useVendorStats = () => {
   }, []);
 };
 
+const getStatusColor = (status: string) => {
+  const s = status.toLowerCase();
+  if (s === 'completed') return 'bg-green-50 text-green-700 border-green-100 dark:bg-green-900/20 dark:text-green-400 dark:border-green-900/50';
+  if (s === 'active' || s === 'in progress') return 'bg-blue-50 text-blue-700 border-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-900/50';
+  if (s === 'paused') return 'bg-orange-50 text-orange-700 border-orange-100 dark:bg-orange-900/20 dark:text-orange-400 dark:border-orange-900/50';
+  return 'bg-gray-50 text-gray-700 border-gray-100 dark:bg-gray-900/20 dark:text-gray-400 dark:border-gray-900/50';
+};
+
 const VendorCard = ({ vendor }: { vendor: any }) => {
   const { t } = useLanguage();
   const profile = getVendorProfile(vendor.name);
@@ -109,9 +117,18 @@ const VendorCard = ({ vendor }: { vendor: any }) => {
               <Briefcase className="h-4 w-4 mr-1.5 text-gray-400 dark:text-gray-500" />
               {vendor.projectCount} {vendor.projectCount === 1 ? t('vendors.one_project') : t('vendors.multiple_projects')}
             </div>
-            <Badge variant="outline" className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border-blue-100 dark:border-blue-900/50">
-              {Object.keys(vendor.statusCount).length} {t('vendors.status_types')}
-            </Badge>
+            {(() => {
+              const statuses = Object.keys(vendor.statusCount);
+              const displayStatus = statuses.length === 1 
+                ? (t(`status.${statuses[0].toLowerCase().replace(' ', '_')}`) || statuses[0])
+                : `${statuses.length} ${t('vendors.status_types')}`;
+              
+              return (
+                <Badge variant="outline" className={getStatusColor(statuses.length === 1 ? statuses[0] : 'multiple')}>
+                  {displayStatus}
+                </Badge>
+              );
+            })()}
           </div>
         </CardContent>
       </Card>
@@ -384,9 +401,18 @@ const Vendors = () => {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline" className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border-blue-100 dark:border-blue-900/50">
-                        {Object.keys(vendor.statusCount).length} {t('vendors.status_types')}
-                      </Badge>
+                      {(() => {
+                        const statuses = Object.keys(vendor.statusCount);
+                        const displayStatus = statuses.length === 1 
+                          ? (t(`status.${statuses[0].toLowerCase().replace(' ', '_')}`) || statuses[0])
+                          : `${statuses.length} ${t('vendors.status_types')}`;
+                        
+                        return (
+                          <Badge variant="outline" className={getStatusColor(statuses.length === 1 ? statuses[0] : 'multiple')}>
+                            {displayStatus}
+                          </Badge>
+                        );
+                      })()}
                     </TableCell>
                   </TableRow>
                 ))}

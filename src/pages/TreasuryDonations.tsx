@@ -96,7 +96,7 @@ const TreasuryDonations = () => {
           </CardHeader>
           <CardContent>
             <p className="text-3xl font-bold text-gray-900 dark:text-white">₳ 1,010</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">Epoch 625</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">{t('donations.epoch')} 625</p>
           </CardContent>
         </Card>
 
