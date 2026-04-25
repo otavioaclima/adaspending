@@ -48,7 +48,7 @@ const Footer = () => {
         <div className="max-w-4xl mx-auto bg-gradient-to-br from-cardano-blue/20 to-cardano-teal/20 rounded-3xl p-8 md:p-12 mb-16 border border-white/10 text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">{t('teaser.cta.title')}</h2>
           <p className="text-white/70 mb-8 max-w-2xl mx-auto">{t('teaser.cta.subtitle')}</p>
-          
+
           <div className="max-w-md mx-auto">
             {!submitted ? (
               <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-2">
@@ -58,8 +58,8 @@ const Footer = () => {
                   {...form.register('email', { required: true, pattern: /^\S+@\S+$/i })}
                   disabled={isSubmitting}
                 />
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="bg-cardano-blue hover:bg-cardano-blue/90 text-white h-12 px-8 font-bold"
                   disabled={isSubmitting}
                 >
@@ -79,7 +79,7 @@ const Footer = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-left">
             <Link to="/" className="inline-block mb-6">
               <img
                 src="/assets/14b66eb5-72ae-42fe-94f7-70a49cc9ad69.png"
@@ -92,7 +92,7 @@ const Footer = () => {
             <p className="text-white/60 text-sm leading-relaxed mb-8 max-w-sm">
               {t('teaser.footer.description')}
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center justify-center lg:justify-start gap-4">
               <a
                 href="https://x.com/ADAspending_com"
                 target="_blank"
@@ -118,7 +118,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-center lg:text-left">
             <div>
               <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-cardano-blue mb-6">{t('footer.explore')}</h3>
               <ul className="space-y-4">
@@ -152,13 +152,14 @@ const Footer = () => {
                 <li><a href="https://cardano.org/" target="_blank" rel="noopener noreferrer" className="text-sm text-white/50 hover:text-white transition-colors flex items-center gap-1">Cardano <ExternalLink size={10} /></a></li>
                 <li><a href="https://www.intersectmbo.org/" target="_blank" rel="noopener noreferrer" className="text-sm text-white/50 hover:text-white transition-colors flex items-center gap-1">Intersect <ExternalLink size={10} /></a></li>
                 <li><a href="https://cardanofoundation.org/" target="_blank" rel="noopener noreferrer" className="text-sm text-white/50 hover:text-white transition-colors flex items-center gap-1">Cardano Foundation <ExternalLink size={10} /></a></li>
+                <li><a href="https://governancespace.com/" target="_blank" rel="noopener noreferrer" className="text-sm text-white/50 hover:text-white transition-colors flex items-center gap-1">Governance Space <ExternalLink size={10} /></a></li>
                 <li><a href="https://cardanofeed.com/" target="_blank" rel="noopener noreferrer" className="text-sm text-white/50 hover:text-white transition-colors flex items-center gap-1">Cardano Feed <ExternalLink size={10} /></a></li>
               </ul>
             </div>
           </div>
         </div>
 
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/30">
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/30 text-center">
           <p>© {new Date().getFullYear()} ADAspending.com. {t('footer.copyright')}</p>
           <div className="flex items-center gap-6">
             <p>{t('footer.opensource')}</p>
