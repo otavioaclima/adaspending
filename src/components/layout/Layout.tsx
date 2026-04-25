@@ -17,11 +17,15 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useQueryClient } from '@tanstack/react-query';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { getCexplorerStats } from '@/services/cexplorer';
+import { getAdaPrice } from '@/services/cardanoscan';
 import Footer from './Footer';
 
 const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fullWidth?: boolean }) => {
   const location = useLocation();
+  const queryClient = useQueryClient();
   const { theme, setTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
@@ -51,6 +55,13 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
     { name: t('nav.about'), href: '/about', icon: Info },
   ];
 
+  const handlePrefetch = (href: string) => {
+    if (href === '/overview') {
+      queryClient.prefetchQuery({ queryKey: ['cexplorerStats'], queryFn: getCexplorerStats });
+      queryClient.prefetchQuery({ queryKey: ['adaPrice'], queryFn: getAdaPrice });
+    }
+  };
+
   const isHomePage = location.pathname === '/';
 
   return (
@@ -70,7 +81,11 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
       <header className="bg-gradient-to-r from-[#131637] to-[#000111] border-b border-gray-800 sticky top-0 z-50 shrink-0">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <Link to="/" className="flex items-center">
+            <Link 
+              to="/" 
+              className="flex items-center"
+              onMouseEnter={() => handlePrefetch('/')}
+            >
               {isHomePage ? (
                 <img
                   src="/assets/257db3dc-2214-4178-afd2-70760c3899c4.png"
@@ -94,6 +109,7 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
               <Link
                 key={item.href}
                 to={item.href}
+                onMouseEnter={() => handlePrefetch(item.href)}
                 className={`nav-link !text-white hover:text-gray-200 ${location.pathname === item.href ? 'nav-link-active' : ''}`}
               >
                 {item.name}

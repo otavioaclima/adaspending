@@ -38,7 +38,7 @@ const FeedbackModal = () => {
           <div className="bg-white/20 p-1.5 rounded-lg">
             <Mail className="h-4 w-4 text-white" />
           </div>
-          <span className="font-bold text-sm tracking-tight">Feedback</span>
+          <span className="font-bold text-sm tracking-tight">{t('banner.feedback_title')}</span>
         </div>
         
         <p className="text-xs leading-relaxed text-white/90">

@@ -6,6 +6,8 @@ export interface Milestone {
   status: string;
   unlockDate: string;
   description: string;
+  acceptanceCriteria?: string;
+  evidenceStatus?: string;
   evidence?: {
     title: string;
     link: string;
@@ -3777,6 +3779,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Withdrawn",
         "unlockDate": "Aug 11, 2025",
         "description": "",
+        "acceptanceCriteria": "None",
+        "evidenceStatus": "Submitted",
         "evidence": null
       },
       {
@@ -3786,6 +3790,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Withdrawn",
         "unlockDate": "Oct 29, 2025",
         "description": "Evidence submitted via the Cardano Treasury Admin.",
+        "acceptanceCriteria": "Quarterly Report",
+        "evidenceStatus": "Submitted",
         "evidence": {
           "title": "M2 - Developer Advocates",
           "link": "https://drive.google.com/file/d/1uvEAxpi4F4VRqFC7Wdl_Kt4_Z3TtU-JA/view",
@@ -3800,6 +3806,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Withdrawn",
         "unlockDate": "Oct 29, 2025",
         "description": "Evidence submitted via the Cardano Treasury Admin.",
+        "acceptanceCriteria": "Quarterly Report",
+        "evidenceStatus": "Submitted",
         "evidence": {
           "title": "M3 - Developer Advocates",
           "link": "https://drive.google.com/file/d/1jv9ki-DD-NLro3UPlX3FQxZuvwtNhkuD/view",
@@ -3814,6 +3822,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Withdrawn",
         "unlockDate": "Jan 29, 2026",
         "description": "",
+        "acceptanceCriteria": "Quarterly Report",
+        "evidenceStatus": "Submitted",
         "evidence": null
       },
       {
@@ -3823,6 +3833,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Paused",
         "unlockDate": "Apr 29, 2026",
         "description": "",
+        "acceptanceCriteria": "Quarterly Report",
+        "evidenceStatus": "Past Due",
         "evidence": null
       },
       {
@@ -3832,6 +3844,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Active",
         "unlockDate": "Jun 29, 2026",
         "description": "",
+        "acceptanceCriteria": "Quarterly Report",
+        "evidenceStatus": "Active",
         "evidence": null
       },
       {
@@ -3841,6 +3855,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Withdrawn",
         "unlockDate": "Aug 11, 2025",
         "description": "",
+        "acceptanceCriteria": "None",
+        "evidenceStatus": "Submitted",
         "evidence": null
       },
       {
@@ -3850,6 +3866,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Withdrawn",
         "unlockDate": "Oct 29, 2025",
         "description": "Evidence submitted via the Cardano Treasury Admin.",
+        "acceptanceCriteria": "Quarterly Report",
+        "evidenceStatus": "Submitted",
         "evidence": {
           "title": "M8 - Travel",
           "link": "https://drive.google.com/file/d/11vFTWSPque3NjnLhfC1RL6qJKkxJhAam/view",
@@ -3864,6 +3882,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Withdrawn",
         "unlockDate": "Jan 29, 2026",
         "description": "Evidence submitted via the Cardano Treasury Admin.",
+        "acceptanceCriteria": "Quarterly Report",
+        "evidenceStatus": "Submitted",
         "evidence": {
           "title": "Open Source Committee Travel Budget - Q1 Events",
           "link": "https://drive.google.com/file/d/1Voy66eSyWQ4vCqaGFjMR-o8C-BIc8wRJ/view",
@@ -3878,6 +3898,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Paused",
         "unlockDate": "Mar 29, 2026",
         "description": "",
+        "acceptanceCriteria": "Quarterly Report",
+        "evidenceStatus": "Past Due",
         "evidence": null
       },
       {
@@ -3887,6 +3909,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Active",
         "unlockDate": "May 29, 2026",
         "description": "",
+        "acceptanceCriteria": "Quarterly Report",
+        "evidenceStatus": "Active",
         "evidence": null
       },
       {
@@ -3896,6 +3920,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Active",
         "unlockDate": "Jun 29, 2026",
         "description": "",
+        "acceptanceCriteria": "Quarterly Report",
+        "evidenceStatus": "Active",
         "evidence": null
       },
       {
@@ -3905,6 +3931,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Withdrawn",
         "unlockDate": "Aug 11, 2025",
         "description": "",
+        "acceptanceCriteria": "None",
+        "evidenceStatus": "Submitted",
         "evidence": null
       },
       {
@@ -3914,6 +3942,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Withdrawn",
         "unlockDate": "Jan 14, 2026",
         "description": "Evidence submitted via the Cardano Treasury Admin.",
+        "acceptanceCriteria": "Quarterly Report",
+        "evidenceStatus": "Submitted",
         "evidence": {
           "title": "4.2 - TxPipe GitHoney Build Contract",
           "link": "https://drive.google.com/file/d/1NLaam0tQS9YkElfK19OZ1H6XqunHAFRx/view",
@@ -3928,6 +3958,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Paused",
         "unlockDate": "Feb 27, 2026",
         "description": "",
+        "acceptanceCriteria": "Quarterly Report",
+        "evidenceStatus": "Active",
         "evidence": null
       },
       {
@@ -3937,6 +3969,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Paused",
         "unlockDate": "Mar 29, 2026",
         "description": "",
+        "acceptanceCriteria": "Quarterly Report",
+        "evidenceStatus": "Active",
         "evidence": null
       },
       {
@@ -3946,6 +3980,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Active",
         "unlockDate": "Nov 29, 2026",
         "description": "",
+        "acceptanceCriteria": "Quarterly Report",
+        "evidenceStatus": "Active",
         "evidence": null
       }
     ]

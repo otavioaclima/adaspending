@@ -37,7 +37,16 @@ import FeedbackModal from "./components/layout/FeedbackModal";
 import ScrollToTop from "./components/layout/ScrollToTop";
 import BackToTop from "./components/layout/BackToTop";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 10 * 60 * 1000, // 10 minutes
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 // Elegant loading fallback
 const LoadingFallback = () => (

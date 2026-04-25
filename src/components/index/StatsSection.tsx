@@ -4,16 +4,17 @@ import { BarChart3, TrendingUp, Briefcase, Users, Wallet, ArrowDownRight, ArrowU
 import StatCard from '@/components/ui/StatCard';
 import { treasuryStats } from '@/data/mockData';
 import { intersectProjects } from '@/data/intersectData';
-import { getTreasuryAmount, getAdaPrice } from '@/services/cardanoscan';
+import { getAdaPrice } from '@/services/cardanoscan';
+import { getCexplorerStats } from '@/services/cexplorer';
 import { Skeleton } from '@/components/ui/skeleton';
 
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const StatsSection = () => {
   const { t } = useLanguage();
-  const { data: cardanoscanTreasury, isLoading: isTreasuryLoading } = useQuery({
-    queryKey: ['cardanoscanTreasury'],
-    queryFn: getTreasuryAmount,
+  const { data: cexplorerStats, isLoading: isCexplorerLoading } = useQuery({
+    queryKey: ['cexplorerStats'],
+    queryFn: getCexplorerStats,
   });
 
   const { data: adaPrice } = useQuery({
@@ -59,15 +60,15 @@ const StatsSection = () => {
 
   return (
     <section className="mb-10">
-      <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         {/* Box 1: Total Treasury Size */}
-        {isTreasuryLoading ? (
+        {isCexplorerLoading ? (
           <Skeleton className="h-[120px] w-full" />
         ) : (
           <StatCard 
             title={t('stats.total_treasury')} 
-            value={formatADA(cardanoscanTreasury || 0)} 
-            usdValue={formatUSD(cardanoscanTreasury || 0) || undefined}
+            value={formatADA(cexplorerStats?.treasury || 0)} 
+            usdValue={formatUSD(cexplorerStats?.treasury || 0) || undefined}
             icon={<BarChart3 className="h-5 w-5" />} 
             className="bg-cardano-blue/10 dark:bg-cardano-blue/20 border-cardano-blue/30 dark:border-cardano-blue/40 h-full" 
           />
@@ -100,7 +101,7 @@ const StatsSection = () => {
           className="bg-green-50 dark:bg-green-900/10 border-green-200 dark:border-green-800/30 h-full" 
         />
         
-        {/* Box 4: Total Projects */}
+        {/* Box 5: Total Projects */}
         <StatCard 
           title={t('stats.total_projects')} 
           value={totalProjects.toString()} 
@@ -108,7 +109,7 @@ const StatsSection = () => {
           className="bg-cardano-coral/10 dark:bg-cardano-coral/20 border-cardano-coral/30 dark:border-cardano-coral/40 h-full" 
         />
 
-        {/* Box 5: Total Vendors */}
+        {/* Box 6: Total Vendors */}
         <StatCard 
           title={t('stats.total_vendors')} 
           value={uniqueVendors.toString()} 

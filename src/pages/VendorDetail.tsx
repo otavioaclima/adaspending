@@ -118,7 +118,7 @@ const VendorDetail = () => {
   const transactionRows = vendorProjects.map(project => ({
     id: project.id,
     title: project.projectName,
-    fundRound: "Intersect Treasury 1",
+    fundRound: t('vendor_detail.intersect_treasury'),
     requestedAmount: project.totalAmount,
     fundedAmount: project.totalAmount,
     spentAmount: project.amountSpent,
@@ -179,28 +179,28 @@ const VendorDetail = () => {
             {profile?.website && (
               <a href={profile.website} target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" size="sm" className="gap-2">
-                  <Globe className="h-4 w-4" /> Website <ExternalLink className="h-3 w-3 opacity-50" />
+                  <Globe className="h-4 w-4" /> {t('vendor_detail.website')} <ExternalLink className="h-3 w-3 opacity-50" />
                 </Button>
               </a>
             )}
             {profile?.github && (
               <a href={profile.github} target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" size="sm" className="gap-2">
-                  <Github className="h-4 w-4" /> GitHub <ExternalLink className="h-3 w-3 opacity-50" />
+                  <Github className="h-4 w-4" /> {t('vendor_detail.github')} <ExternalLink className="h-3 w-3 opacity-50" />
                 </Button>
               </a>
             )}
             {profile?.twitter && (
               <a href={profile.twitter} target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" size="sm" className="gap-2">
-                  <Twitter className="h-4 w-4" /> X / Twitter <ExternalLink className="h-3 w-3 opacity-50" />
+                  <Twitter className="h-4 w-4" /> {t('vendor_detail.twitter')} <ExternalLink className="h-3 w-3 opacity-50" />
                 </Button>
               </a>
             )}
             {profile?.discord && (
               <a href={profile.discord} target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" size="sm" className="gap-2">
-                  <MessageCircle className="h-4 w-4" /> Discord <ExternalLink className="h-3 w-3 opacity-50" />
+                  <MessageCircle className="h-4 w-4" /> {t('vendor_detail.discord')} <ExternalLink className="h-3 w-3 opacity-50" />
                 </Button>
               </a>
             )}
@@ -388,7 +388,7 @@ const VendorDetail = () => {
                       <div className="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-900/50 border border-gray-100 dark:border-gray-700 flex items-center justify-center shrink-0">
                         <MessageCircle className="h-4 w-4 text-gray-400 group-hover:text-cardano-blue transition-colors" />
                       </div>
-                      <span>Discord</span>
+                      <span>{t('vendor_detail.discord')}</span>
                     </a>
                   </li>
                 )}

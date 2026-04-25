@@ -19,7 +19,10 @@ import {
   Send,
   Share2,
   Link as LinkIcon,
-  Eye
+  Eye,
+  ChevronRight,
+  ChevronLeft,
+  ClipboardCheck
 } from 'lucide-react';
 import { 
   AreaChart, 
@@ -61,12 +64,161 @@ const getStatusIcon = (status: string) => {
 const getStatusColor = (status: string) => {
   switch (status.toLowerCase()) {
     case 'completed':
-      return 'bg-green-100 text-green-800 border-green-200';
+      return 'bg-green-100 text-green-800 border-green-200 dark:bg-green-900/30 dark:text-green-400 dark:border-green-800 hover:bg-green-200 dark:hover:bg-green-900/50';
     case 'paused':
-      return 'bg-amber-100 text-amber-800 border-amber-200';
+      return 'bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:border-amber-800 hover:bg-amber-200 dark:hover:bg-amber-900/50';
     default:
-      return 'bg-blue-100 text-blue-800 border-blue-200';
+      return 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800 hover:bg-blue-200 dark:hover:bg-blue-900/50';
   }
+};
+
+const MilestoneTimeline = ({ milestones, t }: { milestones: any[], t: any }) => {
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const [showRightArrow, setShowRightArrow] = useState(false);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+
+  const checkScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setShowRightArrow(scrollLeft + clientWidth < scrollWidth - 20);
+      setShowLeftArrow(scrollLeft > 10);
+    }
+  };
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (scrollRef.current) {
+      const scrollAmount = 400;
+      scrollRef.current.scrollBy({ 
+        left: direction === 'left' ? -scrollAmount : scrollAmount, 
+        behavior: 'smooth' 
+      });
+    }
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      checkScroll();
+    }, 100);
+    window.addEventListener('resize', checkScroll);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', checkScroll);
+    };
+  }, [milestones]);
+
+  if (!milestones || milestones.length === 0) return null;
+
+  return (
+    <Card className="border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-gray-800/40 mb-8 overflow-hidden relative">
+      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+        <CardTitle className="text-lg font-bold dark:text-white">
+          {t('project.milestone_overview')}
+        </CardTitle>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="h-8 w-8 rounded-lg border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+            onClick={() => scroll('left')}
+            disabled={!showLeftArrow}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="h-8 w-8 rounded-lg border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+            onClick={() => scroll('right')}
+            disabled={!showRightArrow}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </CardHeader>
+      
+      <CardContent className="pt-6 pb-8 relative">
+        <div 
+          ref={scrollRef}
+          onScroll={checkScroll}
+          className="relative overflow-x-auto pb-4 scrollbar-hide scroll-smooth"
+        >
+          <div className="flex items-center min-w-max px-12 relative">
+            {/* The Base Grey Line */}
+            <div className="absolute top-[2.75rem] left-12 right-12 h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full" />
+            
+            <div className="flex items-start gap-0 relative z-10">
+              {milestones.map((milestone, index) => {
+                const isCompleted = milestone.status.toLowerCase() === 'withdrawn';
+                const isLast = index === milestones.length - 1;
+                const isNextCompleted = !isLast && milestones[index+1].status.toLowerCase() === 'withdrawn';
+                
+                return (
+                  <div key={milestone.id} className="flex flex-col items-center w-56 first:pl-0 last:pr-0">
+                    {/* Top Section: ID & Checkmark */}
+                    <div className="flex items-center gap-1.5 mb-3 h-5">
+                      <span className={`text-xs font-bold ${isCompleted ? 'text-green-600 dark:text-green-500' : 'text-gray-400 dark:text-gray-600'}`}>
+                        m-{index}
+                      </span>
+                      {isCompleted ? (
+                        <CheckCircle className="h-3.5 w-3.5 text-green-600 dark:text-green-500" />
+                      ) : (
+                        <CheckCircle className="h-3.5 w-3.5 text-gray-200 dark:text-gray-800" />
+                      )}
+                    </div>
+                    
+                    {/* Middle Section: Node & Line Segment */}
+                    <div className="relative flex items-center justify-center w-full">
+                      {/* Segment after this node */}
+                      {!isLast && (
+                        <div className={`absolute left-1/2 w-full h-1.5 transition-colors duration-500 ${isNextCompleted ? 'bg-green-500' : 'bg-gray-100 dark:bg-gray-800'}`} />
+                      )}
+                      
+                      {/* Node Circle */}
+                      <div className={`
+                        w-5 h-5 rounded-full border-[4px] z-20 transition-all duration-500
+                        ${isCompleted 
+                          ? 'bg-white border-green-500 shadow-[0_0_0_4px_rgba(34,197,94,0.1)]' 
+                          : 'bg-white dark:bg-gray-950 border-gray-200 dark:border-gray-800'}
+                      `} />
+                    </div>
+                    
+                    {/* Bottom Section: Date & Status */}
+                    <div className="mt-4 flex flex-col items-center text-center">
+                      <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 mb-2 whitespace-nowrap">
+                        {milestone.unlockDate} (UTC)
+                      </span>
+                      
+                      <div className={`
+                        px-3 py-1 rounded-lg border text-[9px] font-bold transition-all
+                        ${isCompleted 
+                          ? 'bg-gray-50/50 dark:bg-gray-900/50 border-gray-100 dark:border-gray-800 text-gray-500 dark:text-gray-400' 
+                          : 'bg-transparent border-gray-50 dark:border-gray-900 text-gray-300 dark:text-gray-700'}
+                      `}>
+                        {isCompleted ? t('project.milestone_completed') : t('project.milestone_pending')}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+        
+        {/* Subtle Edge Fades for scroll indication */}
+        <div className={`absolute left-0 top-0 bottom-8 w-12 bg-gradient-to-r from-white dark:from-gray-900 to-transparent pointer-events-none transition-opacity duration-300 ${showLeftArrow ? 'opacity-100' : 'opacity-0'}`} />
+        <div className={`absolute right-0 top-0 bottom-8 w-12 bg-gradient-to-l from-white dark:from-gray-900 to-transparent pointer-events-none transition-opacity duration-300 ${showRightArrow ? 'opacity-100' : 'opacity-0'}`} />
+      </CardContent>
+    </Card>
+  );
+};
+
+const getEvidenceStatusColor = (status: string | undefined) => {
+  if (!status) return 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 border-gray-200 dark:border-gray-700';
+  const s = status.toLowerCase();
+  if (s.includes('submitted')) return 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-100 dark:border-blue-900/50';
+  if (s.includes('past due')) return 'bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-amber-100 dark:border-amber-900/50';
+  if (s.includes('active')) return 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900/50';
+  return 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 border-gray-200 dark:border-gray-700';
 };
 
 const ProjectDetail = () => {
@@ -175,7 +327,7 @@ const ProjectDetail = () => {
             <div className="flex items-center gap-2 mb-3">
               <Badge variant="outline" className="bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 dark:text-gray-300">{t('fund.intersect_contracts')}</Badge>
               <div className="flex items-center gap-2">
-                <Badge className={`${getStatusColor(project.status)} border shadow-sm`}>
+                <Badge variant="outline" className={cn("border shadow-sm", getStatusColor(project.status))}>
                   <StatusIcon className="h-3.5 w-3.5 mr-1" />
                   {project.status}
                 </Badge>
@@ -299,6 +451,9 @@ const ProjectDetail = () => {
             </CardContent>
           </Card>
 
+          {/* Milestone Overview Timeline */}
+          <MilestoneTimeline milestones={project.milestones || []} t={t} />
+
           {/* Project Timeline Chart */}
           {chartData.length > 0 && (
             <Card className="border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-gray-800/40 mb-8 transition-colors">
@@ -376,9 +531,9 @@ const ProjectDetail = () => {
           {/* Milestones List */}
           {project.milestones && project.milestones.length > 0 && (
             <div className="space-y-6">
-              <div className="flex items-center justify-between px-1">
+              <div className="flex items-center gap-4 px-1 mb-8">
                 <h3 className="text-2xl font-black text-gray-900 dark:text-white tracking-tight">{t('project.milestones')}</h3>
-                <Badge variant="outline" className="bg-white dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700">{t('project.phases').replace('{count}', project.milestones.length.toString())}</Badge>
+                <Badge variant="outline" className="bg-white dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 h-7">{t('project.phases').replace('{count}', project.milestones.length.toString())}</Badge>
               </div>
 
               <div className="space-y-6 relative before:absolute before:left-6 before:top-4 before:bottom-4 before:w-0.5 before:bg-gray-100 dark:before:bg-gray-800">
@@ -413,8 +568,18 @@ const ProjectDetail = () => {
                       </div>
 
                       {milestone.description && (
-                        <div className="bg-gray-50/80 dark:bg-gray-900/80 p-4 rounded-xl border border-gray-100 dark:border-gray-700 mb-6 text-gray-600 dark:text-gray-400 leading-relaxed text-sm whitespace-pre-wrap">
+                        <div className="bg-gray-50/80 dark:bg-gray-900/80 p-4 rounded-xl border border-gray-100 dark:border-gray-700 mb-4 text-gray-600 dark:text-gray-400 leading-relaxed text-sm whitespace-pre-wrap">
                           {milestone.description}
+                        </div>
+                      )}
+
+                      {milestone.acceptanceCriteria && (
+                        <div className="mb-6 px-4 py-3 bg-cardano-blue/[0.03] dark:bg-cardano-blue/[0.05] rounded-xl border border-cardano-blue/10 dark:border-cardano-blue/20 flex items-start gap-3">
+                          <ClipboardCheck className="h-4 w-4 text-cardano-blue/70 dark:text-cardano-blue/50 mt-0.5 shrink-0" />
+                          <div>
+                            <p className="text-[10px] font-black uppercase tracking-widest text-cardano-blue/60 dark:text-cardano-blue/40 mb-1">{t('project.acceptance_criteria')}</p>
+                            <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{milestone.acceptanceCriteria}</p>
+                          </div>
                         </div>
                       )}
 
@@ -424,7 +589,17 @@ const ProjectDetail = () => {
                             <div className="p-2.5 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
                               <FileText className="h-4 w-4 text-cardano-blue" />
                             </div>
-                            <span className="text-sm font-bold text-gray-700 dark:text-gray-300">{milestone.evidence.title}</span>
+                            <div className="flex flex-col">
+                              <span className="text-sm font-bold text-gray-700 dark:text-gray-300 leading-tight">{milestone.evidence.title}</span>
+                              {milestone.evidenceStatus && (
+                                <div className="flex items-center gap-1.5 mt-1">
+                                  <span className="text-[9px] font-black uppercase tracking-tighter text-gray-400 dark:text-gray-500">{t('project.evidence_status')}:</span>
+                                  <Badge variant="outline" className={`text-[9px] h-4.5 px-1.5 py-0 font-black uppercase rounded-md ${getEvidenceStatusColor(milestone.evidenceStatus)}`}>
+                                    {milestone.evidenceStatus}
+                                  </Badge>
+                                </div>
+                              )}
+                            </div>
                           </div>
                           <div className="flex gap-2 w-full sm:w-auto">
                             {milestone.evidence.transactionHash && (

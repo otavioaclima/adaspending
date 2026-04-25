@@ -87,7 +87,7 @@ const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
                       trx.status === "completed" ? "text-purple-700 font-medium" :
                       trx.status === "active" ? "text-blue-700 font-medium" :
                       "text-gray-700 dark:text-gray-300" }>
-                      {trx.status}
+                      {t('status.' + trx.status.toLowerCase())}
                     </span>
                   </td>
                   <td className="px-3 py-2">
