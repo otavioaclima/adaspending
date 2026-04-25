@@ -168,6 +168,49 @@ const VendorDetail = () => {
 
         {/* Sidebar */}
         <div className="space-y-6">
+          {/* Financial Summary Card */}
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">
+            <h3 className="text-sm font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-6">
+              {t('vendor_detail.financial_summary')}
+            </h3>
+            <div className="space-y-6">
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('vendor_detail.total_allocated')}</p>
+                <p className="text-2xl font-bold text-cardano-blue dark:text-blue-300 flex items-center">
+                  <Wallet className="h-5 w-5 mr-2" />
+                  ₳{stats.totalFunded.toLocaleString()}
+                </p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('vendor_detail.total_spent')}</p>
+                <p className="text-2xl font-bold text-orange-600 dark:text-orange-500">
+                  ₳{stats.amountSpent.toLocaleString()}
+                </p>
+              </div>
+              <div className="pt-4 border-t border-gray-50 dark:border-gray-700">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-gray-500 dark:text-gray-400">{t('vendor_detail.execution_progress')}</span>
+                  <span className="text-sm font-bold text-gray-900 dark:text-white">
+                    {((stats.amountSpent / stats.totalFunded) * 100).toFixed(1)}%
+                  </span>
+                </div>
+                <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
+                  <div className="bg-cardano-blue h-full" style={{ width: `${(stats.amountSpent / stats.totalFunded) * 100}%` }} />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4 pt-4">
+                <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700">
+                  <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold mb-1">{t('vendor_detail.projects')}</p>
+                  <p className="text-lg font-bold text-gray-900 dark:text-white">{stats.projectCount}</p>
+                </div>
+                <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700">
+                  <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold mb-1">{t('vendor_detail.completed')}</p>
+                  <p className="text-lg font-bold text-green-600 dark:text-green-500">{stats.completedCount}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Contact Info Card */}
           {hasLinks && (
             <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">
@@ -233,49 +276,6 @@ const VendorDetail = () => {
               </ul>
             </div>
           )}
-
-          {/* Financial Summary Card */}
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">
-            <h3 className="text-sm font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-6">
-              {t('vendor_detail.financial_summary')}
-            </h3>
-            <div className="space-y-6">
-              <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('vendor_detail.total_allocated')}</p>
-                <p className="text-2xl font-bold text-cardano-blue dark:text-blue-300 flex items-center">
-                  <Wallet className="h-5 w-5 mr-2" />
-                  ₳{stats.totalFunded.toLocaleString()}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('vendor_detail.total_spent')}</p>
-                <p className="text-2xl font-bold text-orange-600 dark:text-orange-500">
-                  ₳{stats.amountSpent.toLocaleString()}
-                </p>
-              </div>
-              <div className="pt-4 border-t border-gray-50 dark:border-gray-700">
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-500 dark:text-gray-400">{t('vendor_detail.execution_progress')}</span>
-                  <span className="text-sm font-bold text-gray-900 dark:text-white">
-                    {((stats.amountSpent / stats.totalFunded) * 100).toFixed(1)}%
-                  </span>
-                </div>
-                <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-                  <div className="bg-cardano-blue h-full" style={{ width: `${(stats.amountSpent / stats.totalFunded) * 100}%` }} />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4 pt-4">
-                <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700">
-                  <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold mb-1">{t('vendor_detail.projects')}</p>
-                  <p className="text-lg font-bold text-gray-900 dark:text-white">{stats.projectCount}</p>
-                </div>
-                <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700">
-                  <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold mb-1">{t('vendor_detail.completed')}</p>
-                  <p className="text-lg font-bold text-green-600 dark:text-green-500">{stats.completedCount}</p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </Layout>
