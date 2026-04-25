@@ -34,17 +34,17 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-[#0a0c2e] to-[#020412] py-12 px-4 md:py-24 min-h-[80vh] flex items-center">
+    <section className="relative bg-gradient-to-br from-[#0a0c2e] to-[#020412] py-20 px-4 md:py-24 min-h-[80vh] flex items-center">
       <div className="container mx-auto text-center">
         <Link to="/" className="flex flex-col items-center mb-8">
           <img 
             alt="ADAspending Graph Logo" 
-            className="h-32 md:h-44 mb-6 animate-fade-in object-contain w-auto max-w-full drop-shadow-[0_0_30px_rgba(0,51,173,0.3)] dark:drop-shadow-[0_0_30px_rgba(59,130,246,0.2)] hover:scale-105 transition-all duration-700" 
+            className="h-40 md:h-56 mb-10 animate-fade-in animate-float object-contain w-auto max-w-[85%] drop-shadow-[0_0_40px_rgba(0,51,173,0.5)] dark:drop-shadow-[0_0_50px_rgba(59,130,246,0.4)] hover:scale-105 transition-all duration-1000" 
             src="/assets/1b553c01-58c1-4454-8098-2be801352be8.png" 
             fetchpriority="high"
             loading="eager"
-            width={400}
-            height={400}
+            width={500}
+            height={500}
           />
         </Link>
 
