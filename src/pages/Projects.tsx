@@ -62,8 +62,9 @@ const Projects = () => {
   const { t } = useLanguage();
   const [searchParams] = useSearchParams();
   const initialStatus = searchParams.get('status') || 'all';
+  const initialSearch = searchParams.get('search') || '';
   
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [statusFilter, setStatusFilter] = useState(initialStatus);
   const [sizeFilter, setSizeFilter] = useState('all');
   const [vendorFilter, setVendorFilter] = useState('all');
@@ -71,11 +72,16 @@ const Projects = () => {
   const [sortFilter, setSortFilter] = useState('totalAmount-desc');
   const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
 
-  // Sync status filter if URL changes
+  // Sync filters if URL changes
   React.useEffect(() => {
     const status = searchParams.get('status');
     if (status) {
       setStatusFilter(status);
+    }
+    
+    const search = searchParams.get('search');
+    if (search !== null) {
+      setSearchTerm(search);
     }
   }, [searchParams]);
 
@@ -297,7 +303,7 @@ const Projects = () => {
                 <CardContent className="flex-grow">
                   <div className="space-y-4">
                     <div>
-                      <p className="text-xs text-gray-400 dark:text-gray-500 uppercase font-semibold mb-1">{t('vendors.one_project')}</p>
+                      <p className="text-xs text-gray-400 dark:text-gray-500 uppercase font-semibold mb-1">{t('projects.vendor_label')}</p>
                       <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate" title={project.vendor}>{project.vendor}</p>
                     </div>
 

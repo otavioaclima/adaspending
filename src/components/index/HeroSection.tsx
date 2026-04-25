@@ -1,6 +1,7 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Search, TrendingUp } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -8,6 +9,26 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 const HeroSection = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      navigate(`/projects?search=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      navigate('/projects');
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  const handleTrendingClick = (tag: string) => {
+    navigate(`/projects?search=${encodeURIComponent(tag)}`);
+  };
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-[#0a0c2e] to-[#020412] rounded-3xl text-white mb-10 shadow-2xl border border-white/5">
@@ -39,9 +60,15 @@ const HeroSection = () => {
               <Input
                 className="bg-transparent border-none focus-visible:ring-0 placeholder:text-gray-500 text-white text-base h-10"
                 placeholder={t('hero.search_placeholder')}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
             </div>
-            <Button className="bg-cardano-blue hover:bg-blue-600 text-white px-6 h-10 rounded-lg font-bold transition-all text-sm">
+            <Button 
+              className="bg-cardano-blue hover:bg-blue-600 text-white px-6 h-10 rounded-lg font-bold transition-all text-sm"
+              onClick={handleSearch}
+            >
               {t('hero.search_button')}
             </Button>
           </div>
@@ -49,10 +76,10 @@ const HeroSection = () => {
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mt-4 text-[10px] uppercase tracking-wider font-bold text-gray-500">
             <TrendingUp className="h-3 w-3 text-blue-400" />
             <span>{t('hero.trending')}</span>
-            <button className="hover:text-blue-400 transition-colors">#IOG</button>
-            <button className="hover:text-blue-400 transition-colors">#Cardano CF</button>
-            <button className="hover:text-blue-400 transition-colors">#Intersect</button>
-            <button className="hover:text-blue-400 transition-colors">#Builder DAO</button>
+            <button onClick={() => handleTrendingClick('IOG')} className="hover:text-blue-400 transition-colors">#IOG</button>
+            <button onClick={() => handleTrendingClick('Cardano CF')} className="hover:text-blue-400 transition-colors">#Cardano CF</button>
+            <button onClick={() => handleTrendingClick('Intersect')} className="hover:text-blue-400 transition-colors">#Intersect</button>
+            <button onClick={() => handleTrendingClick('Builder DAO')} className="hover:text-blue-400 transition-colors">#Builder DAO</button>
           </div>
         </div>
 
