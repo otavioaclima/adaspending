@@ -63,11 +63,12 @@ const Projects = () => {
   const [searchParams] = useSearchParams();
   const initialStatus = searchParams.get('status') || 'all';
   const initialSearch = searchParams.get('search') || '';
+  const initialVendor = searchParams.get('vendor') || 'all';
   
   const [searchTerm, setSearchTerm] = useState(initialSearch);
   const [statusFilter, setStatusFilter] = useState(initialStatus);
   const [sizeFilter, setSizeFilter] = useState('all');
-  const [vendorFilter, setVendorFilter] = useState('all');
+  const [vendorFilter, setVendorFilter] = useState(initialVendor);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortFilter, setSortFilter] = useState('totalAmount-desc');
   const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
@@ -82,6 +83,11 @@ const Projects = () => {
     const search = searchParams.get('search');
     if (search !== null) {
       setSearchTerm(search);
+    }
+
+    const vendor = searchParams.get('vendor');
+    if (vendor) {
+      setVendorFilter(vendor);
     }
   }, [searchParams]);
 

@@ -464,7 +464,7 @@ export default {
   'accounting.remaining': '残高',
   'accounting.no_transactions': '記録された取引はありません',
   'accounting.date': '日付',
-  'accounting.title_col': 'タイトル',
+  'accounting.title_col': 'プロジェクト',
   'accounting.fund_round': '資金調達ラウンド',
   'accounting.received': '受領済み',
   'accounting.spent': '支出済み',

@@ -31,7 +31,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "UTXO-ER-0001-25",
     "projectName": "IOR - Cardano Vision Work Program 2025",
-    "vendor": "IOR",
+    "vendor": "Input Output Group",
     "totalAmount": 26840000.0,
     "amountSpent": 26840000.0,
     "status": "Completed",
@@ -98,7 +98,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "UTXO-EMI-0001-25",
     "projectName": "IOG - Advancing Decentralised Community Innovation Funding & Infrastructure",
-    "vendor": "IOG",
+    "vendor": "Input Output Group",
     "totalAmount": 5159000.0,
     "amountSpent": 3095400.0,
     "status": "Paused",
@@ -169,7 +169,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "UTXO-EG-0003-25",
     "projectName": "IOG - Beyond Minimum Viable Governance",
-    "vendor": "IOG",
+    "vendor": "Input Output Group",
     "totalAmount": 592780.0,
     "amountSpent": 227390.0,
     "status": "Paused",
@@ -226,7 +226,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "UTXO-EC-0003-25",
     "projectName": "IOG - Blockfrost Platform Community Budget Proposal",
-    "vendor": "IOG",
+    "vendor": "Input Output Group",
     "totalAmount": 1300000.0,
     "amountSpent": 1137500.0,
     "status": "Paused",
@@ -344,7 +344,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "UTXO-EC-0002-25-06",
     "projectName": "Input Output Engineering Core Development Proposal (6of6)",
-    "vendor": "Input Output Engineering Core Development Proposal (6of6)",
+    "vendor": "Input Output Group",
     "totalAmount": 33664800.0,
     "amountSpent": 19518335.0,
     "status": "Paused",
@@ -599,7 +599,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "UTXO-EC-0002-25-05",
     "projectName": "Input Output Engineering Core Development Proposal (5of6)",
-    "vendor": "Input Output Engineering Core Development Proposal (5of6)",
+    "vendor": "Input Output Group",
     "totalAmount": 11492000.0,
     "amountSpent": 2496000.0,
     "status": "Paused",
@@ -829,7 +829,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "UTXO-EC-0002-25-04",
     "projectName": "Input Output Engineering Core Development Proposal (4of6)",
-    "vendor": "Input Output Engineering Core Development Proposal (4of6)",
+    "vendor": "Input Output Group",
     "totalAmount": 10816000.0,
     "amountSpent": 5678401.0,
     "status": "Paused",
@@ -1052,7 +1052,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "UTXO-EC-0002-25-03",
     "projectName": "Input Output Engineering Core Development Proposal (3of6)",
-    "vendor": "Input Output Engineering Core Development Proposal (3of6)",
+    "vendor": "Input Output Group",
     "totalAmount": 8870001.0,
     "amountSpent": 5104715.0,
     "status": "Paused",
@@ -1303,7 +1303,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "UTXO-EC-0002-25-02",
     "projectName": "Input Output Engineering Core Development Proposal (2of6)",
-    "vendor": "Input Output Engineering Core Development Proposal (2of6)",
+    "vendor": "Input Output Group",
     "totalAmount": 7774000.0,
     "amountSpent": 3969084.0,
     "status": "Paused",
@@ -1535,7 +1535,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "UTXO-EC-0002-25-01",
     "projectName": "Input Output Engineering Core Development Proposal (1of6)",
-    "vendor": "Input Output Engineering Core Development Proposal (1of6)",
+    "vendor": "Input Output Group",
     "totalAmount": 24200280.0,
     "amountSpent": 13795686.0,
     "status": "Paused",
@@ -1775,7 +1775,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "ER-0004b-25",
     "projectName": "Product Research (1of2)",
-    "vendor": "Product Research Team",
+    "vendor": "Cardano Product Committee (CPC)",
     "totalAmount": 80000.0,
     "amountSpent": 80000.0,
     "status": "Completed",
@@ -1795,7 +1795,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "ER-0004a-25",
     "projectName": "Product Committee - Local Gatherings, Business Calls, Workshops",
-    "vendor": "Product Committee",
+    "vendor": "Cardano Product Committee (CPC)",
     "totalAmount": 350000.0,
     "amountSpent": 220000.0,
     "status": "Paused",
@@ -3766,7 +3766,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "EC-0013(6,10,4)-25",
     "projectName": "Open Source Committee - Developer Advocates Program, Committee Travel Budget, Bug Bounty",
-    "vendor": "Open Source Committee",
+    "vendor": "Open Source Committee (OSC)",
     "totalAmount": 1010000.0,
     "amountSpent": 766000.0,
     "status": "Paused",
@@ -4227,7 +4227,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "EC-0012-25",
     "projectName": "GO MAESTRO INC - Complete Web3 developer stack",
-    "vendor": "GO MAESTRO INC",
+    "vendor": "Maestro",
     "totalAmount": 600000.0,
     "amountSpent": 600000.0,
     "status": "Completed",

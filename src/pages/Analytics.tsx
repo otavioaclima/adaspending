@@ -157,8 +157,10 @@ const Analytics = () => {
           title={t('stats.intersect_budget')} 
           value="₳345,531,529" 
           usdValue="214,229,548"
-          icon={<Wallet className="h-4 w-4 text-purple-400" />} 
+          icon={<Wallet className="h-4 w-4 text-cardano-blue" />} 
           className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md" 
+          valueClassName="text-cardano-blue dark:text-blue-400"
+          tooltipText={t('project.usd_conversion_tooltip')}
         />
         <StatCard 
           title={t('stats.total_spent')} 
@@ -166,8 +168,10 @@ const Analytics = () => {
           usdValue="213,119,546"
           change="99.48%"
           positive={true}
-          icon={<Globe className="h-4 w-4 text-orange-400" />} 
+          icon={<Globe className="h-4 w-4 text-orange-500" />} 
           className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md" 
+          valueClassName="text-orange-600 dark:text-orange-500"
+          tooltipText={t('project.usd_conversion_tooltip')}
         />
         <StatCard 
           title={t('stats.remaining_budget')} 
@@ -175,8 +179,10 @@ const Analytics = () => {
           usdValue="1,110,001"
           change="0.52%"
           positive={false}
-          icon={<TrendingUp className="h-4 w-4 text-green-400" />} 
+          icon={<TrendingUp className="h-4 w-4 text-green-500" />} 
           className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md" 
+          valueClassName="text-green-600 dark:text-green-500"
+          tooltipText={t('project.usd_conversion_tooltip')}
         />
       </div>
 

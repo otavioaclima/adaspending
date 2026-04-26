@@ -465,7 +465,7 @@ export default {
   'accounting.remaining': 'Restante',
   'accounting.no_transactions': 'No se registraron transacciones',
   'accounting.date': 'Fecha',
-  'accounting.title_col': 'Título',
+  'accounting.title_col': 'Proyecto',
   'accounting.fund_round': 'Ronda de Financiación',
   'accounting.received': 'Recibido',
   'accounting.spent': 'Gastado',

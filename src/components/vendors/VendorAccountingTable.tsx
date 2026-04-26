@@ -47,7 +47,7 @@ const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
         </div>
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">{t('accounting.remaining')}</p>
-          <p className="font-bold text-gray-800 dark:text-gray-200">
+          <p className="font-bold text-green-600 dark:text-green-500">
             ₳{(totalFunded - totalSpent).toLocaleString()}
           </p>
         </div>
@@ -87,7 +87,7 @@ const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
                       trx.status === "completed" ? "text-purple-700 font-medium" :
                       trx.status === "active" ? "text-blue-700 font-medium" :
                       "text-gray-700 dark:text-gray-300" }>
-                      {t('status.' + trx.status.toLowerCase())}
+                      {t('status.' + trx.status.toLowerCase().replace(' ', '_'))}
                     </span>
                   </td>
                   <td className="px-3 py-2">

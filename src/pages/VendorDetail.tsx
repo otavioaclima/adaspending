@@ -4,15 +4,21 @@ import { ArrowLeft, Building, Wallet, Info, Globe, Mail, MessageCircle, Github, 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer 
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
+  ResponsiveContainer
 } from 'recharts';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import Layout from '@/components/layout/Layout';
 import { intersectProjects } from '@/data/intersectData';
 import { getVendorProfile } from '@/data/vendorProfiles';
@@ -56,7 +62,7 @@ const VendorDetail = () => {
   useEffect(() => {
     const storageKey = `vendor_views_${vendorName.replace(/\s+/g, '_')}`;
     const storedViews = localStorage.getItem(storageKey);
-    
+
     let currentViews = 0;
     if (storedViews) {
       currentViews = parseInt(storedViews, 10);
@@ -68,7 +74,7 @@ const VendorDetail = () => {
       }
       currentViews = (seed % 500) + 50;
     }
-    
+
     const nextViews = currentViews + 1;
     localStorage.setItem(storageKey, nextViews.toString());
     setViews(nextViews);
@@ -83,8 +89,11 @@ const VendorDetail = () => {
     return {
       totalFunded: vendorProjects.reduce((acc, p) => acc + p.totalAmount, 0),
       amountSpent: vendorProjects.reduce((acc, p) => acc + p.amountSpent, 0),
+      remaining: vendorProjects.reduce((acc, p) => acc + (p.totalAmount - p.amountSpent), 0),
       projectCount: vendorProjects.length,
       completedCount: vendorProjects.filter(p => p.status.toLowerCase() === 'completed').length,
+      inProgressCount: vendorProjects.filter(p => p.status.toLowerCase() === 'in progress' || p.status.toLowerCase() === 'active').length,
+      pausedCount: vendorProjects.filter(p => p.status.toLowerCase() === 'paused').length,
     };
   }, [vendorProjects]);
 
@@ -93,7 +102,7 @@ const VendorDetail = () => {
     if (vendorProjects.length === 0) return [];
 
     const monthlyData: Record<string, number> = {};
-    
+
     vendorProjects.forEach(project => {
       if (project.milestones) {
         project.milestones.forEach(milestone => {
@@ -191,7 +200,7 @@ const VendorDetail = () => {
                 </div>
               </div>
               {profile?.description && (
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 max-w-lg">{profile.description}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 max-w-xl leading-relaxed">{profile.description}</p>
               )}
             </div>
           </div>
@@ -256,10 +265,25 @@ const VendorDetail = () => {
               {t('vendor_detail.vendor_profile')}
             </h3>
             <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-              {t('vendor_detail.vendor_desc')
-                .replace('{name}', vendorName)
-                .replace('{count}', stats.projectCount.toString())
-                .replace('{total}', stats.totalFunded.toLocaleString())}
+              {(() => {
+                const desc = t('vendor_detail.vendor_desc')
+                  .replace('{name}', vendorName)
+                  .replace('{count}', stats.projectCount.toString());
+
+                const parts = desc.split('₳{total}');
+                if (parts.length === 2) {
+                  return (
+                    <>
+                      {parts[0]}
+                      <span className="text-cardano-blue dark:text-blue-400 font-bold">
+                        ₳{stats.totalFunded.toLocaleString()}
+                      </span>
+                      {parts[1]}
+                    </>
+                  );
+                }
+                return desc.replace('{total}', stats.totalFunded.toLocaleString());
+              })()}
             </p>
           </div>
 
@@ -283,38 +307,38 @@ const VendorDetail = () => {
                     <AreaChart data={chartData}>
                       <defs>
                         <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="hsl(var(--cardano-blue))" stopOpacity={0.3}/>
-                          <stop offset="95%" stopColor="hsl(var(--cardano-blue))" stopOpacity={0}/>
+                          <stop offset="5%" stopColor="hsl(var(--cardano-blue))" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="hsl(var(--cardano-blue))" stopOpacity={0} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="text-gray-100 dark:text-gray-700" />
-                      <XAxis 
-                        dataKey="date" 
-                        axisLine={false} 
-                        tickLine={false} 
-                        tick={{ fill: 'currentColor', fontSize: 11 }} 
+                      <XAxis
+                        dataKey="date"
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fill: 'currentColor', fontSize: 11 }}
                         className="text-gray-400 dark:text-gray-500"
                       />
-                      <YAxis 
-                        axisLine={false} 
-                        tickLine={false} 
-                        tick={{ fill: 'currentColor', fontSize: 11 }} 
+                      <YAxis
+                        axisLine={false}
+                        tickLine={false}
+                        tick={{ fill: 'currentColor', fontSize: 11 }}
                         className="text-gray-400 dark:text-gray-500"
-                        tickFormatter={(v) => `₳${v >= 1000 ? (v/1000).toFixed(0) + 'k' : v}`}
+                        tickFormatter={(v) => `₳${v >= 1000 ? (v / 1000).toFixed(0) + 'k' : v}`}
                       />
-                      <Tooltip 
+                      <RechartsTooltip
                         contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
                         itemStyle={{ color: '#f3f4f6' }}
                         labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
                         formatter={(value: number) => [`₳${value.toLocaleString()}`, t('projects.budget_label')]}
                       />
-                      <Area 
-                        type="monotone" 
-                        dataKey="amount" 
-                        stroke="hsl(var(--cardano-blue))" 
+                      <Area
+                        type="monotone"
+                        dataKey="amount"
+                        stroke="hsl(var(--cardano-blue))"
                         strokeWidth={3}
-                        fillOpacity={1} 
-                        fill="url(#colorAmount)" 
+                        fillOpacity={1}
+                        fill="url(#colorAmount)"
                       />
                     </AreaChart>
                   </ResponsiveContainer>
@@ -334,7 +358,7 @@ const VendorDetail = () => {
                 {stats.projectCount} {stats.projectCount === 1 ? t('vendors.one_project') : t('vendors.multiple_projects')}
               </Badge>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {vendorProjects.map((project) => (
                 <Card key={project.id} className="flex flex-col h-full hover:shadow-md transition-shadow border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800/40">
@@ -417,20 +441,63 @@ const VendorDetail = () => {
                     <Wallet className="h-5 w-5 mr-2" />
                     ₳{stats.totalFunded.toLocaleString()}
                   </p>
-                  <p className="text-xs font-bold text-gray-400 dark:text-gray-500 ml-7 opacity-80">
-                    ≈ ${ (stats.totalFunded * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }) } USD
-                  </p>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <p className="text-xs font-bold text-gray-400 dark:text-gray-500 ml-7 opacity-80 cursor-help w-fit flex items-center gap-1">
+                          ≈ ${(stats.totalFunded * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                          <Info className="h-3 w-3 opacity-50" />
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="text-xs">{t('project.usd_conversion_tooltip')}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
               </div>
               <div>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('vendor_detail.total_spent')}</p>
                 <div className="flex flex-col">
-                  <p className="text-2xl font-bold text-orange-600 dark:text-orange-500">
+                  <p className="text-2xl font-bold text-orange-600 dark:text-orange-500 flex items-center">
+                    <ArrowRight className="h-5 w-5 mr-2" />
                     ₳{stats.amountSpent.toLocaleString()}
                   </p>
-                  <p className="text-xs font-bold text-gray-400 dark:text-gray-500 opacity-80">
-                    ≈ ${ (stats.amountSpent * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }) } USD
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <p className="text-xs font-bold text-gray-400 dark:text-gray-500 ml-7 opacity-80 cursor-help w-fit flex items-center gap-1">
+                          ≈ ${(stats.amountSpent * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                          <Info className="h-3 w-3 opacity-50" />
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="text-xs">{t('project.usd_conversion_tooltip')}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('accounting.remaining')}</p>
+                <div className="flex flex-col">
+                  <p className="text-2xl font-bold text-green-600 dark:text-green-400 flex items-center">
+                    <CheckCircle2 className="h-5 w-5 mr-2" />
+                    ₳{stats.remaining.toLocaleString()}
                   </p>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <p className="text-xs font-bold text-gray-400 dark:text-gray-500 ml-7 opacity-80 cursor-help w-fit flex items-center gap-1">
+                          ≈ ${(stats.remaining * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                          <Info className="h-3 w-3 opacity-50" />
+                        </p>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="text-xs">{t('project.usd_conversion_tooltip')}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
                 </div>
               </div>
               <div className="pt-4 border-t border-gray-50 dark:border-gray-700">
@@ -444,15 +511,31 @@ const VendorDetail = () => {
                   <div className="bg-cardano-blue h-full" style={{ width: `${(stats.amountSpent / stats.totalFunded) * 100}%` }} />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4 pt-4">
-                <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700">
-                  <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold mb-1">{t('vendor_detail.projects')}</p>
-                  <p className="text-lg font-bold text-gray-900 dark:text-white">{stats.projectCount}</p>
-                </div>
-                <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700">
-                  <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold mb-1">{t('vendor_detail.completed')}</p>
-                  <p className="text-lg font-bold text-green-600 dark:text-green-500">{stats.completedCount}</p>
-                </div>
+              <div className="grid grid-cols-2 gap-3 pt-4">
+                <Link to={`/projects?vendor=${encodeURIComponent(vendorName)}`} className="group">
+                  <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700 group-hover:border-cardano-blue/50 transition-colors h-full">
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold mb-1 group-hover:text-cardano-blue transition-colors">{t('vendor_detail.projects')}</p>
+                    <p className="text-lg font-bold text-gray-900 dark:text-white">{stats.projectCount}</p>
+                  </div>
+                </Link>
+                <Link to={`/projects?status=Completed&vendor=${encodeURIComponent(vendorName)}`} className="group">
+                  <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700 group-hover:border-green-500/50 transition-colors h-full">
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold mb-1 group-hover:text-green-600 transition-colors">{t('vendor_detail.completed')}</p>
+                    <p className="text-lg font-bold text-green-600 dark:text-green-500">{stats.completedCount}</p>
+                  </div>
+                </Link>
+                <Link to={`/projects?status=In Progress&vendor=${encodeURIComponent(vendorName)}`} className="group">
+                  <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700 group-hover:border-blue-500/50 transition-colors h-full">
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold mb-1 group-hover:text-blue-600 transition-colors">{t('status.in_progress')}</p>
+                    <p className="text-lg font-bold text-blue-600 dark:text-blue-500">{stats.inProgressCount}</p>
+                  </div>
+                </Link>
+                <Link to={`/projects?status=Paused&vendor=${encodeURIComponent(vendorName)}`} className="group">
+                  <div className="bg-gray-50 dark:bg-gray-900/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700 group-hover:border-amber-500/50 transition-colors h-full">
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold mb-1 group-hover:text-amber-600 transition-colors">{t('status.paused')}</p>
+                    <p className="text-lg font-bold text-amber-600 dark:text-amber-500">{stats.pausedCount}</p>
+                  </div>
+                </Link>
               </div>
             </div>
           </div>

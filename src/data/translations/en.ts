@@ -474,7 +474,7 @@ export default {
   'accounting.remaining': 'Remaining',
   'accounting.no_transactions': 'No transactions recorded',
   'accounting.date': 'Date',
-  'accounting.title_col': 'Title',
+  'accounting.title_col': 'Project',
   'accounting.fund_round': 'Fund Round',
   'accounting.received': 'Received',
   'accounting.spent': 'Spent',

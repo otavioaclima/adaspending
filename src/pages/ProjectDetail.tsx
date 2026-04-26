@@ -731,7 +731,7 @@ const ProjectDetail = () => {
                 <div className="p-6 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-900/50">
                   <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">{t('project.total_budget')}</p>
                   <div className="flex flex-col">
-                    <span className="text-3xl font-black text-gray-900 dark:text-white tracking-tighter">₳{project.totalAmount.toLocaleString()}</span>
+                    <span className="text-3xl font-black text-cardano-blue tracking-tighter">₳{project.totalAmount.toLocaleString()}</span>
                     <TooltipProvider>
                       <UITooltip>
                         <TooltipTrigger asChild>

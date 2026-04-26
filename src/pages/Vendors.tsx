@@ -99,7 +99,7 @@ const VendorCard = ({ vendor }: { vendor: any }) => {
           <div className="grid grid-cols-2 gap-4 mb-5 p-3 bg-gray-50 dark:bg-gray-900/50 rounded-lg border border-gray-100 dark:border-gray-700">
             <div>
               <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold mb-1">{t('vendors.allocation_label')}</p>
-              <p className="text-sm font-bold text-gray-900 dark:text-gray-100 flex items-center">
+              <p className="text-sm font-bold text-cardano-blue dark:text-blue-400 flex items-center">
                 <Wallet className="h-3 w-3 mr-1 text-cardano-blue" />
                 ₳{vendor.totalFunded.toLocaleString()}
               </p>
@@ -388,7 +388,7 @@ const Vendors = () => {
                         </span>
                       </Link>
                     </TableCell>
-                    <TableCell className="text-gray-900 dark:text-gray-100 font-medium">
+                    <TableCell className="text-cardano-blue dark:text-blue-400 font-medium">
                       ₳{vendor.totalFunded.toLocaleString()}
                     </TableCell>
                     <TableCell className="text-orange-600 dark:text-orange-500 font-medium">
