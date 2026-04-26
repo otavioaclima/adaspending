@@ -2,15 +2,15 @@ import React from 'react';
 import Layout from '@/components/layout/Layout';
 import HeroSection from '@/components/index/HeroSection';
 import StatsSection from '@/components/index/StatsSection';
-import FundRoundSection from '@/components/index/FundRoundSection';
-import ChartsSection from '@/components/index/ChartsSection';
+const FundRoundSection = React.lazy(() => import('@/components/index/FundRoundSection'));
+const ChartsSection = React.lazy(() => import('@/components/index/ChartsSection'));
 
 
 import ProposalBudgetComparator from "@/components/dashboard/ProposalBudgetComparator";
 import OverspendingPanel from "@/components/dashboard/OverspendingPanel";
 import TrackingAlerts from "@/components/dashboard/TrackingAlerts";
 import Thermometer from "@/components/dashboard/Thermometer";
-import IntersectProjectsTable from "@/components/dashboard/IntersectProjectsTable";
+const IntersectProjectsTable = React.lazy(() => import("@/components/dashboard/IntersectProjectsTable"));
 
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -35,11 +35,15 @@ const Index = () => {
         </div>
         <TrackingAlerts />
       </section>
-      <section className="mb-10">
-        <IntersectProjectsTable />
+      <section className="mb-10 content-visibility-auto">
+        <React.Suspense fallback={<div className="h-40 flex items-center justify-center bg-gray-50/50 dark:bg-gray-800/50 rounded-xl animate-pulse" />}>
+          <IntersectProjectsTable />
+        </React.Suspense>
       </section>
-      <FundRoundSection />
-      <ChartsSection />
+      <React.Suspense fallback={<div className="h-40 flex items-center justify-center bg-gray-50/50 dark:bg-gray-800/50 rounded-xl animate-pulse" />}>
+        <FundRoundSection />
+        <ChartsSection />
+      </React.Suspense>
 
 
     </Layout>

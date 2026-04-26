@@ -56,18 +56,24 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
   ];
 
   const handlePrefetch = (href: string) => {
-    if (href === '/overview' || href === '/analytics') {
+    // Prefetch common API data for dashboard pages
+    if (['/overview', '/analytics', '/projects', '/vendors'].includes(href)) {
       queryClient.prefetchQuery({ queryKey: ['cexplorerStats'], queryFn: getCexplorerStats });
       queryClient.prefetchQuery({ queryKey: ['adaPrice'], queryFn: getAdaPrice });
     }
     
-    // Prefetch page chunks on hover for instant navigation
-    if (href === '/about') import('@/pages/About');
-    if (href === '/projects') import('@/pages/Projects');
-    if (href === '/vendors') import('@/pages/Vendors');
-    if (href === '/explorer') import('@/pages/SpendingExplorer');
-    if (href === '/donations') import('@/pages/TreasuryDonations');
-    if (href === '/analytics') import('@/pages/Analytics');
+    // Prefetch page chunks for instant navigation
+    // This uses dynamic imports to tell Vite/Webpack to load the chunk in the background
+    switch(href) {
+      case '/overview': import('@/pages/Index'); break;
+      case '/about': import('@/pages/About'); break;
+      case '/projects': import('@/pages/Projects'); break;
+      case '/vendors': import('@/pages/Vendors'); break;
+      case '/explorer': import('@/pages/SpendingExplorer'); break;
+      case '/donations': import('@/pages/TreasuryDonations'); break;
+      case '/analytics': import('@/pages/Analytics'); break;
+      default: break;
+    }
   };
 
   const isHomePage = location.pathname === '/';

@@ -7,8 +7,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React, { Suspense, lazy } from "react";
 
 // Lazy load pages
-import Index from "./pages/Index";
-import Teaser from "./pages/Teaser";
+const Index = lazy(() => import("./pages/Index"));
+const Teaser = lazy(() => import("./pages/Teaser"));
 
 // Lazy load other pages
 const Vendors = lazy(() => import("./pages/Vendors"));
