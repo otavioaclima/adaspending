@@ -43,7 +43,7 @@ const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
         </div>
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">{t('accounting.total_spent')}</p>
-          <p className="font-bold text-yellow-700">₳{totalSpent.toLocaleString()}</p>
+          <p className="font-bold text-orange-600 dark:text-orange-500">₳{totalSpent.toLocaleString()}</p>
         </div>
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">{t('accounting.remaining')}</p>
@@ -79,7 +79,7 @@ const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
                   <td className="px-3 py-2 text-gray-700 dark:text-gray-300">{trx.title}</td>
                   <td className="px-3 py-2 text-gray-700 dark:text-gray-300">{trx.fundRound}</td>
                   <td className="px-3 py-2 text-cardano-blue dark:text-blue-400">₳{trx.fundedAmount.toLocaleString()}</td>
-                  <td className="px-3 py-2 text-yellow-700">₳{trx.spentAmount.toLocaleString()}</td>
+                  <td className="px-3 py-2 text-orange-600 dark:text-orange-500">₳{trx.spentAmount.toLocaleString()}</td>
                   <td className="px-3 py-2 capitalize">
                     <span className={
                       trx.status === "approved" ? "text-green-700 font-medium" :

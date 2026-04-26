@@ -84,9 +84,9 @@ const MilestoneRow = ({ milestone, index, t, defaultExpanded }: {
             {milestone.unlockDate} (UTC)
           </div>
         </td>
-        <td className="px-6 py-4">
+        <td className="px-6 py-4 whitespace-nowrap">
           <Badge variant="outline" className={cn(
-            "text-[10px] h-5 px-2 font-bold uppercase",
+            "text-[10px] h-5 px-2 font-bold uppercase whitespace-nowrap",
             isWithdrawn 
               ? 'bg-green-50/50 dark:bg-green-900/10 text-green-700 dark:text-green-400 border-green-100 dark:border-green-900/30' 
               : 'bg-gray-50 dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700'
@@ -94,9 +94,9 @@ const MilestoneRow = ({ milestone, index, t, defaultExpanded }: {
             {milestone.status}
           </Badge>
         </td>
-        <td className="px-6 py-4">
+        <td className="px-6 py-4 whitespace-nowrap">
           <span className={cn(
-            "text-xs font-bold",
+            "text-xs font-bold whitespace-nowrap",
             milestone.evidenceStatus?.toLowerCase().includes('past due') ? "text-amber-600 dark:text-amber-500" : "text-gray-500 dark:text-gray-400"
           )}>
             {milestone.evidenceStatus || (milestone.evidence ? 'Submitted' : 'None')}
@@ -688,12 +688,12 @@ const ProjectDetail = () => {
                   <table className="w-full text-left border-collapse">
                     <thead>
                       <tr className="bg-gray-50/50 dark:bg-gray-800/50 border-b border-gray-200 dark:border-gray-800">
-                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 w-[40px]">#</th>
-                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">{t('project.milestone_name')}</th>
-                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">{t('project.unlock_date')}</th>
-                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">{t('project.status_label')}</th>
-                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500">{t('project.evidence_label')}</th>
-                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 text-right">{t('project.amount_label')}</th>
+                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 w-[80px]">#</th>
+                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 min-w-[200px]">{t('project.milestone_name')}</th>
+                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 w-[180px]">{t('project.unlock_date')}</th>
+                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 w-[140px]">{t('project.status_label')}</th>
+                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 w-[140px]">{t('project.evidence_label')}</th>
+                        <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest text-gray-400 dark:text-gray-500 text-right w-[160px]">{t('project.amount_label')}</th>
                         <th className="px-6 py-4 w-[60px]"></th>
                       </tr>
                     </thead>
