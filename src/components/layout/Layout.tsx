@@ -56,10 +56,17 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
   ];
 
   const handlePrefetch = (href: string) => {
-    if (href === '/overview') {
+    if (href === '/overview' || href === '/analytics') {
       queryClient.prefetchQuery({ queryKey: ['cexplorerStats'], queryFn: getCexplorerStats });
       queryClient.prefetchQuery({ queryKey: ['adaPrice'], queryFn: getAdaPrice });
     }
+    
+    // Prefetch page chunks on hover for instant navigation
+    if (href === '/about') import('@/pages/About');
+    if (href === '/projects') import('@/pages/Projects');
+    if (href === '/vendors') import('@/pages/Vendors');
+    if (href === '/explorer') import('@/pages/Explorer');
+    if (href === '/donations') import('@/pages/Donations');
   };
 
   const isHomePage = location.pathname === '/';
