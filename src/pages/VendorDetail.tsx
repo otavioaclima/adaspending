@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Building, Wallet, Info, Globe, Mail, MessageCircle, Github, Twitter, ExternalLink, Activity, Eye } from 'lucide-react';
+import { ArrowLeft, Building, Wallet, Info, Globe, Mail, MessageCircle, Github, Twitter, ExternalLink, Activity, Eye, CheckCircle2, Clock, Briefcase, ArrowRight, LayoutGrid, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -18,6 +18,28 @@ import { intersectProjects } from '@/data/intersectData';
 import { getVendorProfile } from '@/data/vendorProfiles';
 import { useLanguage } from '@/contexts/LanguageContext';
 import VendorAccountingTable from '@/components/vendors/VendorAccountingTable';
+
+const getStatusIcon = (status: string) => {
+  switch (status.toLowerCase()) {
+    case 'completed':
+      return <CheckCircle2 className="h-4 w-4 mr-1 text-green-600" />;
+    case 'paused':
+      return <Clock className="h-4 w-4 mr-1 text-amber-600" />;
+    default:
+      return <Briefcase className="h-4 w-4 mr-1 text-blue-600" />;
+  }
+};
+
+const getStatusColor = (status: string) => {
+  switch (status.toLowerCase()) {
+    case 'completed':
+      return 'bg-green-100 text-green-800 border-green-200';
+    case 'paused':
+      return 'bg-amber-100 text-amber-800 border-amber-200';
+    default:
+      return 'bg-blue-100 text-blue-800 border-blue-200';
+  }
+};
 
 const VendorDetail = () => {
   const { t } = useLanguage();
@@ -204,6 +226,13 @@ const VendorDetail = () => {
                 </Button>
               </a>
             )}
+            {profile?.telegram && (
+              <a href={profile.telegram} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" size="sm" className="gap-2">
+                  <Send className="h-4 w-4" /> {t('vendor_detail.telegram')} <ExternalLink className="h-3 w-3 opacity-50" />
+                </Button>
+              </a>
+            )}
             {profile?.email && (
               <a href={`mailto:${profile.email}`}>
                 <Button variant="outline" size="sm" className="gap-2">
@@ -293,6 +322,82 @@ const VendorDetail = () => {
               </CardContent>
             </Card>
           )}
+
+          {/* Project Showcase Section */}
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <LayoutGrid className="h-5 w-5 text-cardano-blue" />
+                {t('vendor_detail.project_showcase')}
+              </h3>
+              <Badge variant="secondary" className="bg-cardano-blue/10 text-cardano-blue border-none font-bold">
+                {stats.projectCount} {stats.projectCount === 1 ? t('vendors.one_project') : t('vendors.multiple_projects')}
+              </Badge>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {vendorProjects.map((project) => (
+                <Card key={project.id} className="flex flex-col h-full hover:shadow-md transition-shadow border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800/40">
+                  <CardHeader className="p-4 pb-2">
+                    <div className="flex justify-between items-start mb-2">
+                      <Badge variant="outline" className={`${getStatusColor(project.status)} flex items-center text-[10px] py-0 h-5`}>
+                        {getStatusIcon(project.status)}
+                        {t(`status.${project.status.toLowerCase().replace(' ', '_')}`) || project.status}
+                      </Badge>
+                      <span className="text-[10px] text-gray-400 font-mono">{project.id}</span>
+                    </div>
+                    <CardTitle className="text-base font-bold line-clamp-2 overflow-hidden h-[2.5rem] leading-tight text-gray-900 dark:text-white">
+                      {project.projectName}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-4 pt-0 flex-grow">
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4 pt-2">
+                        <div>
+                          <p className="text-[10px] text-gray-400 uppercase font-semibold mb-1">{t('projects.budget_label')}</p>
+                          <p className="text-xs font-bold text-cardano-blue dark:text-blue-300 flex items-center">
+                            <Wallet className="h-3 w-3 mr-1" />
+                            ₳{project.totalAmount.toLocaleString()}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-[10px] text-gray-400 uppercase font-semibold mb-1">{t('projects.spent_label')}</p>
+                          <p className="text-xs font-bold text-orange-600 flex items-center">
+                            <ArrowRight className="h-3 w-3 mr-1" />
+                            ₳{project.amountSpent.toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Progress bar */}
+                      <div className="pt-2">
+                        <div className="flex justify-between text-[10px] mb-1">
+                          <span className="text-gray-500 dark:text-gray-400">{t('projects.execution')}</span>
+                          <span className="font-semibold text-gray-700 dark:text-gray-300">
+                            {((project.amountSpent / project.totalAmount) * 100).toFixed(0)}%
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
+                          <div
+                            className="bg-cardano-blue h-1.5 rounded-full transition-all duration-1000"
+                            style={{ width: `${(project.amountSpent / project.totalAmount) * 100}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                  <div className="p-4 pt-0">
+                    <Link to={`/projects/${project.id}`} className="w-full">
+                      <Button variant="outline" size="sm" className="w-full justify-between hover:bg-cardano-blue hover:text-white group text-xs">
+                        {t('projects.view_details')}
+                        <ArrowRight className="h-3 w-3 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </Link>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
 
           <VendorAccountingTable transactionRows={transactionRows} totalFunded={stats.totalFunded} />
         </div>
@@ -411,6 +516,17 @@ const VendorDetail = () => {
                         <Twitter className="h-4 w-4 text-gray-400 group-hover:text-cardano-blue transition-colors" />
                       </div>
                       <span className="truncate">{profile.twitter.replace('https://x.com/', '@')}</span>
+                    </a>
+                  </li>
+                )}
+                {profile.telegram && (
+                  <li>
+                    <a href={profile.telegram} target="_blank" rel="noopener noreferrer"
+                      className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-300 hover:text-cardano-blue dark:hover:text-blue-400 transition-colors group">
+                      <div className="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-900/50 border border-gray-100 dark:border-gray-700 flex items-center justify-center shrink-0">
+                        <Send className="h-4 w-4 text-gray-400 group-hover:text-cardano-blue transition-colors" />
+                      </div>
+                      <span className="truncate">{profile.telegram.replace('https://t.me/', '@')}</span>
                     </a>
                   </li>
                 )}

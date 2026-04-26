@@ -9,8 +9,27 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Briefcase, Users, ArrowUpRight, ArrowRight, PieChart as PieIcon, BarChart3, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getVendorProfile } from '@/data/vendorProfiles';
+import { Building } from 'lucide-react';
 
-const COLORS = ['hsl(var(--cardano-blue))', '#1BAAD6', '#F59E0B', '#10B981', '#6366F1', '#EC4899', '#94A3B8'];
+const COLORS = ['#0033AD', '#1BAAD6', '#F59E0B', '#10B981', '#6366F1', '#EC4899', '#94A3B8'];
+
+const VendorLogo = ({ profile, name }: { profile?: any, name: string }) => {
+  const [error, setError] = React.useState(false);
+
+  if (profile?.logo && !error) {
+    return (
+      <img 
+        src={profile.logo} 
+        alt={name} 
+        className="w-full h-full object-contain"
+        onError={() => setError(true)}
+      />
+    );
+  }
+
+  return <Building className="h-5 w-5 text-gray-400" />;
+};
 
 const VisualElementsSection = () => {
   const { t, language } = useLanguage();
@@ -91,112 +110,164 @@ const VisualElementsSection = () => {
   };
 
   return (
-    <section className="py-16 px-4 relative overflow-hidden dark:bg-black">
-      {/* Blockchain background pattern */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none">
-        <div className="h-full w-full bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48ZyBmaWxsPSIjMDAzM0FEIj48cGF0aCBkPSJNMzYgMjRhNiA2IDAgMSAwIDAgMTIgNiA2IDAgMCAwIDAtMTJ6bS0xMiAyYTYgNiAwIDEgMCAwIDEyIDYgNiAwIDAgMCAwLTEyem0wLTEyYTYgNiAwIDEgMCAwIDEyIDYgNiAwIDAgMCAwLTEyem0xMiAwYTYgNiAwIDEgMCAwIDEyIDYgNiAwIDAgMCAwLTEyem0xMiAwYTYgNiAwIDEgMCAwIDEyIDYgNiAwIDAgMCAwLTEyem0tMjQgMTJhNiA2IDAgMSAwIDAgMTIgNiA2IDAgMCAwIDAtMTJ6Ii8+PC9nPjwvc3ZnPg==')]"></div>
+    <section className="py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-[#020617] transition-colors duration-500">
+      {/* Modern Tech Background Elements */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Mesh Gradients */}
+        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] bg-cardano-blue/10 dark:bg-cardano-blue/20 blur-[120px] rounded-full animate-pulse" />
+        <div className="absolute top-[20%] -right-[10%] w-[35%] h-[35%] bg-purple-500/5 dark:bg-purple-500/10 blur-[120px] rounded-full" />
+        <div className="absolute -bottom-[10%] left-[20%] w-[30%] h-[30%] bg-emerald-500/5 dark:bg-emerald-500/10 blur-[120px] rounded-full" />
+        
+        {/* Tech Grid Overlay */}
+        <div 
+          className="absolute inset-0 opacity-[0.02] dark:opacity-[0.05]" 
+          style={{ 
+            backgroundImage: `linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)`,
+            backgroundSize: '50px 50px'
+          }} 
+        />
       </div>
       
       <div className="container mx-auto relative z-10">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 dark:text-white">
-          {t('teaser.visuals.title').split('Preview')[0]}
-          <span className="text-cardano-blue">{t('teaser.visuals.title').includes('Preview') ? 'Preview' : ''}</span>
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400 text-center max-w-3xl mx-auto mb-6">
-          {t('teaser.visuals.subtitle')}
-        </p>
-        
-        {/* Data source disclaimer */}
-        <div className="bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 rounded-md p-2 mb-8 text-blue-800 dark:text-blue-300 text-[10px] md:text-xs max-w-2xl mx-auto">
-          <p className="flex items-center justify-center text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 inline flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-            </svg>
-            <span>{t('teaser.visuals.disclaimer')}</span>
+        <div className="text-center mb-16">
+          <Badge variant="outline" className="mb-4 px-4 py-1 border-cardano-blue/30 text-cardano-blue bg-cardano-blue/5 backdrop-blur-md rounded-full animate-in fade-in slide-in-from-bottom-4 duration-700">
+            {t('teaser.visuals.disclaimer')}
+          </Badge>
+          <h2 className="text-4xl md:text-6xl font-black text-gray-900 dark:text-white mb-6 tracking-tight">
+            {t('teaser.visuals.title').split('Preview')[0]}
+            <span className="bg-gradient-to-r from-cardano-blue to-blue-400 bg-clip-text text-transparent">
+              {t('teaser.visuals.title').includes('Preview') ? 'Preview' : ''}
+            </span>
+          </h2>
+          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-medium">
+            {t('teaser.visuals.subtitle')}
           </p>
         </div>
         
         {/* Real Stats Section */}
-        <StatsSection />
+        <div className="mb-12">
+          <StatsSection />
+        </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
           {/* Projects by Status Pie Chart */}
-          <Card className="shadow-lg border-cardano-teal/20 dark:border-gray-800 overflow-hidden transform transition-all duration-500 hover:shadow-xl dark:bg-gray-900">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-2 mb-2">
-                <PieIcon className="h-5 w-5 text-cardano-blue" />
-                <h3 className="text-xl font-bold dark:text-white">{t('analytics.status_breakdown')}</h3>
+          <Card className="group relative bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl border-gray-200/50 dark:border-white/10 shadow-2xl hover:shadow-cardano-blue/5 transition-all duration-500 rounded-3xl overflow-hidden ring-1 ring-black/5 dark:ring-white/5">
+            <div className="absolute inset-0 bg-gradient-to-br from-cardano-blue/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <CardContent className="p-8 relative z-10">
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-cardano-blue/10 rounded-2xl">
+                    <PieIcon className="h-6 w-6 text-cardano-blue" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-black dark:text-white tracking-tight">{t('analytics.status_breakdown')}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{t('analytics.status_breakdown_desc')}</p>
+                  </div>
+                </div>
               </div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">{t('analytics.status_breakdown_desc')}</p>
-              <div className="h-64 w-full">
+              <div className="h-72 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
                       data={statusData}
                       cx="50%"
                       cy="50%"
-                      labelLine={true}
-                      outerRadius={80}
-                      fill="#8884d8"
+                      innerRadius={60}
+                      outerRadius={90}
+                      paddingAngle={5}
                       dataKey="value"
-                      label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      label={({ name, value }) => `${value}`}
                     >
                       {statusData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        <Cell 
+                          key={`cell-${index}`} 
+                          fill={COLORS[index % COLORS.length]} 
+                          className="hover:opacity-80 transition-opacity cursor-pointer"
+                        />
                       ))}
                     </Pie>
                     <Tooltip 
-                      contentStyle={{ backgroundColor: '#131637', border: 'none', borderRadius: '8px', color: '#fff' }}
-                      itemStyle={{ color: '#fff' }}
-                      formatter={(value: number) => [`${value} Projects`, t('overview.total_proposals')]}
+                      contentStyle={{ 
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                        backdropFilter: 'blur(8px)',
+                        border: '1px solid rgba(255, 255, 255, 0.1)', 
+                        borderRadius: '16px', 
+                        color: '#fff',
+                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
+                      }}
+                      itemStyle={{ color: '#fff', fontWeight: '600' }}
+                      formatter={(value: number) => [`${value} Projects`, '']}
                     />
                   </PieChart>
                 </ResponsiveContainer>
+              </div>
+              
+              {/* Legend Grid */}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4">
+                {statusData.map((entry, index) => (
+                  <div key={entry.name} className="flex items-center gap-2">
+                    <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
+                    <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{entry.name}</span>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
           
           {/* Top Vendors Bar Chart */}
-          <Card className="shadow-lg border-cardano-teal/20 dark:border-gray-800 overflow-hidden transform transition-all duration-500 hover:shadow-xl dark:bg-gray-900">
-            <CardContent className="p-6">
-              <div className="flex items-center gap-2 mb-2">
-                <BarChart3 className="h-5 w-5 text-cardano-blue" />
-                <h3 className="text-xl font-bold dark:text-white">{t('analytics.top_vendors')}</h3>
+          <Card className="group relative bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl border-gray-200/50 dark:border-white/10 shadow-2xl hover:shadow-cardano-blue/5 transition-all duration-500 rounded-3xl overflow-hidden ring-1 ring-black/5 dark:ring-white/5">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <CardContent className="p-8 relative z-10">
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 bg-blue-500/10 rounded-2xl">
+                    <BarChart3 className="h-6 w-6 text-blue-500" />
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-black dark:text-white tracking-tight">{t('analytics.top_vendors')}</h3>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">{t('analytics.top_vendors_desc')}</p>
+                  </div>
+                </div>
               </div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">{t('analytics.top_vendors_desc')}</p>
-              <div className="h-64 w-full">
+              <div className="h-72 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart
                     data={vendorData}
                     layout="vertical"
-                    margin={{ top: 5, right: 40, left: 40, bottom: 5 }}
+                    margin={{ top: 5, right: 60, left: 20, bottom: 5 }}
+                    barGap={8}
                   >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#333" horizontal={true} vertical={false} />
+                    <defs>
+                      <linearGradient id="barGradient" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stopColor="#0033AD" />
+                        <stop offset="100%" stopColor="#1BAAD6" />
+                      </linearGradient>
+                    </defs>
                     <XAxis type="number" hide />
                     <YAxis 
                       dataKey="name" 
                       type="category" 
                       stroke="#888" 
-                      fontSize={10} 
-                      width={100} 
+                      fontSize={9} 
+                      width={120} 
                       axisLine={false}
                       tickLine={false}
+                      className="font-bold uppercase tracking-tight"
                     />
                     <Tooltip 
-                      contentStyle={{ backgroundColor: '#131637', border: 'none', borderRadius: '8px', color: '#fff' }}
-                      itemStyle={{ color: '#fff' }}
+                      cursor={{ fill: 'rgba(255,255,255,0.05)' }}
                       content={({ active, payload }) => {
                         if (active && payload && payload.length) {
                           const data = payload[0].payload;
                           return (
-                            <div className="bg-gray-900 p-3 rounded-xl border border-gray-800 shadow-xl">
-                              <p className="text-sm font-bold text-white mb-1">{data.name}</p>
-                              <div className="flex flex-col gap-1">
-                                <p className="text-xs font-black text-blue-400">
+                            <div className="bg-slate-900/90 backdrop-blur-xl p-4 rounded-2xl border border-white/10 shadow-2xl ring-1 ring-black/5">
+                              <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">{data.name}</p>
+                              <div className="space-y-1">
+                                <p className="text-xl font-black text-blue-400">
                                   ₳{formatNumber(data.value)}
                                 </p>
                                 <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
-                                  {data.percentage.toFixed(1)}% of total allocated
+                                  {data.percentage.toFixed(1)}% of total budget
                                 </p>
                               </div>
                             </div>
@@ -205,12 +276,12 @@ const VisualElementsSection = () => {
                         return null;
                       }}
                     />
-                    <Bar dataKey="value" fill="hsl(var(--cardano-blue))" radius={[0, 4, 4, 0]}>
+                    <Bar dataKey="value" fill="url(#barGradient)" radius={[0, 12, 12, 0]} barSize={24}>
                       <LabelList 
-                        dataKey="percentage" 
+                        dataKey="value" 
                         position="right" 
-                        formatter={(val: number) => `${val.toFixed(1)}%`} 
-                        style={{ fontSize: '10px', fontWeight: 'bold', fill: '#888' }} 
+                        formatter={(val: number) => `₳${(val / 1000000).toFixed(1)}M`}
+                        className="fill-gray-600 dark:fill-gray-400 font-bold text-[10px]"
                         offset={10}
                       />
                     </Bar>
@@ -224,21 +295,25 @@ const VisualElementsSection = () => {
         {/* Featured Data Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Top Projects */}
-            <Card className="shadow-lg border-cardano-teal/20 dark:border-gray-800 overflow-hidden dark:bg-gray-900">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-2 mb-4">
-                  <Briefcase className="h-5 w-5 text-cardano-blue" />
-                  <h4 className="font-bold text-gray-900 dark:text-white">{t('overview.project_showcases')}</h4>
+            <Card className="bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl border-gray-200/50 dark:border-white/10 shadow-xl rounded-3xl overflow-hidden ring-1 ring-black/5 dark:ring-white/5">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2.5 bg-blue-500/10 rounded-xl">
+                    <Briefcase className="h-5 w-5 text-blue-500" />
+                  </div>
+                  <h4 className="text-lg font-black text-gray-900 dark:text-white tracking-tight">{t('overview.project_showcases')}</h4>
                 </div>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {topProjects.map((project, idx) => (
                     <div key={project.id} className="group">
-                      <Link to={`/projects/${project.id}`} className="block p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                        <div className="flex justify-between items-start">
-                          <p className="text-sm font-medium text-gray-900 dark:text-white line-clamp-1">{project.projectName}</p>
-                          <ArrowUpRight className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <Link to={`/projects/${project.id}`} className="flex items-center justify-between p-4 rounded-2xl bg-gray-500/5 hover:bg-cardano-blue/10 border border-transparent hover:border-cardano-blue/20 transition-all duration-300">
+                        <div className="flex-1 min-w-0 mr-4">
+                          <p className="text-sm font-bold text-gray-900 dark:text-white truncate group-hover:text-cardano-blue transition-colors">{project.projectName}</p>
+                          <p className="text-[11px] font-black text-blue-500 uppercase tracking-wider mt-0.5">₳{formatNumber(project.totalAmount)}</p>
                         </div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">₳{formatNumber(project.totalAmount)}</p>
+                        <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
+                          <ArrowUpRight className="h-4 w-4 text-cardano-blue" />
+                        </div>
                       </Link>
                     </div>
                   ))}
@@ -247,32 +322,54 @@ const VisualElementsSection = () => {
             </Card>
 
             {/* Top Vendors */}
-            <Card className="shadow-lg border-cardano-teal/20 dark:border-gray-800 overflow-hidden dark:bg-gray-900">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-2 mb-4">
-                  <Users className="h-5 w-5 text-cardano-teal" />
-                  <h4 className="font-bold text-gray-900 dark:text-white">{t('nav.vendors')}</h4>
+            <Card className="bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl border-gray-200/50 dark:border-white/10 shadow-xl rounded-3xl overflow-hidden ring-1 ring-black/5 dark:ring-white/5">
+              <CardContent className="p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="p-2.5 bg-emerald-500/10 rounded-xl">
+                    <Users className="h-5 w-5 text-emerald-500" />
+                  </div>
+                  <h4 className="text-lg font-black text-gray-900 dark:text-white tracking-tight">{t('nav.vendors')}</h4>
                 </div>
-                <div className="space-y-3">
-                  {topVendors.map((vendor, idx) => (
-                    <div key={vendor.name} className="flex justify-between items-center p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">{vendor.name}</p>
-                      <Badge variant="secondary" className="text-[10px]">
-                        {vendor.count} {vendor.count === 1 ? t('vendors.one_project') : t('vendors.multiple_projects')}
-                      </Badge>
-                    </div>
-                  ))}
+                <div className="space-y-4">
+                  {topVendors.map((vendor, idx) => {
+                    const profile = getVendorProfile(vendor.name);
+                    return (
+                      <Link 
+                        key={vendor.name} 
+                        to={`/vendors/${encodeURIComponent(vendor.name)}`}
+                        className="flex justify-between items-center p-4 rounded-2xl bg-gray-500/5 hover:bg-emerald-500/10 border border-transparent hover:border-emerald-500/20 transition-all duration-300 group/vendor"
+                      >
+                        <div className="flex items-center gap-4 min-w-0 flex-1">
+                          <div className="w-10 h-10 rounded-xl overflow-hidden bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 flex-shrink-0 flex items-center justify-center p-1 shadow-sm group-hover/vendor:scale-110 transition-transform">
+                            <VendorLogo profile={profile} name={vendor.name} />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-sm font-bold text-gray-900 dark:text-white truncate group-hover/vendor:text-emerald-600 dark:group-hover/vendor:text-emerald-400 transition-colors">
+                              {vendor.name}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <Badge variant="secondary" className="px-3 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-none font-bold text-[10px] tracking-wide">
+                            {vendor.count} {vendor.count === 1 ? t('vendors.one_project') : t('vendors.multiple_projects')}
+                          </Badge>
+                          <ArrowUpRight className="h-4 w-4 text-emerald-500 opacity-0 group-hover/vendor:opacity-100 transition-all transform translate-x-1 group-hover/vendor:translate-x-0" />
+                        </div>
+                      </Link>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
         </div>
         
         {/* View Full Data CTA Button */}
-        <div className="mt-16 flex justify-center">
-          <Button asChild size="lg" className="bg-cardano-blue hover:bg-blue-600 text-white px-10 py-7 text-lg font-bold rounded-2xl shadow-2xl transition-all hover:scale-105">
-            <Link to="/overview">
+        <div className="mt-20 flex justify-center">
+          <Button asChild size="lg" className="group relative bg-cardano-blue hover:bg-blue-600 text-white px-12 py-8 text-xl font-black rounded-2xl shadow-[0_20px_50px_rgba(0,51,173,0.3)] transition-all hover:scale-105 active:scale-95 overflow-hidden border-none">
+            <Link to="/overview" className="flex items-center gap-3 relative z-10">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] pointer-events-none" />
               {t('teaser.cta.explore_platform')}
-              <ArrowRight className="h-6 w-6 ml-3" />
+              <ArrowRight className="h-6 w-6 transition-transform group-hover:translate-x-2" />
             </Link>
           </Button>
         </div>

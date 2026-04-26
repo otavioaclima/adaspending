@@ -2262,7 +2262,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "EMI-0007-25",
     "projectName": "Supplyoneers FZ-LLC - Cardano Ecosystem Pavilions at Exhibitions",
-    "vendor": "Supplyoneers FZ-LLC",
+    "vendor": "Supplyoneers (DiscoverCardano)",
     "totalAmount": 889500.0,
     "amountSpent": 889500.0,
     "status": "Completed",
@@ -2425,7 +2425,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "EMI-0004-25",
     "projectName": "Rainfire DAO - Cardano Builder DAO ",
-    "vendor": "Rainfire DAO",
+    "vendor": "Cardano Builder DAO",
     "totalAmount": 12000000.0,
     "amountSpent": 12000000.0,
     "status": "Completed",
@@ -2555,7 +2555,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "EMI-0001a-25",
     "projectName": "Catalyst FC - Catalyst 2025 Proposal",
-    "vendor": "Catalyst FC",
+    "vendor": "Project Catalyst",
     "totalAmount": 64300000.0,
     "amountSpent": 43300000.0,
     "status": "Paused",
@@ -3629,7 +3629,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "EC-0017-25",
     "projectName": "Cooperativa de Trabajo Eryx - ZK Bridge",
-    "vendor": "Cooperativa de Trabajo Eryx",
+    "vendor": "Eryx",
     "totalAmount": 700000.0,
     "amountSpent": 457000.0,
     "status": "In Progress",
@@ -3989,7 +3989,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "EC-0013(1,2,7)-25",
     "projectName": "OSC - Maintainer Retainer, Tooling Sustainability, Security Incident Management Programs",
-    "vendor": "OSC",
+    "vendor": "Open Source Committee (OSC)",
     "totalAmount": 3975000.0,
     "amountSpent": 840000.0,
     "status": "Paused",

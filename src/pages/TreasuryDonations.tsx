@@ -48,7 +48,7 @@ const TreasuryDonations = () => {
     <Layout>
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <div className="bg-red-50 dark:bg-red-900/20 p-2 rounded-lg text-red-600 dark:text-red-400">
+          <div className="bg-emerald-50 dark:bg-emerald-900/20 p-2 rounded-lg text-emerald-600 dark:text-emerald-400 transition-colors">
             <Heart className="h-6 w-6 fill-current" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t('donations.title')}</h1>
@@ -59,57 +59,57 @@ const TreasuryDonations = () => {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-        <Card className="border-red-100 dark:border-red-900/50 bg-red-50/30 dark:bg-red-900/10">
+        <Card className="border-emerald-100 dark:border-emerald-900/50 bg-emerald-50/30 dark:bg-emerald-900/10 transition-all hover:shadow-md">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-red-600 dark:text-red-400 uppercase tracking-wider flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-emerald-600 dark:text-emerald-400 uppercase tracking-wider flex items-center gap-2">
               <Coins className="h-4 w-4" />
               {t('donations.total_donated')}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-gray-900 dark:text-white">₳ 2,010,753</p>
-            <p className="text-xs text-red-600/70 dark:text-red-400/70 mt-1 font-medium">
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">₳2,010,753</p>
+            <p className="text-xs text-emerald-600/70 dark:text-emerald-400/70 mt-1 font-medium">
               {t('donations.this_epoch_plus').replace('{amount}', '1,010')}
             </p>
           </CardContent>
         </Card>
 
-        <Card className="dark:bg-gray-800/40 dark:border-gray-800 transition-colors">
+        <Card className="border-blue-100 dark:border-blue-900/50 bg-blue-50/30 dark:bg-blue-900/10 transition-all hover:shadow-md">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-blue-600 dark:text-blue-400 uppercase tracking-wider flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
               {t('donations.current_epoch')}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-gray-900 dark:text-white">₳ 1,010</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">{t('donations.epoch')} 626</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">₳1,010</p>
+            <p className="text-xs text-blue-600/70 dark:text-blue-400/70 mt-1 font-medium">{t('donations.epoch')} 626</p>
           </CardContent>
         </Card>
 
-        <Card className="dark:bg-gray-800/40 dark:border-gray-800 transition-colors">
+        <Card className="border-indigo-100 dark:border-indigo-900/50 bg-indigo-50/30 dark:bg-indigo-900/10 transition-all hover:shadow-md">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-indigo-600 dark:text-indigo-400 uppercase tracking-wider flex items-center gap-2">
               <History className="h-4 w-4" />
               {t('donations.previous_epoch')}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-gray-900 dark:text-white">₳ 1,010</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">{t('donations.epoch')} 625</p>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">₳1,010</p>
+            <p className="text-xs text-indigo-600/70 dark:text-indigo-400/70 mt-1 font-medium">{t('donations.epoch')} 625</p>
           </CardContent>
         </Card>
 
-        <Card className="dark:bg-gray-800/40 dark:border-gray-800 transition-colors">
+        <Card className="border-amber-100 dark:border-amber-900/50 bg-amber-50/30 dark:bg-amber-900/10 transition-all hover:shadow-md">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider flex items-center gap-2">
+            <CardTitle className="text-sm font-medium text-amber-600 dark:text-amber-400 uppercase tracking-wider flex items-center gap-2">
               <Calendar className="h-4 w-4" />
               {t('donations.avg_per_epoch')}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-gray-900 dark:text-white">₳ 909</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 font-medium">
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">₳909</p>
+            <p className="text-xs text-amber-600/70 dark:text-amber-400/70 mt-1 font-medium">
               {t('donations.last_epochs').replace('{count}', '10')}
             </p>
           </CardContent>
@@ -179,7 +179,7 @@ const TreasuryDonations = () => {
                         </a>
                       </TableCell>
                       <TableCell className="text-right font-bold text-gray-900 dark:text-gray-100">
-                        ₳ {donation.amount.toLocaleString()}
+                        ₳{donation.amount.toLocaleString()}
                       </TableCell>
                     </TableRow>
                   ))
@@ -193,7 +193,7 @@ const TreasuryDonations = () => {
                         {epoch.txCount} {t('donations.contributions')}
                       </TableCell>
                       <TableCell className="text-right font-bold text-gray-900 dark:text-gray-100">
-                        ₳ {epoch.amount.toLocaleString()}
+                        ₳{epoch.amount.toLocaleString()}
                       </TableCell>
                     </TableRow>
                   ))
