@@ -4451,7 +4451,7 @@ export const intersectProjects: IntersectProject[] = [
   {
     "id": "EC-0009-25",
     "projectName": "zkFold ZK Rollup",
-    "vendor": "Cardano Foundation",
+    "vendor": "zkFold",
     "totalAmount": 1161000.0,
     "amountSpent": 851610.0,
     "status": "In Progress",

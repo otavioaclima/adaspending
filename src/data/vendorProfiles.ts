@@ -233,7 +233,15 @@ export const vendorProfiles: VendorProfile[] = [
     twitter: "https://x.com/tastenkunst",
     description: "Interactive development studio from Leipzig.",
   },
-
+  {
+    name: "zkFold",
+    logo: "https://pbs.twimg.com/profile_images/1980974097514340352/oR3lTlMb_400x400.jpg",
+    website: "https://zkfold.io/",
+    twitter: "https://x.com/zkFold",
+    email: "info@zkfold.io",
+    github: "https://github.com/zkFold",
+    description: "Blockchain infrastructure company.",
+  },
   {
     name: "Cardano Product Committee (CPC)",
     logo: "https://pbs.twimg.com/profile_images/1897655672277254144/PRaX21vV_400x400.jpg",
