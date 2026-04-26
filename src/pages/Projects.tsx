@@ -170,7 +170,7 @@ const Projects = () => {
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t('projects.title')}</h1>
             <Badge variant="secondary" className="bg-cardano-blue/10 dark:bg-cardano-blue/20 text-cardano-blue border-none h-6 px-3">
-              {intersectProjects.length} {t('projects.total')}
+              {filteredProjects.length} {t('projects.total')}
             </Badge>
           </div>
           <p className="text-gray-600 dark:text-gray-400 max-w-3xl">

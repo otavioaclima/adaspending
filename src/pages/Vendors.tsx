@@ -216,7 +216,7 @@ const Vendors = () => {
           <div className="flex items-center gap-3 mb-2">
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t('vendors.title')}</h1>
             <Badge variant="secondary" className="bg-cardano-blue/10 text-cardano-blue border-none h-6 px-3">
-              {vendors.length} {t('projects.total')}
+              {filteredVendors.length} {t('projects.total')}
             </Badge>
           </div>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl">

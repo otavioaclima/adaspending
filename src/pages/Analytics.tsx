@@ -3,16 +3,16 @@ import React, { useMemo } from 'react';
 import Layout from '@/components/layout/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer, 
-  PieChart, 
-  Pie, 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
   Cell,
   LineChart,
   Line,
@@ -23,15 +23,15 @@ import {
 import { treasuryStats } from '@/data/mockData';
 import { intersectProjects } from '@/data/intersectData';
 import StatCard from '@/components/ui/StatCard';
-import { 
-  BarChart3, 
-  TrendingUp, 
-  PieChart as PieChartIcon, 
-  Activity, 
-  Briefcase, 
-  Users, 
-  Wallet, 
-  Globe 
+import {
+  BarChart3,
+  TrendingUp,
+  PieChart as PieChartIcon,
+  Activity,
+  Briefcase,
+  Users,
+  Wallet,
+  Globe
 } from 'lucide-react';
 
 const Analytics = () => {
@@ -83,6 +83,7 @@ const Analytics = () => {
     { year: '2023', spend: 80 },
     { year: '2024', spend: 128 },
     { year: '2025*', spend: 250 },
+    { year: '2026**', spend: 87 },
   ];
 
   // ADA Average Price data (USD)
@@ -91,7 +92,9 @@ const Analytics = () => {
     { year: '2022', price: 0.78 },
     { year: '2023', price: 0.42 },
     { year: '2024', price: 0.56 },
-    { year: '2025**', price: 0.62 },
+    { year: '2025', price: 0.62 },
+    { year: '2026*', price: 0.25 },
+
   ];
 
   // Quick stats calculations
@@ -105,7 +108,7 @@ const Analytics = () => {
   // Aggregate aggregate payments data
   const chartData = useMemo(() => {
     const monthlyData: Record<string, { amount: number }> = {};
-    
+
     intersectProjects.forEach(project => {
       if (project.milestones) {
         project.milestones.forEach(milestone => {
@@ -141,46 +144,46 @@ const Analytics = () => {
 
       {/* Quick Stats Grid - Cleaner and more consistent */}
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-10">
-        <StatCard 
-          title={t('stats.total_projects')} 
-          value={totalProjects} 
-          icon={<Briefcase className="h-4 w-4 text-cardano-blue" />} 
-          className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md" 
+        <StatCard
+          title={t('stats.total_projects')}
+          value={totalProjects}
+          icon={<Briefcase className="h-4 w-4 text-cardano-blue" />}
+          className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md"
         />
-        <StatCard 
-          title={t('stats.total_vendors')} 
-          value={uniqueVendors} 
-          icon={<Users className="h-4 w-4 text-cardano-teal" />} 
-          className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md" 
+        <StatCard
+          title={t('stats.total_vendors')}
+          value={uniqueVendors}
+          icon={<Users className="h-4 w-4 text-cardano-teal" />}
+          className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md"
         />
-        <StatCard 
-          title={t('stats.intersect_budget')} 
-          value="₳345,531,529" 
+        <StatCard
+          title={t('stats.intersect_budget')}
+          value="₳345,531,529"
           usdValue="214,229,548"
-          icon={<Wallet className="h-4 w-4 text-cardano-blue" />} 
-          className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md" 
+          icon={<Wallet className="h-4 w-4 text-cardano-blue" />}
+          className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md"
           valueClassName="text-cardano-blue dark:text-blue-400"
           tooltipText={t('project.usd_conversion_tooltip')}
         />
-        <StatCard 
-          title={t('stats.total_spent')} 
-          value="₳343,741,204" 
+        <StatCard
+          title={t('stats.total_spent')}
+          value="₳343,741,204"
           usdValue="213,119,546"
           change="99.48%"
           positive={true}
-          icon={<Globe className="h-4 w-4 text-orange-500" />} 
-          className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md" 
+          icon={<Globe className="h-4 w-4 text-orange-500" />}
+          className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md"
           valueClassName="text-orange-600 dark:text-orange-500"
           tooltipText={t('project.usd_conversion_tooltip')}
         />
-        <StatCard 
-          title={t('stats.remaining_budget')} 
-          value="₳1,790,324" 
+        <StatCard
+          title={t('stats.remaining_budget')}
+          value="₳1,790,324"
           usdValue="1,110,001"
           change="0.52%"
           positive={false}
-          icon={<TrendingUp className="h-4 w-4 text-green-500" />} 
-          className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md" 
+          icon={<TrendingUp className="h-4 w-4 text-green-500" />}
+          className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md"
           valueClassName="text-green-600 dark:text-green-500"
           tooltipText={t('project.usd_conversion_tooltip')}
         />
@@ -204,25 +207,25 @@ const Analytics = () => {
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie 
-                    data={treasuryStats.categoryDistribution} 
-                    dataKey="value" 
-                    nameKey="name" 
-                    cx="50%" 
-                    cy="50%" 
-                    outerRadius={100} 
-                    fill="#8884d8" 
-                    label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  <Pie
+                    data={treasuryStats.categoryDistribution}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    fill="#8884d8"
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
                   >
                     {treasuryStats.categoryDistribution.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
                     itemStyle={{ color: '#f3f4f6' }}
                     labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
-                    formatter={(value: number) => `${value}%`} 
+                    formatter={(value: number) => `${value}%`}
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -249,32 +252,32 @@ const Analytics = () => {
                 <BarChart layout="vertical" data={topProjectsData}>
                   <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="currentColor" className="text-gray-200 dark:text-gray-700" />
                   <XAxis type="number" hide />
-                  <YAxis 
-                    dataKey="name" 
-                    type="category" 
-                    axisLine={false} 
-                    tickLine={false} 
-                    width={150} 
-                    tick={{fill: 'currentColor', fontSize: 11}} 
-                    className="text-gray-400 dark:text-gray-500" 
+                  <YAxis
+                    dataKey="name"
+                    type="category"
+                    axisLine={false}
+                    tickLine={false}
+                    width={150}
+                    tick={{ fill: 'currentColor', fontSize: 11 }}
+                    className="text-gray-400 dark:text-gray-500"
                   />
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
                     itemStyle={{ color: '#f3f4f6' }}
                     labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
                     formatter={(value: number) => [`₳${value.toLocaleString()}`, t('projects.budget_label')]}
                     labelFormatter={(label, payload) => payload[0]?.payload?.fullName || label}
-                    cursor={{fill: 'rgba(27,170,214,0.08)'}}
+                    cursor={{ fill: 'rgba(27,170,214,0.08)' }}
                   />
-                  <Bar 
-                    dataKey="amount" 
-                    fill="#1BAAD6" 
-                    radius={[0, 4, 4, 0]} 
+                  <Bar
+                    dataKey="amount"
+                    fill="#1BAAD6"
+                    radius={[0, 4, 4, 0]}
                     barSize={20}
                   >
-                    <LabelList 
-                      dataKey="percent" 
-                      position="right" 
+                    <LabelList
+                      dataKey="percent"
+                      position="right"
                       formatter={(v: number) => `${v.toFixed(1)}%`}
                       fill="currentColor"
                       fontSize={10}
@@ -307,22 +310,22 @@ const Analytics = () => {
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie 
-                    data={statusData} 
-                    dataKey="value" 
-                    nameKey="name" 
-                    cx="50%" 
-                    cy="50%" 
+                  <Pie
+                    data={statusData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
                     innerRadius={60}
-                    outerRadius={100} 
+                    outerRadius={100}
                     paddingAngle={5}
-                    label={({name, value}) => `${name}: ${value}`}
+                    label={({ name, value }) => `${name}: ${value}`}
                   >
                     {statusData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[(index + 2) % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
                     itemStyle={{ color: '#f3f4f6' }}
                     labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
@@ -352,32 +355,32 @@ const Analytics = () => {
                 <BarChart layout="vertical" data={vendorData}>
                   <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="currentColor" className="text-gray-200 dark:text-gray-700" />
                   <XAxis type="number" hide />
-                  <YAxis 
-                    dataKey="name" 
-                    type="category" 
-                    axisLine={false} 
-                    tickLine={false} 
-                    width={150} 
-                    tick={{fill: 'currentColor', fontSize: 11}} 
-                    className="text-gray-400 dark:text-gray-500" 
+                  <YAxis
+                    dataKey="name"
+                    type="category"
+                    axisLine={false}
+                    tickLine={false}
+                    width={150}
+                    tick={{ fill: 'currentColor', fontSize: 11 }}
+                    className="text-gray-400 dark:text-gray-500"
                   />
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
                     itemStyle={{ color: '#f3f4f6' }}
                     labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
                     formatter={(value: number) => [`₳${value.toLocaleString()}`, t('projects.budget_label')]}
                     labelFormatter={(label, payload) => payload[0]?.payload?.fullName || label}
-                    cursor={{fill: 'rgba(115,103,240,0.08)'}}
+                    cursor={{ fill: 'rgba(115,103,240,0.08)' }}
                   />
-                  <Bar 
-                    dataKey="amount" 
-                    fill="#7367F0" 
-                    radius={[0, 4, 4, 0]} 
+                  <Bar
+                    dataKey="amount"
+                    fill="#7367F0"
+                    radius={[0, 4, 4, 0]}
                     barSize={20}
                   >
-                    <LabelList 
-                      dataKey="percent" 
-                      position="right" 
+                    <LabelList
+                      dataKey="percent"
+                      position="right"
                       formatter={(v: number) => `${v.toFixed(1)}%`}
                       fill="currentColor"
                       fontSize={10}
@@ -411,38 +414,38 @@ const Analytics = () => {
               <AreaChart data={chartData}>
                 <defs>
                   <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="hsl(var(--cardano-blue))" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="hsl(var(--cardano-blue))" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="hsl(var(--cardano-blue))" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="hsl(var(--cardano-blue))" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="text-gray-100 dark:text-gray-700" />
-                <XAxis 
-                  dataKey="date" 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{ fill: 'currentColor', fontSize: 12, fontWeight: 600 }} 
+                <XAxis
+                  dataKey="date"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: 'currentColor', fontSize: 12, fontWeight: 600 }}
                   className="text-gray-400 dark:text-gray-500"
                 />
-                <YAxis 
-                  axisLine={false} 
-                  tickLine={false} 
-                  tick={{ fill: 'currentColor', fontSize: 12 }} 
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: 'currentColor', fontSize: 12 }}
                   className="text-gray-400 dark:text-gray-500"
-                  tickFormatter={(v) => `₳${v >= 1000000 ? (v/1000000).toFixed(1) + 'M' : (v/1000).toFixed(0) + 'k'}`}
+                  tickFormatter={(v) => `₳${v >= 1000000 ? (v / 1000000).toFixed(1) + 'M' : (v / 1000).toFixed(0) + 'k'}`}
                 />
-                <Tooltip 
+                <Tooltip
                   contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '12px', padding: '12px 16px', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }}
                   itemStyle={{ color: '#f3f4f6', fontWeight: 600 }}
                   labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 6 }}
                   formatter={(value: number) => [`₳${value.toLocaleString()}`, t('analytics.amount_spent')]}
                 />
-                <Area 
-                  type="monotone" 
-                  dataKey="amount" 
-                  stroke="hsl(var(--cardano-blue))" 
+                <Area
+                  type="monotone"
+                  dataKey="amount"
+                  stroke="hsl(var(--cardano-blue))"
                   strokeWidth={3}
-                  fillOpacity={1} 
-                  fill="url(#colorAmount)" 
+                  fillOpacity={1}
+                  fill="url(#colorAmount)"
                   animationDuration={1500}
                 />
               </AreaChart>
@@ -466,45 +469,40 @@ const Analytics = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={treasurySpendData} barCategoryGap="20%">
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="text-gray-200 dark:text-gray-700" />
-                  <XAxis 
-                    dataKey="year" 
-                    axisLine={false} 
-                    tickLine={false} 
-                    tick={{ fill: 'currentColor', fontWeight: 700, fontSize: 13 }} 
-                    className="text-gray-600 dark:text-gray-400" 
+                  <XAxis
+                    dataKey="year"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: 'currentColor', fontWeight: 700, fontSize: 13 }}
+                    className="text-gray-600 dark:text-gray-400"
                   />
-                  <YAxis 
-                    axisLine={false} 
-                    tickLine={false} 
-                    tick={{ fill: 'currentColor', fontSize: 12 }} 
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: 'currentColor', fontSize: 12 }}
                     className="text-gray-400 dark:text-gray-500"
                     tickFormatter={(v) => `$${v}M`}
                     domain={[0, 300]}
                   />
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
                     itemStyle={{ color: '#f3f4f6' }}
                     labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
                     formatter={(value: number) => [`$${value}M`, t('analytics.treasury_spend_title')]}
                     cursor={{ fill: 'rgba(0,51,173,0.08)' }}
                   />
-                  <Bar 
-                    dataKey="spend" 
-                    fill="hsl(var(--cardano-blue))" 
+                  <Bar
+                    dataKey="spend"
+                    fill="hsl(var(--cardano-blue))"
                     radius={[4, 4, 0, 0]}
                     label={({ x, y, width, value, index }: any) => (
                       <text x={x + width / 2} y={y - 8} textAnchor="middle" className="fill-gray-800 dark:fill-gray-200" fontSize={12} fontWeight={800}>
-                        ${value}M{index === 4 ? '*' : ''}
+                        ${value}M{index === 4 ? '*' : index === 5 ? '**' : ''}
                       </text>
                     )}
                   />
                 </BarChart>
               </ResponsiveContainer>
-            </div>
-            <div className="mt-2 flex items-start gap-2">
-              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/30 text-[10px] text-blue-700 dark:text-blue-400 font-bold px-2.5 py-1.5 rounded-lg">
-                2025 cap: 350M ADA (~$250M+ at ~$0.70)
-              </div>
             </div>
             <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-2 italic">{t('analytics.treasury_spend_note')}</p>
           </CardContent>
@@ -523,39 +521,39 @@ const Analytics = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={adaPriceData} barCategoryGap="20%">
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="currentColor" className="text-gray-200 dark:text-gray-700" />
-                  <XAxis 
-                    dataKey="year" 
-                    axisLine={false} 
-                    tickLine={false} 
-                    tick={{ fill: 'currentColor', fontWeight: 700, fontSize: 13 }} 
-                    className="text-gray-600 dark:text-gray-400" 
+                  <XAxis
+                    dataKey="year"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: 'currentColor', fontWeight: 700, fontSize: 13 }}
+                    className="text-gray-600 dark:text-gray-400"
                   />
-                  <YAxis 
-                    axisLine={false} 
-                    tickLine={false} 
-                    tick={{ fill: 'currentColor', fontSize: 12 }} 
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: 'currentColor', fontSize: 12 }}
                     className="text-gray-400 dark:text-gray-500"
                     tickFormatter={(v) => `$${v.toFixed(2)}`}
                     domain={[0, 3]}
                     ticks={[0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0]}
                   />
-                  <Tooltip 
+                  <Tooltip
                     contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151', color: '#f3f4f6', borderRadius: '8px', padding: '10px 14px' }}
                     itemStyle={{ color: '#f3f4f6' }}
                     labelStyle={{ color: '#9ca3af', fontWeight: 700, marginBottom: 4 }}
                     formatter={(value: number) => [`$${value.toFixed(2)}`, t('analytics.ada_price_title')]}
                     cursor={{ fill: 'rgba(27,170,214,0.08)' }}
                   />
-                  <Bar 
-                    dataKey="price" 
-                    fill="#1BAAD6" 
+                  <Bar
+                    dataKey="price"
+                    fill="#1BAAD6"
                     radius={[4, 4, 0, 0]}
                     label={({ x, y, width, value, index }: any) => (
                       <g>
                         <text x={x + width / 2} y={y - 8} textAnchor="middle" className="fill-[#1BAAD6]" fontSize={12} fontWeight={800}>
                           ${value.toFixed(2)}
                         </text>
-                        {index === 4 && (
+                        {index === 5 && (
                           <text x={x + width / 2} y={y - 22} textAnchor="middle" className="fill-[#1BAAD6]" fontSize={9} fontWeight={700}>
                             ({t('analytics.ytd')})
                           </text>

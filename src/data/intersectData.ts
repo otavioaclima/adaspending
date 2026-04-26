@@ -1747,7 +1747,8 @@ export const intersectProjects: IntersectProject[] = [
         "amount": 10.0,
         "status": "Withdrawn",
         "unlockDate": "Nov 27, 2025",
-        "description": "",
+        "acceptanceCriteria": "Milestone 1 - Test Milestone",
+        "evidenceStatus": "Past Due",
         "evidence": null
       }
     ]
@@ -1768,6 +1769,8 @@ export const intersectProjects: IntersectProject[] = [
         "status": "Matured",
         "unlockDate": "Aug 22, 2025",
         "description": "",
+        "acceptanceCriteria": "Milestone 1 - Test Vendor Fund action",
+        "evidenceStatus": "Past Due",
         "evidence": null
       }
     ]
