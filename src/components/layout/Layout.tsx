@@ -65,8 +65,9 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
     if (href === '/about') import('@/pages/About');
     if (href === '/projects') import('@/pages/Projects');
     if (href === '/vendors') import('@/pages/Vendors');
-    if (href === '/explorer') import('@/pages/Explorer');
-    if (href === '/donations') import('@/pages/Donations');
+    if (href === '/explorer') import('@/pages/SpendingExplorer');
+    if (href === '/donations') import('@/pages/TreasuryDonations');
+    if (href === '/analytics') import('@/pages/Analytics');
   };
 
   const isHomePage = location.pathname === '/';
