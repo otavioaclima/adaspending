@@ -1,9 +1,22 @@
-import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Database, Zap, PieChart, Users, ChevronRight, ArrowDown } from 'lucide-react';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi
+} from "@/components/ui/carousel";
 
 const HowItWorksSection = () => {
   const { t } = useLanguage();
+  const [api, setApi] = React.useState<CarouselApi>();
+  const [current, setCurrent] = React.useState(0);
+
+  React.useEffect(() => {
+    if (!api) return;
+    setCurrent(api.selectedScrollSnap());
+    api.on("select", () => setCurrent(api.selectedScrollSnap()));
+  }, [api]);
 
   const steps = [
     {
@@ -54,10 +67,74 @@ const HowItWorksSection = () => {
         </div>
         
         <div className="relative max-w-6xl mx-auto">
-          {/* Connector Line (Desktop) */}
+          {/* Desktop Only Connector Line */}
           <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 dark:bg-gray-800 -translate-y-1/2 hidden lg:block" />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
+          {/* Mobile Carousel */}
+          <div className="md:hidden">
+            <Carousel 
+              setApi={setApi}
+              opts={{ align: "center", loop: true }}
+              className="w-full"
+            >
+              <CarouselContent>
+                {steps.map((step, idx) => (
+                  <CarouselItem key={step.id} className="basis-full">
+                    <div className="relative group flex flex-col items-center text-center p-4">
+                      <div className="relative">
+                        {/* Step Number Badge */}
+                        <div className={`absolute -top-5 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full flex items-center justify-center text-xs font-black text-white z-20
+                          ${step.color === 'blue' ? 'bg-blue-500' : ''}
+                          ${step.color === 'purple' ? 'bg-purple-500' : ''}
+                          ${step.color === 'emerald' ? 'bg-emerald-500' : ''}
+                          ${step.color === 'amber' ? 'bg-amber-500' : ''}
+                          shadow-[0_4px_12px_rgba(0,0,0,0.15)]`}
+                        >
+                          {step.id}
+                        </div>
+
+                        {/* Icon Circle */}
+                        <div className={`w-24 h-24 rounded-[2.5rem] flex items-center justify-center mb-10 bg-white dark:bg-gray-900 border-2 transition-all duration-500
+                          ${step.color === 'blue' ? 'border-blue-100 dark:border-blue-900' : ''}
+                          ${step.color === 'purple' ? 'border-purple-100 dark:border-purple-900' : ''}
+                          ${step.color === 'emerald' ? 'border-emerald-100 dark:border-emerald-900' : ''}
+                          ${step.color === 'amber' ? 'border-amber-100 dark:border-amber-900' : ''}
+                          shadow-2xl shadow-gray-200/50 dark:shadow-none`}
+                        >
+                          <step.icon className={`h-10 w-10 
+                            ${step.color === 'blue' ? 'text-blue-500' : ''}
+                            ${step.color === 'purple' ? 'text-purple-500' : ''}
+                            ${step.color === 'emerald' ? 'text-emerald-500' : ''}
+                            ${step.color === 'amber' ? 'text-amber-500' : ''}
+                          `} />
+                        </div>
+                      </div>
+                      
+                      <h4 className="text-2xl font-black mb-4 dark:text-white tracking-tight">{step.title}</h4>
+                      <p className="text-sm text-gray-500 dark:text-gray-400 font-medium leading-relaxed max-w-xs">
+                        {step.desc}
+                      </p>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <div className="flex justify-center gap-2 mt-8">
+                {steps.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => api?.scrollTo(i)}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                      current === i ? "w-6 bg-cardano-blue" : "bg-gray-300 dark:bg-gray-700"
+                    }`}
+                    aria-label={`Go to slide ${i + 1}`}
+                  />
+                ))}
+              </div>
+            </Carousel>
+          </div>
+
+          {/* Desktop Grid */}
+          <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">
             {steps.map((step, idx) => (
               <div key={step.id} className="relative group">
                 {/* Step Card */}

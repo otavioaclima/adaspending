@@ -2,9 +2,31 @@ import React from 'react';
 import { BarChart3, Award, Database, Users, ChartLine, Search, LayoutTemplate } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Badge } from '@/components/ui/badge';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi
+} from "@/components/ui/carousel";
 
 const FeaturesSection = () => {
   const { t } = useLanguage();
+  const [api, setApi] = React.useState<CarouselApi>();
+  const [current, setCurrent] = React.useState(0);
+
+  React.useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    setCurrent(api.selectedScrollSnap());
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
 
   const features = [
     {
@@ -82,7 +104,63 @@ const FeaturesSection = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {/* Mobile Carousel */}
+        <div className="md:hidden">
+          <Carousel 
+            setApi={setApi}
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent>
+              {features.map((feature, idx) => (
+                <CarouselItem key={idx} className="basis-[85%]">
+                  <div className="group relative h-full p-2">
+                    {/* Card Container */}
+                    <div className="relative z-10 bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl p-8 rounded-[2rem] border border-gray-200/50 dark:border-white/5 shadow-2xl hover:shadow-cardano-blue/5 transition-all duration-500 h-full flex flex-col">
+                      <div className={`w-14 h-14 flex items-center justify-center rounded-xl bg-gradient-to-br ${feature.gradient} mb-6 group-hover:scale-110 transition-transform duration-500`}>
+                        <feature.icon className={`h-7 w-7 
+                          ${feature.color === 'blue' ? 'text-blue-500' : ''}
+                          ${feature.color === 'emerald' ? 'text-emerald-500' : ''}
+                          ${feature.color === 'rose' ? 'text-rose-500' : ''}
+                          ${feature.color === 'indigo' ? 'text-indigo-500' : ''}
+                          ${feature.color === 'amber' ? 'text-amber-500' : ''}
+                          ${feature.color === 'purple' ? 'text-purple-500' : ''}
+                        `} />
+                      </div>
+                      
+                      <h3 className="text-xl font-black mb-3 dark:text-white tracking-tight leading-snug">{feature.title}</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 font-medium leading-relaxed">
+                        {feature.desc}
+                      </p>
+                      
+                      <div className="mt-auto pt-6 flex justify-end">
+                        <div className="w-8 h-1 bg-gray-100 dark:bg-gray-800 rounded-full group-hover:w-16 group-hover:bg-cardano-blue transition-all duration-500" />
+                      </div>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="flex justify-center gap-2 mt-8">
+              {features.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => api?.scrollTo(i)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    current === i ? "w-6 bg-cardano-blue" : "bg-gray-300 dark:bg-gray-700"
+                  }`}
+                  aria-label={`Go to slide ${i + 1}`}
+                />
+              ))}
+            </div>
+          </Carousel>
+        </div>
+
+        {/* Desktop Grid */}
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, idx) => (
             <div key={idx} className="group relative">
               {/* Card Container */}
