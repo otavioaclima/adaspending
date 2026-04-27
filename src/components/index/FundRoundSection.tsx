@@ -1,17 +1,21 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight, Briefcase, Wallet, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { intersectProjects } from '@/data/intersectData';
-
+import { useIntersectData } from '@/hooks/useIntersectData';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const FundRoundSection = () => {
   const { t } = useLanguage();
+  const { data: intersectProjects = [] } = useIntersectData();
+  
   const totalAllocation = 343741204; // Official Intersect allocated funds
   const totalProjects = intersectProjects.length;
-  const uniqueVendors = new Set(intersectProjects.map(p => p.vendor)).size;
+  const uniqueVendors = React.useMemo(() => 
+    new Set(intersectProjects.map(p => p.vendor)).size
+  , [intersectProjects]);
 
   return (
     <section className="mb-8">

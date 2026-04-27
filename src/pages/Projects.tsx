@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import Layout from '@/components/layout/Layout';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,8 +18,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableFooter,
 } from "@/components/ui/table";
-import { intersectProjects } from "@/data/intersectData";
+import { useIntersectData } from '@/hooks/useIntersectData';
+import { PageSkeleton } from '@/components/ui/PageSkeleton';
 import { useLanguage } from '@/contexts/LanguageContext';
 import {
   Briefcase,
@@ -33,8 +34,15 @@ import {
   LayoutGrid,
   List,
   ChevronUp,
-  ChevronDown
+  ChevronDown,
+  Info
 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const getStatusIcon = (status: string) => {
   switch (status.toLowerCase()) {
@@ -60,6 +68,7 @@ const getStatusColor = (status: string) => {
 
 const Projects = () => {
   const { t } = useLanguage();
+  const { data: intersectProjects = [], isLoading } = useIntersectData();
   const [searchParams] = useSearchParams();
   const initialStatus = searchParams.get('status') || 'all';
   const initialSearch = searchParams.get('search') || '';
@@ -104,7 +113,9 @@ const Projects = () => {
       const matchesSearch = project.projectName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         project.vendor.toLowerCase().includes(searchTerm.toLowerCase());
 
-      const matchesStatus = statusFilter === 'all' || project.status.toLowerCase() === statusFilter.toLowerCase();
+      const matchesStatus = statusFilter === 'all' || 
+        project.status.toLowerCase() === statusFilter.toLowerCase() ||
+        (statusFilter === 'in_progress' && project.status.toLowerCase() === 'in progress');
 
       const matchesVendor = vendorFilter === 'all' || project.vendor === vendorFilter;
 
@@ -165,7 +176,7 @@ const Projects = () => {
   };
 
   return (
-    <Layout>
+    <>
       <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
@@ -239,9 +250,9 @@ const Projects = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">{t('projects.all_status')}</SelectItem>
-                  <SelectItem value="Completed">{t('status.completed')}</SelectItem>
-                  <SelectItem value="Paused">{t('status.paused')}</SelectItem>
-                  <SelectItem value="In Progress">{t('status.in_progress')}</SelectItem>
+                  <SelectItem value="completed">{t('status.completed')}</SelectItem>
+                  <SelectItem value="paused">{t('status.paused')}</SelectItem>
+                  <SelectItem value="in_progress">{t('status.in_progress')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -411,6 +422,21 @@ const Projects = () => {
                       {sortConfig?.key === 'totalAmount' ? (sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />) : null}
                     </div>
                   </TableHead>
+                  <TableHead className="text-right font-bold text-gray-900 dark:text-gray-300">
+                    <div className="flex items-center justify-end gap-1">
+                      %
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-3.5 w-3.5 text-gray-400 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent className="bg-gray-900 text-white border-gray-800">
+                            <p className="text-[10px] font-bold">{t('vendors.percentage_tooltip')}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </TableHead>
                   <TableHead className="text-right cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('amountSpent')}>
                     <div className="flex items-center justify-end gap-1">
                       {t('projects.spent_label')}
@@ -433,7 +459,9 @@ const Projects = () => {
                       {project.id}
                     </TableCell>
                     <TableCell className="font-semibold text-gray-900 dark:text-gray-100">
-                      {project.projectName}
+                      <Link to={`/projects/${project.id}`} className="hover:text-cardano-blue transition-colors">
+                        {project.projectName}
+                      </Link>
                     </TableCell>
                     <TableCell className="text-gray-600 dark:text-gray-400">
                       <div className="truncate max-w-[150px]" title={project.vendor}>
@@ -442,6 +470,9 @@ const Projects = () => {
                     </TableCell>
                     <TableCell className="text-right font-bold text-cardano-blue dark:text-blue-300">
                       {project.totalAmount.toLocaleString()}
+                    </TableCell>
+                    <TableCell className="text-right text-gray-500 text-xs font-bold">
+                      {((project.totalAmount / 343741205) * 100).toFixed(2)}%
                     </TableCell>
                     <TableCell className="text-right font-bold text-orange-600">
                       {project.amountSpent.toLocaleString()}
@@ -469,6 +500,21 @@ const Projects = () => {
                   </TableRow>
                 ))}
               </TableBody>
+              <TableFooter className="bg-gray-100/50 dark:bg-gray-900 font-black">
+                <TableRow className="border-gray-200 dark:border-gray-700">
+                  <TableCell colSpan={4}>{t('projects.total').toUpperCase()}</TableCell>
+                  <TableCell className="text-right text-cardano-blue dark:text-blue-400">
+                    ₳{sortedProjects.reduce((sum, p) => sum + p.totalAmount, 0).toLocaleString()}
+                  </TableCell>
+                  <TableCell className="text-right text-gray-500">
+                    {((sortedProjects.reduce((sum, p) => sum + p.totalAmount, 0) / 343741205) * 100).toFixed(2)}%
+                  </TableCell>
+                  <TableCell className="text-right text-orange-600">
+                    ₳{sortedProjects.reduce((sum, p) => sum + p.amountSpent, 0).toLocaleString()}
+                  </TableCell>
+                  <TableCell colSpan={2}></TableCell>
+                </TableRow>
+              </TableFooter>
             </Table>
           </div>
         )
@@ -484,7 +530,7 @@ const Projects = () => {
           </Button>
         </div>
       )}
-    </Layout>
+    </>
   );
 };
 

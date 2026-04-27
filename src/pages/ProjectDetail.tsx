@@ -1,3 +1,4 @@
+
 import React, { useMemo, useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
@@ -41,16 +42,17 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import Layout from '@/components/layout/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { intersectProjects } from '@/data/intersectData';
-import { getVendorProfile } from '@/data/vendorProfiles';
+import { useIntersectData } from '@/hooks/useIntersectData';
+import { useVendorProfiles } from '@/hooks/useVendorProfiles';
+import { PageSkeleton } from '@/components/ui/PageSkeleton';
 import { 
   Tooltip as UITooltip, 
   TooltipContent, 
   TooltipProvider, 
   TooltipTrigger 
 } from '@/components/ui/tooltip';
+import { toast } from "sonner";
 
 // --- Sub-component for Milestone Row to manage its own expansion state ---
 const MilestoneRow = ({ milestone, index, t, defaultExpanded }: { 
@@ -118,7 +120,6 @@ const MilestoneRow = ({ milestone, index, t, defaultExpanded }: {
         <tr className="bg-gray-50/20 dark:bg-gray-900/10">
           <td colSpan={7} className="px-6 py-4 border-t border-gray-100 dark:border-gray-800 shadow-inner">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {/* Acceptance Criteria Box */}
               <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 shadow-sm">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="p-1.5 bg-cardano-blue/10 dark:bg-cardano-blue/20 rounded-lg">
@@ -131,7 +132,6 @@ const MilestoneRow = ({ milestone, index, t, defaultExpanded }: {
                 </p>
               </div>
 
-              {/* Evidence Submissions Box */}
               <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 shadow-sm">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="p-1.5 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
@@ -195,7 +195,6 @@ const MilestoneRow = ({ milestone, index, t, defaultExpanded }: {
     </React.Fragment>
   );
 };
-import { toast } from "sonner";
 
 const getStatusIcon = (status: string) => {
   switch (status.toLowerCase()) {
@@ -290,7 +289,6 @@ const MilestoneTimeline = ({ milestones, t }: { milestones: any[], t: any }) => 
           className="relative overflow-x-auto pb-4 scrollbar-hide scroll-smooth"
         >
           <div className="flex items-center min-w-max px-12 relative">
-            {/* The Base Grey Line */}
             <div className="absolute top-[2.75rem] left-12 right-12 h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full" />
             
             <div className="flex items-start gap-0 relative z-10">
@@ -301,7 +299,6 @@ const MilestoneTimeline = ({ milestones, t }: { milestones: any[], t: any }) => 
                 
                 return (
                   <div key={milestone.id} className="flex flex-col items-center w-56 first:pl-0 last:pr-0">
-                    {/* Top Section: ID & Checkmark */}
                     <div className="flex items-center gap-1.5 mb-3 h-5">
                       <span className={`text-xs font-bold ${isCompleted ? 'text-green-600 dark:text-green-500' : 'text-gray-400 dark:text-gray-600'}`}>
                         m-{index}
@@ -313,14 +310,11 @@ const MilestoneTimeline = ({ milestones, t }: { milestones: any[], t: any }) => 
                       )}
                     </div>
                     
-                    {/* Middle Section: Node & Line Segment */}
                     <div className="relative flex items-center justify-center w-full">
-                      {/* Segment after this node */}
                       {!isLast && (
                         <div className={`absolute left-1/2 w-full h-1.5 transition-colors duration-500 ${isNextCompleted ? 'bg-green-500' : 'bg-gray-100 dark:bg-gray-800'}`} />
                       )}
                       
-                      {/* Node Circle */}
                       <div className={`
                         w-5 h-5 rounded-full border-[4px] z-20 transition-all duration-500
                         ${isCompleted 
@@ -329,7 +323,6 @@ const MilestoneTimeline = ({ milestones, t }: { milestones: any[], t: any }) => 
                       `} />
                     </div>
                     
-                    {/* Bottom Section: Date & Status */}
                     <div className="mt-4 flex flex-col items-center text-center">
                       <span className="text-[10px] font-bold text-gray-400 dark:text-gray-500 mb-2 whitespace-nowrap">
                         {milestone.unlockDate} (UTC)
@@ -351,7 +344,6 @@ const MilestoneTimeline = ({ milestones, t }: { milestones: any[], t: any }) => 
           </div>
         </div>
         
-        {/* Subtle Edge Fades for scroll indication */}
         <div className={`absolute left-0 top-0 bottom-8 w-12 bg-gradient-to-r from-white dark:from-gray-900 to-transparent pointer-events-none transition-opacity duration-300 ${showLeftArrow ? 'opacity-100' : 'opacity-0'}`} />
         <div className={`absolute right-0 top-0 bottom-8 w-12 bg-gradient-to-l from-white dark:from-gray-900 to-transparent pointer-events-none transition-opacity duration-300 ${showRightArrow ? 'opacity-100' : 'opacity-0'}`} />
       </CardContent>
@@ -359,19 +351,13 @@ const MilestoneTimeline = ({ milestones, t }: { milestones: any[], t: any }) => 
   );
 };
 
-const getEvidenceStatusColor = (status: string | undefined) => {
-  if (!status) return 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 border-gray-200 dark:border-gray-700';
-  const s = status.toLowerCase();
-  if (s.includes('submitted')) return 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border-blue-100 dark:border-blue-900/50';
-  if (s.includes('past due')) return 'bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border-amber-100 dark:border-amber-900/50';
-  if (s.includes('active')) return 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900/50';
-  return 'bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 border-gray-200 dark:border-gray-700';
-};
-
 const ProjectDetail = () => {
   const { t } = useLanguage();
   const { id } = useParams<{ id: string }>();
-  const project = intersectProjects.find(p => p.id === id);
+  const { data: intersectProjects = [], isLoading: loadingProjects } = useIntersectData();
+  const { data: vendorProfiles = [], isLoading: loadingProfiles } = useVendorProfiles();
+  
+  const project = useMemo(() => intersectProjects.find(p => p.id === id), [intersectProjects, id]);
 
   const paymentDates = useMemo(() => {
     if (!project || !project.milestones || project.milestones.length === 0)
@@ -383,25 +369,29 @@ const ProjectDetail = () => {
     };
   }, [project]);
 
-  if (!project) {
-    return (
-      <Layout>
-        <div className="flex flex-col items-center justify-center py-20">
-          <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
-          <h1 className="text-2xl font-bold mb-2 dark:text-white">{t('project.not_found')}</h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">{t('project.not_found_desc')}</p>
-          <Button asChild>
-            <Link to="/projects">{t('project.back_to_projects')}</Link>
-          </Button>
-        </div>
-      </Layout>
-    );
-  }
+  const [views, setViews] = useState(0);
 
-  const StatusIcon = getStatusIcon(project.status);
-  const spentPercentage = (project.amountSpent / project.totalAmount) * 100;
+  useEffect(() => {
+    if (!project) return;
+    const storageKey = `project_views_${project.id}`;
+    const storedViews = localStorage.getItem(storageKey);
+    
+    let currentViews = 0;
+    if (storedViews) {
+      currentViews = parseInt(storedViews, 10);
+    } else {
+      let seed = 0;
+      for (let i = 0; i < project.id.length; i++) {
+        seed += project.id.charCodeAt(i);
+      }
+      currentViews = (seed % 900) + 120;
+    }
+    
+    const nextViews = currentViews + 1;
+    localStorage.setItem(storageKey, nextViews.toString());
+    setViews(nextViews);
+  }, [project?.id]);
 
-  // Aggregate project chart data
   const chartData = useMemo(() => {
     if (!project || !project.milestones) return [];
 
@@ -431,6 +421,34 @@ const ProjectDetail = () => {
       .sort((a, b) => a.timestamp - b.timestamp);
   }, [project]);
 
+  const getProfile = (name: string) => {
+    const normalized = name.toLowerCase().trim();
+    return vendorProfiles.find(p =>
+      p.name.toLowerCase() === normalized ||
+      normalized.includes(p.name.toLowerCase()) ||
+      p.name.toLowerCase().includes(normalized)
+    );
+  };
+
+  if (loadingProjects || loadingProfiles) return <PageSkeleton />;
+
+  if (!project) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20">
+        <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
+        <h1 className="text-2xl font-bold mb-2 dark:text-white">{t('project.not_found')}</h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-6">{t('project.not_found_desc')}</p>
+        <Button asChild>
+          <Link to="/projects">{t('project.back_to_projects')}</Link>
+        </Button>
+      </div>
+    );
+  }
+
+  const StatusIcon = getStatusIcon(project.status);
+  const spentPercentage = (project.amountSpent / project.totalAmount) * 100;
+  const vendorProfile = getProfile(project.vendor);
+
   const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
     toast.success(t('project.link_copied'));
@@ -439,31 +457,8 @@ const ProjectDetail = () => {
   const shareTitle = `${project.projectName} - Cardano Treasury Explorer`;
   const shareUrl = window.location.href;
 
-  const [views, setViews] = useState(0);
-
-  useEffect(() => {
-    const storageKey = `project_views_${project.id}`;
-    const storedViews = localStorage.getItem(storageKey);
-    
-    let currentViews = 0;
-    if (storedViews) {
-      currentViews = parseInt(storedViews, 10);
-    } else {
-      // Generate a realistic seed based on project ID
-      let seed = 0;
-      for (let i = 0; i < project.id.length; i++) {
-        seed += project.id.charCodeAt(i);
-      }
-      currentViews = (seed % 900) + 120;
-    }
-    
-    const nextViews = currentViews + 1;
-    localStorage.setItem(storageKey, nextViews.toString());
-    setViews(nextViews);
-  }, [project.id]);
-
   return (
-    <Layout>
+    <>
       <div className="mb-8">
         <Link to="/projects" className="inline-flex items-center text-sm text-cardano-blue hover:underline mb-6 font-medium">
           <ArrowLeft className="h-4 w-4 mr-1" /> {t('project.back_to_projects')}
@@ -557,9 +552,7 @@ const ProjectDetail = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-        {/* Main Content */}
         <div className="lg:col-span-2 space-y-8">
-          {/* Description Card */}
           <Card className="border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden bg-white dark:bg-gray-800/40">
             <CardHeader className="bg-gray-50/50 dark:bg-gray-900/50 border-b border-gray-100 dark:border-gray-700">
               <CardTitle className="text-lg font-bold flex items-center gap-2 dark:text-white">
@@ -574,7 +567,6 @@ const ProjectDetail = () => {
             </CardContent>
           </Card>
 
-          {/* Progress Card */}
           <Card className="border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-gray-800/40">
             <CardHeader className="pb-2">
               <div className="flex justify-between items-center">
@@ -598,7 +590,6 @@ const ProjectDetail = () => {
             </CardContent>
           </Card>
 
-          {/* Project Timeline Chart */}
           {chartData.length > 0 && (
             <Card className="border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-gray-800/40 mb-8 transition-colors">
               <CardHeader className="border-b border-gray-100 dark:border-gray-700 pb-4">
@@ -672,10 +663,8 @@ const ProjectDetail = () => {
             </Card>
           )}
 
-          {/* Milestone Overview Timeline */}
           <MilestoneTimeline milestones={project.milestones || []} t={t} />
 
-          {/* Milestones Table Section */}
           {project.milestones && project.milestones.length > 0 && (
             <div className="space-y-6">
               <div className="flex items-center gap-4 px-1 mb-6">
@@ -715,7 +704,6 @@ const ProjectDetail = () => {
           )}
         </div>
 
-        {/* Sidebar Summary */}
         <div className="space-y-6">
           <Card className="border-gray-200 dark:border-gray-800 shadow-xl overflow-hidden sticky top-24 ring-1 ring-black/[0.03] dark:ring-white/[0.03] bg-white dark:bg-gray-800">
             <CardHeader className="bg-gray-900 text-white pb-6 pt-7">
@@ -727,7 +715,6 @@ const ProjectDetail = () => {
             </CardHeader>
             <CardContent className="p-0">
               <div className="divide-y divide-gray-100 dark:divide-gray-700">
-                {/* Total Budget */}
                 <div className="p-6 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-900/50">
                   <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">{t('project.total_budget')}</p>
                   <div className="flex flex-col">
@@ -746,35 +733,48 @@ const ProjectDetail = () => {
                       </UITooltip>
                     </TooltipProvider>
                   </div>
-                  <div className="mt-3 flex items-center text-[10px] font-black text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 w-fit px-2.5 py-1.5 rounded-lg border border-green-100 dark:border-green-900/30 uppercase">
-                    <DollarSign className="h-3 w-3 mr-1.5" />
-                    {t('project.currency_label')}: ADA
+                </div>
+
+                <div className="p-6 bg-white dark:bg-gray-800 border-y border-gray-50 dark:border-gray-700/50">
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div>
+                      <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1.5">{t('projects.spent_label')}</p>
+                      <span className="text-xl font-black text-orange-600">₳{project.amountSpent.toLocaleString()}</span>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1.5">{t('stats.remaining_budget')}</p>
+                      <span className="text-xl font-black text-emerald-600 dark:text-emerald-500">₳{(project.totalAmount - project.amountSpent).toLocaleString()}</span>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">{t('project.execution_progress')}</p>
+                      <span className="text-xs font-black text-cardano-blue">{spentPercentage.toFixed(1)}%</span>
+                    </div>
+                    <div className="w-full bg-gray-100 dark:bg-gray-900 rounded-full h-2 overflow-hidden shadow-inner border border-gray-200 dark:border-gray-700">
+                      <div
+                        className="bg-gradient-to-r from-cardano-blue to-blue-400 h-full rounded-full transition-all duration-1000"
+                        style={{ width: `${spentPercentage}%` }}
+                      />
+                    </div>
                   </div>
                 </div>
 
-                {/* Vendor Link */}
                 <div className="p-6">
                   <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">{t('project.vendor_label')}</p>
                   <Link to={`/vendors/${encodeURIComponent(project.vendor)}`} className="flex items-center gap-4 group p-3 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm hover:border-cardano-blue hover:shadow-md transition-all">
-                    {/* Vendor logo or fallback icon */}
-                    {(() => {
-                      const p = getVendorProfile(project.vendor);
-                      return p?.logo ? (
-                        <img
-                          src={p.logo}
-                          alt={`${project.vendor} logo`}
-                          className="w-12 h-12 rounded-xl object-cover border border-gray-100 dark:border-gray-700 shadow-sm shrink-0"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).style.display = 'none';
-                            const next = (e.target as HTMLImageElement).nextElementSibling as HTMLElement | null;
-                            if (next) next.style.display = 'flex';
-                          }}
-                        />
-                      ) : null;
-                    })()}
-                    <div className={`bg-cardano-blue/10 p-3 rounded-xl text-cardano-blue group-hover:bg-cardano-blue group-hover:text-white transition-colors ${getVendorProfile(project.vendor)?.logo ? 'hidden' : ''}`}>
-                      <Building className="h-6 w-6" />
-                    </div>
+                    {vendorProfile?.logo ? (
+                      <img
+                        src={vendorProfile.logo}
+                        alt={`${project.vendor} logo`}
+                        className="w-12 h-12 rounded-xl object-cover border border-gray-100 dark:border-gray-700 shadow-sm shrink-0"
+                      />
+                    ) : (
+                      <div className="bg-cardano-blue/10 p-3 rounded-xl text-cardano-blue group-hover:bg-cardano-blue group-hover:text-white transition-colors">
+                        <Building className="h-6 w-6" />
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <p className="text-base font-bold text-gray-900 dark:text-white truncate group-hover:text-cardano-blue transition-colors">
                         {project.vendor}
@@ -784,7 +784,6 @@ const ProjectDetail = () => {
                   </Link>
                 </div>
 
-                {/* Timeline */}
                 <div className="p-6">
                   <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-5">{t('project.payment_timeline')}</p>
                   <div className="space-y-6 relative before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-100 dark:before:bg-gray-700">
@@ -805,44 +804,29 @@ const ProjectDetail = () => {
                   </div>
                 </div>
 
-                {/* Technical Details */}
-                <div className="p-6">
+                <div className="p-6 bg-gray-50/50 dark:bg-gray-900/20">
                   <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">{t('project.technical_details')}</p>
-                  <div className="space-y-3">
+                  <div className="space-y-4">
+                    {project.scriptHash && (
+                      <div>
+                        <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">{t('project.script_hash')}</p>
+                        <p className="text-xs font-mono text-gray-600 dark:text-gray-400 break-all bg-white dark:bg-gray-800 p-2 rounded border border-gray-100 dark:border-gray-700">{project.scriptHash}</p>
+                      </div>
+                    )}
                     <div>
-                      <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">{t('project.instance_id')}</p>
-                      <p className="text-[11px] font-mono text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/50 p-2 rounded border border-gray-100 dark:border-gray-700 break-all">
-                        9e65e4...ecc9
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">{t('project.script_hash')}</p>
-                      <p className="text-[11px] font-mono text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/50 p-2 rounded border border-gray-100 dark:border-gray-700 break-all">
-                        addr1w8...4v6q (Treasury Contract)
-                      </p>
+                      <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase mb-1">{t('project.treasury_source')}</p>
+                      <Badge variant="outline" className="bg-cardano-blue/5 text-cardano-blue border-cardano-blue/20 font-bold">
+                        Intersect Treasury v1
+                      </Badge>
                     </div>
                   </div>
-                </div>
-
-                {/* Contract Source */}
-                <div className="p-6 bg-gray-50/80 dark:bg-gray-900/30">
-                  <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-3">{t('project.treasury_source')}</p>
-                  <Link to="/" className="flex items-center gap-3 p-4 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm hover:opacity-90 transition-opacity">
-                    <div className="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center overflow-hidden shrink-0">
-                      <img src="/assets/e4da4614-7cea-4f9c-853c-3f019f7932ca.png" className="w-7 h-7 object-contain brightness-0 invert" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-black text-gray-900 dark:text-white">Intersect MBO</p>
-                      <p className="text-[10px] text-gray-500 dark:text-gray-400 font-bold uppercase tracking-tighter">Contract Instance 1</p>
-                    </div>
-                  </Link>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 

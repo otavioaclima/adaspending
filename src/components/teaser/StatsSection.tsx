@@ -6,10 +6,12 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getCexplorerStats } from '@/services/cexplorer';
 import { getAdaPrice } from '@/services/cardanoscan';
-import { intersectProjects } from '@/data/intersectData';
+import { useIntersectData } from '@/hooks/useIntersectData';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const StatsSection = () => {
   const { t, language } = useLanguage();
+  const { data: intersectProjects = [], isLoading } = useIntersectData();
 
   const { data: cexplorerStats } = useQuery({
     queryKey: ['cexplorerStats'],
@@ -28,9 +30,14 @@ const StatsSection = () => {
   });
 
   // Calculate real financial stats from intersectProjects
-  const INTERSECT_TOTAL_BUDGET = 345531529;
+  const INTERSECT_TOTAL_BUDGET = React.useMemo(() => 
+    intersectProjects.reduce((sum, p) => sum + p.totalAmount, 0) || 345531529
+  , [intersectProjects]);
+  
   const totalProjects = intersectProjects.length;
-  const uniqueVendors = new Set(intersectProjects.map(p => p.vendor)).size;
+  const uniqueVendors = React.useMemo(() => 
+    new Set(intersectProjects.map(p => p.vendor)).size
+  , [intersectProjects]);
 
   // Format numbers with commas
   const formatNumber = (num: number | undefined | null) => {
@@ -48,6 +55,22 @@ const StatsSection = () => {
       maximumFractionDigits: 0
     }).format(usdAmount) + ' USD';
   };
+
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[1, 2, 3, 4].map(i => (
+          <Card key={i} className="bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl border-gray-200/50 dark:border-white/10 rounded-3xl overflow-hidden">
+            <CardContent className="p-6">
+              <Skeleton className="h-4 w-24 mb-4" />
+              <Skeleton className="h-8 w-32 mb-2" />
+              <Skeleton className="h-4 w-20" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
@@ -123,4 +146,3 @@ const StatsSection = () => {
 };
 
 export default StatsSection;
-

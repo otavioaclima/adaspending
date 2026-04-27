@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Users, Building, Filter, ChevronDown, ChevronUp, MessageSquare, Info, Link2, Wallet, Briefcase, FilterX, LayoutGrid, List as ListIcon } from 'lucide-react';
@@ -13,44 +14,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableFooter,
 } from "@/components/ui/table";
-import Layout from '@/components/layout/Layout';
-import { intersectProjects } from '@/data/intersectData';
-import { getVendorProfile } from '@/data/vendorProfiles';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useIntersectData } from '@/hooks/useIntersectData';
+import { useVendorProfiles } from '@/hooks/useVendorProfiles';
 import { useLanguage } from '@/contexts/LanguageContext';
-
-// Helper to get unique vendors and their aggregated stats
-const useVendorStats = () => {
-  return useMemo(() => {
-    const stats: Record<string, {
-      name: string;
-      totalFunded: number;
-      amountSpent: number;
-      projectCount: number;
-      statusCount: Record<string, number>;
-    }> = {};
-
-    intersectProjects.forEach(project => {
-      if (!stats[project.vendor]) {
-        stats[project.vendor] = {
-          name: project.vendor,
-          totalFunded: 0,
-          amountSpent: 0,
-          projectCount: 0,
-          statusCount: {}
-        };
-      }
-
-      const v = stats[project.vendor];
-      v.totalFunded += project.totalAmount;
-      v.amountSpent += project.amountSpent;
-      v.projectCount += 1;
-      v.statusCount[project.status] = (v.statusCount[project.status] || 0) + 1;
-    });
-
-    return Object.values(stats).sort((a, b) => b.totalFunded - a.totalFunded);
-  }, []);
-};
+import { PageSkeleton } from '@/components/ui/PageSkeleton';
 
 const getStatusColor = (status: string) => {
   const s = status.toLowerCase();
@@ -60,34 +35,26 @@ const getStatusColor = (status: string) => {
   return 'bg-gray-50 text-gray-700 border-gray-100 dark:bg-gray-900/20 dark:text-gray-400 dark:border-gray-900/50';
 };
 
-const VendorCard = ({ vendor }: { vendor: any }) => {
+const VendorCard = ({ vendor, profile }: { vendor: any, profile: any }) => {
   const { t } = useLanguage();
-  const profile = getVendorProfile(vendor.name);
   return (
     <Link to={`/vendors/${encodeURIComponent(vendor.name)}`}>
       <Card className="h-full hover:shadow-lg transition-all border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800/40 group">
         <CardContent className="p-5">
           <div className="flex items-center gap-4 mb-4">
-            {/* Vendor logo or fallback icon */}
             {profile?.logo ? (
               <img
                 src={profile.logo}
                 alt={`${vendor.name} logo`}
                 className="w-12 h-12 rounded-xl object-cover border border-gray-100 dark:border-gray-700 shadow-sm shrink-0"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = 'none';
-                  const next = (e.target as HTMLImageElement).nextElementSibling as HTMLElement | null;
-                  if (next) next.style.display = 'flex';
-                }}
               />
-            ) : null}
-            <div
-              className={`bg-cardano-blue/10 dark:bg-cardano-blue/20 rounded-xl w-12 h-12 items-center justify-center group-hover:bg-cardano-blue group-hover:text-white transition-colors text-cardano-blue shrink-0 ${profile?.logo ? 'hidden' : 'flex'}`}
-            >
-              <Building className="h-6 w-6" />
-            </div>
+            ) : (
+              <div className="bg-cardano-blue/10 dark:bg-cardano-blue/20 rounded-xl w-12 h-12 flex items-center justify-center group-hover:bg-cardano-blue group-hover:text-white transition-colors text-cardano-blue shrink-0">
+                <Building className="h-6 w-6" />
+              </div>
+            )}
             <div>
-              <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-cardano-blue transition-colors leading-tight truncate max-w-[300px]" title={vendor.name}>
+              <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-cardano-blue transition-colors leading-tight truncate max-w-[200px]" title={vendor.name}>
                 {vendor.name}
               </h3>
               <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">
@@ -138,6 +105,9 @@ const VendorCard = ({ vendor }: { vendor: any }) => {
 
 const Vendors = () => {
   const { t } = useLanguage();
+  const { data: intersectProjects = [], isLoading: loadingProjects } = useIntersectData();
+  const { data: vendorProfiles = [], isLoading: loadingProfiles } = useVendorProfiles();
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [sizeFilter, setSizeFilter] = useState('all');
   const [countFilter, setCountFilter] = useState('all');
@@ -145,10 +115,33 @@ const Vendors = () => {
   const [sortFilter, setSortFilter] = useState('totalFunded-desc');
   const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
-  const vendors = useVendorStats();
+
+  const vendors = useMemo(() => {
+    const stats: Record<string, any> = {};
+
+    intersectProjects.forEach(project => {
+      if (!stats[project.vendor]) {
+        stats[project.vendor] = {
+          name: project.vendor,
+          totalFunded: 0,
+          amountSpent: 0,
+          projectCount: 0,
+          statusCount: {}
+        };
+      }
+
+      const v = stats[project.vendor];
+      v.totalFunded += project.totalAmount;
+      v.amountSpent += project.amountSpent;
+      v.projectCount += 1;
+      v.statusCount[project.status] = (v.statusCount[project.status] || 0) + 1;
+    });
+
+    return Object.values(stats).sort((a: any, b: any) => b.totalFunded - a.totalFunded);
+  }, [intersectProjects]);
 
   const filteredVendors = useMemo(() => {
-    return vendors.filter(vendor => {
+    return vendors.filter((vendor: any) => {
       const matchesSearch = vendor.name.toLowerCase().includes(searchTerm.toLowerCase());
 
       let matchesSize = true;
@@ -168,7 +161,6 @@ const Vendors = () => {
   const sortedVendors = useMemo(() => {
     let sortableItems = [...filteredVendors];
     
-    // Primary sort from dropdown
     if (sortFilter) {
       const [key, direction] = sortFilter.split('-');
       sortableItems.sort((a: any, b: any) => {
@@ -181,7 +173,6 @@ const Vendors = () => {
       });
     }
 
-    // Secondary sort from table headers (if active)
     if (sortConfig !== null) {
       sortableItems.sort((a: any, b: any) => {
         if (a[sortConfig.key] < b[sortConfig.key]) {
@@ -195,6 +186,15 @@ const Vendors = () => {
     }
     return sortableItems;
   }, [filteredVendors, sortConfig, sortFilter]);
+
+  const getProfile = (name: string) => {
+    const normalized = name.toLowerCase().trim();
+    return vendorProfiles.find(p =>
+      p.name.toLowerCase() === normalized ||
+      normalized.includes(p.name.toLowerCase()) ||
+      p.name.toLowerCase().includes(normalized)
+    );
+  };
 
   const requestSort = (key: string) => {
     let direction: 'asc' | 'desc' = 'asc';
@@ -210,8 +210,10 @@ const Vendors = () => {
     setCountFilter('all');
   };
 
+  if (loadingProjects || loadingProfiles) return <PageSkeleton />;
+
   return (
-    <Layout>
+    <>
       <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
@@ -247,7 +249,6 @@ const Vendors = () => {
         </div>
       </div>
 
-      {/* Filter Bar */}
       <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 flex flex-col lg:flex-row lg:items-end gap-x-3 gap-y-4 transition-all duration-300 overflow-hidden">
         <div className="flex-1 w-full flex flex-row gap-2 items-end">
           <div className="flex-1">
@@ -340,8 +341,8 @@ const Vendors = () => {
       {filteredVendors.length > 0 && (
         viewMode === 'grid' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {sortedVendors.map(vendor => (
-              <VendorCard key={vendor.name} vendor={vendor} />
+            {sortedVendors.map((vendor: any) => (
+              <VendorCard key={vendor.name} vendor={vendor} profile={getProfile(vendor.name)} />
             ))}
           </div>
         ) : (
@@ -349,92 +350,128 @@ const Vendors = () => {
             <Table>
               <TableHeader className="bg-gray-50/50 dark:bg-gray-900/50">
                 <TableRow className="border-gray-100 dark:border-gray-800">
-                  <TableHead className="font-bold text-gray-900 dark:text-gray-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('name')}>
+                  <TableHead className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('name')}>
                     <div className="flex items-center gap-1">
                       {t('vendors.name_label')}
                       {sortConfig?.key === 'name' ? (sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />) : null}
                     </div>
                   </TableHead>
-                  <TableHead className="font-bold text-gray-900 dark:text-gray-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('totalFunded')}>
-                    <div className="flex items-center gap-1">
+                  <TableHead className="text-right cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('totalFunded')}>
+                    <div className="flex items-center justify-end gap-1">
                       {t('vendors.allocation_label')}
                       {sortConfig?.key === 'totalFunded' ? (sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />) : null}
                     </div>
                   </TableHead>
-                  <TableHead className="font-bold text-gray-900 dark:text-gray-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('amountSpent')}>
-                    <div className="flex items-center gap-1">
+                  <TableHead className="text-right">
+                    <div className="flex items-center justify-end gap-1">
+                      %
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Info className="h-3.5 w-3.5 text-gray-400 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent className="bg-gray-900 text-white border-gray-800">
+                            <p className="text-[10px] font-bold">{t('vendors.percentage_tooltip')}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </TableHead>
+                  <TableHead className="text-right cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('amountSpent')}>
+                    <div className="flex items-center justify-end gap-1">
                       {t('vendors.spent_label')}
                       {sortConfig?.key === 'amountSpent' ? (sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />) : null}
                     </div>
                   </TableHead>
-                  <TableHead className="font-bold text-gray-900 dark:text-gray-300 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('projectCount')}>
-                    <div className="flex items-center gap-1">
+                  <TableHead className="text-right cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('projectCount')}>
+                    <div className="flex items-center justify-end gap-1">
                       {t('vendors.projects_label')}
                       {sortConfig?.key === 'projectCount' ? (sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />) : null}
                     </div>
                   </TableHead>
-                  <TableHead className="font-bold text-gray-900 dark:text-gray-300">{t('vendors.status_types')}</TableHead>
+                  <TableHead>{t('vendors.status_types')}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {sortedVendors.map((vendor) => (
-                  <TableRow key={vendor.name} className="border-gray-100 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-gray-900/30">
-                    <TableCell className="font-medium">
-                      <Link
-                        to={`/vendors/${encodeURIComponent(vendor.name)}`}
-                        className="flex items-center gap-3 group"
-                        title={vendor.name}
-                      >
-                        {/* Logo or icon in list view */}
-                        {(() => {
-                          const p = getVendorProfile(vendor.name);
-                          return p?.logo ? (
+                {sortedVendors.map((vendor: any) => {
+                  const p = getProfile(vendor.name);
+                  const OFFICIAL_TOTAL = 343741205;
+                  const percentage = (vendor.totalFunded / OFFICIAL_TOTAL) * 100;
+
+                  return (
+                    <TableRow key={vendor.name} className="border-gray-100 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-gray-900/30">
+                      <TableCell className="font-medium">
+                        <Link
+                          to={`/vendors/${encodeURIComponent(vendor.name)}`}
+                          className="flex items-center gap-3 group"
+                        >
+                          {p?.logo ? (
                             <img
                               src={p.logo}
                               alt={vendor.name}
                               className="w-7 h-7 rounded-lg object-cover border border-gray-100 dark:border-gray-700 shrink-0"
-                              onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
                             />
                           ) : (
                             <div className="w-7 h-7 rounded-lg bg-cardano-blue/10 dark:bg-cardano-blue/20 flex items-center justify-center shrink-0">
                               <Building className="h-4 w-4 text-cardano-blue" />
                             </div>
+                          )}
+                          <span className="text-gray-900 dark:text-gray-100 hover:text-cardano-blue transition-colors font-bold truncate max-w-[250px] block">
+                            {vendor.name}
+                          </span>
+                        </Link>
+                      </TableCell>
+                      <TableCell className="text-right text-cardano-blue dark:text-blue-400 font-bold">
+                        ₳{vendor.totalFunded.toLocaleString()}
+                      </TableCell>
+                      <TableCell className="text-right text-gray-500 dark:text-gray-400 font-bold text-xs">
+                        {percentage.toFixed(2)}%
+                      </TableCell>
+                      <TableCell className="text-right text-orange-600 dark:text-orange-500 font-bold">
+                        ₳{vendor.amountSpent.toLocaleString()}
+                      </TableCell>
+                      <TableCell className="text-right text-gray-600 dark:text-gray-400">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <Briefcase className="h-3.5 w-3.5 text-gray-400" />
+                          {vendor.projectCount}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {(() => {
+                          const statuses = Object.keys(vendor.statusCount);
+                          const displayStatus = statuses.length === 1 
+                            ? (t(`status.${statuses[0].toLowerCase().replace(' ', '_')}`) || statuses[0])
+                            : `${statuses.length} ${t('vendors.status_types')}`;
+                          
+                          return (
+                            <Badge variant="outline" className={getStatusColor(statuses.length === 1 ? statuses[0] : 'multiple')}>
+                              {displayStatus}
+                            </Badge>
                           );
                         })()}
-                        <span className="text-cardano-blue hover:underline font-bold truncate max-w-[450px] block">
-                          {vendor.name}
-                        </span>
-                      </Link>
-                    </TableCell>
-                    <TableCell className="text-cardano-blue dark:text-blue-400 font-medium">
-                      ₳{vendor.totalFunded.toLocaleString()}
-                    </TableCell>
-                    <TableCell className="text-orange-600 dark:text-orange-500 font-medium">
-                      ₳{vendor.amountSpent.toLocaleString()}
-                    </TableCell>
-                    <TableCell className="text-gray-600 dark:text-gray-400">
-                      <div className="flex items-center gap-1.5">
-                        <Briefcase className="h-3.5 w-3.5 text-gray-400" />
-                        {vendor.projectCount}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {(() => {
-                        const statuses = Object.keys(vendor.statusCount);
-                        const displayStatus = statuses.length === 1 
-                          ? (t(`status.${statuses[0].toLowerCase().replace(' ', '_')}`) || statuses[0])
-                          : `${statuses.length} ${t('vendors.status_types')}`;
-                        
-                        return (
-                          <Badge variant="outline" className={getStatusColor(statuses.length === 1 ? statuses[0] : 'multiple')}>
-                            {displayStatus}
-                          </Badge>
-                        );
-                      })()}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
+              <TableFooter className="bg-gray-100/50 dark:bg-gray-900 font-black">
+                <TableRow className="border-gray-200 dark:border-gray-800">
+                  <TableCell>{t('projects.total').toUpperCase()}</TableCell>
+                  <TableCell className="text-right text-cardano-blue dark:text-blue-400">
+                    ₳{sortedVendors.reduce((sum: number, v: any) => sum + v.totalFunded, 0).toLocaleString()}
+                  </TableCell>
+                  <TableCell className="text-right text-gray-500">
+                    {((sortedVendors.reduce((sum: number, v: any) => sum + v.totalFunded, 0) / 343741205) * 100).toFixed(2)}%
+                  </TableCell>
+                  <TableCell className="text-right text-orange-600 dark:text-orange-500">
+                    ₳{sortedVendors.reduce((sum: number, v: any) => sum + v.amountSpent, 0).toLocaleString()}
+                  </TableCell>
+                  <TableCell className="text-right text-gray-600 dark:text-gray-400">
+                    {sortedVendors.reduce((sum: number, v: any) => sum + v.projectCount, 0)}
+                  </TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              </TableFooter>
             </Table>
           </Card>
         )
@@ -456,7 +493,7 @@ const Vendors = () => {
           </Button>
         </div>
       )}
-    </Layout>
+    </>
   );
 };
 

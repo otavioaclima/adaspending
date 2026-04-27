@@ -1,6 +1,7 @@
 
 import React, { useMemo } from 'react';
-import Layout from '@/components/layout/Layout';
+import { useIntersectData } from '@/hooks/useIntersectData';
+import { PageSkeleton } from '@/components/ui/PageSkeleton';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import {
@@ -14,14 +15,11 @@ import {
   PieChart,
   Pie,
   Cell,
-  LineChart,
-  Line,
   AreaChart,
   Area,
   LabelList
 } from 'recharts';
 import { treasuryStats } from '@/data/mockData';
-import { intersectProjects } from '@/data/intersectData';
 import StatCard from '@/components/ui/StatCard';
 import {
   BarChart3,
@@ -33,10 +31,45 @@ import {
   Wallet,
   Globe
 } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { getAdaPrice } from '@/services/cardanoscan';
 
 const Analytics = () => {
   const { t } = useLanguage();
+  const { data: intersectProjects = [], isLoading } = useIntersectData();
   const COLORS = ['hsl(var(--cardano-blue))', '#1BAAD6', '#FF9F43', '#28C76F', '#EA5455', '#7367F0'];
+
+  // Aggregate aggregate payments data
+  const chartData = useMemo(() => {
+    const monthlyData: Record<string, { amount: number }> = {};
+
+    intersectProjects.forEach(project => {
+      if (project.milestones) {
+        project.milestones.forEach(milestone => {
+          if (milestone.status.toLowerCase() === 'withdrawn') {
+            const date = new Date(milestone.unlockDate);
+            if (!isNaN(date.getTime())) {
+              const monthYear = date.toLocaleString('en-US', { month: 'short', year: '2-digit' });
+              if (!monthlyData[monthYear]) {
+                monthlyData[monthYear] = { amount: 0 };
+              }
+              monthlyData[monthYear].amount += milestone.amount;
+            }
+          }
+        });
+      }
+    });
+
+    return Object.keys(monthlyData)
+      .map(key => ({
+        date: key,
+        amount: monthlyData[key].amount,
+        timestamp: new Date(key).getTime()
+      }))
+      .sort((a, b) => a.timestamp - b.timestamp);
+  }, [intersectProjects]);
+
+  if (isLoading) return <PageSkeleton />;
 
   // Calculate project status distribution
   const statusCounts = intersectProjects.reduce((acc: any, project) => {
@@ -94,55 +127,37 @@ const Analytics = () => {
     { year: '2024', price: 0.56 },
     { year: '2025', price: 0.62 },
     { year: '2026*', price: 0.25 },
-
   ];
 
   // Quick stats calculations
+  const { data: adaPrice = 0.62 } = useQuery({
+    queryKey: ['adaPrice'],
+    queryFn: getAdaPrice,
+    refetchInterval: 60000,
+  });
+
+  const formatUSD = (adaValue: number) => {
+    const usd = adaValue * adaPrice;
+    return new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(usd);
+  };
+
   const totalProjects = intersectProjects.length;
   const uniqueVendors = new Set(intersectProjects.map(p => p.vendor)).size;
-  const totalAllocated = 345531529;
-  const totalSpent = intersectProjects.reduce((sum, p) => sum + p.amountSpent, 0) + 168789504;
-  const avgBudget = intersectProjects.reduce((sum, p) => sum + p.totalAmount, 0) / totalProjects;
-  const allocationPercent = (totalSpent / totalAllocated) * 100;
-
-  // Aggregate aggregate payments data
-  const chartData = useMemo(() => {
-    const monthlyData: Record<string, { amount: number }> = {};
-
-    intersectProjects.forEach(project => {
-      if (project.milestones) {
-        project.milestones.forEach(milestone => {
-          if (milestone.status.toLowerCase() === 'withdrawn') {
-            const date = new Date(milestone.unlockDate);
-            if (!isNaN(date.getTime())) {
-              const monthYear = date.toLocaleString('en-US', { month: 'short', year: '2-digit' });
-              if (!monthlyData[monthYear]) {
-                monthlyData[monthYear] = { amount: 0 };
-              }
-              monthlyData[monthYear].amount += milestone.amount;
-            }
-          }
-        });
-      }
-    });
-
-    return Object.keys(monthlyData)
-      .map(key => ({
-        date: key,
-        amount: monthlyData[key].amount,
-        timestamp: new Date(key).getTime()
-      }))
-      .sort((a, b) => a.timestamp - b.timestamp);
-  }, []);
+  const intersectBudgetValue = 345531529;
+  const totalSpentValue = 343741204;
+  const remainingBudgetValue = intersectBudgetValue - totalSpentValue;
+  const allocationPercent = (totalSpentValue / intersectBudgetValue) * 100;
 
   return (
-    <Layout>
+    <>
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t('analytics.title')}</h1>
         <p className="text-gray-600 dark:text-gray-400 max-w-3xl">{t('analytics.description')}</p>
       </div>
 
-      {/* Quick Stats Grid - Cleaner and more consistent */}
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-10">
         <StatCard
           title={t('stats.total_projects')}
@@ -158,8 +173,8 @@ const Analytics = () => {
         />
         <StatCard
           title={t('stats.intersect_budget')}
-          value="₳345,531,529"
-          usdValue="214,229,548"
+          value={`₳${intersectBudgetValue.toLocaleString()}`}
+          usdValue={formatUSD(intersectBudgetValue)}
           icon={<Wallet className="h-4 w-4 text-cardano-blue" />}
           className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md"
           valueClassName="text-cardano-blue dark:text-blue-400"
@@ -167,9 +182,9 @@ const Analytics = () => {
         />
         <StatCard
           title={t('stats.total_spent')}
-          value="₳343,741,204"
-          usdValue="213,119,546"
-          change="99.48%"
+          value={`₳${totalSpentValue.toLocaleString()}`}
+          usdValue={formatUSD(totalSpentValue)}
+          change={`${allocationPercent.toFixed(2)}%`}
           positive={true}
           icon={<Globe className="h-4 w-4 text-orange-500" />}
           className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md"
@@ -178,10 +193,10 @@ const Analytics = () => {
         />
         <StatCard
           title={t('stats.remaining_budget')}
-          value="₳1,790,324"
-          usdValue="1,110,001"
-          change="0.52%"
-          positive={false}
+          value={`₳${remainingBudgetValue.toLocaleString()}`}
+          usdValue={formatUSD(remainingBudgetValue)}
+          change={`${(100 - allocationPercent).toFixed(2)}%`}
+          positive={true}
           icon={<TrendingUp className="h-4 w-4 text-green-500" />}
           className="dark:bg-[#0f172a]/40 dark:border-white/5 backdrop-blur-md"
           valueClassName="text-green-600 dark:text-green-500"
@@ -190,7 +205,6 @@ const Analytics = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-        {/* Category Distribution */}
         <Card className="cardano-card transition-all hover:shadow-xl group">
           <CardHeader className="border-b border-cardano-teal/10 pb-4">
             <div className="flex items-center gap-3">
@@ -233,7 +247,6 @@ const Analytics = () => {
           </CardContent>
         </Card>
 
-        {/* Top Projects by Budget */}
         <Card className="cardano-card transition-all hover:shadow-xl">
           <CardHeader className="border-b border-cardano-teal/10 pb-4">
             <div className="flex items-center gap-3">
@@ -293,7 +306,6 @@ const Analytics = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-        {/* Project Status Breakdown */}
         <Card className="cardano-card transition-all hover:shadow-xl">
           <CardHeader className="border-b border-cardano-teal/10 pb-4">
             <div className="flex items-center gap-3">
@@ -336,7 +348,6 @@ const Analytics = () => {
           </CardContent>
         </Card>
 
-        {/* Top Vendors by Budget */}
         <Card className="cardano-card transition-all hover:shadow-xl">
           <CardHeader className="border-b border-cardano-teal/10 pb-4">
             <div className="flex items-center gap-3">
@@ -395,7 +406,6 @@ const Analytics = () => {
         </Card>
       </div>
 
-      {/* Global Payments Over Time Chart */}
       <Card className="cardano-card transition-all hover:shadow-xl mb-12">
         <CardHeader className="border-b border-cardano-teal/10 pb-4">
           <div className="flex items-center gap-3">
@@ -454,9 +464,7 @@ const Analytics = () => {
         </CardContent>
       </Card>
 
-      {/* Cardano Treasury Spend & ADA Price Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-        {/* Treasury Spend (USD) */}
         <Card className="cardano-card transition-all hover:shadow-xl overflow-hidden border-none">
           <CardHeader className="bg-cardano-blue py-6">
             <CardTitle className="text-white text-center text-xl font-black tracking-tight">
@@ -508,7 +516,6 @@ const Analytics = () => {
           </CardContent>
         </Card>
 
-        {/* ADA Price (USD) */}
         <Card className="cardano-card transition-all hover:shadow-xl overflow-hidden border-none">
           <CardHeader className="bg-cardano-blue py-6">
             <CardTitle className="text-white text-center text-xl font-black tracking-tight">
@@ -568,7 +575,7 @@ const Analytics = () => {
           </CardContent>
         </Card>
       </div>
-    </Layout>
+    </>
   );
 };
 

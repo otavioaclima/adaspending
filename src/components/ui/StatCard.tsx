@@ -31,7 +31,7 @@ const StatCard = ({ title, value, usdValue, change, positive, icon, className, v
       </div>
       <div className="space-y-1">
         <div className="flex items-baseline gap-2">
-          <div className={cn("text-xl font-black text-gray-900 dark:text-white tracking-tight leading-none", valueClassName)}>{value}</div>
+          <div className={cn("text-base sm:text-lg md:text-xl font-black text-gray-900 dark:text-white tracking-tight leading-none", valueClassName)}>{value}</div>
           {change && (
             <div className={cn(
               "text-[10px] font-bold px-1.5 py-0.5 rounded-full",

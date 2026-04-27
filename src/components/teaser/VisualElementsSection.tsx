@@ -4,13 +4,14 @@ import { Card, CardContent } from '@/components/ui/card';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar, LabelList } from 'recharts';
 import StatsSection from '@/components/teaser/StatsSection';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { intersectProjects } from '@/data/intersectData';
+import { useIntersectData } from '@/hooks/useIntersectData';
+import { useVendorProfiles } from '@/hooks/useVendorProfiles';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Briefcase, Users, ArrowUpRight, ArrowRight, PieChart as PieIcon, BarChart3, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { getVendorProfile } from '@/data/vendorProfiles';
 import { Building } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const COLORS = ['#0033AD', '#1BAAD6', '#F59E0B', '#10B981', '#6366F1', '#EC4899', '#94A3B8'];
 
@@ -33,9 +34,15 @@ const VendorLogo = ({ profile, name }: { profile?: any, name: string }) => {
 
 const VisualElementsSection = () => {
   const { t, language } = useLanguage();
+  const { data: intersectProjects = [], isLoading: isProjectsLoading } = useIntersectData();
+  const { data: vendorProfiles = [], isLoading: isProfilesLoading } = useVendorProfiles();
 
   // Process real data
   const { statusData, vendorData, timelineData, topProjects, topVendors } = useMemo(() => {
+    if (intersectProjects.length === 0) {
+      return { statusData: [], vendorData: [], timelineData: [], topProjects: [], topVendors: [] };
+    }
+
     // 1. Status Distribution
     const statusCounts = intersectProjects.reduce((acc, p) => {
       acc[p.status] = (acc[p.status] || 0) + 1;
@@ -69,7 +76,6 @@ const VisualElementsSection = () => {
       }));
 
     // 3. Timeline Data (Cumulative spending by month)
-    // We'll use the milestones' unlockDate to estimate spending timeline
     const monthlySpending: Record<string, number> = {};
     intersectProjects.forEach(p => {
       p.milestones.forEach(m => {
@@ -102,12 +108,23 @@ const VisualElementsSection = () => {
       .slice(0, 3);
 
     return { statusData, vendorData, timelineData, topProjects, topVendors };
-  }, [t]);
+  }, [intersectProjects, t]);
 
   const formatNumber = (num: number | undefined | null) => {
     if (num === undefined || num === null || isNaN(num)) return '0';
     return num.toLocaleString(language === 'JP' ? 'ja-JP' : language === 'PT' ? 'pt-BR' : language === 'ES' ? 'es-ES' : 'en-US');
   };
+
+  const getProfile = (name: string) => {
+    const normalized = name.toLowerCase().trim();
+    return vendorProfiles.find(p =>
+      p.name.toLowerCase() === normalized ||
+      normalized.includes(p.name.toLowerCase()) ||
+      p.name.toLowerCase().includes(normalized)
+    );
+  };
+
+  const isLoading = isProjectsLoading || isProfilesLoading;
 
   return (
     <section className="py-16 px-4 relative overflow-hidden bg-slate-50 dark:bg-[#020617] transition-colors duration-500">
@@ -165,51 +182,59 @@ const VisualElementsSection = () => {
                   </div>
                 </div>
               </div>
-              <div className="h-72 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={statusData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={90}
-                      paddingAngle={5}
-                      dataKey="value"
-                      label={({ name, value }) => `${value}`}
-                    >
-                      {statusData.map((entry, index) => (
-                        <Cell 
-                          key={`cell-${index}`} 
-                          fill={COLORS[index % COLORS.length]} 
-                          className="hover:opacity-80 transition-opacity cursor-pointer"
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'rgba(15, 23, 42, 0.9)', 
-                        backdropFilter: 'blur(8px)',
-                        border: '1px solid rgba(255, 255, 255, 0.1)', 
-                        borderRadius: '16px', 
-                        color: '#fff',
-                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
-                      }}
-                      itemStyle={{ color: '#fff', fontWeight: '600' }}
-                      formatter={(value: number) => [`${value} Projects`, '']}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
+              <div className="h-72 w-full flex items-center justify-center">
+                {isLoading ? (
+                  <Skeleton className="h-48 w-48 rounded-full" />
+                ) : (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={statusData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={90}
+                        paddingAngle={5}
+                        dataKey="value"
+                        label={({ name, value }) => `${value}`}
+                      >
+                        {statusData.map((entry, index) => (
+                          <Cell 
+                            key={`cell-${index}`} 
+                            fill={COLORS[index % COLORS.length]} 
+                            className="hover:opacity-80 transition-opacity cursor-pointer"
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                          backdropFilter: 'blur(8px)',
+                          border: '1px solid rgba(255, 255, 255, 0.1)', 
+                          borderRadius: '16px', 
+                          color: '#fff',
+                          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
+                        }}
+                        itemStyle={{ color: '#fff', fontWeight: '600' }}
+                        formatter={(value: number) => [`${value} Projects`, '']}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                )}
               </div>
               
               {/* Legend Grid */}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4">
-                {statusData.map((entry, index) => (
-                  <div key={entry.name} className="flex items-center gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
-                    <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{entry.name}</span>
-                  </div>
-                ))}
+                {isLoading ? (
+                  [1, 2, 3].map(i => <Skeleton key={i} className="h-4 w-20" />)
+                ) : (
+                  statusData.map((entry, index) => (
+                    <div key={entry.name} className="flex items-center gap-2">
+                      <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }} />
+                      <span className="text-[10px] font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{entry.name}</span>
+                    </div>
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
@@ -230,63 +255,69 @@ const VisualElementsSection = () => {
                 </div>
               </div>
               <div className="h-72 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={vendorData}
-                    layout="vertical"
-                    margin={{ top: 5, right: 60, left: 20, bottom: 5 }}
-                    barGap={8}
-                  >
-                    <defs>
-                      <linearGradient id="barGradient" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stopColor="#0033AD" />
-                        <stop offset="100%" stopColor="#1BAAD6" />
-                      </linearGradient>
-                    </defs>
-                    <XAxis type="number" hide />
-                    <YAxis 
-                      dataKey="name" 
-                      type="category" 
-                      stroke="#888" 
-                      fontSize={9} 
-                      width={120} 
-                      axisLine={false}
-                      tickLine={false}
-                      className="font-bold uppercase tracking-tight"
-                    />
-                    <Tooltip 
-                      cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                      content={({ active, payload }) => {
-                        if (active && payload && payload.length) {
-                          const data = payload[0].payload;
-                          return (
-                            <div className="bg-slate-900/90 backdrop-blur-xl p-4 rounded-2xl border border-white/10 shadow-2xl ring-1 ring-black/5">
-                              <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">{data.name}</p>
-                              <div className="space-y-1">
-                                <p className="text-xl font-black text-blue-400">
-                                  ₳{formatNumber(data.value)}
-                                </p>
-                                <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
-                                  {data.percentage.toFixed(1)}% of total budget
-                                </p>
-                              </div>
-                            </div>
-                          );
-                        }
-                        return null;
-                      }}
-                    />
-                    <Bar dataKey="value" fill="url(#barGradient)" radius={[0, 12, 12, 0]} barSize={24}>
-                      <LabelList 
-                        dataKey="value" 
-                        position="right" 
-                        formatter={(val: number) => `₳${(val / 1000000).toFixed(1)}M`}
-                        className="fill-gray-600 dark:fill-gray-400 font-bold text-[10px]"
-                        offset={10}
+                {isLoading ? (
+                  <div className="space-y-4 pt-4">
+                    {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-6 w-full" />)}
+                  </div>
+                ) : (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={vendorData}
+                      layout="vertical"
+                      margin={{ top: 5, right: 60, left: 20, bottom: 5 }}
+                      barGap={8}
+                    >
+                      <defs>
+                        <linearGradient id="barGradient" x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stopColor="#0033AD" />
+                          <stop offset="100%" stopColor="#1BAAD6" />
+                        </linearGradient>
+                      </defs>
+                      <XAxis type="number" hide />
+                      <YAxis 
+                        dataKey="name" 
+                        type="category" 
+                        stroke="#888" 
+                        fontSize={9} 
+                        width={120} 
+                        axisLine={false}
+                        tickLine={false}
+                        className="font-bold uppercase tracking-tight"
                       />
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
+                      <Tooltip 
+                        cursor={{ fill: 'rgba(255,255,255,0.05)' }}
+                        content={({ active, payload }) => {
+                          if (active && payload && payload.length) {
+                            const data = payload[0].payload;
+                            return (
+                              <div className="bg-slate-900/90 backdrop-blur-xl p-4 rounded-2xl border border-white/10 shadow-2xl ring-1 ring-black/5">
+                                <p className="text-xs font-black text-gray-400 uppercase tracking-widest mb-2">{data.name}</p>
+                                <div className="space-y-1">
+                                  <p className="text-xl font-black text-blue-400">
+                                    ₳{formatNumber(data.value)}
+                                  </p>
+                                  <p className="text-[10px] font-bold text-gray-500 uppercase tracking-wider">
+                                    {data.percentage.toFixed(1)}% of total budget
+                                  </p>
+                                </div>
+                              </div>
+                            );
+                          }
+                          return null;
+                        }}
+                      />
+                      <Bar dataKey="value" fill="url(#barGradient)" radius={[0, 12, 12, 0]} barSize={24}>
+                        <LabelList 
+                          dataKey="value" 
+                          position="right" 
+                          formatter={(val: number) => `₳${(val / 1000000).toFixed(1)}M`}
+                          className="fill-gray-600 dark:fill-gray-400 font-bold text-[10px]"
+                          offset={10}
+                        />
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -310,19 +341,23 @@ const VisualElementsSection = () => {
                   </Link>
                 </div>
                 <div className="space-y-4">
-                  {topProjects.map((project, idx) => (
-                    <div key={project.id} className="group">
-                      <Link to={`/projects/${project.id}`} className="flex items-center justify-between p-4 rounded-2xl bg-gray-500/5 hover:bg-cardano-blue/10 border border-transparent hover:border-cardano-blue/20 transition-all duration-300">
-                        <div className="flex-1 min-w-0 mr-4">
-                          <p className="text-sm font-bold text-gray-900 dark:text-white truncate group-hover:text-cardano-blue transition-colors">{project.projectName}</p>
-                          <p className="text-[11px] font-black text-blue-500 uppercase tracking-wider mt-0.5">₳{formatNumber(project.totalAmount)}</p>
-                        </div>
-                        <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
-                          <ArrowUpRight className="h-4 w-4 text-cardano-blue" />
-                        </div>
-                      </Link>
-                    </div>
-                  ))}
+                  {isLoading ? (
+                    [1, 2, 3].map(i => <Skeleton key={i} className="h-16 w-full rounded-2xl" />)
+                  ) : (
+                    topProjects.map((project, idx) => (
+                      <div key={project.id} className="group">
+                        <Link to={`/projects/${project.id}`} className="flex items-center justify-between p-4 rounded-2xl bg-gray-500/5 hover:bg-cardano-blue/10 border border-transparent hover:border-cardano-blue/20 transition-all duration-300">
+                          <div className="flex-1 min-w-0 mr-4">
+                            <p className="text-sm font-bold text-gray-900 dark:text-white truncate group-hover:text-cardano-blue transition-colors">{project.projectName}</p>
+                            <p className="text-[11px] font-black text-blue-500 uppercase tracking-wider mt-0.5">₳{formatNumber(project.totalAmount)}</p>
+                          </div>
+                          <div className="p-2 bg-white dark:bg-gray-800 rounded-xl shadow-sm opacity-0 group-hover:opacity-100 transition-all transform translate-x-2 group-hover:translate-x-0">
+                            <ArrowUpRight className="h-4 w-4 text-cardano-blue" />
+                          </div>
+                        </Link>
+                      </div>
+                    ))
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -343,33 +378,37 @@ const VisualElementsSection = () => {
                   </Link>
                 </div>
                 <div className="space-y-4">
-                  {topVendors.map((vendor, idx) => {
-                    const profile = getVendorProfile(vendor.name);
-                    return (
-                      <Link 
-                        key={vendor.name} 
-                        to={`/vendors/${encodeURIComponent(vendor.name)}`}
-                        className="flex justify-between items-center p-4 rounded-2xl bg-gray-500/5 hover:bg-emerald-500/10 border border-transparent hover:border-emerald-500/20 transition-all duration-300 group/vendor"
-                      >
-                        <div className="flex items-center gap-4 min-w-0 flex-1">
-                          <div className="w-10 h-10 rounded-xl overflow-hidden bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 flex-shrink-0 flex items-center justify-center p-1 shadow-sm group-hover/vendor:scale-110 transition-transform">
-                            <VendorLogo profile={profile} name={vendor.name} />
+                  {isLoading ? (
+                    [1, 2, 3].map(i => <Skeleton key={i} className="h-16 w-full rounded-2xl" />)
+                  ) : (
+                    topVendors.map((vendor, idx) => {
+                      const profile = getProfile(vendor.name);
+                      return (
+                        <Link 
+                          key={vendor.name} 
+                          to={`/vendors/${encodeURIComponent(vendor.name)}`}
+                          className="flex justify-between items-center p-4 rounded-2xl bg-gray-500/5 hover:bg-emerald-500/10 border border-transparent hover:border-emerald-500/20 transition-all duration-300 group/vendor"
+                        >
+                          <div className="flex items-center gap-4 min-w-0 flex-1">
+                            <div className="w-10 h-10 rounded-xl overflow-hidden bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 flex-shrink-0 flex items-center justify-center p-1 shadow-sm group-hover/vendor:scale-110 transition-transform">
+                              <VendorLogo profile={profile} name={vendor.name} />
+                            </div>
+                            <div className="min-w-0">
+                              <p className="text-sm font-bold text-gray-900 dark:text-white truncate group-hover/vendor:text-emerald-600 dark:group-hover/vendor:text-emerald-400 transition-colors">
+                                {vendor.name}
+                              </p>
+                            </div>
                           </div>
-                          <div className="min-w-0">
-                            <p className="text-sm font-bold text-gray-900 dark:text-white truncate group-hover/vendor:text-emerald-600 dark:group-hover/vendor:text-emerald-400 transition-colors">
-                              {vendor.name}
-                            </p>
+                          <div className="flex items-center gap-3">
+                            <Badge variant="secondary" className="px-3 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-none font-bold text-[10px] tracking-wide">
+                              {vendor.count} {vendor.count === 1 ? t('vendors.one_project') : t('vendors.multiple_projects')}
+                            </Badge>
+                            <ArrowUpRight className="h-4 w-4 text-emerald-500 opacity-0 group-hover/vendor:opacity-100 transition-all transform translate-x-1 group-hover/vendor:translate-x-0" />
                           </div>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <Badge variant="secondary" className="px-3 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-none font-bold text-[10px] tracking-wide">
-                            {vendor.count} {vendor.count === 1 ? t('vendors.one_project') : t('vendors.multiple_projects')}
-                          </Badge>
-                          <ArrowUpRight className="h-4 w-4 text-emerald-500 opacity-0 group-hover/vendor:opacity-100 transition-all transform translate-x-1 group-hover/vendor:translate-x-0" />
-                        </div>
-                      </Link>
-                    );
-                  })}
+                        </Link>
+                      );
+                    })
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -391,4 +430,3 @@ const VisualElementsSection = () => {
 };
 
 export default VisualElementsSection;
-

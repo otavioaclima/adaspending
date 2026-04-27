@@ -63,7 +63,6 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
     }
     
     // Prefetch page chunks for instant navigation
-    // This uses dynamic imports to tell Vite/Webpack to load the chunk in the background
     switch(href) {
       case '/overview': import('@/pages/Index'); break;
       case '/about': import('@/pages/About'); break;
@@ -79,52 +78,57 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
   const isHomePage = location.pathname === '/';
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-[#020617] transition-colors duration-500">
       {/* Disclaimer Top Bar */}
-      <div className="bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 py-1.5 px-4 text-center transition-colors shrink-0">
+      <div className="bg-gray-100 dark:bg-[#0f172a] border-b border-gray-200 dark:border-white/5 py-1.5 px-4 text-center transition-colors shrink-0">
         <div className="container mx-auto flex items-center justify-center gap-2">
           <div className="cardano-icon shrink-0" />
-          <p className="text-[10px] md:text-[11px] font-medium text-gray-500 dark:text-gray-400">
+          <p className="text-[10px] md:text-[11px] font-bold text-gray-500 dark:text-gray-400 tracking-wide">
             {t('layout.disclaimer')}
           </p>
         </div>
       </div>
 
 
-      {/* Header */}
-      <header className="bg-gradient-to-r from-[#131637] to-[#000111] border-b border-gray-800 sticky top-0 z-50 shrink-0">
+      {/* Header - Premium Dark Blue (Matching Hero) */}
+      <header className="bg-[#020617] dark:bg-[#020617] backdrop-blur-xl border-b border-white/10 sticky top-0 z-50 shrink-0 transition-all duration-500 shadow-xl">
         <div className="container mx-auto px-4 py-3 flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <Link 
               to="/" 
-              className="flex items-center"
+              className="flex items-center group"
               onMouseEnter={() => handlePrefetch('/')}
             >
               {isHomePage ? (
                 <img
                   src="/assets/257db3dc-2214-4178-afd2-70760c3899c4.png"
                   alt="Cardano Treasury Explorer"
-                  className="h-20 w-auto"
+                  className="h-16 md:h-20 w-auto transition-transform group-hover:scale-105"
                   fetchpriority="high"
                 />
               ) : (
                 <img
                   src="/assets/14b66eb5-72ae-42fe-94f7-70a49cc9ad69.png"
                   alt="ADAspending Logo"
-                  className="h-10 w-auto"
+                  className="h-8 md:h-10 w-auto transition-transform group-hover:scale-105"
                   fetchpriority="high"
                 />
               )}
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center space-x-4">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-1">
             {navigation.map((item) => (
               <Link
                 key={item.href}
                 to={item.href}
                 onMouseEnter={() => handlePrefetch(item.href)}
-                className={`nav-link !text-white hover:text-gray-200 ${location.pathname === item.href ? 'nav-link-active' : ''}`}
+                className={`px-4 py-2 text-sm font-bold rounded-xl transition-all duration-200 ${
+                  location.pathname === item.href 
+                    ? 'bg-white text-cardano-blue shadow-lg' 
+                    : 'text-white/80 hover:bg-white/10 hover:text-white'
+                }`}
               >
                 {item.name}
               </Link>
@@ -132,75 +136,78 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
           </div>
 
           <div className="flex items-center space-x-2">
+            {/* Language Switcher */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 hover:text-white gap-2 px-2 focus-visible:ring-0 focus-visible:ring-offset-0 transition-colors">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 gap-2 px-3 h-10 rounded-xl transition-all">
                   <span className="text-lg">
                     {language === 'EN' ? '🇺🇸' : language === 'PT' ? '🇧🇷' : language === 'ES' ? '🇪🇸' : '🇯🇵'}
                   </span>
-                  <span className="text-xs font-bold">{language}</span>
+                  <span className="text-xs font-black tracking-widest">{language}</span>
                   <ChevronDown className="h-3 w-3 opacity-50" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-[#131637] border-gray-800 min-w-[140px] [&_*]:text-white">
+              <DropdownMenuContent align="end" className="bg-white/95 dark:bg-[#0f172a]/95 border-gray-200 dark:border-white/10 min-w-[160px] backdrop-blur-xl rounded-2xl p-1 shadow-2xl">
                 <DropdownMenuItem
                   onClick={() => setLanguage('EN')}
-                  className="hover:!bg-white/10 focus:!bg-white/10 focus:!text-white !text-white cursor-pointer flex items-center gap-2"
+                  className="hover:!bg-cardano-blue/10 focus:!bg-cardano-blue/10 cursor-pointer flex items-center gap-3 py-2.5 px-4 rounded-xl transition-colors font-bold text-sm"
                 >
                   <span className="text-lg">🇺🇸</span>
-                  <span>English (EN)</span>
+                  <span>English</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => setLanguage('PT')}
-                  className="hover:!bg-white/10 focus:!bg-white/10 focus:!text-white !text-white cursor-pointer flex items-center gap-2"
+                  className="hover:!bg-cardano-blue/10 focus:!bg-cardano-blue/10 cursor-pointer flex items-center gap-3 py-2.5 px-4 rounded-xl transition-colors font-bold text-sm"
                 >
                   <span className="text-lg">🇧🇷</span>
-                  <span>Português (PT)</span>
+                  <span>Português</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => setLanguage('ES')}
-                  className="hover:!bg-white/10 focus:!bg-white/10 focus:!text-white !text-white cursor-pointer flex items-center gap-2"
+                  className="hover:!bg-cardano-blue/10 focus:!bg-cardano-blue/10 cursor-pointer flex items-center gap-3 py-2.5 px-4 rounded-xl transition-colors font-bold text-sm"
                 >
                   <span className="text-lg">🇪🇸</span>
-                  <span>Español (ES)</span>
+                  <span>Español</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => setLanguage('JP')}
-                  className="hover:!bg-white/10 focus:!bg-white/10 focus:!text-white !text-white cursor-pointer flex items-center gap-2"
+                  className="hover:!bg-cardano-blue/10 focus:!bg-cardano-blue/10 cursor-pointer flex items-center gap-3 py-2.5 px-4 rounded-xl transition-colors font-bold text-sm"
                 >
                   <span className="text-lg">🇯🇵</span>
-                  <span>日本語 (JP)</span>
+                  <span>日本語</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
+            {/* Theme Toggle */}
             <div className="hidden md:block">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="text-white hover:bg-white/10 hover:text-white transition-colors"
+                className="text-white hover:bg-white/10 h-10 w-10 rounded-xl transition-all"
                 title={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
               >
                 {theme === "dark" ? (
-                  <Sun className="h-[1.2rem] w-[1.2rem] transition-all" />
+                  <Sun className="h-5 w-5 text-amber-400" />
                 ) : (
-                  <Moon className="h-[1.2rem] w-[1.2rem] transition-all" />
+                  <Moon className="h-5 w-5" />
                 )}
                 <span className="sr-only">Toggle theme</span>
               </Button>
             </div>
 
+            {/* Mobile Menu Toggle */}
             <div className="md:hidden">
               <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="text-white hover:bg-white/10 hover:text-white transition-colors">
+                  <Button variant="ghost" size="icon" className="text-white hover:bg-white/10 h-10 w-10 rounded-xl transition-all">
                     <Menu className="h-6 w-6" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="bg-[#131637] border-gray-800 text-white p-0 overflow-y-auto">
-                  <SheetHeader className="p-6 border-b border-gray-800">
-                    <SheetTitle className="text-white text-left flex items-center gap-3">
+                <SheetContent side="right" className="bg-white dark:bg-[#020617] border-gray-200 dark:border-white/5 text-gray-900 dark:text-white p-0 overflow-y-auto">
+                  <SheetHeader className="p-6 border-b border-gray-100 dark:border-white/5">
+                    <SheetTitle className="text-left flex items-center gap-3">
                       <img 
                         src="/assets/14b66eb5-72ae-42fe-94f7-70a49cc9ad69.png" 
                         className="h-8 w-auto" 
@@ -215,29 +222,29 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
                         key={item.href}
                         to={item.href}
                         onClick={() => setIsMenuOpen(false)}
-                        className={`flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-200 group active:scale-[0.98] focus:outline-none focus:bg-white/10 ${
+                        className={`flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-200 group active:scale-[0.98] focus:outline-none ${
                           location.pathname === item.href 
                             ? 'bg-cardano-blue text-white shadow-lg shadow-cardano-blue/20' 
-                            : 'text-white hover:bg-white/5 active:bg-white/10'
+                            : 'text-gray-600 dark:text-white/70 hover:bg-cardano-blue/5 dark:hover:bg-white/5 active:bg-cardano-blue/10'
                         }`}
                       >
                         <item.icon className={`h-5 w-5 transition-transform duration-200 group-hover:scale-110 ${
-                          location.pathname === item.href ? 'text-white' : 'text-white/50'
+                          location.pathname === item.href ? 'text-white' : 'text-gray-400 dark:text-white/40'
                         }`} />
-                        <span className="font-semibold text-[15px]">{item.name}</span>
+                        <span className="font-bold text-[15px]">{item.name}</span>
                       </Link>
                     ))}
                   </nav>
 
-                  <div className="mt-4 pt-6 border-t border-gray-800 px-6 pb-8">
-                    <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/30 mb-4 px-1">{t('layout.theme')}</p>
-                    <div className="grid grid-cols-2 gap-3 bg-black/20 p-1.5 rounded-2xl border border-white/5">
+                  <div className="mt-4 pt-6 border-t border-gray-100 dark:border-white/5 px-6 pb-8">
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 dark:text-white/30 mb-4 px-1">{t('layout.theme')}</p>
+                    <div className="grid grid-cols-2 gap-3 bg-gray-50 dark:bg-black/20 p-1.5 rounded-2xl border border-gray-100 dark:border-white/5">
                        <Button 
                          variant="ghost" 
                          className={`flex items-center justify-center gap-2 h-11 rounded-xl transition-all duration-300 ${
                            theme === 'light' 
-                             ? 'bg-white text-[#131637] shadow-lg' 
-                             : 'text-white/60 hover:text-white hover:bg-white/5'
+                             ? 'bg-white dark:bg-gray-800 text-cardano-blue shadow-md' 
+                             : 'text-gray-500 dark:text-white/60 hover:text-cardano-blue dark:hover:text-white hover:bg-white/50'
                          }`}
                          onClick={() => setTheme('light')}
                        >
@@ -248,8 +255,8 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
                          variant="ghost" 
                          className={`flex items-center justify-center gap-2 h-11 rounded-xl transition-all duration-300 ${
                            theme === 'dark' 
-                             ? 'bg-white text-[#131637] shadow-lg' 
-                             : 'text-white/60 hover:text-white hover:bg-white/5'
+                             ? 'bg-cardano-blue text-white shadow-lg shadow-cardano-blue/20' 
+                             : 'text-gray-500 dark:text-white/60 hover:text-cardano-blue dark:hover:text-white hover:bg-white/50'
                          }`}
                          onClick={() => setTheme('dark')}
                        >
@@ -264,8 +271,6 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
           </div>
         </div>
       </header>
-
-
 
       {/* Main Content */}
       <main className={`flex-grow ${fullWidth ? 'w-full' : 'container mx-auto px-4 py-6'}`}>
@@ -313,4 +318,3 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
 };
 
 export default Layout;
-

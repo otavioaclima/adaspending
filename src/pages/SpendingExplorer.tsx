@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import {
   LayoutGrid,
@@ -25,8 +26,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Layout from '@/components/layout/Layout';
-import { intersectProjects } from '@/data/intersectData';
+import { useIntersectData } from '@/hooks/useIntersectData';
 import {
   Treemap,
   ResponsiveContainer,
@@ -52,10 +52,13 @@ const CustomizedContent = (props: any) => {
   const { root, depth, x, y, width, height, index, name, value, total } = props;
   const percent = ((value / total) * 100).toFixed(1);
 
-  if (!name || width < 80 || height < 40) return null;
+  if (!name || width < 5 || height < 5) return null;
 
   // Use index to pick color since data is sorted descending
   const colorIndex = Math.min(index, COLORS.length - 1);
+
+  const showText = width > 40 && height > 20;
+  const showPercent = width > 40 && height > 40;
 
   return (
     <g>
@@ -71,80 +74,111 @@ const CustomizedContent = (props: any) => {
           strokeOpacity: 0.2,
         }}
       />
-      <text
-        x={x + width / 2}
-        y={y + height / 2 - 8}
-        textAnchor="middle"
-        fill="#fff"
-        fontSize={Math.max(9, Math.min(width / 12, 13))}
-        fontWeight="600"
-        className="pointer-events-none tracking-normal"
-      >
-        {name.length > 25 ? name.substring(0, 22) + '...' : name}
-      </text>
-      <text
-        x={x + width / 2}
-        y={y + height / 2 + 10}
-        textAnchor="middle"
-        fill="#fff"
-        fontSize={Math.max(8, Math.min(width / 14, 11))}
-        fontWeight="400"
-        className="pointer-events-none opacity-90"
-      >
-        {percent}%
-      </text>
+      {showText && (
+        <text
+          x={x + width / 2}
+          y={y + height / 2 - (showPercent ? 8 : 0)}
+          textAnchor="middle"
+          fill="#fff"
+          fontSize={Math.max(7, Math.min(width / 10, 12))}
+          fontWeight="600"
+          className="pointer-events-none tracking-tight"
+        >
+          {name.length > (width / 8) ? name.substring(0, Math.floor(width / 8) - 2) + '..' : name}
+        </text>
+      )}
+      {showPercent && (
+        <text
+          x={x + width / 2}
+          y={y + height / 2 + 10}
+          textAnchor="middle"
+          fill="#fff"
+          fontSize={Math.max(6, Math.min(width / 12, 10))}
+          fontWeight="400"
+          className="pointer-events-none opacity-90"
+        >
+          {percent}%
+        </text>
+      )}
     </g>
   );
 };
 
 const SpendingExplorer = () => {
   const { t } = useLanguage();
+  const { data: intersectProjects = [] } = useIntersectData();
   const [viewMode, setViewMode] = useState<'treemap' | 'table'>('treemap');
   const [breakdown, setBreakdown] = useState<'vendor' | 'project'>('vendor');
   const [selectedYear, setSelectedYear] = useState('FY 2025');
   const [selectedQuarter, setSelectedQuarter] = useState(1);
 
-  // Treasury constant
+  // Treasury constants
+  const INTERSECT_TOTAL_BUDGET = 345531529;
   const OFFICIAL_TOTAL_ALLOCATED = 343741204;
 
-  // Group data based on breakdown selection with normalization
+  // Group data based on breakdown selection
   const chartData = useMemo(() => {
     const groups: Record<string, number> = {};
     
     intersectProjects.forEach(p => {
       let key = breakdown === 'vendor' ? p.vendor : p.projectName;
-      
-      // Normalization for Vendor view to ensure proper aggregation
-      if (breakdown === 'vendor') {
-        if (key.includes('Input Output Engineering')) key = 'Input Output Engineering';
-        if (key === 'IOG') key = 'Input Output Engineering';
-        if (key === 'OSC') key = 'Open Source Committee';
-        if (key.includes('Midgard')) key = 'Midgard';
-        if (key.startsWith('addr1')) key = 'Other / Direct (Address)';
-      }
-      
       groups[key] = (groups[key] || 0) + p.totalAmount;
     });
     
-    const trackedTotal = Object.values(groups).reduce((a, b) => a + b, 0);
+    // Calculate difference to official allocated total
+    const projectsTotal = Object.values(groups).reduce((a, b) => a + b, 0);
+    const adjustment = OFFICIAL_TOTAL_ALLOCATED - projectsTotal;
+    
+    if (adjustment > 0) {
+      groups[t('explorer.untracked_label')] = adjustment;
+    }
     
     return Object.entries(groups)
-      .map(([name, value]) => ({ name, value, total: trackedTotal }))
+      .map(([name, value]) => ({ 
+        name, 
+        value, 
+        total: OFFICIAL_TOTAL_ALLOCATED 
+      }))
       .sort((a, b) => b.value - a.value);
-  }, [breakdown]);
+  }, [intersectProjects, breakdown, t]);
 
   const totalTracked = useMemo(() => chartData.reduce((sum, item) => sum + item.value, 0), [chartData]);
 
   return (
-    <Layout fullWidth>
+    <>
       <div className="flex flex-col lg:flex-row lg:h-[calc(100vh-120px)] bg-white dark:bg-gray-950 overflow-y-auto lg:overflow-hidden border-t border-gray-100 dark:border-gray-800">
         {/* Site Sidebar Style */}
         <div className="w-full lg:w-64 bg-[#000111] text-white flex flex-col shrink-0 border-r border-gray-800">
-          <div className="p-4 border-b border-gray-800/50">
-            <Button variant="ghost" className="w-full justify-start text-gray-400 hover:text-white hover:bg-white/5 gap-3 font-medium text-sm">
+          <div className="p-4 space-y-4 border-b border-gray-800/50">
+            <Button variant="ghost" className="w-full justify-start text-gray-400 hover:text-white hover:bg-white/5 gap-3 font-medium text-sm" onClick={() => {
+              setSelectedYear('FY 2025');
+              setSelectedQuarter(1);
+              setBreakdown('vendor');
+            }}>
               <Home className="h-4 w-4" />
               {t('explorer.reset_explorer')}
             </Button>
+
+            <div className="space-y-2 px-1">
+              <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{t('explorer.breakdown_label')}</div>
+              <Select value={breakdown} onValueChange={(v: any) => setBreakdown(v)}>
+                <SelectTrigger className="w-full h-9 border-gray-800 bg-[#1e2532] text-gray-300 hover:text-white hover:bg-[#252d3d] text-[11px] font-bold shadow-sm transition-colors">
+                  <SelectValue placeholder={t('explorer.select_breakdown')} />
+                </SelectTrigger>
+                <SelectContent className="bg-[#000111] border-gray-800 text-white">
+                  <SelectItem value="vendor" className="text-xs font-bold focus:bg-white/10 focus:text-white">
+                    <div className="flex items-center gap-2">
+                      <Users className="h-3 w-3" /> {t('explorer.breakdown_vendor')}
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="project" className="text-xs font-bold focus:bg-white/10 focus:text-white">
+                    <div className="flex items-center gap-2">
+                      <Briefcase className="h-3 w-3" /> {t('explorer.breakdown_project')}
+                    </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="p-5 space-y-8 flex-1 overflow-y-auto">
@@ -195,7 +229,7 @@ const SpendingExplorer = () => {
                   <div className="h-1.5 w-1.5 bg-cardano-blue rounded-full" />
                 </div>
                 <div className="text-[11px] font-black text-gray-300">
-                  {t('explorer.exploring').toUpperCase()} {t(breakdown === 'vendor' ? 'explorer.all_vendors' : 'explorer.all_projects')}
+                  {t('explorer.exploring').toUpperCase()} {t(breakdown === 'vendor' ? 'explorer.all_vendors' : 'explorer.all_projects').toUpperCase()}
                 </div>
               </div>
               <div className="pl-7 text-xl font-black tracking-tight text-white">
@@ -220,8 +254,8 @@ const SpendingExplorer = () => {
               <div>
                 <h2 className="text-xl font-black text-gray-900 dark:text-white mb-0.5 flex items-center gap-3">
                   {t('explorer.spending_by')} {breakdown === 'vendor' ? t('explorer.breakdown_vendor') : t('explorer.breakdown_project')}
-                  <Badge variant="secondary" className="bg-gray-100 text-gray-500 font-black text-[10px] h-5">
-                    {chartData.length} {t('explorer.items')}
+                  <Badge variant="secondary" className="bg-cardano-blue/10 text-cardano-blue border-none h-6 px-3">
+                    {chartData.length} {t('projects.total')}
                   </Badge>
                 </h2>
                 <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">
@@ -234,102 +268,50 @@ const SpendingExplorer = () => {
                   <Info className="h-2.5 w-2.5" />
                 </div>
                 <div className="text-2xl font-black text-[#0033ad] dark:text-blue-400 tracking-tighter">
-                  ₳{OFFICIAL_TOTAL_ALLOCATED.toLocaleString()}
+                  ₳{INTERSECT_TOTAL_BUDGET.toLocaleString()}
                 </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between pt-4 border-t border-gray-50 gap-4">
-              <div className="flex items-center gap-6">
-                <div className="flex items-center gap-3 w-full lg:w-auto">
-                  <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest whitespace-nowrap">{t('explorer.breakdown_label')}:</span>
-                  <Select value={breakdown} onValueChange={(v: any) => setBreakdown(v)}>
-                    <SelectTrigger className="w-full lg:w-[160px] h-8 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-[11px] font-bold shadow-sm">
-                      <SelectValue placeholder={t('explorer.select_breakdown')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="vendor" className="text-xs font-bold">
-                        <div className="flex items-center gap-2">
-                          <Users className="h-3 w-3" /> {t('explorer.breakdown_vendor')}
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="project" className="text-xs font-bold">
-                        <div className="flex items-center gap-2">
-                          <Briefcase className="h-3 w-3" /> {t('explorer.breakdown_project')}
-                        </div>
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <div className="flex bg-gray-50 dark:bg-gray-800 p-1 rounded-lg border border-gray-100 dark:border-gray-700 shadow-inner">
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => setViewMode('treemap')}
-                  className={`h-8 px-4 font-black text-[11px] transition-all ${viewMode === 'treemap' ? 'bg-white dark:bg-gray-700 shadow-sm text-cardano-blue dark:text-blue-400' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
-                >
-                  <LayoutGrid className="h-3.5 w-3.5 mr-2" />
-                  {t('explorer.map_view')}
-                </Button>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => setViewMode('table')}
-                  className={`h-8 px-4 font-black text-[11px] transition-all ${viewMode === 'table' ? 'bg-white dark:bg-gray-700 shadow-sm text-cardano-blue dark:text-blue-400' : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'}`}
-                >
-                  <List className="h-3.5 w-3.5 mr-2" />
-                  {t('explorer.list_view')}
-                </Button>
               </div>
             </div>
           </div>
 
           <div className="p-4 lg:p-6 flex-1 lg:overflow-hidden flex flex-col min-h-[500px] lg:min-h-0">
-            {viewMode === 'treemap' ? (
-              <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 dark:border-gray-800 overflow-hidden flex-1 p-2 lg:p-6 h-[450px] lg:h-full min-h-[400px] lg:min-h-0">
-                <ResponsiveContainer width="100%" height="100%">
-                  <Treemap
-                    data={chartData}
-                    dataKey="value"
-                    aspectRatio={window.innerWidth < 768 ? 4 / 3 : 16 / 9}
-                    stroke="#fff"
-                    content={<CustomizedContent />}
-                  >
-                    <RechartsTooltip
-                      content={({ active, payload }) => {
-                        if (active && payload && payload.length) {
-                          const data = payload[0].payload;
-                          return (
-                            <div className="bg-[#000111] text-white p-4 rounded-xl shadow-2xl border border-gray-800 text-[11px] min-w-[200px]">
-                              <div className="text-gray-500 font-black uppercase tracking-widest text-[9px] mb-2">{(breakdown === 'vendor' ? t('explorer.breakdown_vendor') : t('explorer.breakdown_project')).toUpperCase()} {t('explorer.details')}</div>
-                              <div className="font-bold text-sm mb-2 leading-tight">{data.name}</div>
-                              <div className="h-px bg-gray-800 my-2" />
-                              <div className="flex justify-between items-center mb-1">
-                                <span className="text-gray-400">{t('vendors.allocation_label')}:</span>
-                                <span className="font-bold text-blue-400">₳{data.value.toLocaleString()}</span>
-                              </div>
-                              <div className="flex justify-between items-center">
-                                <span className="text-gray-400">{t('explorer.budget_share')}:</span>
-                                <span className="font-bold text-cardano-teal">
-                                  {((data.value / totalTracked) * 100).toFixed(2)}%
-                                </span>
-                              </div>
+            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 dark:border-gray-800 overflow-hidden flex-1 p-2 lg:p-6 h-[450px] lg:h-full min-h-[400px] lg:min-h-0">
+              <ResponsiveContainer width="100%" height="100%">
+                <Treemap
+                  data={chartData}
+                  dataKey="value"
+                  aspectRatio={window.innerWidth < 768 ? 4 / 3 : 16 / 9}
+                  stroke="#fff"
+                  content={<CustomizedContent />}
+                >
+                  <RechartsTooltip
+                    content={({ active, payload }) => {
+                      if (active && payload && payload.length) {
+                        const data = payload[0].payload;
+                        return (
+                          <div className="bg-[#000111] text-white p-4 rounded-xl shadow-2xl border border-gray-800 text-[11px] min-w-[200px]">
+                            <div className="text-gray-500 font-black uppercase tracking-widest text-[9px] mb-2">{(breakdown === 'vendor' ? t('explorer.breakdown_vendor') : t('explorer.breakdown_project')).toUpperCase()} {t('explorer.details')}</div>
+                            <div className="font-bold text-sm mb-2 leading-tight">{data.name}</div>
+                            <div className="h-px bg-gray-800 my-2" />
+                            <div className="flex justify-between items-center mb-1">
+                              <span className="text-gray-400">{t('vendors.allocation_label')}:</span>
+                              <span className="font-bold text-blue-400">₳{data.value.toLocaleString()}</span>
                             </div>
-                          );
-                        }
-                        return null;
-                      }}
-                    />
-                  </Treemap>
-                </ResponsiveContainer>
-              </div>
-            ) : (
-              <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 dark:border-gray-800 overflow-hidden flex-1 overflow-y-auto">
-                <IntersectProjectsTable />
-              </div>
-            )}
+                            <div className="flex justify-between items-center">
+                              <span className="text-gray-400">{t('explorer.budget_share')}:</span>
+                              <span className="font-bold text-cardano-teal">
+                                {((data.value / totalTracked) * 100).toFixed(2)}%
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      }
+                      return null;
+                    }}
+                  />
+                </Treemap>
+              </ResponsiveContainer>
+            </div>
 
             <div className="mt-4 flex items-center justify-between px-2">
               <div className="flex items-center gap-2 text-[10px] text-gray-400 font-bold uppercase tracking-wider">
@@ -337,13 +319,13 @@ const SpendingExplorer = () => {
                 {t('explorer.data_source')}
               </div>
               <div className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">
-                {t('explorer.showing')} {t('explorer.view_mode_label').replace('{mode}', viewMode.toUpperCase())} • {t('explorer.break_by')} {t('explorer.break_by_mode').replace('{mode}', breakdown.toUpperCase())}
+                {t('explorer.showing')} {t('explorer.map_view').toUpperCase()} • {t('explorer.break_by')} {t('explorer.break_by_mode').replace('{mode}', breakdown.toUpperCase())}
               </div>
             </div>
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 

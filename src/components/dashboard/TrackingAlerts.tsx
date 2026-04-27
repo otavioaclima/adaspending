@@ -1,144 +1,110 @@
+
 import React from "react";
-import { Link } from "react-router-dom";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { CheckCircle, Clock, PauseCircle, ArrowRight } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Clock, Briefcase, ArrowRight, Wallet } from "lucide-react";
-import { intersectProjects, IntersectProject } from "@/data/intersectData";
-import { useLanguage } from "@/contexts/LanguageContext";
-
-const ProjectShowcaseCard = ({ project, color }: { project: IntersectProject, color: "green" | "blue" | "orange" }) => {
-  const colorClasses = {
-    green: "bg-green-50/50 border-green-100 hover:border-green-300 hover:shadow-md dark:bg-green-950/20 dark:border-green-900/50",
-    blue: "bg-blue-50/50 border-blue-100 hover:border-blue-300 hover:shadow-md dark:bg-blue-950/20 dark:border-blue-900/50",
-    orange: "bg-orange-50/50 border-orange-100 hover:border-orange-300 hover:shadow-md dark:bg-orange-950/20 dark:border-orange-900/50",
-  };
-
-  return (
-    <Link to={`/projects/${project.id}`}>
-      <div className={`p-4 rounded-xl border-2 transition-all duration-300 mb-4 group ${colorClasses[color]}`}>
-        <div className="flex justify-between items-start mb-2">
-          <h4 className="font-bold text-sm text-gray-900 dark:text-gray-100 line-clamp-2 mb-2 leading-snug group-hover:text-cardano-blue transition-colors">
-            {project.projectName}
-          </h4>
-          <ArrowRight className="h-4 w-4 text-gray-400 group-hover:translate-x-1 group-hover:text-cardano-blue transition-all shrink-0 ml-2" />
-        </div>
-        <div className="space-y-2">
-          <div className="flex items-center text-xs text-gray-600 dark:text-gray-400">
-            <Briefcase className="h-3.5 w-3.5 mr-2 shrink-0 text-gray-400" />
-            <span className="truncate font-medium">{project.vendor}</span>
-          </div>
-          <div className="flex items-center justify-between pt-1 border-t border-gray-100 dark:border-gray-800">
-            <div className="flex items-center text-[11px] font-bold text-cardano-blue dark:text-blue-400">
-              <Wallet className="h-3.5 w-3.5 mr-1.5 shrink-0" />
-              <span>₳{project.totalAmount.toLocaleString()}</span>
-            </div>
-            {project.amountSpent > 0 && (
-              <span className="text-[10px] font-semibold text-gray-400 dark:text-gray-500">
-                {((project.amountSpent / project.totalAmount) * 100).toFixed(0)}%
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
-};
+import { Button } from "@/components/ui/button";
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useIntersectData } from "@/hooks/useIntersectData";
+import { Link } from "react-router-dom";
 
 const TrackingAlerts = () => {
   const { t } = useLanguage();
+  const { data: intersectProjects = [] } = useIntersectData();
+
+  // Categories based on Intersect project statuses
   const allCompleted = intersectProjects.filter(p => p.status.toLowerCase() === "completed");
   const allInProgress = intersectProjects.filter(p => p.status.toLowerCase() === "in progress");
-  const allPaused = intersectProjects.filter(p => p.status.toLowerCase() === "paused");
+  const allPaused = intersectProjects.filter(p => p.status.toLowerCase() === "paused" || p.status.toLowerCase() === "on hold");
 
-  const completed = allCompleted.slice(0, 3);
-  const inProgress = allInProgress.slice(0, 3);
-  const paused = allPaused.slice(0, 3);
+  const alerts = [
+    {
+      id: 1,
+      title: t('alerts.high_confidence'),
+      description: t('alerts.high_confidence_desc'),
+      color: "emerald",
+      icon: <CheckCircle className="h-6 w-6 text-emerald-500" />,
+      count: allCompleted.length,
+      projects: allCompleted.slice(0, 5),
+      href: "/projects?status=completed"
+    },
+    {
+      id: 2,
+      title: t('alerts.active_monitoring'),
+      description: t('alerts.active_monitoring_desc'),
+      color: "blue",
+      icon: <Clock className="h-6 w-6 text-blue-500" />,
+      count: allInProgress.length,
+      projects: allInProgress.slice(0, 5),
+      href: "/projects?status=in_progress"
+    },
+    {
+      id: 3,
+      title: t('alerts.paused_review'),
+      description: t('alerts.paused_review_desc'),
+      color: "amber",
+      icon: <PauseCircle className="h-6 w-6 text-amber-500" />,
+      count: allPaused.length,
+      projects: allPaused.slice(0, 5),
+      href: "/projects?status=paused"
+    }
+  ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {/* Completed Column */}
-      <Card className="border-none shadow-md bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center justify-between text-green-600">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-5 w-5" />
-              {t('status.completed')}
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {alerts.map((alert) => (
+        <Card key={alert.id} className="group relative overflow-hidden border-none shadow-xl bg-white dark:bg-[#0f172a] hover:shadow-2xl transition-all duration-500 flex flex-col rounded-[2.5rem] ring-1 ring-black/5 dark:ring-white/5">
+          {/* Subtle Accent Background Gradient */}
+          <div className={`absolute top-0 right-0 w-48 h-48 bg-${alert.color}-500/5 blur-[80px] rounded-full -mr-24 -mt-24 transition-colors duration-700`} />
+          
+          <CardHeader className="pb-4 pt-8 px-8 relative z-10">
+            <div className="flex justify-between items-start">
+              <div className="flex items-center gap-4">
+                <div className={`p-3.5 bg-${alert.color}-500/10 rounded-2xl group-hover:scale-110 transition-transform duration-500`}>
+                  {alert.icon}
+                </div>
+                <div className="max-w-[140px] md:max-w-none">
+                  <CardTitle className="text-xl font-black tracking-tight dark:text-white leading-none mb-1.5">{alert.title}</CardTitle>
+                  <CardDescription className="text-xs font-medium text-gray-500 dark:text-gray-400">
+                    {alert.description}
+                  </CardDescription>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <Link to={alert.href} className={`flex items-center gap-2 px-3 py-1.5 bg-${alert.color}-500/5 hover:bg-${alert.color}-500/10 border border-${alert.color}-500/20 rounded-xl group/view transition-all active:scale-95`}>
+                  <span className={`text-xs font-black text-${alert.color}-600 dark:text-${alert.color}-400`}>
+                    {alert.count}
+                  </span>
+                  <div className={`w-px h-3 bg-${alert.color}-500/20`} />
+                  <ArrowRight className={`h-3.5 w-3.5 text-${alert.color}-600 dark:text-${alert.color}-400 transition-transform group-hover/view:translate-x-1`} />
+                </Link>
+              </div>
             </div>
-            <Badge variant="secondary" className="bg-green-100 text-green-700 border-none text-[10px] h-5 px-1.5">
-              {allCompleted.length}
-            </Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {completed.length === 0 ? (
-            <p className="text-sm text-gray-500 italic">{t('showcase.no_completed')}</p>
-          ) : (
-            completed.map(p => (
-              <ProjectShowcaseCard key={p.id} project={p} color="green" />
-            ))
-          )}
-          <Link to="/projects?status=Completed" className="text-xs text-green-600 font-bold hover:underline mt-2 inline-block">
-            {t('showcase.view_all_completed')}
-          </Link>
-        </CardContent>
-      </Card>
+          </CardHeader>
 
-      {/* In Progress Column */}
-      <Card className="border-none shadow-md bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center justify-between text-blue-600">
-            <div className="flex items-center gap-2">
-              <Briefcase className="h-5 w-5" />
-              {t('status.in_progress')}
+          <CardContent className="flex-grow flex flex-col px-8 pb-8 pt-2 relative z-10">
+            <div className="space-y-2">
+              <div className="grid gap-2">
+                {alert.projects.map((project, idx) => (
+                  <Link 
+                    key={project.id || idx} 
+                    to={`/projects/${project.id}`}
+                    className="flex items-center justify-between p-3.5 rounded-2xl bg-gray-50 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 border border-transparent hover:border-gray-200 dark:hover:border-white/10 transition-all group/item shadow-sm hover:shadow-md"
+                  >
+                    <span className="text-[11px] font-bold text-gray-700 dark:text-gray-200 truncate pr-3 group-hover/item:text-cardano-blue transition-colors">
+                      {project.projectName.length > 45 ? project.projectName.substring(0, 45) + '...' : project.projectName}
+                    </span>
+                    <ArrowRight className="h-3.5 w-3.5 text-gray-300 group-hover/item:text-cardano-blue transition-all transform translate-x-1 opacity-0 group-hover/item:opacity-100 group-hover/item:translate-x-0" />
+                  </Link>
+                ))}
+              </div>
             </div>
-            <Badge variant="secondary" className="bg-blue-100 text-blue-700 border-none text-[10px] h-5 px-1.5">
-              {allInProgress.length}
-            </Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {inProgress.length === 0 ? (
-            <p className="text-sm text-gray-500 italic">{t('showcase.no_in_progress')}</p>
-          ) : (
-            inProgress.map(p => (
-              <ProjectShowcaseCard key={p.id} project={p} color="blue" />
-            ))
-          )}
-          <Link to="/projects?status=In Progress" className="text-xs text-blue-600 font-bold hover:underline mt-2 inline-block">
-            {t('showcase.view_all_in_progress')}
-          </Link>
-        </CardContent>
-      </Card>
-
-      {/* Paused Column */}
-      <Card className="border-none shadow-md bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg flex items-center justify-between text-orange-600">
-            <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5" />
-              {t('status.paused_projects')}
-            </div>
-            <Badge variant="secondary" className="bg-orange-100 text-orange-700 border-none text-[10px] h-5 px-1.5">
-              {allPaused.length}
-            </Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {paused.length === 0 ? (
-            <p className="text-sm text-gray-500 italic">{t('showcase.no_paused')}</p>
-          ) : (
-            paused.map(p => (
-              <ProjectShowcaseCard key={p.id} project={p} color="orange" />
-            ))
-          )}
-          <Link to="/projects?status=Paused" className="text-xs text-orange-600 font-bold hover:underline mt-2 inline-block">
-            {t('showcase.view_all_paused')}
-          </Link>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 };
 
 export default TrackingAlerts;
-

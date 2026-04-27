@@ -36,6 +36,9 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 import FeedbackModal from "./components/layout/FeedbackModal";
 import ScrollToTop from "./components/layout/ScrollToTop";
 import BackToTop from "./components/layout/BackToTop";
+import Layout from "./components/layout/Layout";
+import { PageSkeleton } from "./components/ui/PageSkeleton";
+import { Outlet } from "react-router-dom";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -48,11 +51,21 @@ const queryClient = new QueryClient({
   },
 });
 
-// Elegant loading fallback
-const LoadingFallback = () => (
-  <div className="fixed inset-0 flex items-center justify-center bg-white/20 dark:bg-black/20 backdrop-blur-[2px] z-[100]">
-    <div className="w-8 h-8 border-2 border-cardano-blue border-t-transparent rounded-full animate-spin" />
-  </div>
+// Layout wrapper for internal pages to persist header/footer
+const InternalLayout = () => (
+  <Layout>
+    <Suspense fallback={<PageSkeleton />}>
+      <Outlet />
+    </Suspense>
+  </Layout>
+);
+
+const FullWidthLayout = () => (
+  <Layout fullWidth>
+    <Suspense fallback={<PageSkeleton />}>
+      <Outlet />
+    </Suspense>
+  </Layout>
 );
 
 const App = () => (
@@ -65,16 +78,28 @@ const App = () => (
           <ScrollToTop />
           <ThemeProvider defaultTheme="light" storageKey="adaspending-theme">
             <AnalyticsProvider>
-              <Suspense fallback={<LoadingFallback />}>
-                <Routes>
-                  <Route path="/overview" element={<Index />} />
-                  <Route path="/" element={<Teaser />} />
+              <Routes>
+                {/* Home page has its own special layout */}
+                <Route 
+                  path="/" 
+                  element={
+                    <Suspense fallback={<div className="fixed inset-0 bg-[#0a0c2e] flex items-center justify-center"><div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin" /></div>}>
+                      <Teaser />
+                    </Suspense>
+                  } 
+                />
 
+                {/* Internal pages use persistent Layout */}
+                <Route element={<FullWidthLayout />}>
+                  <Route path="/explorer" element={<SpendingExplorer />} />
+                </Route>
+
+                <Route element={<InternalLayout />}>
+                  <Route path="/overview" element={<Index />} />
                   <Route path="/projects" element={<Projects />} />
                   <Route path="/projects/:id" element={<ProjectDetail />} />
                   <Route path="/vendors" element={<Vendors />} />
                   <Route path="/vendors/:id" element={<VendorDetail />} />
-                  <Route path="/explorer" element={<SpendingExplorer />} />
                   <Route path="/donations" element={<TreasuryDonations />} />
                   <Route path="/analytics" element={<Analytics />} />
                   <Route path="/privacy" element={<PrivacyPolicy />} />
@@ -87,10 +112,17 @@ const App = () => (
                   <Route path="/user-stories" element={<UserStories />} />
                   <Route path="/design-system" element={<DesignSystem />} />
                   <Route path="/ui-design" element={<UIDesign />} />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
+                </Route>
+
+                <Route 
+                  path="*" 
+                  element={
+                    <Suspense fallback={<PageSkeleton />}>
+                      <NotFound />
+                    </Suspense>
+                  } 
+                />
+              </Routes>
               <FeedbackModal />
               <BackToTop />
             </AnalyticsProvider>
@@ -102,3 +134,4 @@ const App = () => (
 );
 
 export default App;
+

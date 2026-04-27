@@ -1,12 +1,14 @@
+
 import React, { useMemo } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LabelList } from 'recharts';
-import { intersectProjects } from '@/data/intersectData';
+import { useIntersectData } from '@/hooks/useIntersectData';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Activity, TrendingUp, PieChart as PieChartIcon, BarChart3 } from 'lucide-react';
 
 const ChartsSection = () => {
   const { t } = useLanguage();
+  const { data: intersectProjects = [] } = useIntersectData();
   const COLORS = ['hsl(var(--cardano-blue))', '#1BAAD6', '#FF9F43', '#28C76F', '#EA5455', '#7367F0'];
 
   const statusData = useMemo(() => {
@@ -15,7 +17,7 @@ const ChartsSection = () => {
       counts[p.status] = (counts[p.status] || 0) + 1;
     });
     return Object.entries(counts).map(([name, value]) => ({ name, value }));
-  }, []);
+  }, [intersectProjects]);
 
   const totalAllocated = 345531529; // Match Analytics page constant
 
@@ -33,7 +35,7 @@ const ChartsSection = () => {
       }))
       .sort((a, b) => b.amount - a.amount)
       .slice(0, 8);
-  }, []);
+  }, [intersectProjects]);
 
   return (
     <section className="mb-10">

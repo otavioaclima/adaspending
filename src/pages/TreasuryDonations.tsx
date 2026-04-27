@@ -1,5 +1,5 @@
+
 import React, { useState } from 'react';
-import Layout from '@/components/layout/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -45,7 +45,7 @@ const TreasuryDonations = () => {
   const [viewMode, setViewMode] = useState<'donations' | 'epochs'>('donations');
 
   return (
-    <Layout>
+    <>
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <div className="bg-emerald-50 dark:bg-emerald-900/20 p-2 rounded-lg text-emerald-600 dark:text-emerald-400 transition-colors">
@@ -213,7 +213,7 @@ const TreasuryDonations = () => {
           </div>
         </CardContent>
       </Card>
-    </Layout>
+    </>
   );
 };
 

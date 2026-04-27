@@ -1,13 +1,12 @@
 
 import React from 'react';
-import Layout from '@/components/layout/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const Accessibility = () => {
   const { t } = useLanguage();
 
   return (
-    <Layout>
+    <>
       <div className="max-w-4xl mx-auto py-10 px-4 prose prose-blue dark:prose-invert lg:prose-lg">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 border-b dark:border-gray-800 pb-4">
           {t('accessibility.title')}
@@ -65,7 +64,7 @@ const Accessibility = () => {
           {t('cookies.last_updated')}: April 2024
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 

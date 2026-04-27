@@ -1,3 +1,4 @@
+import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Database, Zap, PieChart, Users, ChevronRight, ArrowDown } from 'lucide-react';
 import {

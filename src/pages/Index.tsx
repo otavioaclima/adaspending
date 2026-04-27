@@ -1,5 +1,4 @@
 import React from 'react';
-import Layout from '@/components/layout/Layout';
 import HeroSection from '@/components/index/HeroSection';
 import StatsSection from '@/components/index/StatsSection';
 const FundRoundSection = React.lazy(() => import('@/components/index/FundRoundSection'));
@@ -13,11 +12,10 @@ import Thermometer from "@/components/dashboard/Thermometer";
 const IntersectProjectsTable = React.lazy(() => import("@/components/dashboard/IntersectProjectsTable"));
 
 import { useLanguage } from '@/contexts/LanguageContext';
-
 const Index = () => {
   const { t } = useLanguage();
   return (
-    <Layout>
+    <>
       <HeroSection />
       <StatsSection />
       <section className="mb-8">
@@ -44,9 +42,7 @@ const Index = () => {
         <FundRoundSection />
         <ChartsSection />
       </React.Suspense>
-
-
-    </Layout>
+    </>
   );
 };
 

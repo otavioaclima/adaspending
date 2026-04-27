@@ -10,14 +10,15 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { intersectProjects } from "@/data/intersectData";
+import { useIntersectData } from "@/hooks/useIntersectData";
 import { Link } from "react-router-dom";
 import { ArrowUpDown, ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type SortConfig = {
-  key: keyof typeof intersectProjects[0] | null;
+  key: string | null;
   direction: 'asc' | 'desc';
 };
 
@@ -36,11 +37,12 @@ const getStatusColor = (status: string) => {
 
 const IntersectProjectsTable = () => {
   const { t } = useLanguage();
+  const { data: intersectProjects = [], isLoading } = useIntersectData();
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: null, direction: 'asc' });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const handleSort = (key: keyof typeof intersectProjects[0]) => {
+  const handleSort = (key: string) => {
     let direction: 'asc' | 'desc' = 'asc';
     if (sortConfig.key === key && sortConfig.direction === 'asc') {
       direction = 'desc';
@@ -49,23 +51,26 @@ const IntersectProjectsTable = () => {
     setCurrentPage(1); // Reset to first page on sort
   };
 
-  const sortedProjects = [...intersectProjects].sort((a, b) => {
-    if (!sortConfig.key) return 0;
-    
-    const aValue = a[sortConfig.key];
-    const bValue = b[sortConfig.key];
+  const sortedProjects = React.useMemo(() => {
+    const data = [...intersectProjects];
+    if (!sortConfig.key) return data;
 
-    if (typeof aValue === 'number' && typeof bValue === 'number') {
-      return sortConfig.direction === 'asc' ? aValue - bValue : bValue - aValue;
-    }
+    return data.sort((a: any, b: any) => {
+      const aValue = a[sortConfig.key!];
+      const bValue = b[sortConfig.key!];
 
-    const aStr = String(aValue).toLowerCase();
-    const bStr = String(bValue).toLowerCase();
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return sortConfig.direction === 'asc' ? aValue - bValue : bValue - aValue;
+      }
 
-    if (aStr < bStr) return sortConfig.direction === 'asc' ? -1 : 1;
-    if (aStr > bStr) return sortConfig.direction === 'asc' ? 1 : -1;
-    return 0;
-  });
+      const aStr = String(aValue).toLowerCase();
+      const bStr = String(bValue).toLowerCase();
+
+      if (aStr < bStr) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aStr > bStr) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [intersectProjects, sortConfig]);
 
   // Pagination logic
   const totalItems = sortedProjects.length;
@@ -73,10 +78,22 @@ const IntersectProjectsTable = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedProjects = sortedProjects.slice(startIndex, startIndex + itemsPerPage);
 
-  const SortIcon = ({ columnKey }: { columnKey: keyof typeof intersectProjects[0] }) => {
+  const SortIcon = ({ columnKey }: { columnKey: string }) => {
     if (sortConfig.key !== columnKey) return <ArrowUpDown className="ml-2 h-4 w-4 opacity-30" />;
     return sortConfig.direction === 'asc' ? <ArrowUp className="ml-2 h-4 w-4 text-cardano-blue dark:text-blue-400" /> : <ArrowDown className="ml-2 h-4 w-4 text-cardano-blue dark:text-blue-400" />;
   };
+
+  if (isLoading) {
+    return (
+      <Card className="w-full border-none shadow-xl bg-white dark:bg-gray-800/50 backdrop-blur-sm p-6">
+        <Skeleton className="h-8 w-64 mb-4" />
+        <Skeleton className="h-4 w-full mb-8" />
+        <div className="space-y-4">
+          {[1, 2, 3, 4, 5].map(i => <Skeleton key={i} className="h-12 w-full" />)}
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full border-none shadow-xl bg-white dark:bg-gray-800/50 backdrop-blur-sm transition-all overflow-hidden">

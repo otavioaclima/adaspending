@@ -1,6 +1,5 @@
 
 import React from 'react';
-import Layout from '@/components/layout/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent } from '@/components/ui/card';
 import { BarChart3, ShieldCheck, Database, Users } from 'lucide-react';
@@ -9,7 +8,7 @@ const About = () => {
   const { t } = useLanguage();
 
   return (
-    <Layout>
+    <>
       <div className="max-w-5xl mx-auto py-10 px-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
         {/* Hero Section */}
         <div className="text-center mb-16">
@@ -92,7 +91,7 @@ const About = () => {
           </p>
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 

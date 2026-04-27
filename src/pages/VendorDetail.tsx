@@ -1,3 +1,4 @@
+
 import React, { useMemo, useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Building, Wallet, Info, Globe, Mail, MessageCircle, Github, Twitter, ExternalLink, Activity, Eye, CheckCircle2, Clock, Briefcase, ArrowRight, LayoutGrid, Send } from 'lucide-react';
@@ -19,10 +20,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import Layout from '@/components/layout/Layout';
-import { intersectProjects } from '@/data/intersectData';
-import { getVendorProfile } from '@/data/vendorProfiles';
+import { useIntersectData } from '@/hooks/useIntersectData';
+import { useVendorProfiles } from '@/hooks/useVendorProfiles';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { PageSkeleton } from '@/components/ui/PageSkeleton';
 import VendorAccountingTable from '@/components/vendors/VendorAccountingTable';
 
 const getStatusIcon = (status: string) => {
@@ -50,16 +51,19 @@ const getStatusColor = (status: string) => {
 const VendorDetail = () => {
   const { t } = useLanguage();
   const { id } = useParams<{ id: string }>();
+  const { data: intersectProjects = [], isLoading: loadingProjects } = useIntersectData();
+  const { data: vendorProfiles = [], isLoading: loadingProfiles } = useVendorProfiles();
+  
   const vendorName = decodeURIComponent(id || '');
 
-  // Find all projects for this vendor
   const vendorProjects = useMemo(() => {
     return intersectProjects.filter(p => p.vendor === vendorName);
-  }, [vendorName]);
+  }, [intersectProjects, vendorName]);
 
   const [views, setViews] = useState(0);
 
   useEffect(() => {
+    if (!vendorName) return;
     const storageKey = `vendor_views_${vendorName.replace(/\s+/g, '_')}`;
     const storedViews = localStorage.getItem(storageKey);
 
@@ -67,7 +71,6 @@ const VendorDetail = () => {
     if (storedViews) {
       currentViews = parseInt(storedViews, 10);
     } else {
-      // Generate a realistic seed based on vendor name
       let seed = 0;
       for (let i = 0; i < vendorName.length; i++) {
         seed += vendorName.charCodeAt(i);
@@ -80,10 +83,15 @@ const VendorDetail = () => {
     setViews(nextViews);
   }, [vendorName]);
 
-  // Get vendor profile (logo, links, description)
-  const profile = useMemo(() => getVendorProfile(vendorName), [vendorName]);
+  const profile = useMemo(() => {
+    const normalized = vendorName.toLowerCase().trim();
+    return vendorProfiles.find(p =>
+      p.name.toLowerCase() === normalized ||
+      normalized.includes(p.name.toLowerCase()) ||
+      p.name.toLowerCase().includes(normalized)
+    );
+  }, [vendorProfiles, vendorName]);
 
-  // Aggregate stats
   const stats = useMemo(() => {
     if (vendorProjects.length === 0) return null;
     return {
@@ -97,7 +105,6 @@ const VendorDetail = () => {
     };
   }, [vendorProjects]);
 
-  // Aggregate transaction data over time
   const chartData = useMemo(() => {
     if (vendorProjects.length === 0) return [];
 
@@ -117,32 +124,29 @@ const VendorDetail = () => {
       }
     });
 
-    // Convert to array and sort by date
-    const sortedData = Object.keys(monthlyData)
+    return Object.keys(monthlyData)
       .map(key => ({
         date: key,
         amount: monthlyData[key],
         timestamp: new Date(key).getTime()
       }))
       .sort((a, b) => a.timestamp - b.timestamp);
-
-    return sortedData;
   }, [vendorProjects]);
+
+  if (loadingProjects || loadingProfiles) return <PageSkeleton />;
 
   if (vendorProjects.length === 0 || !stats) {
     return (
-      <Layout>
-        <div className="text-center py-20">
-          <div className="bg-gray-100 dark:bg-gray-800 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
-            <Building className="h-8 w-8 text-gray-400 dark:text-gray-500" />
-          </div>
-          <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">{t('vendor_detail.not_found')}</h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-6">{t('vendor_detail.not_found_desc').replace('{name}', vendorName)}</p>
-          <Button asChild>
-            <Link to="/vendors">{t('vendor_detail.back_to_vendors')}</Link>
-          </Button>
+      <div className="text-center py-20">
+        <div className="bg-gray-100 dark:bg-gray-800 rounded-full w-16 h-16 mx-auto flex items-center justify-center mb-4">
+          <Building className="h-8 w-8 text-gray-400 dark:text-gray-500" />
         </div>
-      </Layout>
+        <h1 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">{t('vendor_detail.not_found')}</h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-6">{t('vendor_detail.not_found_desc').replace('{name}', vendorName)}</p>
+        <Button asChild>
+          <Link to="/vendors">{t('vendor_detail.back_to_vendors')}</Link>
+        </Button>
+      </div>
     );
   }
 
@@ -160,31 +164,25 @@ const VendorDetail = () => {
   const hasLinks = profile && (profile.website || profile.email || profile.discord || profile.github || profile.twitter);
 
   return (
-    <Layout>
+    <>
       <div className="mb-6">
         <Link to="/vendors" className="inline-flex items-center text-sm text-cardano-blue dark:text-blue-300 hover:underline mb-4">
           <ArrowLeft className="h-4 w-4 mr-1" /> {t('vendor_detail.back_to_vendors')}
         </Link>
 
-        {/* Vendor Header Card */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">
           <div className="flex items-center gap-4">
-            {/* Logo or fallback icon */}
             {profile?.logo ? (
               <img
                 src={profile.logo}
                 alt={`${vendorName} logo`}
                 className="w-16 h-16 rounded-2xl object-cover border border-gray-100 dark:border-gray-700 shadow-sm"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).style.display = 'none';
-                  const next = (e.target as HTMLImageElement).nextElementSibling as HTMLElement | null;
-                  if (next) next.style.display = 'flex';
-                }}
               />
-            ) : null}
-            <div className={`bg-cardano-blue/10 dark:bg-cardano-blue/20 p-4 rounded-2xl text-cardano-blue dark:text-blue-300 ${profile?.logo ? 'hidden' : 'flex'}`}>
-              <Building className="h-8 w-8" />
-            </div>
+            ) : (
+              <div className="bg-cardano-blue/10 dark:bg-cardano-blue/20 p-4 rounded-2xl text-cardano-blue dark:text-blue-300">
+                <Building className="h-8 w-8" />
+              </div>
+            )}
 
             <div>
               <div className="flex items-center gap-2 mb-1">
@@ -205,7 +203,6 @@ const VendorDetail = () => {
             </div>
           </div>
 
-          {/* Quick action buttons */}
           <div className="flex flex-wrap gap-2">
             {profile?.website && (
               <a href={profile.website} target="_blank" rel="noopener noreferrer">
@@ -257,7 +254,6 @@ const VendorDetail = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Main column */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">
             <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
@@ -287,7 +283,6 @@ const VendorDetail = () => {
             </p>
           </div>
 
-          {/* Transactions Over Time Chart */}
           {chartData.length > 0 && (
             <Card className="border-gray-200 dark:border-gray-800 shadow-sm bg-white dark:bg-gray-800/40 transition-colors">
               <CardHeader className="border-b border-gray-100 dark:border-gray-700 pb-4">
@@ -347,7 +342,6 @@ const VendorDetail = () => {
             </Card>
           )}
 
-          {/* Project Showcase Section */}
           <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
@@ -393,7 +387,6 @@ const VendorDetail = () => {
                         </div>
                       </div>
 
-                      {/* Progress bar */}
                       <div className="pt-2">
                         <div className="flex justify-between text-[10px] mb-1">
                           <span className="text-gray-500 dark:text-gray-400">{t('projects.execution')}</span>
@@ -426,9 +419,7 @@ const VendorDetail = () => {
           <VendorAccountingTable transactionRows={transactionRows} totalFunded={stats.totalFunded} />
         </div>
 
-        {/* Sidebar */}
         <div className="space-y-6">
-          {/* Financial Summary Card */}
           <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">
             <h3 className="text-sm font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-6">
               {t('vendor_detail.financial_summary')}
@@ -540,7 +531,6 @@ const VendorDetail = () => {
             </div>
           </div>
 
-          {/* Contact Info Card */}
           {hasLinks && (
             <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">
               <h3 className="text-sm font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-5">
@@ -618,7 +608,7 @@ const VendorDetail = () => {
           )}
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 
