@@ -5,9 +5,11 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { useIntersectData } from '@/hooks/useIntersectData';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Activity, TrendingUp, PieChart as PieChartIcon, BarChart3 } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const ChartsSection = () => {
   const { t } = useLanguage();
+  const isMobile = useIsMobile();
   const { data: intersectProjects = [] } = useIntersectData();
   const COLORS = ['hsl(var(--cardano-blue))', '#1BAAD6', '#FF9F43', '#28C76F', '#EA5455', '#7367F0'];
 
@@ -27,12 +29,18 @@ const ChartsSection = () => {
       stats[p.vendor] = (stats[p.vendor] || 0) + p.totalAmount;
     });
     return Object.entries(stats)
-      .map(([name, amount]) => ({ 
-        name: name.length > 25 ? name.substring(0, 25) + '...' : name, 
-        fullName: name,
-        amount,
-        percent: (amount / totalAllocated) * 100
-      }))
+      .map(([name, amount]) => {
+        const displayName = isMobile 
+          ? (name.length > 18 ? name.substring(0, 18) + '...' : name)
+          : (name.length > 25 ? name.substring(0, 25) + '...' : name);
+        
+        return { 
+          name: displayName, 
+          fullName: name,
+          amount,
+          percent: (amount / totalAllocated) * 100
+        };
+      })
       .sort((a, b) => b.amount - a.amount)
       .slice(0, 8);
   }, [intersectProjects]);
@@ -99,7 +107,11 @@ const ChartsSection = () => {
           <CardContent>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart layout="vertical" data={vendorData}>
+                <BarChart 
+                  layout="vertical" 
+                  data={vendorData}
+                  margin={{ top: 5, right: isMobile ? 45 : 30, left: isMobile ? -25 : 0, bottom: 5 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="currentColor" className="text-gray-200 dark:text-gray-700" />
                   <XAxis type="number" hide />
                   <YAxis 
@@ -107,8 +119,8 @@ const ChartsSection = () => {
                     type="category" 
                     axisLine={false} 
                     tickLine={false} 
-                    width={150} 
-                    tick={{fill: 'currentColor', fontSize: 11}} 
+                    width={isMobile ? 100 : 150} 
+                    tick={{fill: 'currentColor', fontSize: isMobile ? 10 : 11}} 
                     className="text-gray-400 dark:text-gray-500" 
                   />
                   <Tooltip 
@@ -130,7 +142,7 @@ const ChartsSection = () => {
                       position="right" 
                       formatter={(v: number) => `${v.toFixed(1)}%`}
                       fill="currentColor"
-                      fontSize={10}
+                      fontSize={isMobile ? 9 : 10}
                       fontWeight={700}
                       dx={5}
                     />

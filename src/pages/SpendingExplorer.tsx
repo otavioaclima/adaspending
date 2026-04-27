@@ -9,8 +9,11 @@ import {
   Info,
   RotateCcw,
   Briefcase,
-  Users
+  Users,
+  Search,
+  SlidersHorizontal
 } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -50,9 +53,12 @@ const COLORS = [
 
 const CustomizedContent = (props: any) => {
   const { root, depth, x, y, width, height, index, name, value, total } = props;
-  const percent = ((value / total) * 100).toFixed(1);
+  
+  // Robust total calculation to avoid NaN
+  const safeTotal = total || value || 1;
+  const percent = ((value / safeTotal) * 100).toFixed(1);
 
-  if (!name || width < 5 || height < 5) return null;
+  if (!name || isNaN(x) || isNaN(y) || isNaN(width) || isNaN(height) || width < 2 || height < 2) return null;
 
   // Use index to pick color since data is sorted descending
   const colorIndex = Math.min(index, COLORS.length - 1);
@@ -106,11 +112,13 @@ const CustomizedContent = (props: any) => {
 
 const SpendingExplorer = () => {
   const { t } = useLanguage();
+  const isMobile = useIsMobile();
   const { data: intersectProjects = [] } = useIntersectData();
   const [viewMode, setViewMode] = useState<'treemap' | 'table'>('treemap');
   const [breakdown, setBreakdown] = useState<'vendor' | 'project'>('vendor');
   const [selectedYear, setSelectedYear] = useState('FY 2025');
   const [selectedQuarter, setSelectedQuarter] = useState(1);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   // Treasury constants
   const INTERSECT_TOTAL_BUDGET = 345531529;
@@ -155,33 +163,45 @@ const SpendingExplorer = () => {
               setSelectedQuarter(1);
               setBreakdown('vendor');
             }}>
-              <Home className="h-4 w-4" />
+              <RotateCcw className="h-4 w-4" />
               {t('explorer.reset_explorer')}
             </Button>
 
-            <div className="space-y-2 px-1">
-              <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{t('explorer.breakdown_label')}</div>
-              <Select value={breakdown} onValueChange={(v: any) => setBreakdown(v)}>
-                <SelectTrigger className="w-full h-9 border-gray-800 bg-[#1e2532] text-gray-300 hover:text-white hover:bg-[#252d3d] text-[11px] font-bold shadow-sm transition-colors">
-                  <SelectValue placeholder={t('explorer.select_breakdown')} />
-                </SelectTrigger>
-                <SelectContent className="bg-[#000111] border-gray-800 text-white">
-                  <SelectItem value="vendor" className="text-xs font-bold focus:bg-white/10 focus:text-white">
-                    <div className="flex items-center gap-2">
-                      <Users className="h-3 w-3" /> {t('explorer.breakdown_vendor')}
-                    </div>
-                  </SelectItem>
-                  <SelectItem value="project" className="text-xs font-bold focus:bg-white/10 focus:text-white">
-                    <div className="flex items-center gap-2">
-                      <Briefcase className="h-3 w-3" /> {t('explorer.breakdown_project')}
-                    </div>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="px-1">
+              <div className="text-[10px] font-black text-gray-500 uppercase tracking-widest mb-2">{t('explorer.breakdown_label')}</div>
+              <div className="flex items-center gap-2">
+                <div className="flex-1">
+                  <Select value={breakdown} onValueChange={(v: any) => setBreakdown(v)}>
+                    <SelectTrigger className="w-full h-9 border-gray-800 bg-[#1e2532] text-gray-300 hover:text-white hover:bg-[#252d3d] text-[11px] font-bold shadow-sm transition-colors">
+                      <SelectValue placeholder={t('explorer.select_breakdown')} />
+                    </SelectTrigger>
+                    <SelectContent className="bg-[#000111] border-gray-800 text-white">
+                      <SelectItem value="vendor" className="text-xs font-bold focus:bg-white/10 focus:text-white">
+                        <div className="flex items-center gap-2">
+                          <Users className="h-3 w-3" /> {t('explorer.breakdown_vendor')}
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="project" className="text-xs font-bold focus:bg-white/10 focus:text-white">
+                        <div className="flex items-center gap-2">
+                          <Briefcase className="h-3 w-3" /> {t('explorer.breakdown_project')}
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="icon"
+                  className={`lg:hidden h-9 w-9 border-gray-800 bg-[#1e2532] transition-all ${showMobileFilters ? 'text-cardano-blue bg-white' : 'text-gray-300'}`}
+                  onClick={() => setShowMobileFilters(!showMobileFilters)}
+                >
+                  <SlidersHorizontal className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
 
-          <div className="p-5 space-y-8 flex-1 overflow-y-auto">
+          <div className={`${showMobileFilters ? 'block' : 'hidden'} lg:block p-5 space-y-8 flex-1 overflow-y-auto`}>
             <div>
               <div className="flex items-center gap-2 text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-4">
                 <Calendar className="h-3 w-3" />
@@ -247,7 +267,7 @@ const SpendingExplorer = () => {
         </div>
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col bg-[#fcfdfe] dark:bg-gray-950 lg:overflow-hidden min-h-[500px]">
+        <div className="flex-1 flex flex-col bg-[#fcfdfe] dark:bg-gray-950 lg:overflow-hidden min-h-[650px] lg:min-h-0">
           {/* Header */}
           <div className="px-4 lg:px-8 pt-6 pb-4 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 shrink-0">
             <div className="flex flex-col lg:flex-row justify-between lg:items-end gap-4 mb-4">
@@ -274,15 +294,21 @@ const SpendingExplorer = () => {
             </div>
           </div>
 
-          <div className="p-4 lg:p-6 flex-1 lg:overflow-hidden flex flex-col min-h-[500px] lg:min-h-0">
-            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 dark:border-gray-800 overflow-hidden flex-1 p-2 lg:p-6 h-[450px] lg:h-full min-h-[400px] lg:min-h-0">
-              <ResponsiveContainer width="100%" height="100%">
+          <div className="p-4 lg:p-6 flex-1 lg:overflow-hidden flex flex-col min-h-[600px] lg:min-h-0 relative">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 dark:border-gray-800 overflow-hidden flex-1 p-2 lg:p-6 h-[550px] lg:h-full min-h-[550px] lg:min-h-0 relative">
+              {chartData.length === 0 ? (
+                <div className="h-full flex items-center justify-center text-gray-400 font-bold text-sm">
+                  {t('explorer.no_data_available') || 'Loading explorer data...'}
+                </div>
+              ) : (
+                <ResponsiveContainer width="100%" height="100%" minHeight={400}>
                 <Treemap
+                  key={`treemap-final-${breakdown}-${isMobile ? 'mb' : 'dt'}-${chartData.length}`}
                   data={chartData}
                   dataKey="value"
-                  aspectRatio={window.innerWidth < 768 ? 4 / 3 : 16 / 9}
                   stroke="#fff"
-                  content={<CustomizedContent />}
+                  content={CustomizedContent}
+                  isAnimationActive={false}
                 >
                   <RechartsTooltip
                     content={({ active, payload }) => {
@@ -311,6 +337,7 @@ const SpendingExplorer = () => {
                   />
                 </Treemap>
               </ResponsiveContainer>
+              )}
             </div>
 
             <div className="mt-4 flex items-center justify-between px-2">

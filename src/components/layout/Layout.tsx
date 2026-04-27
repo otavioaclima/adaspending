@@ -1,8 +1,9 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Sun, Moon, BarChart3, Award, Users, FileText, Vote, Briefcase, Twitter, Mail, Heart, Info, ChevronDown, ExternalLink, X, Menu } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Sun, Moon, BarChart3, Award, Users, FileText, Vote, Briefcase, Twitter, Mail, Heart, Info, ChevronDown, ExternalLink, X, Menu, Search } from 'lucide-react';
 import { useTheme } from '@/components/theme-provider';
 import {
   DropdownMenu,
@@ -28,8 +29,10 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
   const queryClient = useQueryClient();
   const { theme, setTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
+  const navigate = useNavigate();
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const dismissed = localStorage.getItem('adaspending-feedback-dismissed');
@@ -43,6 +46,14 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
   const handleCloseFeedback = () => {
     setShowFeedbackModal(false);
     localStorage.setItem('adaspending-feedback-dismissed', 'true');
+  };
+  
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      setIsMenuOpen(false);
+      navigate(`/projects?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
   };
 
   const navigation = [
@@ -83,7 +94,7 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
       <div className="bg-gray-100 dark:bg-[#0f172a] border-b border-gray-200 dark:border-white/5 py-1.5 px-4 text-center transition-colors shrink-0">
         <div className="container mx-auto flex items-center justify-center gap-2">
           <div className="cardano-icon shrink-0" />
-          <p className="text-[10px] md:text-[11px] font-bold text-gray-500 dark:text-gray-400 tracking-wide">
+          <p className="text-[10px] md:text-[11px] font-normal md:font-bold text-gray-500 dark:text-gray-400 tracking-wide whitespace-nowrap">
             {t('layout.disclaimer')}
           </p>
         </div>
@@ -205,8 +216,8 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
                     <Menu className="h-6 w-6" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="bg-white dark:bg-[#020617] border-gray-200 dark:border-white/5 text-gray-900 dark:text-white p-0 overflow-y-auto">
-                  <SheetHeader className="p-6 border-b border-gray-100 dark:border-white/5">
+                <SheetContent side="right" className="bg-white dark:bg-[#020617] border-gray-200 dark:border-white/5 text-gray-900 dark:text-white p-0 overflow-y-auto [&>button]:text-white [&>button]:opacity-100">
+                  <SheetHeader className="p-6 bg-[#020617] border-b border-white/10">
                     <SheetTitle className="text-left flex items-center gap-3">
                       <img 
                         src="/assets/14b66eb5-72ae-42fe-94f7-70a49cc9ad69.png" 
@@ -215,6 +226,19 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
                       />
                     </SheetTitle>
                   </SheetHeader>
+
+                  <div className="p-4 border-b border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-black/10">
+                    <div className="relative group">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 group-focus-within:text-cardano-blue transition-colors" />
+                      <Input 
+                        placeholder={t('hero.search_placeholder')}
+                        className="pl-10 h-11 bg-white dark:bg-white/5 border-gray-200 dark:border-white/10 rounded-xl focus-visible:ring-cardano-blue shadow-sm"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                      />
+                    </div>
+                  </div>
                   
                   <nav className="flex flex-col p-4 gap-1">
                     {navigation.map((item) => (
