@@ -19,7 +19,7 @@ const ChartsSection = () => {
     return Object.entries(counts).map(([name, value]) => ({ name, value }));
   }, [intersectProjects]);
 
-  const totalAllocated = 345531529; // Match Analytics page constant
+  const totalAllocated = 343741204; // Match unified treasury budget
 
   const vendorData = useMemo(() => {
     const stats: Record<string, number> = {};

@@ -55,7 +55,7 @@ const VisualElementsSection = () => {
     }));
 
     // 2. Vendor Distribution (Top 6 by total budget)
-    const totalAllocated = intersectProjects.reduce((sum, p) => sum + p.totalAmount, 0);
+    const totalAllocated = 343741204; // Official unified budget
     
     const vendorStats = intersectProjects.reduce((acc, p) => {
       if (!acc[p.vendor]) {
