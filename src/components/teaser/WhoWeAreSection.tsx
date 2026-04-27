@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Users, Globe, Award, ExternalLink, Building, Heart } from 'lucide-react';
+import { Users, Globe, Award, ExternalLink, Building, Heart, CheckCircle2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -10,113 +9,121 @@ const WhoWeAreSection = () => {
   const { t } = useLanguage();
 
   return (
-    <section id="who-we-are" className="py-24 px-4 bg-gradient-to-br from-white to-cardano-light dark:from-black dark:to-gray-900">
-      <div className="container mx-auto">
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <Badge variant="outline" className="mb-4 px-3 py-1 bg-white/80 dark:bg-gray-800 border-cardano-teal/30 text-cardano-blue font-medium">
+    <section id="who-we-are" className="py-20 px-4 relative overflow-hidden bg-white dark:bg-[#020617] transition-colors duration-500">
+      {/* Background decoration */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-cardano-blue/5 dark:bg-cardano-blue/10 blur-[100px] rounded-full" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/5 dark:bg-purple-500/10 blur-[100px] rounded-full" />
+        <div 
+          className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]" 
+          style={{ 
+            backgroundImage: `linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)`,
+            backgroundSize: '40px 40px'
+          }} 
+        />
+      </div>
+
+      <div className="container mx-auto relative z-10">
+        <div className="max-w-4xl mx-auto text-center mb-12">
+          <Badge variant="outline" className="mb-6 px-4 py-1.5 border-cardano-blue/30 text-cardano-blue bg-cardano-blue/5 backdrop-blur-md rounded-full font-bold uppercase tracking-widest text-[10px]">
             {t('teaser.who_we_are.badge')}
           </Badge>
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-cardano-dark dark:text-white">{t('teaser.who_we_are.title')}</h2>
-          <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
+          <h2 className="text-4xl md:text-6xl font-black mb-8 text-gray-900 dark:text-white tracking-tight">
+            {t('teaser.who_we_are.title').split(' ')[0]} <span className="bg-gradient-to-r from-cardano-blue to-blue-400 bg-clip-text text-transparent">{t('teaser.who_we_are.title').split(' ').slice(1).join(' ')}</span>
+          </h2>
+          <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed font-medium">
             {t('teaser.who_we_are.subtitle')}
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-          <Card className="bg-white/90 dark:bg-gray-800 border-none shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-            <div className="h-2 bg-cardano-blue" aria-hidden="true" />
-            <CardContent className="p-8">
-              <div className="rounded-full bg-cardano-light dark:bg-gray-700 p-3 w-14 h-14 flex items-center justify-center mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+          {/* Card 1: Experienced Team */}
+          <Card className="group relative bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl border-gray-200/50 dark:border-white/10 shadow-2xl hover:shadow-cardano-blue/10 transition-all duration-500 rounded-[2.5rem] overflow-hidden ring-1 ring-black/5 dark:ring-white/5">
+            <div className="absolute inset-0 bg-gradient-to-br from-cardano-blue/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <CardContent className="p-10 relative z-10 flex flex-col h-full">
+              <div className="rounded-2xl bg-cardano-blue/10 dark:bg-cardano-blue/20 p-4 w-16 h-16 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500">
                 <Building className="h-8 w-8 text-cardano-blue" />
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-cardano-dark dark:text-white">{t('teaser.who_we_are.card1.title')}</h3>
-              <p className="text-gray-700 dark:text-gray-300 mb-6">
+              <h3 className="text-2xl font-black mb-4 text-gray-900 dark:text-white tracking-tight">{t('teaser.who_we_are.card1.title')}</h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-8 font-medium leading-relaxed">
                 {t('teaser.who_we_are.card1.desc')}
               </p>
-              <div className="flex flex-wrap gap-2 mt-auto">
-                <Badge variant="secondary" className="bg-cardano-light/70 dark:bg-gray-700/70 text-cardano-blue dark:text-cardano-light hover:bg-cardano-light">{t('teaser.who_we_are.card1.badge1')}</Badge>
-                <Badge variant="secondary" className="bg-cardano-light/70 dark:bg-gray-700/70 text-cardano-blue dark:text-cardano-light hover:bg-cardano-light">{t('teaser.who_we_are.card1.badge2')}</Badge>
+              
+              <div className="mt-auto space-y-6">
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="secondary" className="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-none font-bold text-[10px] uppercase tracking-wider">{t('teaser.who_we_are.card1.badge1')}</Badge>
+                  <Badge variant="secondary" className="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-none font-bold text-[10px] uppercase tracking-wider">{t('teaser.who_we_are.card1.badge2')}</Badge>
+                </div>
+                
+                <div className="pt-6 border-t border-gray-100 dark:border-white/5 flex gap-3">
+                  <a href="https://governancespace.com" target="_blank" rel="noopener noreferrer" className="p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:text-cardano-blue transition-colors" title="GovernanceSpace">
+                    <Globe className="h-4 w-4" />
+                  </a>
+                  <a href="https://cardanofeed.com" target="_blank" rel="noopener noreferrer" className="p-2 bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:text-cardano-blue transition-colors" title="CardanoFeed">
+                    <ExternalLink className="h-4 w-4" />
+                  </a>
+                </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-white/90 dark:bg-gray-800 border-none shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-            <div className="h-2 bg-cardano-teal" aria-hidden="true" />
-            <CardContent className="p-8">
-              <div className="rounded-full bg-cardano-light dark:bg-gray-700 p-3 w-14 h-14 flex items-center justify-center mb-6">
-                <Globe className="h-8 w-8 text-cardano-teal" />
+          {/* Card 2: Our Mission */}
+          <Card className="group relative bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl border-gray-200/50 dark:border-white/10 shadow-2xl hover:shadow-emerald-500/10 transition-all duration-500 rounded-[2.5rem] overflow-hidden ring-1 ring-black/5 dark:ring-white/5">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <CardContent className="p-10 relative z-10 flex flex-col h-full">
+              <div className="rounded-2xl bg-emerald-500/10 dark:bg-emerald-500/20 p-4 w-16 h-16 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500">
+                <Globe className="h-8 w-8 text-emerald-500" />
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-cardano-dark dark:text-white">{t('teaser.who_we_are.card2.title')}</h3>
-              <p className="text-gray-700 dark:text-gray-300 mb-6">
+              <h3 className="text-2xl font-black mb-4 text-gray-900 dark:text-white tracking-tight">{t('teaser.who_we_are.card2.title')}</h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-8 font-medium leading-relaxed">
                 {t('teaser.who_we_are.card2.desc')}
               </p>
-              <div className="flex flex-wrap gap-2 mt-auto">
-                <Badge variant="secondary" className="bg-cardano-light/70 dark:bg-gray-700/70 text-cardano-teal dark:text-cardano-light hover:bg-cardano-light">{t('teaser.who_we_are.card2.badge1')}</Badge>
-                <Badge variant="secondary" className="bg-cardano-light/70 dark:bg-gray-700/70 text-cardano-teal dark:text-cardano-light hover:bg-cardano-light">{t('teaser.who_we_are.card2.badge2')}</Badge>
+              <div className="mt-auto flex flex-wrap gap-2">
+                <Badge variant="secondary" className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border-none font-bold text-[10px] uppercase tracking-wider">{t('teaser.who_we_are.card2.badge1')}</Badge>
+                <Badge variant="secondary" className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400 border-none font-bold text-[10px] uppercase tracking-wider">{t('teaser.who_we_are.card2.badge2')}</Badge>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-white/90 dark:bg-gray-800 border-none shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-            <div className="h-2 bg-cardano-coral" aria-hidden="true" />
-            <CardContent className="p-8">
-              <div className="rounded-full bg-cardano-light dark:bg-gray-700 p-3 w-14 h-14 flex items-center justify-center mb-6">
-                <Heart className="h-8 w-8 text-cardano-coral" />
+          {/* Card 3: Our Commitment */}
+          <Card className="group relative bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl border-gray-200/50 dark:border-white/10 shadow-2xl hover:shadow-orange-500/10 transition-all duration-500 rounded-[2.5rem] overflow-hidden ring-1 ring-black/5 dark:ring-white/5">
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <CardContent className="p-10 relative z-10 flex flex-col h-full">
+              <div className="rounded-2xl bg-orange-500/10 dark:bg-orange-500/20 p-4 w-16 h-16 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500">
+                <Heart className="h-8 w-8 text-orange-500" />
               </div>
-              <h3 className="text-2xl font-bold mb-4 text-cardano-dark dark:text-white">{t('teaser.who_we_are.card3.title')}</h3>
-              <p className="text-gray-700 dark:text-gray-300 mb-6">
+              <h3 className="text-2xl font-black mb-4 text-gray-900 dark:text-white tracking-tight">{t('teaser.who_we_are.card3.title')}</h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-8 font-medium leading-relaxed">
                 {t('teaser.who_we_are.card3.desc')}
               </p>
-              <div className="flex flex-wrap gap-2 mt-auto">
-                <Badge variant="secondary" className="bg-cardano-light/70 dark:bg-gray-700/70 text-cardano-coral dark:text-cardano-light hover:bg-cardano-light">{t('teaser.who_we_are.card3.badge1')}</Badge>
-                <Badge variant="secondary" className="bg-cardano-light/70 dark:bg-gray-700/70 text-cardano-coral dark:text-cardano-light hover:bg-cardano-light">{t('teaser.who_we_are.card3.badge2')}</Badge>
+              <div className="mt-auto flex flex-wrap gap-2">
+                <Badge variant="secondary" className="bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 border-none font-bold text-[10px] uppercase tracking-wider">{t('teaser.who_we_are.card3.badge1')}</Badge>
+                <Badge variant="secondary" className="bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 border-none font-bold text-[10px] uppercase tracking-wider">{t('teaser.who_we_are.card3.badge2')}</Badge>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        <div className="max-w-4xl mx-auto">
-          <Card className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-none shadow-xl overflow-hidden border dark:border-gray-700">
-            <div className="p-8 md:p-10">
-              <div className="flex flex-col md:flex-row items-center gap-10">
-                <div className="flex-shrink-0 mb-6 md:mb-0">
-                  <Users className="h-20 w-20 text-cardano-blue" />
-                </div>
-                <div>
-                  <h3 className="text-2xl font-bold mb-3 text-cardano-dark dark:text-white">{t('teaser.who_we_are.trust.title')}</h3>
-                  <ul className="space-y-3 text-gray-700 dark:text-gray-300">
-                    <li className="flex items-start">
-                      <Award className="h-5 w-5 text-cardano-blue mr-3 mt-0.5 flex-shrink-0" />
-                      <span>{t('teaser.who_we_are.trust.item1')}</span>
-                    </li>
-                    <li className="flex items-start">
-                      <Award className="h-5 w-5 text-cardano-blue mr-3 mt-0.5 flex-shrink-0" />
-                      <span>{t('teaser.who_we_are.trust.item2')}</span>
-                    </li>
-                    <li className="flex items-start">
-                      <Award className="h-5 w-5 text-cardano-blue mr-3 mt-0.5 flex-shrink-0" />
-                      <span>{t('teaser.who_we_are.trust.item3')}</span>
-                    </li>
-                  </ul>
-                  
-                  <div className="mt-8 flex flex-wrap gap-4">
-                    <Button className="bg-cardano-blue hover:bg-cardano-blue/90" asChild>
-                      <a href="https://governancespace.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                        <span>GovernanceSpace</span>
-                        <ExternalLink className="h-4 w-4" />
-                      </a>
-                    </Button>
-                    <Button className="bg-cardano-blue hover:bg-cardano-blue/90" asChild>
-                      <a href="https://cardanofeed.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                        <span>CardanoFeed</span>
-                        <ExternalLink className="h-4 w-4" />
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </div>
+        {/* Credibility Banner - Replacing the old Trust card */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 py-12 px-8 bg-gray-50/50 dark:bg-gray-900/50 rounded-[3rem] border border-gray-200/50 dark:border-white/5 backdrop-blur-sm">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-cardano-blue/10 rounded-2xl">
+              <Award className="h-6 w-6 text-cardano-blue" />
             </div>
-          </Card>
+            <p className="text-sm font-bold text-gray-700 dark:text-gray-300">{t('teaser.who_we_are.trust.item1')}</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-purple-500/10 rounded-2xl">
+              <CheckCircle2 className="h-6 w-6 text-purple-500" />
+            </div>
+            <p className="text-sm font-bold text-gray-700 dark:text-gray-300">{t('teaser.who_we_are.trust.item2')}</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-emerald-500/10 rounded-2xl">
+              <Users className="h-6 w-6 text-emerald-500" />
+            </div>
+            <p className="text-sm font-bold text-gray-700 dark:text-gray-300">{t('teaser.who_we_are.trust.item3')}</p>
+          </div>
         </div>
       </div>
     </section>

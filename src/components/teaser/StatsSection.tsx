@@ -50,8 +50,8 @@ const StatsSection = () => {
   };
 
   return (
-    <div className="w-full py-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+    <div className="w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Treasury Size Card */}
         <Card className="group relative bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl border-gray-200/50 dark:border-white/10 shadow-xl hover:shadow-cardano-blue/20 transition-all duration-500 rounded-3xl overflow-hidden ring-1 ring-black/5 dark:ring-white/5">
           <div className="absolute inset-0 bg-gradient-to-br from-cardano-blue/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

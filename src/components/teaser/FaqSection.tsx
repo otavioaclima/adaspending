@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { HelpCircle } from 'lucide-react';
+import { HelpCircle, ChevronDown, MessageCircle, Mail, ArrowRight } from 'lucide-react';
 import {
   Accordion,
   AccordionContent,
@@ -8,6 +7,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 const FaqSection = () => {
   const { t } = useLanguage();
@@ -40,34 +41,44 @@ const FaqSection = () => {
   ];
 
   return (
-    <section className="py-16 px-4 bg-gray-50 dark:bg-black">
-      <div className="container mx-auto max-w-4xl">
+    <section className="py-20 px-4 bg-slate-50 dark:bg-[#020617] relative overflow-hidden transition-colors duration-500">
+      {/* Background decoration */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-cardano-blue/5 dark:bg-cardano-blue/10 blur-[120px] rounded-full" />
+      </div>
+
+      <div className="container mx-auto relative z-10 max-w-4xl">
         <div className="text-center mb-12">
-          <div className="flex justify-center mb-4">
-            <div className="bg-cardano-blue/10 p-3 rounded-full">
-              <HelpCircle className="h-8 w-8 text-cardano-blue" />
-            </div>
-          </div>
-          <h2 className="text-3xl font-bold mb-4 dark:text-white">{t('teaser.faq.title')}</h2>
-          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <Badge variant="outline" className="mb-6 px-4 py-1.5 border-cardano-blue/30 text-cardano-blue bg-cardano-blue/5 backdrop-blur-md rounded-full font-bold uppercase tracking-widest text-[10px]">
+            FAQ
+          </Badge>
+          <h2 className="text-4xl md:text-6xl font-black mb-8 text-gray-900 dark:text-white tracking-tight leading-tight">
+            {t('teaser.faq.title').split(' ')[0]} <span className="bg-gradient-to-r from-cardano-blue to-blue-400 bg-clip-text text-transparent">{t('teaser.faq.title').split(' ').slice(1).join(' ')}</span>
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto font-medium">
             {t('teaser.faq.description')}
           </p>
         </div>
         
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border dark:border-gray-700">
-          <Accordion type="single" collapsible className="w-full" defaultValue="item-0">
+        <div className="space-y-6">
+          <Accordion type="single" collapsible className="w-full space-y-4" defaultValue="item-0">
             {faqs.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`} className="border-b dark:border-gray-700 last:border-none">
-                <AccordionTrigger className="text-left px-6 text-gray-800 dark:text-gray-200 hover:text-cardano-blue dark:hover:text-cardano-blue">
-                  {faq.question}
+              <AccordionItem 
+                key={index} 
+                value={`item-${index}`} 
+                className="border-none bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl border border-gray-200/50 dark:border-white/5 rounded-2xl px-6 shadow-sm hover:shadow-md hover:border-cardano-blue/30 transition-all duration-300"
+              >
+                <AccordionTrigger className="text-left py-6 text-lg font-black text-gray-900 dark:text-white hover:no-underline group transition-colors">
+                  <span className="flex-1 pr-4">{faq.question}</span>
                 </AccordionTrigger>
-                <AccordionContent className="px-6 text-gray-600 dark:text-gray-400">
+                <AccordionContent className="pb-6 text-gray-600 dark:text-gray-400 font-medium leading-relaxed">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
             ))}
           </Accordion>
         </div>
+
       </div>
     </section>
   );

@@ -1,5 +1,6 @@
 export default {
   'nav.overview': 'Resumen',
+  'common.view_all': 'Ver todos',
   'nav.projects': 'Proyectos',
   'nav.vendors': 'Proveedores',
   'nav.explorer': 'Explorador de Gastos',

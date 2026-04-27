@@ -110,7 +110,7 @@ const VisualElementsSection = () => {
   };
 
   return (
-    <section className="py-24 px-4 relative overflow-hidden bg-slate-50 dark:bg-[#020617] transition-colors duration-500">
+    <section className="py-16 px-4 relative overflow-hidden bg-slate-50 dark:bg-[#020617] transition-colors duration-500">
       {/* Modern Tech Background Elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         {/* Mesh Gradients */}
@@ -129,7 +129,7 @@ const VisualElementsSection = () => {
       </div>
       
       <div className="container mx-auto relative z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-14">
           <Badge variant="outline" className="mb-4 px-4 py-1 border-cardano-blue/30 text-cardano-blue bg-cardano-blue/5 backdrop-blur-md rounded-full animate-in fade-in slide-in-from-bottom-4 duration-700">
             {t('teaser.visuals.disclaimer')}
           </Badge>
@@ -145,11 +145,11 @@ const VisualElementsSection = () => {
         </div>
         
         {/* Real Stats Section */}
-        <div className="mb-12">
+        <div className="mb-14">
           <StatsSection />
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-14">
           {/* Projects by Status Pie Chart */}
           <Card className="group relative bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl border-gray-200/50 dark:border-white/10 shadow-2xl hover:shadow-cardano-blue/5 transition-all duration-500 rounded-3xl overflow-hidden ring-1 ring-black/5 dark:ring-white/5">
             <div className="absolute inset-0 bg-gradient-to-br from-cardano-blue/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
@@ -297,11 +297,17 @@ const VisualElementsSection = () => {
             {/* Top Projects */}
             <Card className="bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl border-gray-200/50 dark:border-white/10 shadow-xl rounded-3xl overflow-hidden ring-1 ring-black/5 dark:ring-white/5">
               <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2.5 bg-blue-500/10 rounded-xl">
-                    <Briefcase className="h-5 w-5 text-blue-500" />
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 bg-blue-500/10 rounded-xl">
+                      <Briefcase className="h-5 w-5 text-blue-500" />
+                    </div>
+                    <h4 className="text-lg font-black text-gray-900 dark:text-white tracking-tight">{t('overview.project_showcases')}</h4>
                   </div>
-                  <h4 className="text-lg font-black text-gray-900 dark:text-white tracking-tight">{t('overview.project_showcases')}</h4>
+                  <Link to="/projects" className="text-xs font-bold text-cardano-blue hover:underline flex items-center gap-1 transition-all">
+                    {t('common.view_all')}
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
                 </div>
                 <div className="space-y-4">
                   {topProjects.map((project, idx) => (
@@ -324,11 +330,17 @@ const VisualElementsSection = () => {
             {/* Top Vendors */}
             <Card className="bg-white/40 dark:bg-gray-900/40 backdrop-blur-xl border-gray-200/50 dark:border-white/10 shadow-xl rounded-3xl overflow-hidden ring-1 ring-black/5 dark:ring-white/5">
               <CardContent className="p-6">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2.5 bg-emerald-500/10 rounded-xl">
-                    <Users className="h-5 w-5 text-emerald-500" />
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2.5 bg-emerald-500/10 rounded-xl">
+                      <Users className="h-5 w-5 text-emerald-500" />
+                    </div>
+                    <h4 className="text-lg font-black text-gray-900 dark:text-white tracking-tight">{t('nav.vendors')}</h4>
                   </div>
-                  <h4 className="text-lg font-black text-gray-900 dark:text-white tracking-tight">{t('nav.vendors')}</h4>
+                  <Link to="/vendors" className="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1 transition-all">
+                    {t('common.view_all')}
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
                 </div>
                 <div className="space-y-4">
                   {topVendors.map((vendor, idx) => {
@@ -364,7 +376,7 @@ const VisualElementsSection = () => {
         </div>
         
         {/* View Full Data CTA Button */}
-        <div className="mt-20 flex justify-center">
+        <div className="mt-14 flex justify-center">
           <Button asChild size="lg" className="group relative bg-cardano-blue hover:bg-blue-600 text-white px-12 py-8 text-xl font-black rounded-2xl shadow-[0_20px_50px_rgba(0,51,173,0.3)] transition-all hover:scale-105 active:scale-95 overflow-hidden border-none">
             <Link to="/overview" className="flex items-center gap-3 relative z-10">
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] pointer-events-none" />
