@@ -159,6 +159,7 @@ export default {
   'projects.no_projects': 'No se encontraron proyectos',
   'projects.no_projects_desc': 'Intente ajustar sus filtros para encontrar lo que busca.',
   'projects.clear_filters': 'Limpiar todos los filtros',
+  'projects.filters': 'Filtros',
   'projects.id_label': 'ID del Proyecto',
   'projects.name_label': 'Nombre del Proyecto',
   'projects.vendor_label': 'Empresa',

@@ -159,6 +159,7 @@ export default {
   'projects.no_projects': 'プロジェクトが見つかりません',
   'projects.no_projects_desc': 'お探しのものが見つかるようフィルターを調整してください。',
   'projects.clear_filters': 'すべてのフィルターをクリア',
+  'projects.filters': 'フィルター',
   'projects.id_label': 'プロジェクトID',
   'projects.name_label': 'プロジェクト名',
   'projects.vendor_label': '会社',

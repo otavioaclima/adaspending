@@ -160,6 +160,7 @@ export default {
   'projects.no_projects': 'Nenhum projeto encontrado',
   'projects.no_projects_desc': 'Tente ajustar seus filtros para encontrar o que procura.',
   'projects.clear_filters': 'Limpar todos os filtros',
+  'projects.filters': 'Filtros',
   'projects.id_label': 'ID do Projeto',
   'projects.name_label': 'Nome do Projeto',
   'projects.budget_label': 'Orçamento (₳)',

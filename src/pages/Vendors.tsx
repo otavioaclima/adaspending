@@ -249,8 +249,8 @@ const Vendors = () => {
 
       {/* Filter Bar */}
       <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 flex flex-col lg:flex-row lg:items-end gap-x-3 gap-y-4 transition-all duration-300 overflow-hidden">
-        <div className="flex-1 w-full flex flex-col md:flex-row gap-4 items-end">
-          <div className="flex-1 w-full">
+        <div className="flex-1 w-full flex flex-row gap-2 items-end">
+          <div className="flex-1">
             <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">{t('vendors.search_label')}</label>
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -266,14 +266,12 @@ const Vendors = () => {
           
           <Button 
             variant="outline" 
-            className="lg:hidden h-11 px-4 border-gray-200 dark:border-gray-700 flex items-center justify-between w-full font-bold text-gray-600 dark:text-gray-300"
+            className="lg:hidden h-11 px-3 border-gray-200 dark:border-gray-700 flex items-center justify-center font-bold text-gray-600 dark:text-gray-300"
             onClick={() => setIsFiltersVisible(!isFiltersVisible)}
           >
-            <div className="flex items-center gap-2">
-              <Filter className="h-4 w-4" />
-              {t('projects.filters')}
-            </div>
-            {isFiltersVisible ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            <Filter className="h-4 w-4" />
+            <span className="ml-2 hidden sm:inline">{t('projects.filters')}</span>
+            {isFiltersVisible ? <ChevronUp className="h-4 w-4 ml-1" /> : <ChevronDown className="h-4 w-4 ml-1" />}
           </Button>
         </div>
 
