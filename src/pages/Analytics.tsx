@@ -93,7 +93,7 @@ const Analytics = () => {
       name: vendor.length > 25 ? vendor.substring(0, 25) + '...' : vendor,
       fullName: vendor,
       amount: vendorSpending[vendor],
-      percent: (vendorSpending[vendor] / 345531529) * 100
+      percent: (vendorSpending[vendor] / 343741204) * 100
     }))
     .sort((a, b) => b.amount - a.amount)
     .slice(0, 8);
@@ -106,7 +106,7 @@ const Analytics = () => {
       name: project.projectName.length > 25 ? project.projectName.substring(0, 25) + '...' : project.projectName,
       fullName: project.projectName,
       amount: project.totalAmount,
-      percent: (project.totalAmount / 345531529) * 100
+      percent: (project.totalAmount / 343741204) * 100
     }));
 
   // Cardano Treasury Spend data (USD Millions)
@@ -146,7 +146,7 @@ const Analytics = () => {
 
   const totalProjects = intersectProjects.length;
   const uniqueVendors = new Set(intersectProjects.map(p => p.vendor)).size;
-  const intersectBudgetValue = 345531529;
+  const intersectBudgetValue = 343741204;
   const totalSpentValue = 343741204;
   const remainingBudgetValue = intersectBudgetValue - totalSpentValue;
   const allocationPercent = (totalSpentValue / intersectBudgetValue) * 100;
