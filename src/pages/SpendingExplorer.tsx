@@ -1,9 +1,7 @@
 
 import React, { useState, useMemo } from 'react';
 import {
-  LayoutGrid,
   List,
-  Home,
   Calendar,
   ChevronDown,
   Info,
@@ -11,9 +9,15 @@ import {
   Briefcase,
   Users,
   Search,
-  SlidersHorizontal
+  SlidersHorizontal,
+  GitBranch,
+  CircleDashed,
+  LayoutGrid
 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import SankeyFlow from '@/components/explorer/SankeyFlow';
+import CirclePacking from '@/components/explorer/CirclePacking';
+import BubbleChart from '@/components/explorer/BubbleChart';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -114,7 +118,7 @@ const SpendingExplorer = () => {
   const { t } = useLanguage();
   const isMobile = useIsMobile();
   const { data: intersectProjects = [] } = useIntersectData();
-  const [viewMode, setViewMode] = useState<'treemap' | 'table'>('treemap');
+  const [viewMode, setViewMode] = useState<'treemap' | 'table' | 'sankey' | 'packing' | 'bubbles'>('treemap');
   const [breakdown, setBreakdown] = useState<'vendor' | 'project'>('vendor');
   const [selectedYear, setSelectedYear] = useState('FY 2025');
   const [selectedQuarter, setSelectedQuarter] = useState(1);
@@ -152,11 +156,70 @@ const SpendingExplorer = () => {
 
   const totalTracked = useMemo(() => chartData.reduce((sum, item) => sum + item.value, 0), [chartData]);
 
+  // Hierarchical data for D3 visualizations
+  const treeData = useMemo(() => {
+    if (breakdown === 'vendor') {
+      const vendorsMap: Record<string, any> = {};
+      intersectProjects.forEach(p => {
+        if (!vendorsMap[p.vendor]) {
+          vendorsMap[p.vendor] = { name: p.vendor, children: [] };
+        }
+        vendorsMap[p.vendor].children.push({
+          name: p.projectName,
+          value: p.totalAmount
+        });
+      });
+      return {
+        name: "Cardano Treasury",
+        children: Object.values(vendorsMap)
+      };
+    } else {
+      // Direct breakdown by project
+      return {
+        name: "Cardano Treasury",
+        children: intersectProjects.map(p => ({
+          name: p.projectName,
+          value: p.totalAmount
+        }))
+      };
+    }
+  }, [intersectProjects, breakdown]);
+
+  // Sankey data preparation
+  const sankeyData = useMemo(() => {
+    const nodes: any[] = [{ id: "treasury", name: "Cardano Treasury" }];
+    const links: any[] = [];
+
+    if (breakdown === 'vendor') {
+      const vendorsList = Array.from(new Set(intersectProjects.map(p => p.vendor)));
+      vendorsList.forEach((v, i) => {
+        const vendorId = `v-${i}`;
+        nodes.push({ id: vendorId, name: v });
+        const vendorProjects = intersectProjects.filter(p => p.vendor === v);
+        const totalVendorAmount = vendorProjects.reduce((sum, p) => sum + p.totalAmount, 0);
+        links.push({ source: "treasury", target: vendorId, value: totalVendorAmount });
+        vendorProjects.forEach((p, pi) => {
+          const projectId = `p-${i}-${pi}`;
+          nodes.push({ id: projectId, name: p.projectName });
+          links.push({ source: vendorId, target: projectId, value: p.totalAmount });
+        });
+      });
+    } else {
+      // Direct Treasury -> Projects
+      intersectProjects.forEach((p, i) => {
+        const projectId = `p-${i}`;
+        nodes.push({ id: projectId, name: p.projectName });
+        links.push({ source: "treasury", target: projectId, value: p.totalAmount });
+      });
+    }
+    return { nodes, links };
+  }, [intersectProjects, breakdown]);
+
   return (
     <>
       <div className="flex flex-col lg:flex-row lg:h-[calc(100vh-120px)] bg-white dark:bg-gray-950 overflow-y-auto lg:overflow-hidden border-t border-gray-100 dark:border-gray-800">
         {/* Site Sidebar Style */}
-        <div className="w-full lg:w-64 bg-[#000111] text-white flex flex-col shrink-0 border-r border-gray-800">
+        <div className="w-full lg:w-52 bg-[#000111] text-white flex flex-col shrink-0 border-r border-gray-800">
           <div className="p-4 space-y-4 border-b border-gray-800/50">
             <Button variant="ghost" className="w-full justify-start text-gray-400 hover:text-white hover:bg-white/5 gap-3 font-medium text-sm" onClick={() => {
               setSelectedYear('FY 2025');
@@ -282,6 +345,47 @@ const SpendingExplorer = () => {
                   {selectedYear} {t('explorer.budget_patterns')}
                 </p>
               </div>
+
+              {/* View Switcher Tabs */}
+              <div className="flex bg-gray-100 dark:bg-white/5 p-1 rounded-xl gap-1">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className={`h-8 px-3 text-[10px] font-bold rounded-lg transition-all ${viewMode === 'treemap' ? 'bg-white dark:bg-white/10 shadow-sm text-cardano-blue' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'}`}
+                  onClick={() => setViewMode('treemap')}
+                >
+                  <LayoutGrid className="h-3 w-3 mr-1.5" />
+                  {t('explorer.view_treemap').toUpperCase()}
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className={`h-8 px-3 text-[10px] font-bold rounded-lg transition-all ${viewMode === 'sankey' ? 'bg-white dark:bg-white/10 shadow-sm text-cardano-blue' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'}`}
+                  onClick={() => setViewMode('sankey')}
+                >
+                  <GitBranch className="h-3 w-3 mr-1.5" />
+                  {t('explorer.view_flow').toUpperCase()}
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className={`h-8 px-3 text-[10px] font-bold rounded-lg transition-all ${viewMode === 'packing' ? 'bg-white dark:bg-white/10 shadow-sm text-cardano-blue' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'}`}
+                  onClick={() => setViewMode('packing')}
+                >
+                  <CircleDashed className="h-3 w-3 mr-1.5" />
+                  {t('explorer.view_packing').toUpperCase()}
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className={`h-8 px-3 text-[10px] font-bold rounded-lg transition-all ${viewMode === 'bubbles' ? 'bg-white dark:bg-white/10 shadow-sm text-cardano-blue' : 'text-gray-500 hover:text-gray-900 dark:hover:text-white'}`}
+                  onClick={() => setViewMode('bubbles')}
+                >
+                  <CircleDashed className="h-3 w-3 mr-1.5" />
+                  {t('explorer.view_bubbles').toUpperCase()}
+                </Button>
+              </div>
+
               <div className="text-left lg:text-right">
                 <div className="flex items-center lg:justify-end gap-1.5 text-[8px] font-black text-gray-400 uppercase tracking-[0.2em] mb-0.5">
                   {t('explorer.official_allocated')}
@@ -294,49 +398,56 @@ const SpendingExplorer = () => {
             </div>
           </div>
 
-          <div className="p-4 lg:p-6 flex-1 lg:overflow-hidden flex flex-col min-h-[600px] lg:min-h-0 relative">
-            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 dark:border-gray-800 overflow-hidden flex-1 p-2 lg:p-6 h-[550px] lg:h-full min-h-[550px] lg:min-h-0 relative">
+          <div className="p-0 lg:p-0 flex-1 lg:overflow-hidden flex flex-col min-h-[650px] lg:min-h-0 relative">
+            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 dark:border-gray-800 overflow-hidden flex-1 p-0 lg:p-0 h-[600px] lg:h-full min-h-[600px] lg:min-h-0 relative">
               {chartData.length === 0 ? (
                 <div className="h-full flex items-center justify-center text-gray-400 font-bold text-sm">
                   {t('explorer.no_data_available') || 'Loading explorer data...'}
                 </div>
               ) : (
-                <ResponsiveContainer width="100%" height="100%" minHeight={400}>
-                <Treemap
-                  key={`treemap-final-${breakdown}-${isMobile ? 'mb' : 'dt'}-${chartData.length}`}
-                  data={chartData}
-                  dataKey="value"
-                  stroke="#fff"
-                  content={CustomizedContent}
-                  isAnimationActive={false}
-                >
-                  <RechartsTooltip
-                    content={({ active, payload }) => {
-                      if (active && payload && payload.length) {
-                        const data = payload[0].payload;
-                        return (
-                          <div className="bg-[#000111] text-white p-4 rounded-xl shadow-2xl border border-gray-800 text-[11px] min-w-[200px]">
-                            <div className="text-gray-500 font-black uppercase tracking-widest text-[9px] mb-2">{(breakdown === 'vendor' ? t('explorer.breakdown_vendor') : t('explorer.breakdown_project')).toUpperCase()} {t('explorer.details')}</div>
-                            <div className="font-bold text-sm mb-2 leading-tight">{data.name}</div>
-                            <div className="h-px bg-gray-800 my-2" />
-                            <div className="flex justify-between items-center mb-1">
-                              <span className="text-gray-400">{t('vendors.allocation_label')}:</span>
-                              <span className="font-bold text-blue-400">₳{data.value.toLocaleString()}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="text-gray-400">{t('explorer.budget_share')}:</span>
-                              <span className="font-bold text-cardano-teal">
-                                {((data.value / totalTracked) * 100).toFixed(2)}%
-                              </span>
-                            </div>
-                          </div>
-                        );
-                      }
-                      return null;
-                    }}
-                  />
-                </Treemap>
-              </ResponsiveContainer>
+                <>
+                  {viewMode === 'treemap' && (
+                    <ResponsiveContainer width="100%" height="100%" minHeight={400}>
+                      <Treemap
+                        key={`treemap-final-${breakdown}-${isMobile ? 'mb' : 'dt'}-${chartData.length}`}
+                        data={chartData}
+                        dataKey="value"
+                        stroke="#fff"
+                        content={CustomizedContent}
+                        isAnimationActive={false}
+                      >
+                        <RechartsTooltip
+                          content={({ active, payload }) => {
+                            if (active && payload && payload.length) {
+                              const data = payload[0].payload;
+                              return (
+                                <div className="bg-[#000111] text-white p-4 rounded-xl shadow-2xl border border-gray-800 text-[11px] min-w-[200px]">
+                                  <div className="text-gray-500 font-black uppercase tracking-widest text-[9px] mb-2">{(breakdown === 'vendor' ? t('explorer.breakdown_vendor') : t('explorer.breakdown_project')).toUpperCase()} {t('explorer.details')}</div>
+                                  <div className="font-bold text-sm mb-2 leading-tight">{data.name}</div>
+                                  <div className="h-px bg-gray-800 my-2" />
+                                  <div className="flex justify-between items-center mb-1">
+                                    <span className="text-gray-400">{t('vendors.allocation_label')}:</span>
+                                    <span className="font-bold text-blue-400">₳{data.value.toLocaleString()}</span>
+                                  </div>
+                                  <div className="flex justify-between items-center">
+                                    <span className="text-gray-400">{t('explorer.budget_share')}:</span>
+                                    <span className="font-bold text-cardano-teal">
+                                      {((data.value / totalTracked) * 100).toFixed(2)}%
+                                    </span>
+                                  </div>
+                                </div>
+                              );
+                            }
+                            return null;
+                          }}
+                        />
+                      </Treemap>
+                    </ResponsiveContainer>
+                  )}
+                  {viewMode === 'sankey' && <SankeyFlow data={sankeyData} />}
+                  {viewMode === 'packing' && <CirclePacking data={treeData} />}
+                  {viewMode === 'bubbles' && <BubbleChart data={chartData} />}
+                </>
               )}
             </div>
 
