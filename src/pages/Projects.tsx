@@ -72,6 +72,7 @@ const Projects = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortFilter, setSortFilter] = useState('totalAmount-desc');
   const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
+  const [isFiltersVisible, setIsFiltersVisible] = useState(false);
 
   // Sync filters if URL changes
   React.useEffect(() => {
@@ -201,91 +202,110 @@ const Projects = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 grid grid-cols-2 lg:flex lg:flex-row gap-x-3 gap-y-4 items-end transition-colors">
-        <div className="col-span-2 lg:flex-1 w-full lg:w-auto">
-          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">{t('projects.search_label')}</label>
-          <div className="relative">
-            <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder={t('projects.search_placeholder')}
-              className="pl-10 h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 flex flex-col lg:flex-row lg:items-end gap-x-3 gap-y-4 transition-all duration-300 overflow-hidden">
+        <div className="flex-1 w-full flex flex-col md:flex-row gap-4 items-end">
+          <div className="flex-1 w-full">
+            <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">{t('projects.search_label')}</label>
+            <div className="relative">
+              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder={t('projects.search_placeholder')}
+                className="pl-10 h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onFocus={() => setIsFiltersVisible(true)}
+              />
+            </div>
           </div>
-        </div>
-
-        <div className="col-span-1 w-full lg:w-48">
-          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('projects.status_label')}</label>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-              <SelectValue placeholder={t('projects.all_status')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t('projects.all_status')}</SelectItem>
-              <SelectItem value="Completed">{t('status.completed')}</SelectItem>
-              <SelectItem value="Paused">{t('status.paused')}</SelectItem>
-              <SelectItem value="In Progress">{t('status.in_progress')}</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="col-span-1 w-full lg:w-48">
-          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('projects.budget_size')}</label>
-          <Select value={sizeFilter} onValueChange={setSizeFilter}>
-            <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-              <SelectValue placeholder={t('projects.all_sizes')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t('projects.all_sizes')}</SelectItem>
-              <SelectItem value="small">{t('projects.small_size')}</SelectItem>
-              <SelectItem value="medium">{t('projects.medium_size')}</SelectItem>
-              <SelectItem value="large">{t('projects.large_size')}</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="col-span-1 w-full lg:w-56">
-          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('projects.all_vendors')}</label>
-          <Select value={vendorFilter} onValueChange={setVendorFilter}>
-            <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-              <SelectValue placeholder={t('projects.all_vendors')} />
-            </SelectTrigger>
-            <SelectContent className="max-w-[300px]">
-              <SelectItem value="all">{t('projects.all_vendors')}</SelectItem>
-              {vendors.map(v => (
-                <SelectItem key={v} value={v}>
-                  {v.length > 35 ? v.substring(0, 32) + '...' : v}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="col-span-1 w-full lg:w-48">
-          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('projects.order_by')}</label>
-          <Select value={sortFilter} onValueChange={setSortFilter}>
-            <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-              <SelectValue placeholder={t('projects.order_by')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="projectName-asc">{t('projects.sort_name_asc')}</SelectItem>
-              <SelectItem value="projectName-desc">{t('projects.sort_name_desc')}</SelectItem>
-              <SelectItem value="totalAmount-desc">{t('projects.sort_budget_desc')}</SelectItem>
-              <SelectItem value="totalAmount-asc">{t('projects.sort_budget_asc')}</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="col-span-2 lg:col-span-1 flex justify-center lg:justify-start">
-          <Button
-            variant="ghost"
-            className="h-11 px-4 text-gray-500 hover:text-red-600 hover:bg-red-50 flex items-center w-full lg:w-auto"
-            onClick={resetFilters}
+          
+          <Button 
+            variant="outline" 
+            className="lg:hidden h-11 px-4 border-gray-200 dark:border-gray-700 flex items-center justify-between w-full font-bold text-gray-600 dark:text-gray-300"
+            onClick={() => setIsFiltersVisible(!isFiltersVisible)}
           >
-            <FilterX className="h-4 w-4 mr-2" />
-            {t('projects.reset')}
+            <div className="flex items-center gap-2">
+              <FilterX className="h-4 w-4" />
+              {t('projects.filters')}
+            </div>
+            {isFiltersVisible ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </Button>
+        </div>
+
+        <div className={`${isFiltersVisible ? 'flex' : 'hidden'} lg:flex flex-col lg:flex-row lg:items-end gap-x-3 gap-y-4 w-full lg:w-auto animate-in fade-in slide-in-from-top-2 duration-200`}>
+          <div className="grid grid-cols-2 lg:flex lg:flex-row gap-3 w-full lg:w-auto">
+            <div className="w-full lg:w-48">
+              <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('projects.status_label')}</label>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                  <SelectValue placeholder={t('projects.all_status')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t('projects.all_status')}</SelectItem>
+                  <SelectItem value="Completed">{t('status.completed')}</SelectItem>
+                  <SelectItem value="Paused">{t('status.paused')}</SelectItem>
+                  <SelectItem value="In Progress">{t('status.in_progress')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="w-full lg:w-48">
+              <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('projects.budget_size')}</label>
+              <Select value={sizeFilter} onValueChange={setSizeFilter}>
+                <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                  <SelectValue placeholder={t('projects.all_sizes')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t('projects.all_sizes')}</SelectItem>
+                  <SelectItem value="small">{t('projects.small_size')}</SelectItem>
+                  <SelectItem value="medium">{t('projects.medium_size')}</SelectItem>
+                  <SelectItem value="large">{t('projects.large_size')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="w-full lg:w-56">
+              <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('projects.all_vendors')}</label>
+              <Select value={vendorFilter} onValueChange={setVendorFilter}>
+                <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                  <SelectValue placeholder={t('projects.all_vendors')} />
+                </SelectTrigger>
+                <SelectContent className="max-w-[300px]">
+                  <SelectItem value="all">{t('projects.all_vendors')}</SelectItem>
+                  {vendors.map(v => (
+                    <SelectItem key={v} value={v}>
+                      {v.length > 35 ? v.substring(0, 32) + '...' : v}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="w-full lg:w-48">
+              <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('projects.order_by')}</label>
+              <Select value={sortFilter} onValueChange={setSortFilter}>
+                <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                  <SelectValue placeholder={t('projects.order_by')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="projectName-asc">{t('projects.sort_name_asc')}</SelectItem>
+                  <SelectItem value="projectName-desc">{t('projects.sort_name_desc')}</SelectItem>
+                  <SelectItem value="totalAmount-desc">{t('projects.sort_budget_desc')}</SelectItem>
+                  <SelectItem value="totalAmount-asc">{t('projects.sort_budget_asc')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex justify-center lg:justify-start items-end">
+              <Button
+                variant="ghost"
+                className="h-11 px-4 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center w-full lg:w-auto font-bold"
+                onClick={resetFilters}
+              >
+                <FilterX className="h-4 w-4 mr-2" />
+                {t('projects.reset')}
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 

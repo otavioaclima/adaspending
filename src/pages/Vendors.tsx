@@ -144,6 +144,7 @@ const Vendors = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortFilter, setSortFilter] = useState('totalFunded-desc');
   const [sortConfig, setSortConfig] = useState<{ key: string, direction: 'asc' | 'desc' } | null>(null);
+  const [isFiltersVisible, setIsFiltersVisible] = useState(false);
   const vendors = useVendorStats();
 
   const filteredVendors = useMemo(() => {
@@ -247,75 +248,94 @@ const Vendors = () => {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 grid grid-cols-2 lg:flex lg:flex-row gap-x-3 gap-y-4 items-end transition-colors">
-        <div className="col-span-2 lg:flex-1 w-full lg:w-auto">
-          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">{t('vendors.search_label')}</label>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              placeholder={t('vendors.search_placeholder')}
-              className="pl-10 h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 flex flex-col lg:flex-row lg:items-end gap-x-3 gap-y-4 transition-all duration-300 overflow-hidden">
+        <div className="flex-1 w-full flex flex-col md:flex-row gap-4 items-end">
+          <div className="flex-1 w-full">
+            <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block">{t('vendors.search_label')}</label>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder={t('vendors.search_placeholder')}
+                className="pl-10 h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onFocus={() => setIsFiltersVisible(true)}
+              />
+            </div>
           </div>
-        </div>
-
-        <div className="col-span-1 w-full lg:w-48">
-          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('vendors.total_allocation')}</label>
-          <Select value={sizeFilter} onValueChange={setSizeFilter}>
-            <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white">
-              <SelectValue placeholder={t('projects.all_sizes')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t('projects.all_sizes')}</SelectItem>
-              <SelectItem value="small">{t('projects.small_size')}</SelectItem>
-              <SelectItem value="medium">{t('projects.medium_size')}</SelectItem>
-              <SelectItem value="large">{t('projects.large_size')}</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="col-span-1 w-full lg:w-48">
-          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('vendors.projects_label')}</label>
-          <Select value={countFilter} onValueChange={setCountFilter}>
-            <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white">
-              <SelectValue placeholder={t('vendors.all_counts')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t('vendors.all_counts')}</SelectItem>
-              <SelectItem value="1">{t('vendors.one_project')}</SelectItem>
-              <SelectItem value="2-5">2-5 {t('vendors.multiple_projects')}</SelectItem>
-              <SelectItem value="5+">5+ {t('vendors.multiple_projects')}</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="col-span-1 w-full lg:w-48">
-          <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('projects.order_by')}</label>
-          <Select value={sortFilter} onValueChange={setSortFilter}>
-            <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white">
-              <SelectValue placeholder={t('projects.order_by')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="totalFunded-desc">{t('projects.sort_budget_desc')}</SelectItem>
-              <SelectItem value="totalFunded-asc">{t('projects.sort_budget_asc')}</SelectItem>
-              <SelectItem value="name-asc">{t('projects.sort_name_asc')}</SelectItem>
-              <SelectItem value="name-desc">{t('projects.sort_name_desc')}</SelectItem>
-              <SelectItem value="projectCount-desc">{t('vendors.multiple_projects')}</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="col-span-1 lg:col-span-1 flex justify-center lg:justify-start">
-          <Button
-            variant="ghost"
-            className="h-11 px-4 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center w-full lg:w-auto"
-            onClick={resetFilters}
+          
+          <Button 
+            variant="outline" 
+            className="lg:hidden h-11 px-4 border-gray-200 dark:border-gray-700 flex items-center justify-between w-full font-bold text-gray-600 dark:text-gray-300"
+            onClick={() => setIsFiltersVisible(!isFiltersVisible)}
           >
-            <FilterX className="h-4 w-4 mr-2" />
-            {t('projects.reset')}
+            <div className="flex items-center gap-2">
+              <Filter className="h-4 w-4" />
+              {t('projects.filters')}
+            </div>
+            {isFiltersVisible ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </Button>
+        </div>
+
+        <div className={`${isFiltersVisible ? 'flex' : 'hidden'} lg:flex flex-col lg:flex-row lg:items-end gap-x-3 gap-y-4 w-full lg:w-auto animate-in fade-in slide-in-from-top-2 duration-200`}>
+          <div className="grid grid-cols-2 lg:flex lg:flex-row gap-3 w-full lg:w-auto">
+            <div className="w-full lg:w-48">
+              <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('vendors.total_allocation')}</label>
+              <Select value={sizeFilter} onValueChange={setSizeFilter}>
+                <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white">
+                  <SelectValue placeholder={t('projects.all_sizes')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t('projects.all_sizes')}</SelectItem>
+                  <SelectItem value="small">{t('projects.small_size')}</SelectItem>
+                  <SelectItem value="medium">{t('projects.medium_size')}</SelectItem>
+                  <SelectItem value="large">{t('projects.large_size')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="w-full lg:w-48">
+              <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('vendors.projects_label')}</label>
+              <Select value={countFilter} onValueChange={setCountFilter}>
+                <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white">
+                  <SelectValue placeholder={t('vendors.all_counts')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{t('vendors.all_counts')}</SelectItem>
+                  <SelectItem value="1">{t('vendors.one_project')}</SelectItem>
+                  <SelectItem value="2-5">2-5 {t('vendors.multiple_projects')}</SelectItem>
+                  <SelectItem value="5+">5+ {t('vendors.multiple_projects')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="w-full lg:w-48">
+              <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase mb-1.5 block truncate">{t('projects.order_by')}</label>
+              <Select value={sortFilter} onValueChange={setSortFilter}>
+                <SelectTrigger className="h-11 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 dark:text-white">
+                  <SelectValue placeholder={t('projects.order_by')} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="totalFunded-desc">{t('projects.sort_budget_desc')}</SelectItem>
+                  <SelectItem value="totalFunded-asc">{t('projects.sort_budget_asc')}</SelectItem>
+                  <SelectItem value="name-asc">{t('projects.sort_name_asc')}</SelectItem>
+                  <SelectItem value="name-desc">{t('projects.sort_name_desc')}</SelectItem>
+                  <SelectItem value="projectCount-desc">{t('vendors.multiple_projects')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex justify-center lg:justify-start items-end pb-0 lg:pb-0">
+              <Button
+                variant="ghost"
+                className="h-11 px-4 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center w-full lg:w-auto font-bold"
+                onClick={resetFilters}
+              >
+                <FilterX className="h-4 w-4 mr-2" />
+                {t('projects.reset')}
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
