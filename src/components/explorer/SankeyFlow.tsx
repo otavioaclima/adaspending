@@ -18,7 +18,7 @@ const SankeyFlow: React.FC<SankeyProps> = ({ data }) => {
 
     d3.select(svgRef.current).selectAll("*").remove();
 
-    const width = 1600;
+    const width = 2000;
     const height = 1100;
 
     const svg = d3.select(svgRef.current)
@@ -32,7 +32,7 @@ const SankeyFlow: React.FC<SankeyProps> = ({ data }) => {
       .nodeAlign(sankeyCenter)
       .nodeWidth(20)
       .nodePadding(12)
-      .extent([[5, 10], [width - 180, height - 10]]); // Increased lateral space, reduced label padding from 500 to 180
+      .extent([[0, 10], [width, height - 10]]); // Use 100% of width, nodes can go to the edges
 
     const { nodes, links } = sankey({
       nodes: data.nodes.map(d => Object.assign({}, d)),
@@ -77,15 +77,14 @@ const SankeyFlow: React.FC<SankeyProps> = ({ data }) => {
       .attr("text-anchor", (d: any) => d.x0 < width / 2 ? "start" : "end")
       .attr("fill", "currentColor")
       .attr("class", "dark:text-white text-gray-800")
-      .style("font-weight", "600")
-      .style("font-size", "14px")
+      .style("font-size", "13px")
       .text((d: any) => d.name); // Mostrar nome completo sem truncagem
 
   }, [data]);
 
   return (
-    <div className="w-full h-full flex items-center justify-center overflow-auto p-4">
-      <svg ref={svgRef} className="min-w-[800px] h-full" />
+    <div className="w-full h-full flex items-center justify-center overflow-auto p-0">
+      <svg ref={svgRef} className="w-full h-full" />
     </div>
   );
 };
