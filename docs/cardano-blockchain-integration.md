@@ -26,9 +26,9 @@ The Cexplorer API documentation describes its mainnet endpoint as production Car
 
 ## Verification record
 
-At the implementation audit on 20 October 2026, the public Koios mainnet endpoints returned the current tip at epoch 662 and a `totals` record for epoch 662. That record included separate `circulation`, `treasury`, `reserves`, and `supply` values. The API validates that the totals epoch matches the chain tip before publishing the snapshot.
+The public Koios mainnet endpoints return the current chain tip and monetary totals for that epoch. The totals include separate `circulation`, `treasury`, `reserves`, and `supply` values. The API validates that the totals epoch matches the chain tip before publishing the snapshot.
 
-Production API verification was completed after deploying the backend and frontend to GCP project `cardano-feed-v3` on 20 October 2026. The health route returned HTTP 200. Both Cardano endpoints returned HTTP 200, epoch 662, source `Koios · Cardano mainnet`, a current block time, and matching monetary totals. At that snapshot the API returned `circulation=36810458522351149` lovelace, `treasury=1381928463898900` lovelace, `reserves=6058647486203675` lovelace, and `supply=38941352513796325` lovelace. These are the raw provider values, not hard-coded estimates.
+After deployment to GCP project `cardano-feed-v3`, production verification confirmed that the health route and both Cardano endpoints returned HTTP 200. The Cardano endpoints returned the provider source, current epoch, latest block time, and separate monetary totals. The values come from the live provider response rather than hard-coded estimates.
 
 Production verification after deployment should record:
 

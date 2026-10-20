@@ -132,7 +132,6 @@ const Footer = () => {
               <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-cardano-blue mb-6">{t('footer.data')}</h3>
               <ul className="space-y-4">
                 <li><Link to="/explorer" className="text-sm text-white/50 hover:text-white transition-colors">{t('nav.explorer')}</Link></li>
-                <li><Link to="/donations" className="text-sm text-white/50 hover:text-white transition-colors">{t('nav.donations')}</Link></li>
                 <li><Link to="/analytics" className="text-sm text-white/50 hover:text-white transition-colors">{t('nav.analytics')}</Link></li>
               </ul>
             </div>

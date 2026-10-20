@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { BarChart3, TrendingUp, Briefcase, Users, Wallet, ArrowDownRight, ArrowUpRight } from 'lucide-react';
 import StatCard from '@/components/ui/StatCard';
 import { useIntersectData } from '@/hooks/useIntersectData';
-import { getAdaPrice } from '@/services/cardanoscan';
+import { getAdaPrice } from '@/services/market';
 import { getCardanoStats } from '@/services/cardano';
 import { useLanguage } from '@/contexts/LanguageContext';
 

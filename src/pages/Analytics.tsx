@@ -32,7 +32,7 @@ import {
   Globe
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { getAdaPrice } from '@/services/cardanoscan';
+import { getAdaPrice } from '@/services/market';
 
 const Analytics = () => {
   const { t } = useLanguage();

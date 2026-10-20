@@ -5,7 +5,7 @@ import { BarChart3, TrendingUp, Users, FileText } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getCardanoStats } from '@/services/cardano';
-import { getAdaPrice } from '@/services/cardanoscan';
+import { getAdaPrice } from '@/services/market';
 import { useIntersectData } from '@/hooks/useIntersectData';
 import { Skeleton } from '@/components/ui/skeleton';
 
