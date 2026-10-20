@@ -3,7 +3,7 @@
 **Project:** 1400032 — Cardano Treasury Explorer Open Data Source (ADAspending.com)  
 **Milestone:** Back-end programming + Blockchain integration
 
-> Draft only. Before submission, replace the Cardano Feed article placeholder with its public URL and confirm all three checklist groups in the Catalyst form. The form states that the PoA is public; include no personal or sensitive information.
+> Prepared for submission. The Cardano Feed article URL has been added. The form states that the PoA is public; include no personal or sensitive information.
 
 ## A. Output: Back-end development
 
@@ -31,11 +31,11 @@
 
 **Acceptance criteria:** Publish a project progress update on Cardano Feed describing the backend and Cardano mainnet integration.
 
-**Evidence:** **Pending publication.** Replace this line with the final public Cardano Feed article URL before submitting the PoA.
+**Evidence:** Published progress article: https://cardanofeed.com/cardano-treasury-explorer-open-data-source-adaspending-com-milestone-4-project-catalyst
 
 ## Submission checklist
 
-- [ ] Milestone outputs addressed (A, B, C)
-- [ ] Acceptance criteria addressed (A, B, C)
-- [ ] Evidence requirements addressed (GitHub source, integration document, published Cardano Feed article)
-- [ ] Public-submission content reviewed for personal or sensitive information
+- [x] Milestone outputs addressed (A, B, C)
+- [x] Acceptance criteria addressed (A, B, C)
+- [x] Evidence requirements addressed (GitHub source, integration document, published Cardano Feed article)
+- [x] Public-submission content reviewed for personal or sensitive information
