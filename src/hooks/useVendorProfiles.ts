@@ -6,7 +6,7 @@ export const useVendorProfiles = () => {
   return useQuery<VendorProfile[]>({
     queryKey: ['vendorProfiles'],
     queryFn: async () => {
-      const response = await fetch('/data/vendorProfiles.json');
+      const response = await fetch('/api/v1/data/vendor-profiles');
       if (!response.ok) throw new Error('Failed to fetch vendor profiles');
       return response.json();
     },

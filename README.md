@@ -40,21 +40,54 @@ ADAspending is a comprehensive transparency platform and open data source for tr
    npm install
    ```
 
-3. **Set up Environment Variables**
-   Create a `.env` file in the root directory and add your Cexplorer API key:
-   ```env
-   VITE_CEXPLORER_API_KEY=your_api_key_here
+3. **Start the development servers**
+   ```sh
+   npm run api:dev
    ```
-
-4. **Start the development server**
+   In a second terminal:
    ```sh
    npm run dev
    ```
 
-5. **Build for production**
+4. **Build for production**
    ```sh
    npm run build
    ```
+
+## Backend and Google Cloud deployment
+
+The app includes a small Node.js API that proxies Cardano treasury data through Cexplorer, serves the ADA price from CoinGecko, and provides the existing Intersect and vendor JSON datasets. Browser requests use same-origin `/api` routes; provider credentials stay on the server.
+
+### Local development
+
+Run the API and Vite in separate terminals:
+
+```sh
+npm run api:dev
+npm run dev
+```
+
+Vite forwards `/api` requests to the API server on port 8081. The API health endpoint is available at `http://localhost:8081/api/health`.
+
+### Production architecture
+
+- **Firebase Hosting** serves the built React app on the public domain and forwards `/api/**` requests to the backend.
+- **Cloud Run** runs the Node.js API in `southamerica-east1`.
+- **Artifact Registry and Cloud Build** build and deploy the API container from `cloudbuild.yaml`.
+- Cardano treasury and supply data is fetched server-side from the Cexplorer mainnet API. Provider requests stay on the server and are cached for five minutes.
+
+The Firebase Hosting rewrite expects a Cloud Run service named `adaspending-api`. Deploy that service before publishing Hosting. The GCP project must have billing and the Cloud Run, Cloud Build, and Artifact Registry APIs enabled, plus an Artifact Registry Docker repository named `adaspending` in `southamerica-east1`. Select the intended ADAspending project explicitly when running `gcloud` or Firebase CLI commands.
+
+Build the frontend locally before each backend image deploy because Cloud Build packages the generated `dist` directory:
+
+```sh
+npm ci
+npm run build
+gcloud builds submit --project=cardano-feed-v3 --region=southamerica-east1 --config=cloudbuild.yaml .
+firebase deploy --only hosting:adaspending --project cardano-feed-v3
+```
+
+After deploying Hosting, connect `adaspending.com` in Firebase Hosting and update its DNS records at the current DNS provider. Keep the existing records until the new Firebase Hosting domain has a valid HTTPS certificate and the site has been checked on the Firebase preview URL.
 
 ## 📊 Data Sources
 

@@ -1,0 +1,8 @@
+**
+!Dockerfile
+!.dockerignore
+!cloudbuild.yaml
+!server/
+!server/**
+!dist/
+!dist/**

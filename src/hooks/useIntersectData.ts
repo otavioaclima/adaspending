@@ -6,7 +6,7 @@ export const useIntersectData = () => {
   return useQuery<IntersectProject[]>({
     queryKey: ['intersectData'],
     queryFn: async () => {
-      const response = await fetch('/data/intersectData.json');
+      const response = await fetch('/api/v1/data/intersect-projects');
       if (!response.ok) throw new Error('Failed to fetch intersect data');
       return response.json();
     },

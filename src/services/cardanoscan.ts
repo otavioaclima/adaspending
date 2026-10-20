@@ -4,30 +4,16 @@ export interface NetworkState {
   reserves: string;
   circulatingSupply: string;
   totalSupply: string;
-  activeStake: string;
-  liveStake: string;
+  source?: string;
+  updatedAt?: string;
 }
 
-const API_KEY = import.meta.env.VITE_CARDANOSCAN_API_KEY;
-const BASE_URL = 'https://api.cardanoscan.io/api/v1';
-
 export const getNetworkState = async (): Promise<NetworkState> => {
-  if (!API_KEY) {
-    console.warn('VITE_CARDANOSCAN_API_KEY is not defined');
-  }
-
-  const response = await fetch(`${BASE_URL}/network/state`, {
-    headers: {
-      'apiKey': API_KEY || '',
-    },
-  });
-
+  const response = await fetch('/api/v1/cardano/network-state');
   if (!response.ok) {
-    throw new Error('Failed to fetch network state from Cardanoscan');
+    throw new Error('Failed to fetch network state from Cexplorer');
   }
-
-  const data = await response.json();
-  return data;
+  return response.json();
 };
 
 export const lovelaceToAda = (lovelace: string | number): number => {
@@ -55,12 +41,8 @@ export const getAdaCirculating = async (): Promise<number> => {
 };
 
 export const getAdaPrice = async (): Promise<number> => {
-  try {
-    const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=cardano&vs_currencies=usd');
-    const data = await response.json();
-    return data.cardano.usd;
-  } catch (error) {
-    console.error('Error fetching ADA price:', error);
-    return 0.45; // Fallback price
-  }
+  const response = await fetch('/api/v1/markets/ada-price');
+  if (!response.ok) throw new Error('Failed to fetch ADA price');
+  const data = await response.json();
+  return data.usd;
 };

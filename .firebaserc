@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "cardano-feed-v3"
+  },
+  "targets": {
+    "cardano-feed-v3": {
+      "hosting": {
+        "adaspending": [
+          "adaspending"
+        ]
+      }
+    }
+  }
+}

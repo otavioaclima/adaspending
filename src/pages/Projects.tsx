@@ -105,7 +105,7 @@ const Projects = () => {
   const vendors = useMemo(() => {
     const uniqueVendors = Array.from(new Set(intersectProjects.map(p => p.vendor)));
     return uniqueVendors.sort();
-  }, []);
+  }, [intersectProjects]);
 
   // Filter logic
   const filteredProjects = useMemo(() => {
@@ -126,7 +126,7 @@ const Projects = () => {
 
       return matchesSearch && matchesStatus && matchesVendor && matchesSize;
     });
-  }, [searchTerm, statusFilter, sizeFilter, vendorFilter]);
+  }, [intersectProjects, searchTerm, statusFilter, sizeFilter, vendorFilter]);
 
   // Sort logic
   const sortedProjects = useMemo(() => {
