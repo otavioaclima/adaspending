@@ -22,9 +22,13 @@ export interface IntersectProject {
   vendor: string;
   totalAmount: number;
   amountSpent: number;
+  amountRemaining?: number;
   status: string;
   description?: string;
   milestones?: Milestone[];
+  vendorAddress?: string;
+  vendorIdentitySource?: string;
+  officialProjectId?: string;
 }
 
 // Note: The actual data has been moved to public/data/intersectData.json

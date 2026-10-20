@@ -8,7 +8,7 @@ export type TransactionRow = {
   fundRound: string;
   requestedAmount: number;
   fundedAmount: number;
-  spentAmount: number;
+  withdrawnAmount: number;
   transactionHash?: string;
   status: string;
   updatedAt: string;
@@ -17,12 +17,13 @@ export type TransactionRow = {
 type Props = {
   transactionRows: TransactionRow[];
   totalFunded: number;
+  totalRemaining: number;
 };
 
-const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
+const VendorAccountingTable = ({ transactionRows, totalFunded, totalRemaining }: Props) => {
   const { t } = useLanguage();
-  const totalSpent = transactionRows.reduce(
-    (acc, curr) => acc + (curr.spentAmount || 0),
+  const totalWithdrawn = transactionRows.reduce(
+    (acc, curr) => acc + (curr.withdrawnAmount || 0),
     0
   );
 
@@ -36,19 +37,19 @@ const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
       </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{t('accounting.total_received')}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{t('accounting.total_allocated')}</p>
           <p className="font-bold text-cardano-blue dark:text-blue-400">
             ₳{totalFunded.toLocaleString()}
           </p>
         </div>
         <div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{t('accounting.total_spent')}</p>
-          <p className="font-bold text-orange-600 dark:text-orange-500">₳{totalSpent.toLocaleString()}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">{t('accounting.total_withdrawn')}</p>
+          <p className="font-bold text-orange-600 dark:text-orange-500">₳{totalWithdrawn.toLocaleString()}</p>
         </div>
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">{t('accounting.remaining')}</p>
           <p className="font-bold text-green-600 dark:text-green-500">
-            ₳{(totalFunded - totalSpent).toLocaleString()}
+            ₳{totalRemaining.toLocaleString()}
           </p>
         </div>
       </div>
@@ -59,8 +60,8 @@ const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
               <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{t('accounting.date')}</th>
               <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{t('accounting.title_col')}</th>
               <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{t('accounting.fund_round')}</th>
-              <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{t('accounting.received')}</th>
-              <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{t('accounting.spent')}</th>
+              <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{t('accounting.allocated')}</th>
+              <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{t('accounting.withdrawn')}</th>
               <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{t('accounting.status')}</th>
               <th className="px-3 py-2 text-left font-semibold text-gray-700 dark:text-gray-300">{t('accounting.tx_hash')}</th>
             </tr>
@@ -79,7 +80,7 @@ const VendorAccountingTable = ({ transactionRows, totalFunded }: Props) => {
                   <td className="px-3 py-2 text-gray-700 dark:text-gray-300">{trx.title}</td>
                   <td className="px-3 py-2 text-gray-700 dark:text-gray-300">{trx.fundRound}</td>
                   <td className="px-3 py-2 text-cardano-blue dark:text-blue-400">₳{trx.fundedAmount.toLocaleString()}</td>
-                  <td className="px-3 py-2 text-orange-600 dark:text-orange-500">₳{trx.spentAmount.toLocaleString()}</td>
+                  <td className="px-3 py-2 text-orange-600 dark:text-orange-500">₳{trx.withdrawnAmount.toLocaleString()}</td>
                   <td className="px-3 py-2 capitalize">
                     <span className={
                       trx.status === "approved" ? "text-green-700 font-medium" :

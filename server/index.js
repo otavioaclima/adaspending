@@ -2,6 +2,7 @@ import { createServer } from "node:http";
 import { createReadStream, promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { vendorIdentityByProjectId } from "./vendorIdentityMap.js";
 
 const serverDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectDirectory = path.resolve(serverDirectory, "..");
@@ -10,6 +11,7 @@ const staticDirectory = path.join(projectDirectory, "dist");
 const publicDirectory = path.join(projectDirectory, "public");
 const port = Number(process.env.PORT || 8081);
 const koiosBaseUrl = process.env.KOIOS_API_URL || "https://api.koios.rest/api/v1";
+const intersectApiBaseUrl = process.env.INTERSECT_API_URL || "https://administration.info.intersectmbo.org/api/v1";
 const cache = new Map();
 const maxStaleSeconds = 6 * 60 * 60;
 
@@ -274,6 +276,83 @@ const readDataFile = async (filename) => {
   return JSON.parse(await fs.readFile(path.join(directory, "data", filename), "utf8"));
 };
 
+const projectIdTokens = (value) => String(value || "")
+  .split(/[&,\s]+/)
+  .map((identifier) => identifier.startsWith("UTXO-") ? identifier.slice(5) : identifier)
+  .filter(Boolean);
+
+const lovelaceToAda = (value, field) => {
+  const amount = Number(value);
+  if (!Number.isFinite(amount) || amount < 0) throw new Error(`Intersect returned invalid ${field}`);
+  return amount / 1_000_000;
+};
+
+const getIntersectVendorProjects = () => cached("intersect-vendor-projects", 900, async () => {
+  const firstPage = await fetchJson(`${intersectApiBaseUrl}/projects?limit=100&page=1`);
+  if (!Array.isArray(firstPage?.data) || !firstPage.pagination) {
+    throw new Error("Intersect returned an invalid projects response");
+  }
+
+  const projectsFromApi = [...firstPage.data];
+  const totalCount = Number(firstPage.pagination.total_count);
+  const pageSize = Number(firstPage.pagination.limit) || 100;
+  const pageCount = Number.isFinite(totalCount) ? Math.ceil(totalCount / pageSize) : 1;
+  for (let page = 2; page <= pageCount; page += 1) {
+    const result = await fetchJson(`${intersectApiBaseUrl}/projects?limit=${pageSize}&page=${page}`);
+    if (!Array.isArray(result?.data)) throw new Error(`Intersect returned an invalid projects page ${page}`);
+    projectsFromApi.push(...result.data);
+  }
+  if (Number.isFinite(totalCount) && projectsFromApi.length !== totalCount) {
+    throw new Error("Intersect returned an incomplete projects list");
+  }
+
+  const legacyProjects = await readDataFile("intersectData.json");
+  const legacyByProjectId = new Map();
+  for (const legacyProject of legacyProjects) {
+    for (const token of projectIdTokens(legacyProject.id)) legacyByProjectId.set(token, legacyProject);
+  }
+
+  const excludedTestProjectIds = new Set(["EX-000-01"]);
+  const projects = projectsFromApi.filter((project) => !excludedTestProjectIds.has(project.project_id)).map((project) => {
+    const projectId = String(project.project_id || "");
+    if (!projectId) throw new Error("Intersect returned a project without an identifier");
+    const matchingLegacy = projectIdTokens(projectId)
+      .map((token) => legacyByProjectId.get(token))
+      .find(Boolean);
+    const allocatedLovelace = project.financials?.total_allocated_lovelace ?? project.initial_amount_lovelace;
+    const withdrawnLovelace = project.financials?.total_withdrawn_lovelace ?? 0;
+    const allocatedAda = lovelaceToAda(allocatedLovelace, "allocated amount");
+    const withdrawnAda = lovelaceToAda(withdrawnLovelace, "withdrawn amount");
+    // The API's contract UTXO balance can include ADA shared by multiple projects,
+    // so it is not a per-project remaining allocation. Derive the remainder instead.
+    const remainingAda = Math.max(0, allocatedAda - withdrawnAda);
+    const upstreamVendorName = typeof project.vendor_name === "string" ? project.vendor_name.trim() : "";
+    const mappedVendorName = vendorIdentityByProjectId[projectId] || "";
+    return {
+      id: matchingLegacy?.id || projectId,
+      officialProjectId: projectId,
+      projectName: String(project.project_name || projectId),
+      vendor: upstreamVendorName || mappedVendorName || "Unmapped vendor",
+      vendorIdentitySource: upstreamVendorName ? "intersect-api" : mappedVendorName ? "curated-project-id-map" : "unmapped",
+      vendorAddress: project.vendor_address || "",
+      totalAmount: allocatedAda,
+      amountSpent: withdrawnAda,
+      amountRemaining: remainingAda,
+      status: String(project.status || "unknown"),
+      description: project.description || "",
+      milestones: matchingLegacy?.milestones || [],
+    };
+  });
+
+  return {
+    projects,
+    source: "Intersect Administration API · Cardano mainnet",
+    updatedAt: new Date().toISOString(),
+    upstreamUpdatedAt: firstPage.meta?.timestamp || null,
+    stale: false,
+  };
+});
+
 const apiRoutes = {
   "/api/health": async () => ({ status: "ok", service: "adaspending", timestamp: new Date().toISOString() }),
   "/api/v1/cardano/treasury-stats": getTreasuryStats,
@@ -281,6 +360,7 @@ const apiRoutes = {
   "/api/v1/cardano/treasury-donations/all-time": getAllTimeTreasuryDonations,
   "/api/v1/cardano/network-state": getNetworkState,
   "/api/v1/markets/ada-price": getAdaPrice,
+  "/api/v1/data/intersect-vendor-projects": getIntersectVendorProjects,
   "/api/v1/data/intersect-projects": () => readDataFile("intersectData.json"),
   "/api/v1/data/vendor-profiles": () => readDataFile("vendorProfiles.json"),
 };
@@ -342,6 +422,7 @@ const server = createServer(async (request, response) => {
         ? 21_600
         : requestUrl.pathname.endsWith("/treasury-donations")
           ? 300
+          : requestUrl.pathname.endsWith("/intersect-vendor-projects") ? 900
           : requestUrl.pathname.includes("/data/") ? 3600 : 60;
       response.writeHead(200, {
         "Cache-Control": `public, max-age=${maxAge}`,

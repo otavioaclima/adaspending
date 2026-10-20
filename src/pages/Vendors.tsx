@@ -22,7 +22,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useIntersectData } from '@/hooks/useIntersectData';
+import { useIntersectVendorProjects } from '@/hooks/useIntersectVendorProjects';
 import { useVendorProfiles } from '@/hooks/useVendorProfiles';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { PageSkeleton } from '@/components/ui/PageSkeleton';
@@ -37,6 +37,7 @@ const getStatusColor = (status: string) => {
 
 const VendorCard = ({ vendor, profile }: { vendor: any, profile: any }) => {
   const { t } = useLanguage();
+  const displayName = vendor.name === 'Unmapped vendor' ? t('vendors.unmapped_vendor') : vendor.name;
   return (
     <Link to={`/vendors/${encodeURIComponent(vendor.name)}`}>
       <Card className="h-full hover:shadow-lg transition-all border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800/40 group">
@@ -45,7 +46,7 @@ const VendorCard = ({ vendor, profile }: { vendor: any, profile: any }) => {
             {profile?.logo ? (
               <img
                 src={profile.logo}
-                alt={`${vendor.name} logo`}
+                alt={`${displayName} logo`}
                 className="w-12 h-12 rounded-xl object-cover border border-gray-100 dark:border-gray-700 shadow-sm shrink-0"
               />
             ) : (
@@ -54,8 +55,8 @@ const VendorCard = ({ vendor, profile }: { vendor: any, profile: any }) => {
               </div>
             )}
             <div>
-              <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-cardano-blue transition-colors leading-tight truncate max-w-[200px]" title={vendor.name}>
-                {vendor.name}
+              <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-cardano-blue transition-colors leading-tight truncate max-w-[200px]" title={displayName}>
+                {displayName}
               </h3>
               <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wider">
                 {t('vendors.active_vendor')}
@@ -72,7 +73,7 @@ const VendorCard = ({ vendor, profile }: { vendor: any, profile: any }) => {
               </p>
             </div>
             <div>
-              <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold mb-1">{t('vendors.spent_label')}</p>
+              <p className="text-[10px] text-gray-400 dark:text-gray-500 uppercase font-bold mb-1">{t('vendors.withdrawn_label')}</p>
               <p className="text-sm font-bold text-orange-600 dark:text-orange-500 flex items-center">
                 ₳{vendor.amountSpent.toLocaleString()}
               </p>
@@ -104,8 +105,9 @@ const VendorCard = ({ vendor, profile }: { vendor: any, profile: any }) => {
 };
 
 const Vendors = () => {
-  const { t } = useLanguage();
-  const { data: intersectProjects = [], isLoading: loadingProjects } = useIntersectData();
+  const { language, t } = useLanguage();
+  const { data: directory, isLoading: loadingProjects, isError: projectsError } = useIntersectVendorProjects();
+  const intersectProjects = directory?.projects || [];
   const { data: vendorProfiles = [], isLoading: loadingProfiles } = useVendorProfiles();
   
   const [searchTerm, setSearchTerm] = useState('');
@@ -188,6 +190,7 @@ const Vendors = () => {
   }, [filteredVendors, sortConfig, sortFilter]);
 
   const getProfile = (name: string) => {
+    if (name === 'Unmapped vendor') return undefined;
     const normalized = name.toLowerCase().trim();
     return vendorProfiles.find(p =>
       p.name.toLowerCase() === normalized ||
@@ -211,6 +214,15 @@ const Vendors = () => {
   };
 
   if (loadingProjects || loadingProfiles) return <PageSkeleton />;
+  if (projectsError || !directory) return (
+    <Card><CardContent className="py-8 text-center text-gray-600 dark:text-gray-300">{t('vendors.load_error')}</CardContent></Card>
+  );
+
+  const locale = ({ EN: 'en-US', PT: 'pt-BR', ES: 'es-ES', JP: 'ja-JP' } as Record<string, string>)[language] || 'en-US';
+  const updatedAt = directory.upstreamUpdatedAt || directory.updatedAt;
+  const formattedUpdateTime = updatedAt
+    ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' }).format(new Date(updatedAt))
+    : '';
 
   return (
     <>
@@ -224,6 +236,9 @@ const Vendors = () => {
           </div>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl">
             {t('vendors.description')}
+          </p>
+          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+            {t('vendors.data_source')}{formattedUpdateTime ? ` · ${formattedUpdateTime} UTC` : ''}
           </p>
         </div>
 
@@ -248,6 +263,12 @@ const Vendors = () => {
           </Button>
         </div>
       </div>
+
+      {directory.stale && (
+        <p className="mb-6 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-200">
+          {t('vendors.stale_data')}
+        </p>
+      )}
 
       <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 flex flex-col lg:flex-row lg:items-end gap-x-3 gap-y-4 transition-all duration-300 overflow-hidden">
         <div className="flex-1 w-full flex flex-row gap-2 items-end">
@@ -379,7 +400,7 @@ const Vendors = () => {
                   </TableHead>
                   <TableHead className="text-right cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" onClick={() => requestSort('amountSpent')}>
                     <div className="flex items-center justify-end gap-1">
-                      {t('vendors.spent_label')}
+                      {t('vendors.withdrawn_label')}
                       {sortConfig?.key === 'amountSpent' ? (sortConfig.direction === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />) : null}
                     </div>
                   </TableHead>
@@ -417,7 +438,7 @@ const Vendors = () => {
                             </div>
                           )}
                           <span className="text-gray-900 dark:text-gray-100 hover:text-cardano-blue transition-colors font-bold truncate max-w-[250px] block">
-                            {vendor.name}
+                            {vendor.name === 'Unmapped vendor' ? t('vendors.unmapped_vendor') : vendor.name}
                           </span>
                         </Link>
                       </TableCell>

@@ -56,7 +56,7 @@ ADAspending is a comprehensive transparency platform and open data source for tr
 
 ## Backend and Google Cloud deployment
 
-The app includes a small Node.js API that proxies Cardano mainnet treasury and supply data through Koios, serves the ADA price from CoinGecko, and provides the existing Intersect and vendor JSON datasets. Browser requests use same-origin `/api` routes; provider credentials stay on the server.
+The app includes a small Node.js API that proxies Cardano mainnet treasury and supply data through Koios, serves the ADA price from CoinGecko, and provides the existing Intersect and vendor JSON datasets. The Vendors directory also reads current project funding and status from Intersect's Administration API through a same-origin route, with vendor names joined from an explicit project-ID map. Browser requests use same-origin `/api` routes; provider credentials stay on the server.
 
 ### Local development
 

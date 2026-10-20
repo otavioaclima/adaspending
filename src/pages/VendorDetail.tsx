@@ -1,7 +1,7 @@
 
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Building, Wallet, Info, Globe, Mail, MessageCircle, Github, Twitter, ExternalLink, Activity, Eye, CheckCircle2, Clock, Briefcase, ArrowRight, LayoutGrid, Send } from 'lucide-react';
+import { ArrowLeft, Building, Wallet, Info, Globe, Mail, MessageCircle, Github, Twitter, ExternalLink, Activity, CheckCircle2, Clock, Briefcase, ArrowRight, LayoutGrid, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -20,7 +20,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useIntersectData } from '@/hooks/useIntersectData';
+import { useIntersectVendorProjects } from '@/hooks/useIntersectVendorProjects';
 import { useVendorProfiles } from '@/hooks/useVendorProfiles';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { PageSkeleton } from '@/components/ui/PageSkeleton';
@@ -49,39 +49,24 @@ const getStatusColor = (status: string) => {
 };
 
 const VendorDetail = () => {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
   const { id } = useParams<{ id: string }>();
-  const { data: intersectProjects = [], isLoading: loadingProjects } = useIntersectData();
+  const { data: vendorDirectory, isLoading: loadingProjects } = useIntersectVendorProjects();
+  const intersectProjects = vendorDirectory?.projects || [];
   const { data: vendorProfiles = [], isLoading: loadingProfiles } = useVendorProfiles();
   
   const vendorName = decodeURIComponent(id || '');
+  const displayVendorName = vendorName === 'Unmapped vendor' ? t('vendors.unmapped_vendor') : vendorName;
 
   const vendorProjects = useMemo(() => {
     return intersectProjects.filter(p => p.vendor === vendorName);
   }, [intersectProjects, vendorName]);
 
-  const [views, setViews] = useState(0);
-
-  useEffect(() => {
-    if (!vendorName) return;
-    const storageKey = `vendor_views_${vendorName.replace(/\s+/g, '_')}`;
-    const storedViews = localStorage.getItem(storageKey);
-
-    let currentViews = 0;
-    if (storedViews) {
-      currentViews = parseInt(storedViews, 10);
-    } else {
-      let seed = 0;
-      for (let i = 0; i < vendorName.length; i++) {
-        seed += vendorName.charCodeAt(i);
-      }
-      currentViews = (seed % 500) + 50;
-    }
-
-    const nextViews = currentViews + 1;
-    localStorage.setItem(storageKey, nextViews.toString());
-    setViews(nextViews);
-  }, [vendorName]);
+  const locale = ({ EN: 'en-US', PT: 'pt-BR', ES: 'es-ES', JP: 'ja-JP' } as Record<string, string>)[language] || 'en-US';
+  const directoryUpdatedAt = vendorDirectory?.upstreamUpdatedAt || vendorDirectory?.updatedAt;
+  const formattedDirectoryUpdatedAt = directoryUpdatedAt
+    ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' }).format(new Date(directoryUpdatedAt))
+    : '';
 
   const profile = useMemo(() => {
     const normalized = vendorName.toLowerCase().trim();
@@ -96,8 +81,8 @@ const VendorDetail = () => {
     if (vendorProjects.length === 0) return null;
     return {
       totalFunded: vendorProjects.reduce((acc, p) => acc + p.totalAmount, 0),
-      amountSpent: vendorProjects.reduce((acc, p) => acc + p.amountSpent, 0),
-      remaining: vendorProjects.reduce((acc, p) => acc + (p.totalAmount - p.amountSpent), 0),
+      amountWithdrawn: vendorProjects.reduce((acc, p) => acc + p.amountSpent, 0),
+      remaining: vendorProjects.reduce((acc, p) => acc + (p.amountRemaining ?? Math.max(0, p.totalAmount - p.amountSpent)), 0),
       projectCount: vendorProjects.length,
       completedCount: vendorProjects.filter(p => p.status.toLowerCase() === 'completed').length,
       inProgressCount: vendorProjects.filter(p => p.status.toLowerCase() === 'in progress' || p.status.toLowerCase() === 'active').length,
@@ -156,7 +141,7 @@ const VendorDetail = () => {
     fundRound: t('vendor_detail.intersect_treasury'),
     requestedAmount: project.totalAmount,
     fundedAmount: project.totalAmount,
-    spentAmount: project.amountSpent,
+    withdrawnAmount: project.amountSpent,
     status: project.status,
     updatedAt: new Date().toISOString(),
   }));
@@ -175,7 +160,7 @@ const VendorDetail = () => {
             {profile?.logo ? (
               <img
                 src={profile.logo}
-                alt={`${vendorName} logo`}
+                alt={`${displayVendorName} logo`}
                 className="w-16 h-16 rounded-2xl object-cover border border-gray-100 dark:border-gray-700 shadow-sm"
               />
             ) : (
@@ -190,16 +175,15 @@ const VendorDetail = () => {
                   {t('vendor_detail.official_vendor')}
                 </Badge>
               </div>
-              <div className="flex items-center gap-3">
-                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{vendorName}</h1>
-                <div className="flex items-center text-gray-400 dark:text-gray-500 text-xs mt-1">
-                  <Eye className="h-3.5 w-3.5 mr-1" />
-                  <span>{views.toLocaleString()} {t('project.views')}</span>
-                </div>
+                <div className="flex items-center gap-3">
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{displayVendorName}</h1>
               </div>
               {profile?.description && (
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 max-w-xl leading-relaxed">{profile.description}</p>
               )}
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                {t('vendors.data_source')}{formattedDirectoryUpdatedAt ? ` · ${formattedDirectoryUpdatedAt} UTC` : ''}
+              </p>
             </div>
           </div>
 
@@ -253,6 +237,12 @@ const VendorDetail = () => {
         </div>
       </div>
 
+      {vendorDirectory?.stale && (
+        <p className="mb-6 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-200">
+          {t('vendors.stale_data')}
+        </p>
+      )}
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm transition-colors">
@@ -263,7 +253,7 @@ const VendorDetail = () => {
             <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
               {(() => {
                 const desc = t('vendor_detail.vendor_desc')
-                  .replace('{name}', vendorName)
+                  .replace('{name}', displayVendorName)
                   .replace('{count}', stats.projectCount.toString());
 
                 const parts = desc.split('₳{total}');
@@ -362,7 +352,7 @@ const VendorDetail = () => {
                         {getStatusIcon(project.status)}
                         {t(`status.${project.status.toLowerCase().replace(' ', '_')}`) || project.status}
                       </Badge>
-                      <span className="text-[10px] text-gray-400 font-mono">{project.id}</span>
+                      <span className="text-[10px] text-gray-400 font-mono">{project.officialProjectId || project.id}</span>
                     </div>
                     <CardTitle className="text-base font-bold line-clamp-2 overflow-hidden h-[2.5rem] leading-tight text-gray-900 dark:text-white">
                       {project.projectName}
@@ -379,7 +369,7 @@ const VendorDetail = () => {
                           </p>
                         </div>
                         <div>
-                          <p className="text-[10px] text-gray-400 uppercase font-semibold mb-1">{t('projects.spent_label')}</p>
+                          <p className="text-[10px] text-gray-400 uppercase font-semibold mb-1">{t('vendors.withdrawn_label')}</p>
                           <p className="text-xs font-bold text-orange-600 flex items-center">
                             <ArrowRight className="h-3 w-3 mr-1" />
                             ₳{project.amountSpent.toLocaleString()}
@@ -397,7 +387,7 @@ const VendorDetail = () => {
                         <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5">
                           <div
                             className="bg-cardano-blue h-1.5 rounded-full transition-all duration-1000"
-                            style={{ width: `${(project.amountSpent / project.totalAmount) * 100}%` }}
+                            style={{ width: `${Math.min(100, Math.max(0, (project.amountSpent / project.totalAmount) * 100))}%` }}
                           ></div>
                         </div>
                       </div>
@@ -416,7 +406,7 @@ const VendorDetail = () => {
             </div>
           </div>
 
-          <VendorAccountingTable transactionRows={transactionRows} totalFunded={stats.totalFunded} />
+          <VendorAccountingTable transactionRows={transactionRows} totalFunded={stats.totalFunded} totalRemaining={stats.remaining} />
         </div>
 
         <div className="space-y-6">
@@ -448,17 +438,17 @@ const VendorDetail = () => {
                 </div>
               </div>
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('vendor_detail.total_spent')}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('vendor_detail.total_withdrawn')}</p>
                 <div className="flex flex-col">
                   <p className="text-2xl font-bold text-orange-600 dark:text-orange-500 flex items-center">
                     <ArrowRight className="h-5 w-5 mr-2" />
-                    ₳{stats.amountSpent.toLocaleString()}
+                    ₳{stats.amountWithdrawn.toLocaleString()}
                   </p>
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <p className="text-xs font-bold text-gray-400 dark:text-gray-500 ml-7 opacity-80 cursor-help w-fit flex items-center gap-1">
-                          ≈ ${(stats.amountSpent * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                          ≈ ${(stats.amountWithdrawn * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
                           <Info className="h-3 w-3 opacity-50" />
                         </p>
                       </TooltipTrigger>
@@ -495,11 +485,11 @@ const VendorDetail = () => {
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm text-gray-500 dark:text-gray-400">{t('vendor_detail.execution_progress')}</span>
                   <span className="text-sm font-bold text-gray-900 dark:text-white">
-                    {((stats.amountSpent / stats.totalFunded) * 100).toFixed(1)}%
+                    {((stats.amountWithdrawn / stats.totalFunded) * 100).toFixed(1)}%
                   </span>
                 </div>
                 <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-                  <div className="bg-cardano-blue h-full" style={{ width: `${(stats.amountSpent / stats.totalFunded) * 100}%` }} />
+                  <div className="bg-cardano-blue h-full" style={{ width: `${Math.min(100, Math.max(0, (stats.amountWithdrawn / stats.totalFunded) * 100))}%` }} />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3 pt-4">
