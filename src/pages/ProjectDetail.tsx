@@ -373,6 +373,18 @@ const ProjectDetail = () => {
     };
   }, [project]);
 
+  const paymentTimeline = useMemo(() => {
+    const hasDatePassed = (value: string) => {
+      const timestamp = Date.parse(value);
+      return Number.isFinite(timestamp) && timestamp <= Date.now();
+    };
+
+    return {
+      startPassed: hasDatePassed(paymentDates.start),
+      endPassed: hasDatePassed(paymentDates.end),
+    };
+  }, [paymentDates]);
+
   const [views, setViews] = useState(0);
 
   useEffect(() => {
@@ -802,16 +814,16 @@ const ProjectDetail = () => {
 
                 <div className="p-6">
                   <p className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-5">{t('project.payment_timeline')}</p>
-                  <div className="space-y-6 relative before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-100 dark:before:bg-gray-700">
+                  <div className={`space-y-6 relative before:absolute before:left-[7px] before:top-2 before:bottom-2 before:w-0.5 ${paymentTimeline.endPassed ? 'before:bg-cardano-blue/35' : 'before:bg-gray-100 dark:before:bg-gray-700'}`}>
                     <div className="flex gap-4 relative">
-                      <div className="w-4 h-4 rounded-full border-4 border-white dark:border-gray-800 bg-cardano-blue shadow-sm z-10" />
+                      <div className={`w-4 h-4 rounded-full border-4 border-white dark:border-gray-800 ${paymentTimeline.startPassed ? 'bg-cardano-blue' : 'bg-gray-200 dark:bg-gray-600'} shadow-sm z-10`} />
                       <div>
                         <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-tighter">{t('project.payment_start')}</p>
                         <p className="text-sm font-bold text-gray-900 dark:text-white">{paymentDates.start}</p>
                       </div>
                     </div>
                     <div className="flex gap-4 relative">
-                      <div className="w-4 h-4 rounded-full border-4 border-white dark:border-gray-800 bg-gray-200 dark:bg-gray-600 shadow-sm z-10" />
+                      <div className={`w-4 h-4 rounded-full border-4 border-white dark:border-gray-800 ${paymentTimeline.endPassed ? 'bg-cardano-blue' : 'bg-gray-200 dark:bg-gray-600'} shadow-sm z-10`} />
                       <div>
                         <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-tighter">{t('project.payment_end')}</p>
                         <p className="text-sm font-bold text-gray-900 dark:text-white">{paymentDates.end}</p>
