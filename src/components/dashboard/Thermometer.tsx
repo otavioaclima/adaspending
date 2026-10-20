@@ -8,7 +8,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 const Thermometer = () => {
   const { t } = useLanguage();
-  const { data: vendorDirectory } = useIntersectVendorProjects();
+  const { data: vendorDirectory, isLoading, isError } = useIntersectVendorProjects();
   const financialSummary = vendorDirectory?.financialSummary;
   const totalPaid = financialSummary?.withdrawnMilestoneAda || 0;
   const totalAllocation = financialSummary?.totalAllocatedAda || 0;
@@ -32,11 +32,11 @@ const Thermometer = () => {
           <div className="flex justify-between items-end mb-1">
             <div className="space-y-1">
               <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{t('analytics.milestones_paid')}</span>
-              <div className="text-2xl font-black text-[#0033ad] dark:text-blue-400">{financialSummary ? `₳${Math.floor(totalPaid).toLocaleString()}` : '—'}</div>
+              <div className="text-2xl font-black text-[#0033ad] dark:text-blue-400">{financialSummary ? `₳${Math.floor(totalPaid).toLocaleString()}` : isLoading ? '…' : '—'}</div>
             </div>
             <div className="text-right space-y-1">
               <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{t('analytics.payout_ratio')}</span>
-              <div className="text-xl font-black text-gray-900 dark:text-white">{percentage.toFixed(1)}%</div>
+              <div className="text-xl font-black text-gray-900 dark:text-white">{financialSummary ? `${percentage.toFixed(1)}%` : isLoading ? '…' : '—'}</div>
             </div>
           </div>
           
@@ -44,9 +44,10 @@ const Thermometer = () => {
             <Progress value={percentage} className="h-3 bg-gray-100 dark:bg-gray-800" />
             <div className="flex justify-between mt-2 text-[10px] font-bold text-gray-400">
               <span>₳0</span>
-              <span>{financialSummary ? `₳${Math.floor(totalAllocation).toLocaleString()}` : '—'}</span>
+              <span>{financialSummary ? `₳${Math.floor(totalAllocation).toLocaleString()}` : isLoading ? '…' : '—'}</span>
             </div>
           </div>
+          {isError && !financialSummary && <p className="text-xs text-gray-500 dark:text-gray-400" role="status">{t('common.data_unavailable')}</p>}
 
         </div>
       </CardContent>
