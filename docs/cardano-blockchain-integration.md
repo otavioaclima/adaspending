@@ -7,6 +7,7 @@ The production API reads public Cardano mainnet data through the Koios query API
 - `GET /api/v1/cardano/treasury-stats` returns ADA-denominated treasury and circulating-supply values for the home dashboard.
 - `GET /api/v1/cardano/network-state` returns the same values in lovelace, along with reserves, total supply, epoch, source, and the latest block time.
 - `GET /api/v1/cardano/treasury-donations` returns confirmed treasury-donation transactions and per-epoch totals for the latest ten epochs.
+- `GET /api/v1/cardano/treasury-donations/all-time` returns the confirmed donation total across all recorded donation epochs.
 
 The API is called from Cloud Run. The browser does not contact the chain-data provider directly.
 
@@ -18,7 +19,7 @@ This matters because `45,000,000,000 ADA - reserves` is total supply, not circul
 
 ADAspending now uses Koios's documented public API tier instead.
 
-The donations page queries Koios `GET /tx_treasury_donations_epoch?_epoch_no={epoch}` for each of the latest ten epochs. It sums the on-chain `treasury_donation` lovelace field, displays the transaction hash and block time, and links each hash to a Cardano explorer. The page labels its ten-epoch reporting window rather than presenting a partial sum as an all-time total.
+The donations page queries Koios `GET /tx_treasury_donations_epoch?_epoch_no={epoch}` for each of the latest ten epochs. It sums the on-chain `treasury_donation` lovelace field, displays the transaction hash and block time, and links each hash to a Cardano explorer. Its all-time total sums the `treasury_donation` field returned by Koios `GET /totals?_epoch_no={epoch}` from Conway epoch 507 through the current epoch. That historical total is cached for six hours to keep provider traffic bounded. The page shows the all-time reporting range separately from the ten-epoch transaction list.
 
 ## Freshness and provider failures
 

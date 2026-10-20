@@ -217,6 +217,58 @@ const getTreasuryDonations = () => cached("treasury-donations", 300, async () =>
   };
 });
 
+const getAllTimeTreasuryDonations = () => cached("treasury-donations-all-time", 21_600, async () => {
+  const tipRows = await fetchJson(`${koiosBaseUrl}/tip`);
+  const tip = Array.isArray(tipRows) ? tipRows[0] : undefined;
+  const currentEpoch = Number(tip?.epoch_no);
+  if (!Number.isInteger(currentEpoch) || currentEpoch < 507) {
+    throw new Error("Koios did not return a valid epoch for the treasury-donation history");
+  }
+
+  const firstEpoch = 507;
+  const epochs = Array.from({ length: currentEpoch - firstEpoch + 1 }, (_, index) => firstEpoch + index);
+  const donationsByEpoch = new Map();
+  const failedEpochs = [];
+  let nextEpochIndex = 0;
+
+  const worker = async () => {
+    while (nextEpochIndex < epochs.length) {
+      const epoch = epochs[nextEpochIndex++];
+      try {
+        let rows;
+        try {
+          rows = await fetchJson(`${koiosBaseUrl}/totals?_epoch_no=${epoch}`);
+        } catch {
+          rows = await fetchJson(`${koiosBaseUrl}/totals?_epoch_no=${epoch}`);
+        }
+        const totals = Array.isArray(rows) ? rows[0] : undefined;
+        if (Number(totals?.epoch_no) !== epoch) throw new Error(`Invalid totals for epoch ${epoch}`);
+        donationsByEpoch.set(epoch, toLovelace(totals.treasury_donation, "treasury donation"));
+      } catch {
+        failedEpochs.push(epoch);
+      }
+    }
+  };
+
+  const workerCount = Math.min(4, epochs.length);
+  await Promise.all(Array.from({ length: workerCount }, worker));
+  if (failedEpochs.length) {
+    throw new Error(`Koios donation history was incomplete for ${failedEpochs.length} epochs`);
+  }
+
+  const amounts = [...donationsByEpoch.values()];
+  const totalLovelace = amounts.reduce((total, amount) => total + BigInt(amount), 0n);
+  return {
+    firstEpoch,
+    lastEpoch: currentEpoch,
+    totalLovelace: totalLovelace.toString(),
+    epochsWithDonations: amounts.filter((amount) => BigInt(amount) > 0n).length,
+    source: "Koios · Cardano mainnet",
+    updatedAt: new Date().toISOString(),
+    stale: false,
+  };
+});
+
 const readDataFile = async (filename) => {
   const directory = isDevelopment ? publicDirectory : staticDirectory;
   return JSON.parse(await fs.readFile(path.join(directory, "data", filename), "utf8"));
@@ -226,6 +278,7 @@ const apiRoutes = {
   "/api/health": async () => ({ status: "ok", service: "adaspending", timestamp: new Date().toISOString() }),
   "/api/v1/cardano/treasury-stats": getTreasuryStats,
   "/api/v1/cardano/treasury-donations": getTreasuryDonations,
+  "/api/v1/cardano/treasury-donations/all-time": getAllTimeTreasuryDonations,
   "/api/v1/cardano/network-state": getNetworkState,
   "/api/v1/markets/ada-price": getAdaPrice,
   "/api/v1/data/intersect-projects": () => readDataFile("intersectData.json"),
@@ -285,7 +338,11 @@ const server = createServer(async (request, response) => {
 
     try {
       const body = await route();
-      const maxAge = requestUrl.pathname.includes("/data/") ? 3600 : 60;
+      const maxAge = requestUrl.pathname.endsWith("/treasury-donations/all-time")
+        ? 21_600
+        : requestUrl.pathname.endsWith("/treasury-donations")
+          ? 300
+          : requestUrl.pathname.includes("/data/") ? 3600 : 60;
       response.writeHead(200, {
         "Cache-Control": `public, max-age=${maxAge}`,
         "Content-Type": "application/json; charset=utf-8",

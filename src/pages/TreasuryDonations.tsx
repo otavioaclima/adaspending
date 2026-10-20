@@ -12,7 +12,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getTreasuryDonations } from '@/services/treasuryDonations';
+import { getAllTimeTreasuryDonations, getTreasuryDonations } from '@/services/treasuryDonations';
 
 const localeForLanguage: Record<string, string> = {
   EN: 'en-US',
@@ -33,12 +33,19 @@ const TreasuryDonations = () => {
     staleTime: 5 * 60 * 1000,
     refetchInterval: 5 * 60 * 1000,
   });
+  const allTimeQuery = useQuery({
+    queryKey: ['treasuryDonationsAllTime'],
+    queryFn: getAllTimeTreasuryDonations,
+    staleTime: 6 * 60 * 60 * 1000,
+    refetchInterval: 6 * 60 * 60 * 1000,
+    retry: 1,
+  });
   const data = query.data;
   const currentEpochTotal = data?.epochs.find((epoch) => epoch.epoch === data.currentEpoch)?.totalLovelace || '0';
   const previousEpochTotal = data?.epochs.find((epoch) => epoch.epoch === data.currentEpoch - 1)?.totalLovelace || '0';
 
   const stats = [
-    { title: t('donations.recent_total'), value: data ? `₳${formatAda(data.totalLovelace, locale)}` : '—', detail: data ? t('donations.recent_period').replace('{first}', String(data.firstEpoch)).replace('{last}', String(data.lastEpoch)) : '', icon: Coins, color: 'text-emerald-600 dark:text-emerald-400' },
+    { title: t('donations.all_time_total'), value: allTimeQuery.data ? `₳${formatAda(allTimeQuery.data.totalLovelace, locale)}` : allTimeQuery.isLoading ? '…' : '—', detail: allTimeQuery.data ? t('donations.all_epochs').replace('{first}', String(allTimeQuery.data.firstEpoch)).replace('{last}', String(allTimeQuery.data.lastEpoch)) : allTimeQuery.isError ? t('donations.total_unavailable') : t('donations.total_calculating'), icon: Coins, color: 'text-emerald-600 dark:text-emerald-400' },
     { title: t('donations.current_epoch'), value: data ? `₳${formatAda(currentEpochTotal, locale)}` : '—', detail: data ? `${t('donations.epoch')} ${data.currentEpoch}` : '', icon: Heart, color: 'text-blue-600 dark:text-blue-400' },
     { title: t('donations.previous_epoch'), value: data ? `₳${formatAda(previousEpochTotal, locale)}` : '—', detail: data ? `${t('donations.epoch')} ${Math.max(0, data.currentEpoch - 1)}` : '', icon: TrendingUp, color: 'text-indigo-600 dark:text-indigo-400' },
     { title: t('donations.average_epoch'), value: data ? `₳${formatAda(data.averagePerEpochLovelace, locale)}` : '—', detail: data ? t('donations.epochs_included').replace('{count}', String(data.epochs.length)) : '', icon: CalendarDays, color: 'text-amber-600 dark:text-amber-400' },
@@ -71,7 +78,7 @@ const TreasuryDonations = () => {
         </Card>
       ) : data ? (
         <>
-          {data.stale && (
+          {(data.stale || allTimeQuery.data?.stale) && (
             <p className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-200">
               {t('donations.stale_notice')}
             </p>
