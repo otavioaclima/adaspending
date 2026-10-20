@@ -150,7 +150,7 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
             {/* Language Switcher */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 gap-2 px-3 h-10 rounded-xl transition-all">
+                <Button variant="ghost" size="sm" className="!text-white hover:!text-white focus:!text-white data-[state=open]:!text-white hover:bg-white/10 gap-2 px-3 h-10 rounded-xl transition-all">
                   <span className="text-lg">
                     {language === 'EN' ? '🇺🇸' : language === 'PT' ? '🇧🇷' : language === 'ES' ? '🇪🇸' : '🇯🇵'}
                   </span>
