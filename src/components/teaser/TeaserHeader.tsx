@@ -29,7 +29,7 @@ const TeaserHeader = () => {
             <Button 
               variant="ghost" 
               size="sm" 
-              className="text-white bg-white/5 border border-white/10 hover:bg-white/10 backdrop-blur-md hover:text-white gap-2 px-4 py-5 rounded-xl focus-visible:ring-0 focus-visible:ring-offset-0 transition-all active:scale-95"
+              className="!text-white bg-white/5 border border-white/10 hover:bg-white/10 hover:!text-white focus:!text-white data-[state=open]:!text-white backdrop-blur-md gap-2 px-4 py-5 rounded-xl focus-visible:ring-0 focus-visible:ring-offset-0 transition-all active:scale-95"
             >
               <span className="text-xl leading-none">
                 {language === 'EN' ? '🇺🇸' : language === 'PT' ? '🇧🇷' : language === 'ES' ? '🇪🇸' : '🇯🇵'}
