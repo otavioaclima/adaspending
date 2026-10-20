@@ -83,7 +83,7 @@ const TreasuryDonations = () => {
       ) : data ? (
         <>
           {(data.stale || query.isError || allTimeQuery.data?.stale || allTimeQuery.isError) && (
-            <p className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-200">
+            <p className="mb-4 text-xs leading-5 text-gray-500 dark:text-gray-400" role="status">
               {t('donations.stale_notice')}
             </p>
           )}
