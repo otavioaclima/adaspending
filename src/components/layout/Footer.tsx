@@ -1,83 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Twitter, ChevronRight, Github, ExternalLink } from 'lucide-react';
+import { Mail, Twitter, Github, ExternalLink } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { useForm } from 'react-hook-form';
-import { useToast } from '@/hooks/use-toast';
 
 const Footer = () => {
   const { t } = useLanguage();
-  const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-
-  const form = useForm({
-    defaultValues: {
-      email: '',
-    },
-  });
-
-  const onSubmit = async (data: { email: string }) => {
-    try {
-      setIsSubmitting(true);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Newsletter subscription (Mock):', data.email);
-      setSubmitted(true);
-      form.reset();
-      toast({
-        title: t('teaser.cta.success_title'),
-        description: t('teaser.cta.success_desc'),
-      });
-    } catch (error) {
-      toast({
-        title: t('teaser.cta.fail_title'),
-        description: t('teaser.cta.fail_desc'),
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <footer className="bg-[#0a0b1e] text-white pt-16 pb-8 border-t border-white/5">
       <div className="container mx-auto px-4">
-        {/* Newsletter Section */}
-        <div className="max-w-4xl mx-auto bg-gradient-to-br from-cardano-blue/20 to-cardano-teal/20 rounded-3xl p-8 md:p-12 mb-16 border border-white/10 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">{t('teaser.cta.title')}</h2>
-          <p className="text-white/70 mb-8 max-w-2xl mx-auto">{t('teaser.cta.subtitle')}</p>
-
-          <div className="max-w-md mx-auto">
-            {!submitted ? (
-              <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-2">
-                <Input
-                  placeholder={t('teaser.cta.input_placeholder')}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-white/40 h-12"
-                  {...form.register('email', { required: true, pattern: /^\S+@\S+$/i })}
-                  disabled={isSubmitting}
-                />
-                <Button
-                  type="submit"
-                  className="bg-cardano-blue hover:bg-cardano-blue/90 text-white h-12 px-8 font-bold"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? t('teaser.cta.subscribing') : t('teaser.cta.subscribe')}
-                  {!isSubmitting && <ChevronRight className="ml-2 h-4 w-4" />}
-                </Button>
-              </form>
-            ) : (
-              <div className="bg-white/10 py-3 px-6 rounded-xl border border-white/10 text-cardano-teal font-medium">
-                {t('teaser.cta.success_msg')}
-              </div>
-            )}
-            {form.formState.errors.email && (
-              <p className="text-red-400 text-xs mt-2 text-left">{t('teaser.cta.invalid_email')}</p>
-            )}
-          </div>
-        </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-16">
           <div className="lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-left">
             <Link to="/" className="inline-block mb-6">

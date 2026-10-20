@@ -19,7 +19,6 @@ const sections = [
       { name: 'How It Works', desc: 'Step-by-step guide: Search → Explore → Analyze → Participate.' },
       { name: 'Who We Are', desc: 'Team profiles and community involvement.' },
       { name: 'FAQ', desc: 'Accordion-based frequently asked questions addressing common queries.' },
-      { name: 'CTA Section', desc: 'Final call-to-action encouraging exploration or newsletter signup.' },
       { name: 'Footer', desc: 'Social links, legal information, and community resources.' },
     ],
   },
