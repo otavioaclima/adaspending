@@ -41,28 +41,28 @@ const TeaserHeader = () => {
           <DropdownMenuContent align="end" className="bg-[#020617]/90 border-white/10 text-white min-w-[180px] shadow-2xl backdrop-blur-xl rounded-2xl p-1 animate-in fade-in zoom-in-95 duration-200">
             <DropdownMenuItem 
               onClick={() => setLanguage('EN')} 
-              className="hover:!bg-white/10 focus:!bg-white/10 cursor-pointer flex items-center gap-3 py-3 px-4 rounded-xl transition-colors"
+              className="text-white hover:!text-white focus:!text-white data-[highlighted]:!text-white hover:!bg-white/10 focus:!bg-white/10 cursor-pointer flex items-center gap-3 py-3 px-4 rounded-xl transition-colors"
             >
               <span className="text-xl leading-none">🇺🇸</span>
               <span className="text-sm font-bold">English</span>
             </DropdownMenuItem>
             <DropdownMenuItem 
               onClick={() => setLanguage('PT')} 
-              className="hover:!bg-white/10 focus:!bg-white/10 cursor-pointer flex items-center gap-3 py-3 px-4 rounded-xl transition-colors"
+              className="text-white hover:!text-white focus:!text-white data-[highlighted]:!text-white hover:!bg-white/10 focus:!bg-white/10 cursor-pointer flex items-center gap-3 py-3 px-4 rounded-xl transition-colors"
             >
               <span className="text-xl leading-none">🇧🇷</span>
               <span className="text-sm font-bold">Português</span>
             </DropdownMenuItem>
             <DropdownMenuItem 
               onClick={() => setLanguage('ES')} 
-              className="hover:!bg-white/10 focus:!bg-white/10 cursor-pointer flex items-center gap-3 py-3 px-4 rounded-xl transition-colors"
+              className="text-white hover:!text-white focus:!text-white data-[highlighted]:!text-white hover:!bg-white/10 focus:!bg-white/10 cursor-pointer flex items-center gap-3 py-3 px-4 rounded-xl transition-colors"
             >
               <span className="text-xl leading-none">🇪🇸</span>
               <span className="text-sm font-bold">Español</span>
             </DropdownMenuItem>
             <DropdownMenuItem 
               onClick={() => setLanguage('JP')} 
-              className="hover:!bg-white/10 focus:!bg-white/10 cursor-pointer flex items-center gap-3 py-3 px-4 rounded-xl transition-colors"
+              className="text-white hover:!text-white focus:!text-white data-[highlighted]:!text-white hover:!bg-white/10 focus:!bg-white/10 cursor-pointer flex items-center gap-3 py-3 px-4 rounded-xl transition-colors"
             >
               <span className="text-xl leading-none">🇯🇵</span>
               <span className="text-sm font-bold">日本語</span>

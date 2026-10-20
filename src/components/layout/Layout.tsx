@@ -158,31 +158,31 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
                   <ChevronDown className="h-3 w-3 opacity-50" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-white/95 dark:bg-[#0f172a]/95 border-gray-200 dark:border-white/10 min-w-[160px] backdrop-blur-xl rounded-2xl p-1 shadow-2xl">
+              <DropdownMenuContent align="end" className="bg-white/95 dark:bg-[#0f172a]/95 border-gray-200 dark:border-white/10 text-gray-900 dark:text-white min-w-[160px] backdrop-blur-xl rounded-2xl p-1 shadow-2xl">
                 <DropdownMenuItem
                   onClick={() => setLanguage('EN')}
-                  className="hover:!bg-cardano-blue/10 focus:!bg-cardano-blue/10 cursor-pointer flex items-center gap-3 py-2.5 px-4 rounded-xl transition-colors font-bold text-sm"
+                  className="text-gray-900 dark:text-white hover:!text-gray-900 dark:hover:!text-white focus:!text-gray-900 dark:focus:!text-white data-[highlighted]:!text-gray-900 dark:data-[highlighted]:!text-white hover:!bg-cardano-blue/10 focus:!bg-cardano-blue/10 cursor-pointer flex items-center gap-3 py-2.5 px-4 rounded-xl transition-colors font-bold text-sm"
                 >
                   <span className="text-lg">🇺🇸</span>
                   <span>English</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => setLanguage('PT')}
-                  className="hover:!bg-cardano-blue/10 focus:!bg-cardano-blue/10 cursor-pointer flex items-center gap-3 py-2.5 px-4 rounded-xl transition-colors font-bold text-sm"
+                  className="text-gray-900 dark:text-white hover:!text-gray-900 dark:hover:!text-white focus:!text-gray-900 dark:focus:!text-white data-[highlighted]:!text-gray-900 dark:data-[highlighted]:!text-white hover:!bg-cardano-blue/10 focus:!bg-cardano-blue/10 cursor-pointer flex items-center gap-3 py-2.5 px-4 rounded-xl transition-colors font-bold text-sm"
                 >
                   <span className="text-lg">🇧🇷</span>
                   <span>Português</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => setLanguage('ES')}
-                  className="hover:!bg-cardano-blue/10 focus:!bg-cardano-blue/10 cursor-pointer flex items-center gap-3 py-2.5 px-4 rounded-xl transition-colors font-bold text-sm"
+                  className="text-gray-900 dark:text-white hover:!text-gray-900 dark:hover:!text-white focus:!text-gray-900 dark:focus:!text-white data-[highlighted]:!text-gray-900 dark:data-[highlighted]:!text-white hover:!bg-cardano-blue/10 focus:!bg-cardano-blue/10 cursor-pointer flex items-center gap-3 py-2.5 px-4 rounded-xl transition-colors font-bold text-sm"
                 >
                   <span className="text-lg">🇪🇸</span>
                   <span>Español</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => setLanguage('JP')}
-                  className="hover:!bg-cardano-blue/10 focus:!bg-cardano-blue/10 cursor-pointer flex items-center gap-3 py-2.5 px-4 rounded-xl transition-colors font-bold text-sm"
+                  className="text-gray-900 dark:text-white hover:!text-gray-900 dark:hover:!text-white focus:!text-gray-900 dark:focus:!text-white data-[highlighted]:!text-gray-900 dark:data-[highlighted]:!text-white hover:!bg-cardano-blue/10 focus:!bg-cardano-blue/10 cursor-pointer flex items-center gap-3 py-2.5 px-4 rounded-xl transition-colors font-bold text-sm"
                 >
                   <span className="text-lg">🇯🇵</span>
                   <span>日本語</span>
