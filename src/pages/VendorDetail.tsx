@@ -2,7 +2,7 @@
 import React, { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Building, Wallet, Info, Globe, Mail, MessageCircle, Github, Twitter, ExternalLink, Activity, CheckCircle2, Clock, Briefcase, ArrowRight, LayoutGrid, Send } from 'lucide-react';
+import { ArrowLeft, Building, Wallet, Info, Globe, Mail, MessageCircle, Github, Twitter, Activity, CheckCircle2, Clock, Briefcase, ArrowRight, LayoutGrid, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
@@ -199,46 +199,46 @@ const VendorDetail = () => {
 
           <div className="flex flex-wrap gap-2">
             {profile?.website && (
-              <a href={profile.website} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Globe className="h-4 w-4" /> {t('vendor_detail.website')} <ExternalLink className="h-3 w-3 opacity-50" />
-                </Button>
-              </a>
+              <Button variant="outline" size="icon" asChild>
+                <a href={profile.website} target="_blank" rel="noopener noreferrer" aria-label={t('vendor_detail.website')} title={t('vendor_detail.website')}>
+                  <Globe />
+                </a>
+              </Button>
             )}
             {profile?.github && (
-              <a href={profile.github} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Github className="h-4 w-4" /> {t('vendor_detail.github')} <ExternalLink className="h-3 w-3 opacity-50" />
-                </Button>
-              </a>
+              <Button variant="outline" size="icon" asChild>
+                <a href={profile.github} target="_blank" rel="noopener noreferrer" aria-label={t('vendor_detail.github')} title={t('vendor_detail.github')}>
+                  <Github />
+                </a>
+              </Button>
             )}
             {profile?.twitter && (
-              <a href={profile.twitter} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Twitter className="h-4 w-4" /> {t('vendor_detail.twitter')} <ExternalLink className="h-3 w-3 opacity-50" />
-                </Button>
-              </a>
+              <Button variant="outline" size="icon" asChild>
+                <a href={profile.twitter} target="_blank" rel="noopener noreferrer" aria-label={t('vendor_detail.twitter')} title={t('vendor_detail.twitter')}>
+                  <Twitter />
+                </a>
+              </Button>
             )}
             {profile?.discord && (
-              <a href={profile.discord} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <MessageCircle className="h-4 w-4" /> {t('vendor_detail.discord')} <ExternalLink className="h-3 w-3 opacity-50" />
-                </Button>
-              </a>
+              <Button variant="outline" size="icon" asChild>
+                <a href={profile.discord} target="_blank" rel="noopener noreferrer" aria-label={t('vendor_detail.discord')} title={t('vendor_detail.discord')}>
+                  <MessageCircle />
+                </a>
+              </Button>
             )}
             {profile?.telegram && (
-              <a href={profile.telegram} target="_blank" rel="noopener noreferrer">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Send className="h-4 w-4" /> {t('vendor_detail.telegram')} <ExternalLink className="h-3 w-3 opacity-50" />
-                </Button>
-              </a>
+              <Button variant="outline" size="icon" asChild>
+                <a href={profile.telegram} target="_blank" rel="noopener noreferrer" aria-label={t('vendor_detail.telegram')} title={t('vendor_detail.telegram')}>
+                  <Send />
+                </a>
+              </Button>
             )}
             {profile?.email && (
-              <a href={`mailto:${profile.email}`}>
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Mail className="h-4 w-4" /> {t('vendor_detail.contact_vendor')}
-                </Button>
-              </a>
+              <Button variant="outline" size="icon" asChild>
+                <a href={`mailto:${profile.email}`} aria-label={t('vendor_detail.contact_vendor')} title={t('vendor_detail.contact_vendor')}>
+                  <Mail />
+                </a>
+              </Button>
             )}
             {!hasLinks && (
               <Button variant="outline" size="sm">{t('vendor_detail.contact_vendor')}</Button>
