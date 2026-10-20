@@ -2,12 +2,13 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { AlertCircle, AlertTriangle, ShieldCheck } from "lucide-react";
-import { useIntersectData } from "@/hooks/useIntersectData";
+import { useIntersectVendorProjects } from "@/hooks/useIntersectVendorProjects";
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const OverspendingPanel = () => {
   const { t } = useLanguage();
-  const { data: intersectProjects = [] } = useIntersectData();
+  const { data: vendorDirectory } = useIntersectVendorProjects();
+  const intersectProjects = vendorDirectory?.projects || [];
 
   // Use real data from intersectProjects
   const flagged = intersectProjects.filter(
@@ -31,7 +32,9 @@ const OverspendingPanel = () => {
       </CardHeader>
       <CardContent className="pt-4">
         <div className="space-y-4">
-          {flagged.length === 0 ? (
+          {!vendorDirectory ? (
+            <p className="py-6 text-center text-sm text-gray-500 dark:text-gray-400">{t('stats.data_unavailable')}</p>
+          ) : flagged.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-6 text-center">
               <div className="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-full flex items-center justify-center mb-3">
                 <ShieldCheck className="h-6 w-6 text-emerald-600 dark:text-emerald-500" />

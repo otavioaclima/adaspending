@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { useIntersectData } from "@/hooks/useIntersectData";
+import { useIntersectVendorProjects } from "@/hooks/useIntersectVendorProjects";
 import { Link } from "react-router-dom";
 import { ArrowUpDown, ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -37,7 +37,8 @@ const getStatusColor = (status: string) => {
 
 const IntersectProjectsTable = () => {
   const { t } = useLanguage();
-  const { data: intersectProjects = [], isLoading } = useIntersectData();
+  const { data: vendorDirectory, isLoading } = useIntersectVendorProjects();
+  const intersectProjects = vendorDirectory?.projects || [];
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: null, direction: 'asc' });
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;

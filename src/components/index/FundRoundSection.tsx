@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom';
 import { ChevronRight, Briefcase, Wallet, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useIntersectData } from '@/hooks/useIntersectData';
+import { useIntersectVendorProjects } from '@/hooks/useIntersectVendorProjects';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const FundRoundSection = () => {
   const { t } = useLanguage();
-  const { data: intersectProjects = [] } = useIntersectData();
-  
-  const totalAllocation = 343741204; // Official Intersect allocated funds
+  const { data: vendorDirectory } = useIntersectVendorProjects();
+  const intersectProjects = vendorDirectory?.projects || [];
+  const totalAllocation = vendorDirectory?.financialSummary.totalAllocatedAda;
   const totalProjects = intersectProjects.length;
   const uniqueVendors = React.useMemo(() => 
     new Set(intersectProjects.map(p => p.vendor)).size
@@ -41,7 +41,7 @@ const FundRoundSection = () => {
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('explorer.total_allocation')}</p>
               <p className="text-2xl font-black text-cardano-blue dark:text-blue-300">
-                ₳{totalAllocation.toLocaleString()}
+                {totalAllocation === undefined ? '—' : `₳${totalAllocation.toLocaleString()}`}
               </p>
             </div>
             <div className="text-center p-6 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700 transition-colors">
@@ -50,7 +50,7 @@ const FundRoundSection = () => {
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('stats.total_projects')}</p>
               <p className="text-2xl font-black text-gray-900 dark:text-white">
-                {totalProjects}
+                {vendorDirectory ? totalProjects : '—'}
               </p>
             </div>
             <div className="text-center p-6 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-100 dark:border-gray-700 transition-colors">
@@ -59,7 +59,7 @@ const FundRoundSection = () => {
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">{t('stats.total_vendors')}</p>
               <p className="text-2xl font-black text-gray-900 dark:text-white">
-                {uniqueVendors}
+                {vendorDirectory ? uniqueVendors : '—'}
               </p>
             </div>
           </div>

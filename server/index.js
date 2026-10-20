@@ -288,22 +288,59 @@ const lovelaceToAda = (value, field) => {
 };
 
 const getIntersectVendorProjects = () => cached("intersect-vendor-projects", 900, async () => {
-  const firstPage = await fetchJson(`${intersectApiBaseUrl}/projects?limit=100&page=1`);
+  const [firstPage, firstWithdrawnMilestonePage] = await Promise.all([
+    fetchJson(`${intersectApiBaseUrl}/projects?limit=100&page=1`),
+    fetchJson(`${intersectApiBaseUrl}/milestones?limit=100&page=1&withdrawn=true`),
+  ]);
   if (!Array.isArray(firstPage?.data) || !firstPage.pagination) {
     throw new Error("Intersect returned an invalid projects response");
+  }
+  if (!Array.isArray(firstWithdrawnMilestonePage?.data) || !firstWithdrawnMilestonePage.pagination) {
+    throw new Error("Intersect returned an invalid withdrawn milestones response");
   }
 
   const projectsFromApi = [...firstPage.data];
   const totalCount = Number(firstPage.pagination.total_count);
   const pageSize = Number(firstPage.pagination.limit) || 100;
   const pageCount = Number.isFinite(totalCount) ? Math.ceil(totalCount / pageSize) : 1;
-  for (let page = 2; page <= pageCount; page += 1) {
-    const result = await fetchJson(`${intersectApiBaseUrl}/projects?limit=${pageSize}&page=${page}`);
-    if (!Array.isArray(result?.data)) throw new Error(`Intersect returned an invalid projects page ${page}`);
+  const projectPageResults = await Promise.all(Array.from({ length: pageCount - 1 }, (_, index) => {
+    const page = index + 2;
+    return fetchJson(`${intersectApiBaseUrl}/projects?limit=${pageSize}&page=${page}`);
+  }));
+  for (const [index, result] of projectPageResults.entries()) {
+    if (!Array.isArray(result?.data)) throw new Error(`Intersect returned an invalid projects page ${index + 2}`);
     projectsFromApi.push(...result.data);
   }
   if (Number.isFinite(totalCount) && projectsFromApi.length !== totalCount) {
     throw new Error("Intersect returned an incomplete projects list");
+  }
+
+  const withdrawnMilestonePageSize = Number(firstWithdrawnMilestonePage.pagination.limit) || 100;
+  const withdrawnMilestoneTotal = Number(firstWithdrawnMilestonePage.pagination.total_count);
+  const withdrawnMilestonePageCount = Number.isFinite(withdrawnMilestoneTotal)
+    ? Math.ceil(withdrawnMilestoneTotal / withdrawnMilestonePageSize)
+    : 1;
+  const withdrawnMilestonePages = await Promise.all(Array.from({ length: withdrawnMilestonePageCount - 1 }, (_, index) => {
+    const page = index + 2;
+    return fetchJson(`${intersectApiBaseUrl}/milestones?limit=${withdrawnMilestonePageSize}&page=${page}&withdrawn=true`);
+  }));
+  const withdrawnMilestones = [...firstWithdrawnMilestonePage.data];
+  for (const [index, result] of withdrawnMilestonePages.entries()) {
+    if (!Array.isArray(result?.data)) throw new Error(`Intersect returned an invalid withdrawn milestones page ${index + 2}`);
+    withdrawnMilestones.push(...result.data);
+  }
+  if (Number.isFinite(withdrawnMilestoneTotal) && withdrawnMilestones.length !== withdrawnMilestoneTotal) {
+    throw new Error("Intersect returned an incomplete withdrawn milestones list");
+  }
+  const withdrawnMilestoneAdaByProject = new Map();
+  for (const milestone of withdrawnMilestones) {
+    const projectId = String(milestone.project?.project_id || "");
+    if (!projectId || !milestone.withdrawn) continue;
+    const milestoneAmountAda = lovelaceToAda(milestone.amount_lovelace, "withdrawn milestone allocation");
+    withdrawnMilestoneAdaByProject.set(
+      projectId,
+      (withdrawnMilestoneAdaByProject.get(projectId) || 0) + milestoneAmountAda,
+    );
   }
 
   const legacyProjects = await readDataFile("intersectData.json");
@@ -320,11 +357,10 @@ const getIntersectVendorProjects = () => cached("intersect-vendor-projects", 900
       .map((token) => legacyByProjectId.get(token))
       .find(Boolean);
     const allocatedLovelace = project.financials?.total_allocated_lovelace ?? project.initial_amount_lovelace;
-    const withdrawnLovelace = project.financials?.total_withdrawn_lovelace ?? 0;
     const allocatedAda = lovelaceToAda(allocatedLovelace, "allocated amount");
-    const withdrawnAda = lovelaceToAda(withdrawnLovelace, "withdrawn amount");
-    // The API's contract UTXO balance can include ADA shared by multiple projects,
-    // so it is not a per-project remaining allocation. Derive the remainder instead.
+    // The aggregate withdrawal field can include contract-level amounts that exceed
+    // this project's allocation. Use the approved milestone values flagged withdrawn.
+    const withdrawnAda = withdrawnMilestoneAdaByProject.get(projectId) || 0;
     const remainingAda = Math.max(0, allocatedAda - withdrawnAda);
     const upstreamVendorName = typeof project.vendor_name === "string" ? project.vendor_name.trim() : "";
     const mappedVendorName = vendorIdentityByProjectId[projectId] || "";
@@ -344,8 +380,18 @@ const getIntersectVendorProjects = () => cached("intersect-vendor-projects", 900
     };
   });
 
+  const financialSummary = projects.reduce((summary, project) => ({
+    totalAllocatedAda: summary.totalAllocatedAda + project.totalAmount,
+    withdrawnMilestoneAda: summary.withdrawnMilestoneAda + project.amountSpent,
+  }), { totalAllocatedAda: 0, withdrawnMilestoneAda: 0 });
+  financialSummary.remainingMilestoneAda = Math.max(
+    0,
+    financialSummary.totalAllocatedAda - financialSummary.withdrawnMilestoneAda,
+  );
+
   return {
     projects,
+    financialSummary,
     source: "Intersect Administration API · Cardano mainnet",
     updatedAt: new Date().toISOString(),
     upstreamUpdatedAt: firstPage.meta?.timestamp || null,

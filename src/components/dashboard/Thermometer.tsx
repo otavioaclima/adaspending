@@ -3,17 +3,16 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Info, Landmark } from "lucide-react";
-import { useIntersectData } from "@/hooks/useIntersectData";
+import { useIntersectVendorProjects } from "@/hooks/useIntersectVendorProjects";
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const Thermometer = () => {
   const { t } = useLanguage();
-  const { data: intersectProjects = [] } = useIntersectData();
-
-  const OFFICIAL_TOTAL_ALLOCATED = 343741204; // Official Intersect allocated funds
-  const totalPaid = intersectProjects.reduce((sum, p) => sum + p.amountSpent, 0);
-  
-  const percentage = (totalPaid / OFFICIAL_TOTAL_ALLOCATED) * 100;
+  const { data: vendorDirectory } = useIntersectVendorProjects();
+  const financialSummary = vendorDirectory?.financialSummary;
+  const totalPaid = financialSummary?.withdrawnMilestoneAda || 0;
+  const totalAllocation = financialSummary?.totalAllocatedAda || 0;
+  const percentage = totalAllocation ? (totalPaid / totalAllocation) * 100 : 0;
 
   return (
     <Card className="cardano-card h-full">
@@ -33,7 +32,7 @@ const Thermometer = () => {
           <div className="flex justify-between items-end mb-1">
             <div className="space-y-1">
               <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{t('analytics.milestones_paid')}</span>
-              <div className="text-2xl font-black text-[#0033ad] dark:text-blue-400">₳{Math.floor(totalPaid).toLocaleString()}</div>
+              <div className="text-2xl font-black text-[#0033ad] dark:text-blue-400">{financialSummary ? `₳${Math.floor(totalPaid).toLocaleString()}` : '—'}</div>
             </div>
             <div className="text-right space-y-1">
               <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{t('analytics.payout_ratio')}</span>
@@ -45,7 +44,7 @@ const Thermometer = () => {
             <Progress value={percentage} className="h-3 bg-gray-100 dark:bg-gray-800" />
             <div className="flex justify-between mt-2 text-[10px] font-bold text-gray-400">
               <span>₳0</span>
-              <span>₳{OFFICIAL_TOTAL_ALLOCATED.toLocaleString()}</span>
+              <span>{financialSummary ? `₳${Math.floor(totalAllocation).toLocaleString()}` : '—'}</span>
             </div>
           </div>
 

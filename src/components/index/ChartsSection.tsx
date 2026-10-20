@@ -2,7 +2,7 @@
 import React, { useMemo } from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LabelList } from 'recharts';
-import { useIntersectData } from '@/hooks/useIntersectData';
+import { useIntersectVendorProjects } from '@/hooks/useIntersectVendorProjects';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Activity, TrendingUp, PieChart as PieChartIcon, BarChart3 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -10,7 +10,8 @@ import { useIsMobile } from '@/hooks/use-mobile';
 const ChartsSection = () => {
   const { t } = useLanguage();
   const isMobile = useIsMobile();
-  const { data: intersectProjects = [] } = useIntersectData();
+  const { data: vendorDirectory } = useIntersectVendorProjects();
+  const intersectProjects = vendorDirectory?.projects || [];
   const COLORS = ['hsl(var(--cardano-blue))', '#1BAAD6', '#FF9F43', '#28C76F', '#EA5455', '#7367F0'];
 
   const statusData = useMemo(() => {
@@ -21,7 +22,7 @@ const ChartsSection = () => {
     return Object.entries(counts).map(([name, value]) => ({ name, value }));
   }, [intersectProjects]);
 
-  const totalAllocated = 343741204; // Match unified treasury budget
+  const totalAllocated = vendorDirectory?.financialSummary.totalAllocatedAda || 0;
 
   const vendorData = useMemo(() => {
     const stats: Record<string, number> = {};
@@ -38,12 +39,12 @@ const ChartsSection = () => {
           name: displayName, 
           fullName: name,
           amount,
-          percent: (amount / totalAllocated) * 100
+          percent: totalAllocated ? (amount / totalAllocated) * 100 : 0
         };
       })
       .sort((a, b) => b.amount - a.amount)
       .slice(0, 8);
-  }, [intersectProjects]);
+  }, [intersectProjects, totalAllocated]);
 
   return (
     <section className="mb-10">

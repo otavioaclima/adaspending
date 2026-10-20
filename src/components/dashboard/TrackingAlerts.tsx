@@ -5,16 +5,17 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useIntersectData } from "@/hooks/useIntersectData";
+import { useIntersectVendorProjects } from "@/hooks/useIntersectVendorProjects";
 import { Link } from "react-router-dom";
 
 const TrackingAlerts = () => {
   const { t } = useLanguage();
-  const { data: intersectProjects = [] } = useIntersectData();
+  const { data: vendorDirectory } = useIntersectVendorProjects();
+  const intersectProjects = vendorDirectory?.projects || [];
 
   // Categories based on Intersect project statuses
   const allCompleted = intersectProjects.filter(p => p.status.toLowerCase() === "completed");
-  const allInProgress = intersectProjects.filter(p => p.status.toLowerCase() === "in progress");
+  const allInProgress = intersectProjects.filter(p => ['in progress', 'active'].includes(p.status.toLowerCase()));
   const allPaused = intersectProjects.filter(p => p.status.toLowerCase() === "paused" || p.status.toLowerCase() === "on hold");
 
   const alerts = [

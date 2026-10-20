@@ -3,6 +3,11 @@ import { IntersectProject } from '../data/intersectData';
 
 export interface IntersectVendorDirectoryData {
   projects: IntersectProject[];
+  financialSummary: {
+    totalAllocatedAda: number;
+    withdrawnMilestoneAda: number;
+    remainingMilestoneAda: number;
+  };
   source: string;
   updatedAt: string;
   upstreamUpdatedAt?: string | null;

@@ -1,21 +1,18 @@
 
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { useIntersectData } from "@/hooks/useIntersectData";
+import { useIntersectVendorProjects } from "@/hooks/useIntersectVendorProjects";
 import { Progress } from "@/components/ui/progress";
 import { Info, TrendingUp, DollarSign } from "lucide-react";
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const ProposalBudgetComparator = () => {
   const { t } = useLanguage();
-  const { data: intersectProjects = [] } = useIntersectData();
-  
-  const INTERSECT_TOTAL_BUDGET = 345531529; // Intersect Total allocated funds 2024+2025
-  const trackedSpent = intersectProjects.reduce((sum, p) => sum + p.amountSpent, 0);
-  const BASELINE_SPENT = 168789504; // Baseline spent outside of tracked projects
-  const totalSpent = BASELINE_SPENT + trackedSpent;
-  
-  const percentSpent = (totalSpent / INTERSECT_TOTAL_BUDGET) * 100;
+  const { data: vendorDirectory } = useIntersectVendorProjects();
+  const financialSummary = vendorDirectory?.financialSummary;
+  const totalWithdrawnMilestoneValue = financialSummary?.withdrawnMilestoneAda || 0;
+  const totalAllocation = financialSummary?.totalAllocatedAda || 0;
+  const percentSpent = totalAllocation ? (totalWithdrawnMilestoneValue / totalAllocation) * 100 : 0;
 
   return (
     <Card className="cardano-card h-full">
@@ -23,7 +20,7 @@ const ProposalBudgetComparator = () => {
         <div className="flex justify-between items-start">
           <div>
             <CardTitle className="text-lg font-black">{t('analytics.budget_utilization')}</CardTitle>
-            <CardDescription className="text-xs font-medium">{t('analytics.intersect_spending_desc')}</CardDescription>
+            <CardDescription className="text-xs font-medium">{t('analytics.withdrawn_milestone_desc')}</CardDescription>
           </div>
           <div className="p-2 bg-cardano-blue/10 rounded-lg">
             <TrendingUp className="h-5 w-5 text-cardano-blue" />
@@ -34,8 +31,8 @@ const ProposalBudgetComparator = () => {
         <div className="space-y-6">
           <div className="flex justify-between items-end mb-1">
             <div className="space-y-1">
-              <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{t('stats.total_spent')}</span>
-              <div className="text-2xl font-black text-orange-600 dark:text-orange-500">₳{Math.floor(totalSpent).toLocaleString()}</div>
+              <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{t('stats.withdrawn_milestone_value')}</span>
+              <div className="text-2xl font-black text-orange-600 dark:text-orange-500">{financialSummary ? `₳${Math.floor(totalWithdrawnMilestoneValue).toLocaleString()}` : '—'}</div>
             </div>
             <div className="text-right space-y-1">
               <span className="text-[10px] font-black text-gray-500 uppercase tracking-widest">{t('analytics.utilization')}</span>
@@ -47,7 +44,7 @@ const ProposalBudgetComparator = () => {
             <Progress value={percentSpent} className="h-3 bg-gray-100 dark:bg-gray-800" />
             <div className="flex justify-between mt-2 text-[10px] font-bold text-gray-400">
               <span>₳0</span>
-              <span>₳{INTERSECT_TOTAL_BUDGET.toLocaleString()}</span>
+              <span>{financialSummary ? `₳${Math.floor(totalAllocation).toLocaleString()}` : '—'}</span>
             </div>
           </div>
 
