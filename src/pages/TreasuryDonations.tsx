@@ -12,7 +12,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { allTimeTreasuryDonationsSnapshot, getAllTimeTreasuryDonations, getTreasuryDonations } from '@/services/treasuryDonations';
+import { allTimeTreasuryDonationsSnapshot, getAllTimeTreasuryDonations, getTreasuryDonations, treasuryDonationsSnapshot } from '@/services/treasuryDonations';
 
 const localeForLanguage: Record<string, string> = {
   EN: 'en-US',
@@ -30,6 +30,8 @@ const TreasuryDonations = () => {
   const query = useQuery({
     queryKey: ['treasuryDonations'],
     queryFn: getTreasuryDonations,
+    initialData: treasuryDonationsSnapshot,
+    initialDataUpdatedAt: 0,
     staleTime: 5 * 60 * 1000,
     refetchInterval: 5 * 60 * 1000,
   });
@@ -69,7 +71,7 @@ const TreasuryDonations = () => {
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {stats.map((stat) => <Card key={stat.title} className="h-36 animate-pulse" />)}
         </div>
-      ) : query.isError ? (
+      ) : query.isError && !data ? (
         <Card>
           <CardContent className="flex flex-col items-center gap-4 py-10 text-center">
             <p className="text-gray-600 dark:text-gray-300">{t('donations.load_error')}</p>
@@ -80,7 +82,7 @@ const TreasuryDonations = () => {
         </Card>
       ) : data ? (
         <>
-          {(data.stale || allTimeQuery.data?.stale || allTimeQuery.isError) && (
+          {(data.stale || query.isError || allTimeQuery.data?.stale || allTimeQuery.isError) && (
             <p className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-200">
               {t('donations.stale_notice')}
             </p>
