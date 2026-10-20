@@ -83,7 +83,7 @@ const Analytics = () => {
         <p className="text-gray-600 dark:text-gray-400 max-w-3xl">{t('analytics.description')}</p>
       </div>
       {data && (data.stale || data.sync?.state === 'delayed' || data.sync?.state === 'unknown') && (
-        <p className="mb-6 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-200" role="status">
+        <p className="mb-4 text-xs text-gray-500 dark:text-gray-400" role="status">
           {data.stale ? t('vendors.stale_data') : data.sync?.state === 'delayed' ? t('stats.intersect_sync_delayed').replace('{days}', ((data.sync.lagHours || 0) / 24).toFixed(1)) : t('stats.intersect_sync_unknown')}
         </p>
       )}

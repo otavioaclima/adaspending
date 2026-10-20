@@ -558,7 +558,7 @@ const ProjectDetail = () => {
       </div>
 
       {(directory.stale || directory.sync?.state !== 'current') && (
-        <p className="mb-6 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-200" role="status">
+        <p className="mb-4 text-xs text-gray-500 dark:text-gray-400" role="status">
           {directory.stale
             ? t('vendors.stale_data')
             : directory.sync?.state === 'delayed'

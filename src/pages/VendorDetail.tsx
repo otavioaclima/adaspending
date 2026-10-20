@@ -244,7 +244,7 @@ const VendorDetail = () => {
       </div>
 
       {(vendorDirectory?.stale || vendorDirectory?.sync?.state === 'delayed' || vendorDirectory?.sync?.state === 'unknown') && (
-        <p className="mb-6 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-200">
+        <p className="mb-4 text-xs text-gray-500 dark:text-gray-400">
           {vendorDirectory?.stale ? t('vendors.stale_data') : vendorDirectory?.sync?.state === 'delayed' ? t('stats.intersect_sync_delayed').replace('{days}', ((vendorDirectory.sync.lagHours || 0) / 24).toFixed(1)) : t('stats.intersect_sync_unknown')}
         </p>
       )}

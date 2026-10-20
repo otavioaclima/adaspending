@@ -118,7 +118,7 @@ const StatsSection = () => {
                 <FileText className="h-5 w-5 text-purple-500" />
               </div>
       {vendorDirectory?.sync && vendorDirectory.sync.state !== 'current' && (
-        <p className="mt-3 text-xs text-amber-700 dark:text-amber-300" role="status">
+        <p className="mt-3 text-xs text-gray-500 dark:text-gray-400" role="status">
           {vendorDirectory.sync.state === 'delayed'
             ? t('stats.intersect_sync_delayed').replace('{days}', ((vendorDirectory.sync.lagHours || 0) / 24).toFixed(1))
             : t('stats.intersect_sync_unknown')}
