@@ -5,14 +5,12 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Badge } from '@/components/ui/badge';
-import { useIntersectData } from '@/hooks/useIntersectData';
 import { useQuery } from '@tanstack/react-query';
 import { getCardanoStats } from '@/services/cardano';
 
 const HeroSection = () => {
   const { t, language } = useLanguage();
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
-  const { data: intersectProjects = [] } = useIntersectData();
   
   const { data: cardanoStats } = useQuery({
     queryKey: ['cardanoStats'],
@@ -79,11 +77,11 @@ const HeroSection = () => {
           {/* Live Status Badge */}
           <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md mb-10 animate-in fade-in slide-in-from-bottom-4 duration-1000">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              <span className={`animate-ping absolute inline-flex h-full w-full rounded-full ${cardanoStats?.stale ? 'bg-amber-400' : 'bg-emerald-400'} opacity-75`}></span>
+              <span className={`relative inline-flex rounded-full h-2 w-2 ${cardanoStats?.stale ? 'bg-amber-500' : 'bg-emerald-500'}`}></span>
             </span>
             <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400">
-              {t('hero.tracking_treasury')}: {cardanoStats ? formatADA(cardanoStats.treasury) : '—'}
+              {t(cardanoStats?.stale ? 'hero.cached_data' : 'hero.live')}: {cardanoStats ? formatADA(cardanoStats.treasury) : '—'}
             </span>
           </div>
 

@@ -1,15 +1,10 @@
 
 import React, { useState, useMemo } from 'react';
 import {
-  List,
-  Calendar,
-  ChevronDown,
   Info,
   RotateCcw,
   Briefcase,
   Users,
-  Search,
-  SlidersHorizontal,
   GitBranch,
   CircleDashed,
   LayoutGrid
@@ -27,13 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useIntersectData } from '@/hooks/useIntersectData';
+import { useIntersectVendorProjects } from '@/hooks/useIntersectVendorProjects';
 import {
   Treemap,
   ResponsiveContainer,
@@ -117,16 +106,11 @@ const CustomizedContent = (props: any) => {
 const SpendingExplorer = () => {
   const { t } = useLanguage();
   const isMobile = useIsMobile();
-  const { data: intersectProjects = [] } = useIntersectData();
+  const { data: vendorDirectory } = useIntersectVendorProjects();
+  const intersectProjects = vendorDirectory?.projects || [];
   const [viewMode, setViewMode] = useState<'treemap' | 'table' | 'sankey' | 'packing' | 'bubbles'>('treemap');
   const [breakdown, setBreakdown] = useState<'vendor' | 'project'>('vendor');
-  const [selectedYear, setSelectedYear] = useState('FY 2025');
-  const [selectedQuarter, setSelectedQuarter] = useState(1);
-  const [showMobileFilters, setShowMobileFilters] = useState(false);
-
-  // Treasury constants
-  const INTERSECT_TOTAL_BUDGET = 345531529;
-  const OFFICIAL_TOTAL_ALLOCATED = 343741204;
+  const totalAllocation = vendorDirectory?.financialSummary.totalAllocatedAda ?? 0;
 
   // Group data based on breakdown selection
   const chartData = useMemo(() => {
@@ -137,22 +121,14 @@ const SpendingExplorer = () => {
       groups[key] = (groups[key] || 0) + p.totalAmount;
     });
     
-    // Calculate difference to official allocated total
-    const projectsTotal = Object.values(groups).reduce((a, b) => a + b, 0);
-    const adjustment = OFFICIAL_TOTAL_ALLOCATED - projectsTotal;
-    
-    if (adjustment > 0) {
-      groups[t('explorer.untracked_label')] = adjustment;
-    }
-    
     return Object.entries(groups)
       .map(([name, value]) => ({ 
         name, 
         value, 
-        total: OFFICIAL_TOTAL_ALLOCATED 
+        total: totalAllocation,
       }))
       .sort((a, b) => b.value - a.value);
-  }, [intersectProjects, breakdown, t]);
+  }, [intersectProjects, breakdown, totalAllocation]);
 
   const totalTracked = useMemo(() => chartData.reduce((sum, item) => sum + item.value, 0), [chartData]);
 
@@ -217,13 +193,16 @@ const SpendingExplorer = () => {
 
   return (
     <>
+      {vendorDirectory && (vendorDirectory.stale || vendorDirectory.sync?.state === 'delayed' || vendorDirectory.sync?.state === 'unknown') && (
+        <p className="mx-4 mt-4 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-200" role="status">
+          {vendorDirectory.stale ? t('vendors.stale_data') : vendorDirectory.sync?.state === 'delayed' ? t('stats.intersect_sync_delayed').replace('{days}', ((vendorDirectory.sync.lagHours || 0) / 24).toFixed(1)) : t('stats.intersect_sync_unknown')}
+        </p>
+      )}
       <div className="flex flex-col lg:flex-row lg:h-[calc(100vh-120px)] bg-white dark:bg-gray-950 overflow-y-auto lg:overflow-hidden border-t border-gray-100 dark:border-gray-800">
         {/* Site Sidebar Style */}
         <div className="w-full lg:w-52 bg-[#000111] text-white flex flex-col shrink-0 border-r border-gray-800">
           <div className="p-4 space-y-4 border-b border-gray-800/50">
             <Button variant="ghost" className="w-full justify-start text-gray-400 hover:text-white hover:bg-white/5 gap-3 font-medium text-sm" onClick={() => {
-              setSelectedYear('FY 2025');
-              setSelectedQuarter(1);
               setBreakdown('vendor');
             }}>
               <RotateCcw className="h-4 w-4" />
@@ -252,59 +231,11 @@ const SpendingExplorer = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                <Button 
-                  variant="outline" 
-                  size="icon"
-                  className={`lg:hidden h-9 w-9 border-gray-800 bg-[#1e2532] transition-all ${showMobileFilters ? 'text-cardano-blue bg-white' : 'text-gray-300'}`}
-                  onClick={() => setShowMobileFilters(!showMobileFilters)}
-                >
-                  <SlidersHorizontal className="h-4 w-4" />
-                </Button>
               </div>
             </div>
           </div>
 
-          <div className={`${showMobileFilters ? 'block' : 'hidden'} lg:block p-5 space-y-8 flex-1 overflow-y-auto`}>
-            <div>
-              <div className="flex items-center gap-2 text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-4">
-                <Calendar className="h-3 w-3" />
-                {t('explorer.fiscal_period')}
-              </div>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="w-full justify-between bg-[#1e2532] border-gray-800 text-gray-300 hover:text-white hover:bg-[#252d3d] h-10 text-xs font-bold transition-colors">
-                    {selectedYear}
-                    <ChevronDown className="h-4 w-4 opacity-50" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 bg-[#000111] border-gray-800 text-white">
-                  <DropdownMenuItem className="focus:bg-white/10 focus:text-white cursor-pointer font-bold text-xs" onClick={() => setSelectedYear('FY 2025')}>
-                    FY 2025
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="focus:bg-white/10 focus:text-white cursor-pointer font-bold text-xs" onClick={() => setSelectedYear('FY 2026')}>
-                    FY 2026
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-
-            <div>
-              <div className="flex items-center gap-2 text-[10px] font-black text-gray-500 uppercase tracking-[0.2em] mb-4">
-                {t('explorer.quarter_filters')}
-              </div>
-              <div className="grid grid-cols-4 gap-1.5">
-                {[1, 2, 3, 4].map(q => (
-                  <button
-                    key={q}
-                    onClick={() => setSelectedQuarter(q)}
-                    className={`h-9 text-[10px] font-black rounded-md flex items-center justify-center transition-all ${q === selectedQuarter ? 'bg-cardano-blue shadow-[0_0_15px_rgba(0,51,173,0.4)] text-white' : 'bg-[#131637] text-gray-500 hover:text-gray-300 hover:bg-[#1a1e4a]'}`}
-                  >
-                    Q{q}
-                  </button>
-                ))}
-              </div>
-            </div>
-
+          <div className="p-5 space-y-8 flex-1 overflow-y-auto">
             <div className="pt-6 border-t border-gray-800">
               <div className="text-[10px] font-black text-gray-600 uppercase tracking-[0.2em] mb-4">{t('explorer.active_selection')}</div>
               <div className="flex items-center gap-3 mb-2">
@@ -319,7 +250,7 @@ const SpendingExplorer = () => {
                 ₳{(totalTracked / 1000000).toFixed(1)}M <span className="text-[10px] text-gray-500 font-bold ml-1">{t('explorer.tracked')}</span>
               </div>
               <div className="pl-7 mt-2 text-[9px] font-bold text-gray-500">
-                {selectedYear} - Q{selectedQuarter} Report
+                {t('explorer.all_time_current_allocations')}
               </div>
             </div>
           </div>
@@ -342,7 +273,7 @@ const SpendingExplorer = () => {
                   </Badge>
                 </h2>
                 <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest">
-                  {selectedYear} {t('explorer.budget_patterns')}
+                  {t('explorer.budget_patterns')}
                 </p>
               </div>
 
@@ -392,7 +323,7 @@ const SpendingExplorer = () => {
                   <Info className="h-2.5 w-2.5" />
                 </div>
                 <div className="text-2xl font-black text-[#0033ad] dark:text-blue-400 tracking-tighter">
-                  ₳{INTERSECT_TOTAL_BUDGET.toLocaleString()}
+                  ₳{totalAllocation.toLocaleString()}
                 </div>
               </div>
             </div>

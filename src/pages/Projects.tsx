@@ -20,7 +20,7 @@ import {
   TableRow,
   TableFooter,
 } from "@/components/ui/table";
-import { useIntersectData } from '@/hooks/useIntersectData';
+import { useIntersectVendorProjects } from '@/hooks/useIntersectVendorProjects';
 import { PageSkeleton } from '@/components/ui/PageSkeleton';
 import { useLanguage } from '@/contexts/LanguageContext';
 import {
@@ -68,7 +68,9 @@ const getStatusColor = (status: string) => {
 
 const Projects = () => {
   const { t } = useLanguage();
-  const { data: intersectProjects = [], isLoading } = useIntersectData();
+  const { data: directory, isLoading, isError } = useIntersectVendorProjects();
+  const intersectProjects = directory?.projects || [];
+  const totalAllocation = directory?.financialSummary.totalAllocatedAda ?? 0;
   const [searchParams] = useSearchParams();
   const initialStatus = searchParams.get('status') || 'all';
   const initialSearch = searchParams.get('search') || '';
@@ -175,6 +177,9 @@ const Projects = () => {
     setVendorFilter('all');
   };
 
+  if (isLoading) return <PageSkeleton />;
+  if (isError || !directory) return <p className="py-10 text-center text-gray-600 dark:text-gray-300">{t('stats.data_unavailable')}</p>;
+
   return (
     <>
       <div className="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -187,6 +192,9 @@ const Projects = () => {
           </div>
           <p className="text-gray-600 dark:text-gray-400 max-w-3xl">
             {t('projects.description')}
+          </p>
+          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+            {directory.source} · API response {directory.upstreamUpdatedAt ? new Date(directory.upstreamUpdatedAt).toLocaleString() : new Date(directory.updatedAt).toLocaleString()} UTC
           </p>
         </div>
 
@@ -211,6 +219,16 @@ const Projects = () => {
           </Button>
         </div>
       </div>
+
+      {(directory.stale || directory.sync?.state !== 'current') && (
+        <p className="mb-6 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-200" role="status">
+          {directory.stale
+            ? t('vendors.stale_data')
+            : directory.sync?.state === 'delayed'
+              ? t('stats.intersect_sync_delayed').replace('{days}', ((directory.sync.lagHours || 0) / 24).toFixed(1))
+              : t('stats.intersect_sync_unknown')}
+        </p>
+      )}
 
       {/* Filter Bar */}
       <div className="bg-white dark:bg-gray-800 p-4 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 flex flex-col lg:flex-row lg:items-end gap-x-3 gap-y-4 transition-all duration-300 overflow-hidden">
@@ -472,7 +490,7 @@ const Projects = () => {
                       {project.totalAmount.toLocaleString()}
                     </TableCell>
                     <TableCell className="text-right text-gray-500 text-xs font-bold">
-                      {((project.totalAmount / 343741205) * 100).toFixed(2)}%
+                      {(totalAllocation > 0 ? (project.totalAmount / totalAllocation) * 100 : 0).toFixed(2)}%
                     </TableCell>
                     <TableCell className="text-right font-bold text-orange-600">
                       {project.amountSpent.toLocaleString()}
@@ -507,7 +525,7 @@ const Projects = () => {
                     ₳{sortedProjects.reduce((sum, p) => sum + p.totalAmount, 0).toLocaleString()}
                   </TableCell>
                   <TableCell className="text-right text-gray-500">
-                    {((sortedProjects.reduce((sum, p) => sum + p.totalAmount, 0) / 343741205) * 100).toFixed(2)}%
+                    {(totalAllocation > 0 ? (sortedProjects.reduce((sum, p) => sum + p.totalAmount, 0) / totalAllocation) * 100 : 0).toFixed(2)}%
                   </TableCell>
                   <TableCell className="text-right text-orange-600">
                     ₳{sortedProjects.reduce((sum, p) => sum + p.amountSpent, 0).toLocaleString()}

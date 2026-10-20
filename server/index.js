@@ -241,6 +241,7 @@ const getAllTimeTreasuryDonations = () => cached("treasury-donations-all-time", 
         try {
           rows = await fetchJson(`${koiosBaseUrl}/totals?_epoch_no=${epoch}`);
         } catch {
+          await new Promise((resolve) => setTimeout(resolve, 250));
           rows = await fetchJson(`${koiosBaseUrl}/totals?_epoch_no=${epoch}`);
         }
         const totals = Array.isArray(rows) ? rows[0] : undefined;
@@ -252,7 +253,9 @@ const getAllTimeTreasuryDonations = () => cached("treasury-donations-all-time", 
     }
   };
 
-  const workerCount = Math.min(4, epochs.length);
+  // Koios's public tier supports higher throughput; 12 workers keep a cold
+  // all-epoch refresh responsive without issuing the entire history at once.
+  const workerCount = Math.min(12, epochs.length);
   await Promise.all(Array.from({ length: workerCount }, worker));
   if (failedEpochs.length) {
     throw new Error(`Koios donation history was incomplete for ${failedEpochs.length} epochs`);
@@ -276,11 +279,6 @@ const readDataFile = async (filename) => {
   return JSON.parse(await fs.readFile(path.join(directory, "data", filename), "utf8"));
 };
 
-const projectIdTokens = (value) => String(value || "")
-  .split(/[&,\s]+/)
-  .map((identifier) => identifier.startsWith("UTXO-") ? identifier.slice(5) : identifier)
-  .filter(Boolean);
-
 const lovelaceToAda = (value, field) => {
   const amount = Number(value);
   if (!Number.isFinite(amount) || amount < 0) throw new Error(`Intersect returned invalid ${field}`);
@@ -288,17 +286,10 @@ const lovelaceToAda = (value, field) => {
 };
 
 const getIntersectVendorProjects = () => cached("intersect-vendor-projects", 900, async () => {
-  const [firstPage, firstWithdrawnMilestonePage] = await Promise.all([
-    fetchJson(`${intersectApiBaseUrl}/projects?limit=100&page=1`),
-    fetchJson(`${intersectApiBaseUrl}/milestones?limit=100&page=1&withdrawn=true`),
-  ]);
+  const firstPage = await fetchJson(`${intersectApiBaseUrl}/projects?limit=100&page=1`);
   if (!Array.isArray(firstPage?.data) || !firstPage.pagination) {
     throw new Error("Intersect returned an invalid projects response");
   }
-  if (!Array.isArray(firstWithdrawnMilestonePage?.data) || !firstWithdrawnMilestonePage.pagination) {
-    throw new Error("Intersect returned an invalid withdrawn milestones response");
-  }
-
   const projectsFromApi = [...firstPage.data];
   const totalCount = Number(firstPage.pagination.total_count);
   const pageSize = Number(firstPage.pagination.limit) || 100;
@@ -315,22 +306,69 @@ const getIntersectVendorProjects = () => cached("intersect-vendor-projects", 900
     throw new Error("Intersect returned an incomplete projects list");
   }
 
-  const withdrawnMilestonePageSize = Number(firstWithdrawnMilestonePage.pagination.limit) || 100;
-  const withdrawnMilestoneTotal = Number(firstWithdrawnMilestonePage.pagination.total_count);
-  const withdrawnMilestonePageCount = Number.isFinite(withdrawnMilestoneTotal)
-    ? Math.ceil(withdrawnMilestoneTotal / withdrawnMilestonePageSize)
-    : 1;
-  const withdrawnMilestonePages = await Promise.all(Array.from({ length: withdrawnMilestonePageCount - 1 }, (_, index) => {
-    const page = index + 2;
-    return fetchJson(`${intersectApiBaseUrl}/milestones?limit=${withdrawnMilestonePageSize}&page=${page}&withdrawn=true`);
-  }));
-  const withdrawnMilestones = [...firstWithdrawnMilestonePage.data];
-  for (const [index, result] of withdrawnMilestonePages.entries()) {
-    if (!Array.isArray(result?.data)) throw new Error(`Intersect returned an invalid withdrawn milestones page ${index + 2}`);
-    withdrawnMilestones.push(...result.data);
+  const firstMilestonePage = await fetchJson(`${intersectApiBaseUrl}/milestones?limit=100&page=1`);
+  if (!Array.isArray(firstMilestonePage?.data) || !firstMilestonePage.pagination) {
+    throw new Error("Intersect returned an invalid milestones response");
   }
-  if (Number.isFinite(withdrawnMilestoneTotal) && withdrawnMilestones.length !== withdrawnMilestoneTotal) {
-    throw new Error("Intersect returned an incomplete withdrawn milestones list");
+  const allMilestoneCount = Number(firstMilestonePage.pagination.total_count);
+  const allMilestonePageSize = Number(firstMilestonePage.pagination.limit) || 100;
+  const allMilestonePageCount = Number.isFinite(allMilestoneCount)
+    ? Math.ceil(allMilestoneCount / allMilestonePageSize)
+    : 1;
+  const allMilestonePages = await Promise.all(Array.from({ length: allMilestonePageCount - 1 }, (_, index) => {
+    const page = index + 2;
+    return fetchJson(`${intersectApiBaseUrl}/milestones?limit=${allMilestonePageSize}&page=${page}`);
+  }));
+  const allMilestones = [...firstMilestonePage.data];
+  for (const [index, result] of allMilestonePages.entries()) {
+    if (!Array.isArray(result?.data)) throw new Error(`Intersect returned an invalid milestones page ${index + 2}`);
+    allMilestones.push(...result.data);
+  }
+  if (Number.isFinite(allMilestoneCount) && allMilestones.length !== allMilestoneCount) {
+    throw new Error("Intersect returned an incomplete milestones list");
+  }
+
+  const withdrawnMilestones = allMilestones.filter((milestone) => milestone.withdrawn);
+
+  let upstreamStatus = null;
+  try {
+    upstreamStatus = await fetchJson(`${intersectApiBaseUrl}/status`);
+  } catch (error) {
+    console.warn("Intersect status check failed:", error.message);
+  }
+
+  const milestonesByProject = new Map();
+  for (const milestone of allMilestones) {
+    const projectId = String(milestone.project?.project_id || "");
+    if (!projectId) continue;
+    const milestones = milestonesByProject.get(projectId) || [];
+    const timeLimit = Number(milestone.time_limit);
+    const completionEvidence = Array.isArray(milestone.completion?.evidence)
+      ? milestone.completion.evidence[0]
+      : null;
+    const anchorUrl = completionEvidence?.anchorUrl;
+    const evidenceLink = Array.isArray(anchorUrl) ? anchorUrl.join("") : anchorUrl;
+    milestones.push({
+      id: String(milestone.milestone_id || milestone.id),
+      title: String(milestone.label || milestone.milestone_id || "Milestone"),
+      amount: lovelaceToAda(milestone.amount_lovelace, "milestone allocation"),
+      status: milestone.withdrawn ? "Withdrawn" : milestone.archived ? "Archived" : milestone.paused ? "Paused" : milestone.completion ? "Completed" : "Pending",
+      unlockDate: Number.isFinite(timeLimit) && timeLimit > 0 ? new Date(timeLimit).toISOString().slice(0, 10) : "N/A",
+      withdrawalTime: milestone.withdrawal?.time?.iso || null,
+      withdrawalTxHash: milestone.withdrawal?.tx_hash || null,
+      description: String(milestone.description || milestone.acceptance_criteria || ""),
+      acceptanceCriteria: String(milestone.acceptance_criteria || ""),
+      evidenceStatus: milestone.evidence_provided ? "Submitted" : "None",
+      evidence: completionEvidence && evidenceLink ? {
+        title: String(completionEvidence.label || milestone.label || "Milestone evidence"),
+        link: String(evidenceLink),
+        transactionHash: milestone.withdrawal?.tx_hash || undefined,
+        transactionLink: milestone.withdrawal?.tx_hash
+          ? `https://cexplorer.io/tx/${milestone.withdrawal.tx_hash}`
+          : undefined,
+      } : undefined,
+    });
+    milestonesByProject.set(projectId, milestones);
   }
   const withdrawnMilestoneAdaByProject = new Map();
   for (const milestone of withdrawnMilestones) {
@@ -343,19 +381,10 @@ const getIntersectVendorProjects = () => cached("intersect-vendor-projects", 900
     );
   }
 
-  const legacyProjects = await readDataFile("intersectData.json");
-  const legacyByProjectId = new Map();
-  for (const legacyProject of legacyProjects) {
-    for (const token of projectIdTokens(legacyProject.id)) legacyByProjectId.set(token, legacyProject);
-  }
-
   const excludedTestProjectIds = new Set(["EX-000-01"]);
   const projects = projectsFromApi.filter((project) => !excludedTestProjectIds.has(project.project_id)).map((project) => {
     const projectId = String(project.project_id || "");
     if (!projectId) throw new Error("Intersect returned a project without an identifier");
-    const matchingLegacy = projectIdTokens(projectId)
-      .map((token) => legacyByProjectId.get(token))
-      .find(Boolean);
     const allocatedLovelace = project.financials?.total_allocated_lovelace ?? project.initial_amount_lovelace;
     const allocatedAda = lovelaceToAda(allocatedLovelace, "allocated amount");
     // The aggregate withdrawal field can include contract-level amounts that exceed
@@ -364,8 +393,10 @@ const getIntersectVendorProjects = () => cached("intersect-vendor-projects", 900
     const remainingAda = Math.max(0, allocatedAda - withdrawnAda);
     const upstreamVendorName = typeof project.vendor_name === "string" ? project.vendor_name.trim() : "";
     const mappedVendorName = vendorIdentityByProjectId[projectId] || "";
+    const projectMilestones = (milestonesByProject.get(projectId) || [])
+      .sort((left, right) => left.unlockDate.localeCompare(right.unlockDate));
     return {
-      id: matchingLegacy?.id || projectId,
+      id: projectId,
       officialProjectId: projectId,
       projectName: String(project.project_name || projectId),
       vendor: upstreamVendorName || mappedVendorName || "Unmapped vendor",
@@ -376,7 +407,11 @@ const getIntersectVendorProjects = () => cached("intersect-vendor-projects", 900
       amountRemaining: remainingAda,
       status: String(project.status || "unknown"),
       description: project.description || "",
-      milestones: matchingLegacy?.milestones || [],
+      fundedAt: project.fund_time?.iso || null,
+      fundTxHash: project.fund_tx_hash || null,
+      lastEventAt: project.last_event_time?.iso || null,
+      contractInstance: project.treasury?.contract_instance || null,
+      milestones: projectMilestones,
     };
   });
 
@@ -389,12 +424,29 @@ const getIntersectVendorProjects = () => cached("intersect-vendor-projects", 900
     financialSummary.totalAllocatedAda - financialSummary.withdrawnMilestoneAda,
   );
 
+  const syncStatus = upstreamStatus?.data || null;
+  const lastEventProcessedAt = syncStatus?.sync?.last_event_processed?.iso || null;
+  const indexedThroughAt = syncStatus?.chain?.indexer_time?.iso || null;
+  const syncCheckedAt = upstreamStatus?.meta?.timestamp || null;
+  const syncLagMs = lastEventProcessedAt ? Date.now() - Date.parse(lastEventProcessedAt) : null;
+  const sync = {
+    state: syncLagMs === null || !Number.isFinite(syncLagMs)
+      ? "unknown"
+      : syncLagMs > 24 * 60 * 60 * 1000 ? "delayed" : "current",
+    lastEventProcessedAt,
+    indexedThroughAt,
+    checkedAt: syncCheckedAt,
+    lagHours: syncLagMs === null || !Number.isFinite(syncLagMs) ? null : Math.max(0, syncLagMs / (60 * 60 * 1000)),
+    indexedProjectCount: Number(syncStatus?.totals?.projects) || null,
+  };
+
   return {
     projects,
     financialSummary,
     source: "Intersect Administration API · Cardano mainnet",
     updatedAt: new Date().toISOString(),
     upstreamUpdatedAt: firstPage.meta?.timestamp || null,
+    sync,
     stale: false,
   };
 });
@@ -407,7 +459,7 @@ const apiRoutes = {
   "/api/v1/cardano/network-state": getNetworkState,
   "/api/v1/markets/ada-price": getAdaPrice,
   "/api/v1/data/intersect-vendor-projects": getIntersectVendorProjects,
-  "/api/v1/data/intersect-projects": () => readDataFile("intersectData.json"),
+  "/api/v1/data/intersect-projects": async () => (await getIntersectVendorProjects()).projects,
   "/api/v1/data/vendor-profiles": () => readDataFile("vendorProfiles.json"),
 };
 
@@ -468,7 +520,7 @@ const server = createServer(async (request, response) => {
         ? 21_600
         : requestUrl.pathname.endsWith("/treasury-donations")
           ? 300
-          : requestUrl.pathname.endsWith("/intersect-vendor-projects") ? 900
+          : requestUrl.pathname.endsWith("/intersect-vendor-projects") || requestUrl.pathname.endsWith("/intersect-projects") ? 900
           : requestUrl.pathname.includes("/data/") ? 3600 : 60;
       response.writeHead(200, {
         "Cache-Control": `public, max-age=${maxAge}`,

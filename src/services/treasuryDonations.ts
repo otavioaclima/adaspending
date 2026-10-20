@@ -42,7 +42,7 @@ export const allTimeTreasuryDonationsSnapshot: AllTimeTreasuryDonations = {
   epochsWithDonations: 42,
   source: 'Koios · Cardano mainnet',
   updatedAt: '2026-10-20T14:15:48.719Z',
-  stale: false,
+  stale: true,
 };
 
 // Small, verified recent-epoch snapshot lets the page render immediately while
@@ -74,7 +74,7 @@ export const treasuryDonationsSnapshot: TreasuryDonationsData = {
   }],
   source: 'Koios · Cardano mainnet',
   updatedAt: '2026-10-20T15:37:51.389Z',
-  stale: false,
+  stale: true,
 };
 
 export const getTreasuryDonations = async (): Promise<TreasuryDonationsData> => {

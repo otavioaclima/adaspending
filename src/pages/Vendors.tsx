@@ -141,6 +141,7 @@ const Vendors = () => {
 
     return Object.values(stats).sort((a: any, b: any) => b.totalFunded - a.totalFunded);
   }, [intersectProjects]);
+  const totalAllocation = directory?.financialSummary.totalAllocatedAda ?? 0;
 
   const filteredVendors = useMemo(() => {
     return vendors.filter((vendor: any) => {
@@ -238,7 +239,7 @@ const Vendors = () => {
             {t('vendors.description')}
           </p>
           <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-            {t('vendors.data_source')}{formattedUpdateTime ? ` · ${formattedUpdateTime} UTC` : ''}
+            {t('vendors.data_source')} {directory.source}{formattedUpdateTime ? ` · API response ${formattedUpdateTime} UTC` : ''}
           </p>
         </div>
 
@@ -264,9 +265,13 @@ const Vendors = () => {
         </div>
       </div>
 
-      {directory.stale && (
+      {(directory.stale || directory.sync?.state !== 'current') && (
         <p className="mb-6 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-200">
-          {t('vendors.stale_data')}
+          {directory.stale
+            ? t('vendors.stale_data')
+            : directory.sync?.state === 'delayed'
+              ? t('stats.intersect_sync_delayed').replace('{days}', ((directory.sync.lagHours || 0) / 24).toFixed(1))
+              : t('stats.intersect_sync_unknown')}
         </p>
       )}
 
@@ -416,8 +421,7 @@ const Vendors = () => {
               <TableBody>
                 {sortedVendors.map((vendor: any) => {
                   const p = getProfile(vendor.name);
-                  const OFFICIAL_TOTAL = 343741205;
-                  const percentage = (vendor.totalFunded / OFFICIAL_TOTAL) * 100;
+                  const percentage = totalAllocation > 0 ? (vendor.totalFunded / totalAllocation) * 100 : 0;
 
                   return (
                     <TableRow key={vendor.name} className="border-gray-100 dark:border-gray-800 hover:bg-gray-50/50 dark:hover:bg-gray-900/30">
@@ -482,7 +486,7 @@ const Vendors = () => {
                     ₳{sortedVendors.reduce((sum: number, v: any) => sum + v.totalFunded, 0).toLocaleString()}
                   </TableCell>
                   <TableCell className="text-right text-gray-500">
-                    {((sortedVendors.reduce((sum: number, v: any) => sum + v.totalFunded, 0) / 343741205) * 100).toFixed(2)}%
+                    {(totalAllocation > 0 ? (sortedVendors.reduce((sum: number, v: any) => sum + v.totalFunded, 0) / totalAllocation) * 100 : 0).toFixed(2)}%
                   </TableCell>
                   <TableCell className="text-right text-orange-600 dark:text-orange-500">
                     ₳{sortedVendors.reduce((sum: number, v: any) => sum + v.amountSpent, 0).toLocaleString()}

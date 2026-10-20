@@ -1,5 +1,6 @@
 
 import React, { useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Building, Wallet, Info, Globe, Mail, MessageCircle, Github, Twitter, ExternalLink, Activity, CheckCircle2, Clock, Briefcase, ArrowRight, LayoutGrid, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -24,6 +25,7 @@ import { useIntersectVendorProjects } from '@/hooks/useIntersectVendorProjects';
 import { useVendorProfiles } from '@/hooks/useVendorProfiles';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { PageSkeleton } from '@/components/ui/PageSkeleton';
+import { getAdaPrice } from '@/services/market';
 import VendorAccountingTable from '@/components/vendors/VendorAccountingTable';
 
 const getStatusIcon = (status: string) => {
@@ -52,6 +54,7 @@ const VendorDetail = () => {
   const { language, t } = useLanguage();
   const { id } = useParams<{ id: string }>();
   const { data: vendorDirectory, isLoading: loadingProjects } = useIntersectVendorProjects();
+  const { data: adaPrice } = useQuery({ queryKey: ['adaPrice'], queryFn: getAdaPrice, staleTime: 5 * 60 * 1000, refetchInterval: 60_000 });
   const intersectProjects = vendorDirectory?.projects || [];
   const { data: vendorProfiles = [], isLoading: loadingProfiles } = useVendorProfiles();
   
@@ -99,7 +102,7 @@ const VendorDetail = () => {
       if (project.milestones) {
         project.milestones.forEach(milestone => {
           if (milestone.status.toLowerCase() === 'withdrawn') {
-            const date = new Date(milestone.unlockDate);
+            const date = new Date(milestone.withdrawalTime || milestone.unlockDate);
             if (!isNaN(date.getTime())) {
               const monthYear = date.toLocaleString('en-US', { month: 'short', year: '2-digit' });
               monthlyData[monthYear] = (monthlyData[monthYear] || 0) + milestone.amount;
@@ -135,16 +138,19 @@ const VendorDetail = () => {
     );
   }
 
-  const transactionRows = vendorProjects.map(project => ({
-    id: project.id,
-    title: project.projectName,
-    fundRound: t('vendor_detail.intersect_treasury'),
-    requestedAmount: project.totalAmount,
-    fundedAmount: project.totalAmount,
-    withdrawnAmount: project.amountSpent,
-    status: project.status,
-    updatedAt: new Date().toISOString(),
-  }));
+  const transactionRows = vendorProjects.flatMap(project => (project.milestones || [])
+    .filter(milestone => milestone.status.toLowerCase() === 'withdrawn')
+    .map(milestone => ({
+      id: `${project.id}-${milestone.id}`,
+      title: `${project.projectName} · ${milestone.title}`,
+      fundRound: t('vendor_detail.intersect_treasury'),
+      requestedAmount: milestone.amount,
+      fundedAmount: milestone.amount,
+      withdrawnAmount: milestone.amount,
+      transactionHash: milestone.withdrawalTxHash || undefined,
+      status: milestone.status,
+      updatedAt: milestone.withdrawalTime || milestone.unlockDate,
+    })));
 
   const hasLinks = profile && (profile.website || profile.email || profile.discord || profile.github || profile.twitter);
 
@@ -237,9 +243,9 @@ const VendorDetail = () => {
         </div>
       </div>
 
-      {vendorDirectory?.stale && (
+      {(vendorDirectory?.stale || vendorDirectory?.sync?.state === 'delayed' || vendorDirectory?.sync?.state === 'unknown') && (
         <p className="mb-6 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-200">
-          {t('vendors.stale_data')}
+          {vendorDirectory?.stale ? t('vendors.stale_data') : vendorDirectory?.sync?.state === 'delayed' ? t('stats.intersect_sync_delayed').replace('{days}', ((vendorDirectory.sync.lagHours || 0) / 24).toFixed(1)) : t('stats.intersect_sync_unknown')}
         </p>
       )}
 
@@ -426,7 +432,7 @@ const VendorDetail = () => {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <p className="text-xs font-bold text-gray-400 dark:text-gray-500 ml-7 opacity-80 cursor-help w-fit flex items-center gap-1">
-                          ≈ ${(stats.totalFunded * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                          ≈ ${adaPrice === undefined ? '—' : (stats.totalFunded * adaPrice).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
                           <Info className="h-3 w-3 opacity-50" />
                         </p>
                       </TooltipTrigger>
@@ -448,7 +454,7 @@ const VendorDetail = () => {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <p className="text-xs font-bold text-gray-400 dark:text-gray-500 ml-7 opacity-80 cursor-help w-fit flex items-center gap-1">
-                          ≈ ${(stats.amountWithdrawn * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                          ≈ ${adaPrice === undefined ? '—' : (stats.amountWithdrawn * adaPrice).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
                           <Info className="h-3 w-3 opacity-50" />
                         </p>
                       </TooltipTrigger>
@@ -470,7 +476,7 @@ const VendorDetail = () => {
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <p className="text-xs font-bold text-gray-400 dark:text-gray-500 ml-7 opacity-80 cursor-help w-fit flex items-center gap-1">
-                          ≈ ${(stats.remaining * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
+                          ≈ ${adaPrice === undefined ? '—' : (stats.remaining * adaPrice).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })} USD
                           <Info className="h-3 w-3 opacity-50" />
                         </p>
                       </TooltipTrigger>

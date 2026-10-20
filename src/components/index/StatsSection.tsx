@@ -132,7 +132,14 @@ const StatsSection = () => {
       {vendorDirectory && (
         <p className="text-xs text-gray-500 dark:text-gray-400">
           {t('vendors.data_source')}: {vendorDirectory.source}
-          {vendorDirectory.upstreamUpdatedAt && <> · {new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' }).format(new Date(vendorDirectory.upstreamUpdatedAt))} UTC</>}
+          {vendorDirectory.upstreamUpdatedAt && <> · API response {new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' }).format(new Date(vendorDirectory.upstreamUpdatedAt))} UTC</>}
+        </p>
+      )}
+      {vendorDirectory?.sync && vendorDirectory.sync.state !== 'current' && (
+        <p className="text-xs text-amber-700 dark:text-amber-300" role="status">
+          {vendorDirectory.sync.state === 'delayed'
+            ? t('stats.intersect_sync_delayed').replace('{days}', ((vendorDirectory.sync.lagHours || 0) / 24).toFixed(1))
+            : t('stats.intersect_sync_unknown')}
         </p>
       )}
       <p className="text-xs text-gray-500 dark:text-gray-400">{t('stats.withdrawn_milestone_note')}</p>

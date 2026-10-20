@@ -1,15 +1,7 @@
 
-import { useQuery } from '@tanstack/react-query';
-import { IntersectProject } from '../data/intersectData';
+import { useIntersectVendorProjects } from './useIntersectVendorProjects';
 
 export const useIntersectData = () => {
-  return useQuery<IntersectProject[]>({
-    queryKey: ['intersectData'],
-    queryFn: async () => {
-      const response = await fetch('/api/v1/data/intersect-projects');
-      if (!response.ok) throw new Error('Failed to fetch intersect data');
-      return response.json();
-    },
-    staleTime: 24 * 60 * 60 * 1000, // 24 hours
-  });
+  const query = useIntersectVendorProjects();
+  return { ...query, data: query.data?.projects };
 };

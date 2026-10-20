@@ -1,6 +1,7 @@
 
 import React, { useMemo, useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import {
   ArrowLeft,
   ExternalLink,
@@ -43,8 +44,9 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useIntersectData } from '@/hooks/useIntersectData';
+import { useIntersectVendorProjects } from '@/hooks/useIntersectVendorProjects';
 import { useVendorProfiles } from '@/hooks/useVendorProfiles';
+import { getAdaPrice } from '@/services/market';
 import { PageSkeleton } from '@/components/ui/PageSkeleton';
 import { 
   Tooltip as UITooltip, 
@@ -354,10 +356,12 @@ const MilestoneTimeline = ({ milestones, t }: { milestones: any[], t: any }) => 
 const ProjectDetail = () => {
   const { t } = useLanguage();
   const { id } = useParams<{ id: string }>();
-  const { data: intersectProjects = [], isLoading: loadingProjects } = useIntersectData();
+  const { data: directory, isLoading: loadingProjects } = useIntersectVendorProjects();
+  const intersectProjects = directory?.projects || [];
   const { data: vendorProfiles = [], isLoading: loadingProfiles } = useVendorProfiles();
+  const { data: adaPrice } = useQuery({ queryKey: ['adaPrice'], queryFn: getAdaPrice, staleTime: 5 * 60 * 1000, refetchInterval: 60_000 });
   
-  const project = useMemo(() => intersectProjects.find(p => p.id === id), [intersectProjects, id]);
+  const project = useMemo(() => intersectProjects.find(p => p.id === id || p.officialProjectId === id), [intersectProjects, id]);
 
   const paymentDates = useMemo(() => {
     if (!project || !project.milestones || project.milestones.length === 0)
@@ -397,26 +401,26 @@ const ProjectDetail = () => {
 
     const monthlyData: Record<string, { milestones: number, payments: number }> = {};
     
+    const addToMonth = (dateValue: string, field: 'milestones' | 'payments', amount: number) => {
+      const date = new Date(dateValue);
+      if (Number.isNaN(date.getTime())) return;
+      const key = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}`;
+      if (!monthlyData[key]) monthlyData[key] = { milestones: 0, payments: 0 };
+      monthlyData[key][field] += amount;
+    };
     project.milestones.forEach(milestone => {
-      const date = new Date(milestone.unlockDate);
-      if (!isNaN(date.getTime())) {
-        const monthYear = date.toLocaleString('en-US', { month: 'short', year: '2-digit' });
-        if (!monthlyData[monthYear]) {
-          monthlyData[monthYear] = { milestones: 0, payments: 0 };
-        }
-        monthlyData[monthYear].milestones += milestone.amount;
-        if (milestone.status.toLowerCase() === 'withdrawn') {
-          monthlyData[monthYear].payments += milestone.amount;
-        }
+      addToMonth(milestone.unlockDate, 'milestones', milestone.amount);
+      if (milestone.status.toLowerCase() === 'withdrawn') {
+        addToMonth(milestone.withdrawalTime || milestone.unlockDate, 'payments', milestone.amount);
       }
     });
 
     return Object.keys(monthlyData)
       .map(key => ({
-        date: key,
+        date: new Date(`${key}-01T00:00:00Z`).toLocaleString('en-US', { month: 'short', year: '2-digit', timeZone: 'UTC' }),
         milestones: monthlyData[key].milestones,
         payments: monthlyData[key].payments,
-        timestamp: new Date(key).getTime()
+        timestamp: new Date(`${key}-01T00:00:00Z`).getTime()
       }))
       .sort((a, b) => a.timestamp - b.timestamp);
   }, [project]);
@@ -432,6 +436,8 @@ const ProjectDetail = () => {
 
   if (loadingProjects || loadingProfiles) return <PageSkeleton />;
 
+  if (!directory) return <p className="py-10 text-center text-gray-600 dark:text-gray-300">{t('stats.data_unavailable')}</p>;
+
   if (!project) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
@@ -446,7 +452,7 @@ const ProjectDetail = () => {
   }
 
   const StatusIcon = getStatusIcon(project.status);
-  const spentPercentage = (project.amountSpent / project.totalAmount) * 100;
+  const spentPercentage = project.totalAmount > 0 ? (project.amountSpent / project.totalAmount) * 100 : 0;
   const vendorProfile = getProfile(project.vendor);
 
   const handleCopyLink = () => {
@@ -542,14 +548,24 @@ const ProjectDetail = () => {
             </div>
 
             <Button asChild variant="outline" className="shadow-sm border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 dark:text-gray-300 rounded-full">
-              <a href={`https://treasury.sundae.fi/instances/9e65e4ed7d6fd86fc4827d2b45da6d2c601fb920e8bfd794b8ecc619/project/${project.id}`} target="_blank" rel="noopener noreferrer">
+              {project.contractInstance && <a href={`https://treasury.sundae.fi/instances/${project.contractInstance}/project/${project.id}`} target="_blank" rel="noopener noreferrer">
                 <ExternalLink className="h-4 w-4 mr-2" />
                 {t('project.sundae_explorer')}
-              </a>
+              </a>}
             </Button>
           </div>
         </div>
       </div>
+
+      {(directory.stale || directory.sync?.state !== 'current') && (
+        <p className="mb-6 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-200" role="status">
+          {directory.stale
+            ? t('vendors.stale_data')
+            : directory.sync?.state === 'delayed'
+              ? t('stats.intersect_sync_delayed').replace('{days}', ((directory.sync.lagHours || 0) / 24).toFixed(1))
+              : t('stats.intersect_sync_unknown')}
+        </p>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
         <div className="lg:col-span-2 space-y-8">
@@ -723,7 +739,7 @@ const ProjectDetail = () => {
                       <UITooltip>
                         <TooltipTrigger asChild>
                           <span className="text-sm font-bold text-gray-500 dark:text-gray-400 mt-1 opacity-80 flex items-center cursor-help w-fit">
-                            ≈ ${ (project.totalAmount * 0.62).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }) } USD
+                            {adaPrice !== undefined && <>≈ ${ (project.totalAmount * adaPrice).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 }) } USD</>}
                             <HelpCircle className="h-3 w-3 ml-1.5 opacity-60" />
                           </span>
                         </TooltipTrigger>
@@ -738,12 +754,12 @@ const ProjectDetail = () => {
                 <div className="p-6 bg-white dark:bg-gray-800 border-y border-gray-50 dark:border-gray-700/50">
                   <div className="grid grid-cols-2 gap-4 mb-6">
                     <div>
-                      <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1.5">{t('projects.spent_label')}</p>
+                      <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1.5">{t('stats.withdrawn_milestone_value')}</p>
                       <span className="text-xl font-black text-orange-600">₳{project.amountSpent.toLocaleString()}</span>
                     </div>
                     <div>
-                      <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1.5">{t('stats.remaining_budget')}</p>
-                      <span className="text-xl font-black text-emerald-600 dark:text-emerald-500">₳{(project.totalAmount - project.amountSpent).toLocaleString()}</span>
+                      <p className="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-1.5">{t('stats.not_marked_withdrawn')}</p>
+                      <span className="text-xl font-black text-emerald-600 dark:text-emerald-500">₳{(project.amountRemaining ?? Math.max(0, project.totalAmount - project.amountSpent)).toLocaleString()}</span>
                     </div>
                   </div>
                   

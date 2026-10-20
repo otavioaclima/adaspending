@@ -44,7 +44,7 @@ const Analytics = () => {
       vendors.set(project.vendor, (vendors.get(project.vendor) ?? 0) + project.totalAmount);
       project.milestones?.forEach((milestone) => {
         if (milestone.status.toLowerCase() !== 'withdrawn') return;
-        const date = new Date(milestone.unlockDate);
+        const date = new Date(milestone.withdrawalTime || milestone.unlockDate);
         if (Number.isNaN(date.getTime())) return;
         const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
         const entry = monthlyAmounts.get(key) ?? { timestamp: date.getTime(), amount: 0 };
@@ -82,6 +82,11 @@ const Analytics = () => {
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t('analytics.title')}</h1>
         <p className="text-gray-600 dark:text-gray-400 max-w-3xl">{t('analytics.description')}</p>
       </div>
+      {data && (data.stale || data.sync?.state === 'delayed' || data.sync?.state === 'unknown') && (
+        <p className="mb-6 rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900 dark:border-amber-900 dark:bg-amber-950/30 dark:text-amber-200" role="status">
+          {data.stale ? t('vendors.stale_data') : data.sync?.state === 'delayed' ? t('stats.intersect_sync_delayed').replace('{days}', ((data.sync.lagHours || 0) / 24).toFixed(1)) : t('stats.intersect_sync_unknown')}
+        </p>
+      )}
 
       {isError || !data ? (
         <Card className="cardano-card mb-10"><CardContent className="py-10 text-center text-gray-600 dark:text-gray-300">

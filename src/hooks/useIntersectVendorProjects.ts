@@ -11,6 +11,14 @@ export interface IntersectVendorDirectoryData {
   source: string;
   updatedAt: string;
   upstreamUpdatedAt?: string | null;
+  sync?: {
+    state: 'current' | 'delayed' | 'unknown';
+    lastEventProcessedAt?: string | null;
+    indexedThroughAt?: string | null;
+    checkedAt?: string | null;
+    lagHours?: number | null;
+    indexedProjectCount?: number | null;
+  };
   stale: boolean;
 }
 

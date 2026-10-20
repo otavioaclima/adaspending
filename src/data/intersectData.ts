@@ -8,6 +8,8 @@ export interface Milestone {
   description: string;
   acceptanceCriteria?: string;
   evidenceStatus?: string;
+  withdrawalTime?: string | null;
+  withdrawalTxHash?: string | null;
   evidence?: {
     title: string;
     link: string;
@@ -26,11 +28,14 @@ export interface IntersectProject {
   status: string;
   description?: string;
   milestones?: Milestone[];
+  fundedAt?: string | null;
+  fundTxHash?: string | null;
+  lastEventAt?: string | null;
   vendorAddress?: string;
   vendorIdentitySource?: string;
   officialProjectId?: string;
+  contractInstance?: string | null;
 }
 
-// Note: The actual data has been moved to public/data/intersectData.json
-// and is loaded asynchronously via the useIntersectData hook.
+// Intersect project data is fetched from the live same-origin API.
 export const intersectProjects: IntersectProject[] = [];

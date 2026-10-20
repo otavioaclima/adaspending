@@ -6,12 +6,13 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getCardanoStats } from '@/services/cardano';
 import { getAdaPrice } from '@/services/market';
-import { useIntersectData } from '@/hooks/useIntersectData';
+import { useIntersectVendorProjects } from '@/hooks/useIntersectVendorProjects';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const StatsSection = () => {
   const { t, language } = useLanguage();
-  const { data: intersectProjects = [], isLoading } = useIntersectData();
+  const { data: vendorDirectory, isLoading } = useIntersectVendorProjects();
+  const intersectProjects = vendorDirectory?.projects || [];
 
   const { data: cardanoStats } = useQuery({
     queryKey: ['cardanoStats'],
@@ -29,9 +30,7 @@ const StatsSection = () => {
   });
 
   // Calculate real financial stats from intersectProjects
-  const INTERSECT_TOTAL_BUDGET = React.useMemo(() => 
-    intersectProjects.reduce((sum, p) => sum + p.totalAmount, 0) || 345531529
-  , [intersectProjects]);
+  const INTERSECT_TOTAL_BUDGET = vendorDirectory?.financialSummary.totalAllocatedAda;
   
   const totalProjects = intersectProjects.length;
   const uniqueVendors = React.useMemo(() => 
@@ -103,8 +102,8 @@ const StatsSection = () => {
               </div>
             </div>
             <div className="space-y-1">
-              <p className="text-3xl font-black text-cardano-blue dark:text-blue-400 tracking-tight">₳{formatNumber(INTERSECT_TOTAL_BUDGET)}</p>
-              <p className="text-sm font-bold text-gray-500/80 dark:text-gray-400/80">{formatCurrency(INTERSECT_TOTAL_BUDGET)}</p>
+              <p className="text-3xl font-black text-cardano-blue dark:text-blue-400 tracking-tight">{INTERSECT_TOTAL_BUDGET === undefined ? '—' : `₳${formatNumber(INTERSECT_TOTAL_BUDGET)}`}</p>
+              <p className="text-sm font-bold text-gray-500/80 dark:text-gray-400/80">{INTERSECT_TOTAL_BUDGET === undefined ? '—' : formatCurrency(INTERSECT_TOTAL_BUDGET)}</p>
             </div>
           </CardContent>
         </Card>
@@ -118,6 +117,13 @@ const StatsSection = () => {
               <div className="p-2 bg-purple-500/10 rounded-xl">
                 <FileText className="h-5 w-5 text-purple-500" />
               </div>
+      {vendorDirectory?.sync && vendorDirectory.sync.state !== 'current' && (
+        <p className="mt-3 text-xs text-amber-700 dark:text-amber-300" role="status">
+          {vendorDirectory.sync.state === 'delayed'
+            ? t('stats.intersect_sync_delayed').replace('{days}', ((vendorDirectory.sync.lagHours || 0) / 24).toFixed(1))
+            : t('stats.intersect_sync_unknown')}
+        </p>
+      )}
             </div>
             <div>
               <p className="text-3xl font-black text-gray-900 dark:text-white tracking-tight">{formatNumber(totalProjects)}</p>

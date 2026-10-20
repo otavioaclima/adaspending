@@ -55,7 +55,7 @@ const VisualElementsSection = () => {
     }));
 
     // 2. Vendor Distribution (Top 6 by total budget)
-    const totalAllocated = 343741204; // Official unified budget
+    const totalAllocated = intersectProjects.reduce((sum, project) => sum + project.totalAmount, 0);
     
     const vendorStats = intersectProjects.reduce((acc, p) => {
       if (!acc[p.vendor]) {
@@ -72,15 +72,16 @@ const VisualElementsSection = () => {
       .map(v => ({
         name: v.name,
         value: v.totalBudget,
-        percentage: (v.totalBudget / totalAllocated) * 100
+        percentage: totalAllocated > 0 ? (v.totalBudget / totalAllocated) * 100 : 0
       }));
 
     // 3. Timeline Data (Cumulative spending by month)
     const monthlySpending: Record<string, number> = {};
     intersectProjects.forEach(p => {
-      p.milestones.forEach(m => {
-        if (m.unlockDate && m.status === 'Completed') {
-          const date = new Date(m.unlockDate);
+      p.milestones?.forEach(m => {
+        const eventDate = m.withdrawalTime || m.unlockDate;
+        if (eventDate && m.status.toLowerCase() === 'withdrawn') {
+          const date = new Date(eventDate);
           if (!isNaN(date.getTime())) {
             const monthYear = date.toLocaleString('en-US', { month: 'short', year: '2-digit' });
             monthlySpending[monthYear] = (monthlySpending[monthYear] || 0) + m.amount;
