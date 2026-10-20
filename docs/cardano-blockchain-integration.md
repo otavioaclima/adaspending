@@ -15,7 +15,7 @@ The backend reads the latest epoch from Koios `GET /tip`, then requests that epo
 
 This matters because `45,000,000,000 ADA - reserves` is total supply, not circulating supply: total supply also includes the treasury and rewards pots. The earlier implementation therefore overstated the circulating-supply figure. The dashboard now uses Koios's `circulation` field and reports the source, epoch, and latest block time alongside the figure.
 
-The Cexplorer API documentation describes its mainnet endpoint as production Cardano mainnet, but also requires an API key for API use. The prior backend sent no API key, and live requests returned a usage notice or HTTP 403. ADAspending now uses Koios's documented public API tier instead.
+ADAspending now uses Koios's documented public API tier instead.
 
 ## Freshness and provider failures
 
