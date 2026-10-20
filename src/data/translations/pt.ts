@@ -556,6 +556,8 @@ export default {
   'donations.all_time_total': 'Total histórico',
   'donations.all_epochs': 'Todas as épocas registradas: {first}–{last}',
   'donations.total_calculating': 'Calculando a partir dos registros on-chain',
+  'donations.total_refreshing': 'Atualizando a partir da mainnet Cardano…',
+  'donations.total_refresh_failed': 'Exibindo o último total confirmado; falha ao atualizar',
   'donations.total_unavailable': 'Total histórico temporariamente indisponível',
   'donations.current_epoch': 'Época atual',
   'donations.previous_epoch': 'Época anterior',

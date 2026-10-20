@@ -21,6 +21,8 @@ ADAspending now uses Koios's documented public API tier instead.
 
 The donations page queries Koios `GET /tx_treasury_donations_epoch?_epoch_no={epoch}` for each of the latest ten epochs. It sums the on-chain `treasury_donation` lovelace field, displays the transaction hash and block time, and links each hash to a Cardano explorer. Its all-time total sums the `treasury_donation` field returned by Koios `GET /totals?_epoch_no={epoch}` from Conway epoch 507 through the current epoch. That historical total is cached for six hours to keep provider traffic bounded. The page shows the all-time reporting range separately from the ten-epoch transaction list.
 
+To avoid an empty or loading placeholder on first render, the donations page starts with the latest verified all-time total bundled in the frontend and immediately refreshes it from the API in the background. The refreshed API value takes over when available. If that refresh fails, the last confirmed value remains visible and the page marks the data as potentially out of date.
+
 ## Freshness and provider failures
 
 - Successful on-chain snapshots are cached for five minutes per Cloud Run instance.

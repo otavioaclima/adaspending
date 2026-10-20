@@ -486,6 +486,8 @@ export default {
   'donations.all_time_total': '累計寄付額',
   'donations.all_epochs': '全記録エポック: {first}～{last}',
   'donations.total_calculating': 'オンチェーンのエポック記録から集計中',
+  'donations.total_refreshing': 'Cardanoメインネットから更新中…',
+  'donations.total_refresh_failed': '最後に確認された合計を表示中。更新に失敗しました',
   'donations.total_unavailable': '累計額を一時的に取得できません',
   'donations.current_epoch': '現在のエポック',
   'donations.previous_epoch': '前のエポック',
