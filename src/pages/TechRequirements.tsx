@@ -49,7 +49,7 @@ const frontendRequirements = [
     icon: Activity,
     items: [
       { name: 'Recharts 2.x', priority: 'Must', desc: 'Declarative chart library for bar, line, pie, scatter, and area charts. Used across Dashboard, Spending Explorer, and Proposal analytics.' },
-      { name: 'Mapbox GL JS 3.x', priority: 'Must', desc: 'WebGL-powered interactive map for geographic spending distribution. Requires Mapbox access token for tile rendering.' },
+      { name: 'D3.js 7.x', priority: 'Must', desc: 'Data-driven flow visualizations used by the current Spending Explorer.' },
     ],
   },
   {
@@ -91,7 +91,7 @@ const backendRequirements = [
     icon: Cloud,
     items: [
       { name: 'Deno Runtime', priority: 'Must', desc: 'TypeScript-first serverless functions running on Deno. Auto-deployed on push. Used for external API proxying and server-side logic.' },
-      { name: 'API Proxy Functions', priority: 'Must', desc: 'Edge functions to securely proxy requests to Project Catalyst API, Cardano blockchain explorers, and third-party data sources.' },
+      { name: 'Same-origin API', priority: 'Must', desc: 'Cloud Run routes securely proxy Koios, Intersect Administration, and CoinGecko data providers.' },
       { name: 'Scheduled Functions (CRON)', priority: 'Should', desc: 'Periodic tasks for data synchronization: fetching latest proposals, updating fund round status, and refreshing cached analytics.' },
       { name: 'Secrets Management', priority: 'Must', desc: 'Secure storage for API keys, service tokens, and sensitive configuration. Accessible only within edge functions at runtime.' },
     ],
@@ -111,8 +111,8 @@ const integrationRequirements = [
     category: 'Cardano Ecosystem APIs',
     icon: Globe,
     items: [
-      { name: 'Project Catalyst API', priority: 'Must', desc: 'Primary data source for proposals, fund rounds, voting results, and milestones. REST API with pagination support.' },
-      { name: 'Cardano Blockchain Explorer', priority: 'Should', desc: 'On-chain transaction verification via Blockfrost or Koios API. Used to cross-reference treasury disbursements.' },
+      { name: 'Intersect Administration API', priority: 'Must', desc: 'Project allocations, milestones, withdrawal status, and indexer synchronization metadata.' },
+      { name: 'Koios query API', priority: 'Must', desc: 'Cardano mainnet treasury, circulating supply, and confirmed treasury donation data.' },
       
     ],
   },
@@ -120,8 +120,7 @@ const integrationRequirements = [
     category: 'Mapping & Geolocation',
     icon: Globe,
     items: [
-      { name: 'Mapbox API', priority: 'Must', desc: 'Vector tile service for the Spending Explorer map view. Requires access token. Style: mapbox://styles/mapbox/dark-v11.' },
-      { name: 'Geocoding Service', priority: 'Should', desc: 'Convert recipient location strings to lat/lng coordinates for map plotting. Batch geocoding on data import.' },
+      { name: 'Geographic map (deferred)', priority: 'Could', desc: 'Not part of the current Spending Explorer. Add a map provider only if geographic analysis becomes a product requirement.' },
     ],
   },
   {
@@ -148,7 +147,7 @@ const integrationRequirements = [
     icon: Shield,
     items: [
       { name: 'HTTPS Everywhere', priority: 'Must', desc: 'All traffic encrypted via TLS 1.3. HSTS headers enforced. No mixed content allowed.' },
-      { name: 'Content Security Policy', priority: 'Should', desc: 'CSP headers to prevent XSS attacks. Whitelist for Mapbox, Cloud backend, and approved CDN domains.' },
+      { name: 'Content Security Policy', priority: 'Should', desc: 'CSP headers to prevent XSS attacks. Restrict connections to the Cloud backend and approved provider domains.' },
       { name: 'CORS Configuration', priority: 'Must', desc: 'Strict Cross-Origin Resource Sharing policies on edge functions. Only allow requests from adaspending.com and preview domains.' },
       { name: 'Data Privacy (LGPD/GDPR)', priority: 'Should', desc: 'Cookie consent banner, data retention policies, and user data export/deletion capabilities for regulatory compliance.' },
       { name: 'Dependency Scanning', priority: 'Should', desc: 'Regular npm audit for vulnerability detection. Automated alerts for critical/high severity issues in dependencies.' },
@@ -288,7 +287,7 @@ const TechRequirements: React.FC = () => {
                   <li>• Vite 5 + SWC</li>
                   <li>• Tailwind CSS 3 + shadcn/ui</li>
                   <li>• React Query + React Router 6</li>
-                  <li>• Recharts + Mapbox GL</li>
+                  <li>• Recharts + D3.js</li>
                   <li>• React Hook Form + Zod</li>
                 </ul>
               </div>
@@ -306,10 +305,10 @@ const TechRequirements: React.FC = () => {
               <div>
                 <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2"><Link2 className="h-4 w-4 text-secondary" /> Integrations</h4>
                 <ul className="space-y-1 text-muted-foreground">
-                  <li>• Project Catalyst API</li>
-                  <li>• Cardano Blockchain Explorer</li>
-                  <li>• Mapbox Tiles & Geocoding</li>
-                  <li>• GitHub CI/CD</li>
+                  <li>• Koios + Intersect Administration API</li>
+                  <li>• Cardano transaction explorer links</li>
+                  <li>• Google Cloud Run + Cloud Storage</li>
+                  <li>• GitHub Actions CI</li>
                   <li>• Web Analytics & RUM</li>
                   <li>• Error Monitoring</li>
                 </ul>
@@ -382,8 +381,8 @@ const TechRequirements: React.FC = () => {
           <CardContent>
             <div className="space-y-3 text-sm">
               {[
-                { risk: 'Catalyst API Rate Limits', impact: 'High', mitigation: 'Implement caching layer with React Query stale times (5-15 min). Edge function response caching. Fallback to local snapshot data.' },
-                { risk: 'Mapbox Token Exposure', impact: 'Medium', mitigation: 'Use domain-restricted tokens. Monitor usage via Mapbox dashboard. Rotate tokens quarterly.' },
+                { risk: 'Provider API Availability', impact: 'High', mitigation: 'Cache provider responses, show source freshness, and serve a clearly marked last-known Intersect snapshot when available.' },
+                { risk: 'Indexer Data Delay', impact: 'High', mitigation: 'Display upstream synchronization time and mark delayed Intersect data clearly.' },
                 { risk: 'Large Dataset Rendering', impact: 'Medium', mitigation: 'Virtualized lists for 1000+ items. Server-side pagination. Aggregated data for charts instead of raw records.' },
                 { risk: 'Browser Compatibility', impact: 'Low', mitigation: 'Polyfills via Vite. Progressive enhancement. Automated cross-browser testing.' },
                 { risk: 'Third-Party API Changes', impact: 'Medium', mitigation: 'Adapter pattern for external APIs. Contract tests. Version pinning where available.' },

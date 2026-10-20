@@ -1,17 +1,15 @@
 
-import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { BarChart3, TrendingUp, Briefcase, Users, Wallet, ArrowDownRight, ArrowUpRight } from 'lucide-react';
 import StatCard from '@/components/ui/StatCard';
-import { useIntersectVendorProjects } from '@/hooks/useIntersectVendorProjects';
+import { useIntersectOverview } from '@/hooks/useIntersectOverview';
 import { getAdaPrice } from '@/services/market';
 import { getCardanoStats } from '@/services/cardano';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const StatsSection = () => {
   const { t, language } = useLanguage();
-  const { data: vendorDirectory, isLoading: isLoadingIntersect, isError: isIntersectError } = useIntersectVendorProjects();
-  const intersectProjects = vendorDirectory?.projects || [];
+  const { data: vendorDirectory, isLoading: isLoadingIntersect, isError: isIntersectError } = useIntersectOverview();
 
   const { data: cardanoStats } = useQuery({
     queryKey: ['cardanoStats'],
@@ -35,10 +33,8 @@ const StatsSection = () => {
     }).format(value);
   };
 
-  const totalProjects = intersectProjects.length;
-  const uniqueVendors = React.useMemo(() => 
-    new Set(intersectProjects.map(p => p.vendor)).size
-  , [intersectProjects]);
+  const totalProjects = vendorDirectory?.projectCount || 0;
+  const uniqueVendors = vendorDirectory?.vendorGroupCount || 0;
 
   const financialSummary = vendorDirectory?.financialSummary;
 

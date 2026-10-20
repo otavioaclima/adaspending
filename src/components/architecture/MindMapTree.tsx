@@ -127,7 +127,6 @@ const mindMapData: TreeNode = {
             { label: 'Scatter Plot', description: 'Budget vs completion' },
           ],
         },
-        { label: 'Map View', description: 'Mapbox globe — geographic distribution' },
         { label: 'Data Table', description: 'Sortable, filterable table' },
         { label: 'Data Summary', description: 'Aggregate statistics' },
       ],

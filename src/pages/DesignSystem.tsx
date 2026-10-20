@@ -106,7 +106,6 @@ const componentLibrary = [
     items: [
       { name: 'Table', desc: 'Data grid with sortable columns and row hover.', variants: 'Table, TableHeader, TableBody, TableRow, TableCell' },
       { name: 'Charts (Recharts)', desc: 'Bar, Line, Pie, Scatter, Area charts.', variants: 'Responsive containers with tooltips and legends' },
-      { name: 'Map (Mapbox GL)', desc: 'Interactive geographic visualization.', variants: 'Dark style, markers sized by value, popups' },
     ],
   },
   {

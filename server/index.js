@@ -3,6 +3,7 @@ import { createReadStream, promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { vendorIdentityByProjectId } from "./vendorIdentityMap.js";
+import { createIntersectOverviewSummary, summarizeIntersectProjects } from "./intersectSummary.js";
 
 const serverDirectory = path.dirname(fileURLToPath(import.meta.url));
 const projectDirectory = path.resolve(serverDirectory, "..");
@@ -14,6 +15,68 @@ const koiosBaseUrl = process.env.KOIOS_API_URL || "https://api.koios.rest/api/v1
 const intersectApiBaseUrl = process.env.INTERSECT_API_URL || "https://administration.info.intersectmbo.org/api/v1";
 const cache = new Map();
 const maxStaleSeconds = 6 * 60 * 60;
+const sharedCacheBucket = process.env.INTERSECT_SHARED_CACHE_BUCKET;
+let sharedStorageToken = null;
+
+const getStorageAccessToken = async () => {
+  if (sharedStorageToken && sharedStorageToken.expiresAt > Date.now() + 30_000) return sharedStorageToken.value;
+  const response = await fetch("http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token", {
+    headers: { "Metadata-Flavor": "Google" },
+    signal: AbortSignal.timeout(3_000),
+  });
+  if (!response.ok) throw new Error(`Cloud Run token request failed (${response.status})`);
+  const token = await response.json();
+  sharedStorageToken = {
+    value: token.access_token,
+    expiresAt: Date.now() + Number(token.expires_in || 0) * 1000,
+  };
+  return sharedStorageToken.value;
+};
+
+const sharedCacheObjectUrl = (key) => {
+  const objectName = encodeURIComponent(`adaspending-cache/${key}.json`);
+  return `https://storage.googleapis.com/storage/v1/b/${encodeURIComponent(sharedCacheBucket)}/o/${objectName}`;
+};
+
+const readSharedCache = async (key) => {
+  if (!sharedCacheBucket || key !== "intersect-vendor-projects") return null;
+  try {
+    const token = await getStorageAccessToken();
+    const response = await fetch(`${sharedCacheObjectUrl(key)}?alt=media`, {
+      headers: { Authorization: `Bearer ${token}` },
+      signal: AbortSignal.timeout(3_000),
+    });
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error(`Cloud Storage cache read failed (${response.status})`);
+    const snapshot = await response.json();
+    return snapshot && Number.isFinite(snapshot.cachedAt) && snapshot.value
+      ? snapshot
+      : null;
+  } catch (error) {
+    console.warn("Shared Intersect cache read failed:", error.message);
+    return null;
+  }
+};
+
+const writeSharedCache = async (key, value) => {
+  if (!sharedCacheBucket || key !== "intersect-vendor-projects") return;
+  try {
+    const token = await getStorageAccessToken();
+    const url = `https://storage.googleapis.com/upload/storage/v1/b/${encodeURIComponent(sharedCacheBucket)}/o?uploadType=media&name=${encodeURIComponent(`adaspending-cache/${key}.json`)}`;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ cachedAt: Date.now(), value }),
+      signal: AbortSignal.timeout(5_000),
+    });
+    if (!response.ok) throw new Error(`Cloud Storage cache write failed (${response.status})`);
+  } catch (error) {
+    console.warn("Shared Intersect cache write failed:", error.message);
+  }
+};
 
 const mimeTypes = {
   ".css": "text/css; charset=utf-8",
@@ -46,25 +109,44 @@ const cached = async (key, maxAgeSeconds, load) => {
   if (existing && existing.expiresAt > Date.now()) return existing.value;
   if (existing?.pending) return existing.pending;
 
-  const pending = load();
-  cache.set(key, { ...existing, pending, expiresAt: 0 });
-  try {
-    const value = await pending;
-    cache.set(key, { value, cachedAt: Date.now(), expiresAt: Date.now() + maxAgeSeconds * 1000 });
-    return value;
-  } catch (error) {
-    if (existing?.value && Date.now() - existing.cachedAt < maxStaleSeconds * 1000) {
-      const staleValue = { ...existing.value, stale: true };
+  const pending = (async () => {
+    const shared = await readSharedCache(key);
+    const now = Date.now();
+    if (shared && now - shared.cachedAt < maxAgeSeconds * 1000) {
       cache.set(key, {
-        value: existing.value,
-        cachedAt: existing.cachedAt,
-        expiresAt: Date.now() + Math.min(maxAgeSeconds, 60) * 1000,
+        value: shared.value,
+        cachedAt: shared.cachedAt,
+        expiresAt: shared.cachedAt + maxAgeSeconds * 1000,
       });
-      return staleValue;
+      return shared.value;
     }
-    cache.delete(key);
-    throw error;
-  }
+
+    try {
+      const value = await load();
+      cache.set(key, { value, cachedAt: Date.now(), expiresAt: Date.now() + maxAgeSeconds * 1000 });
+      await writeSharedCache(key, value);
+      return value;
+    } catch (error) {
+      const existingCanBeServedStale = existing?.value && Date.now() - existing.cachedAt < maxStaleSeconds * 1000;
+      const sharedCanBeServedStale = shared?.value && Date.now() - shared.cachedAt < maxStaleSeconds * 1000;
+      const staleSnapshot = existingCanBeServedStale && (!sharedCanBeServedStale || existing.cachedAt >= shared.cachedAt)
+        ? existing
+        : sharedCanBeServedStale ? shared : null;
+      if (staleSnapshot) {
+        const staleValue = { ...staleSnapshot.value, stale: true };
+        cache.set(key, {
+          value: staleSnapshot.value,
+          cachedAt: staleSnapshot.cachedAt,
+          expiresAt: Date.now() + Math.min(maxAgeSeconds, 60) * 1000,
+        });
+        return staleValue;
+      }
+      cache.delete(key);
+      throw error;
+    }
+  })();
+  cache.set(key, { ...existing, pending, expiresAt: 0 });
+  return pending;
 };
 
 const fetchJson = async (url, options = {}) => {
@@ -415,14 +497,7 @@ const getIntersectVendorProjects = () => cached("intersect-vendor-projects", 900
     };
   });
 
-  const financialSummary = projects.reduce((summary, project) => ({
-    totalAllocatedAda: summary.totalAllocatedAda + project.totalAmount,
-    withdrawnMilestoneAda: summary.withdrawnMilestoneAda + project.amountSpent,
-  }), { totalAllocatedAda: 0, withdrawnMilestoneAda: 0 });
-  financialSummary.remainingMilestoneAda = Math.max(
-    0,
-    financialSummary.totalAllocatedAda - financialSummary.withdrawnMilestoneAda,
-  );
+  const financialSummary = summarizeIntersectProjects(projects).financialSummary;
 
   const syncStatus = upstreamStatus?.data || null;
   const lastEventProcessedAt = syncStatus?.sync?.last_event_processed?.iso || null;
@@ -451,6 +526,8 @@ const getIntersectVendorProjects = () => cached("intersect-vendor-projects", 900
   };
 });
 
+const getIntersectOverview = async () => createIntersectOverviewSummary(await getIntersectVendorProjects());
+
 const apiRoutes = {
   "/api/health": async () => ({ status: "ok", service: "adaspending", timestamp: new Date().toISOString() }),
   "/api/v1/cardano/treasury-stats": getTreasuryStats,
@@ -459,6 +536,7 @@ const apiRoutes = {
   "/api/v1/cardano/network-state": getNetworkState,
   "/api/v1/markets/ada-price": getAdaPrice,
   "/api/v1/data/intersect-vendor-projects": getIntersectVendorProjects,
+  "/api/v1/data/intersect-overview": getIntersectOverview,
   "/api/v1/data/intersect-projects": async () => (await getIntersectVendorProjects()).projects,
   "/api/v1/data/vendor-profiles": () => readDataFile("vendorProfiles.json"),
 };
@@ -520,7 +598,7 @@ const server = createServer(async (request, response) => {
         ? 21_600
         : requestUrl.pathname.endsWith("/treasury-donations")
           ? 300
-          : requestUrl.pathname.endsWith("/intersect-vendor-projects") || requestUrl.pathname.endsWith("/intersect-projects") ? 900
+        : requestUrl.pathname.endsWith("/intersect-vendor-projects") || requestUrl.pathname.endsWith("/intersect-overview") || requestUrl.pathname.endsWith("/intersect-projects") ? 900
           : requestUrl.pathname.includes("/data/") ? 3600 : 60;
       response.writeHead(200, {
         "Cache-Control": `public, max-age=${maxAge}`,
