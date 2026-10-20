@@ -7,20 +7,19 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { Badge } from '@/components/ui/badge';
 import { useIntersectData } from '@/hooks/useIntersectData';
 import { useQuery } from '@tanstack/react-query';
-import { getCexplorerStats } from '@/services/cexplorer';
+import { getCardanoStats } from '@/services/cardano';
 
 const HeroSection = () => {
   const { t, language } = useLanguage();
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
   const { data: intersectProjects = [] } = useIntersectData();
   
-  const { data: cexplorerStats } = useQuery({
-    queryKey: ['cexplorerStats'],
-    queryFn: getCexplorerStats,
-    initialData: {
-      treasury: 1621148478,
-      circulating: 35948271034
-    }
+  const { data: cardanoStats } = useQuery({
+    queryKey: ['cardanoStats'],
+    queryFn: getCardanoStats,
+    staleTime: 5 * 60 * 1000,
+    refetchInterval: 5 * 60 * 1000,
+    retry: 2,
   });
 
   const phrases = [
@@ -84,7 +83,7 @@ const HeroSection = () => {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
             <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400">
-              {t('hero.tracking_treasury')}: {formatADA(cexplorerStats?.treasury || 0)}
+              {t('hero.tracking_treasury')}: {cardanoStats ? formatADA(cardanoStats.treasury) : '—'}
             </span>
           </div>
 

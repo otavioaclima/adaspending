@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { BarChart3, TrendingUp, Users, FileText } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getCexplorerStats } from '@/services/cexplorer';
+import { getCardanoStats } from '@/services/cardano';
 import { getAdaPrice } from '@/services/cardanoscan';
 import { useIntersectData } from '@/hooks/useIntersectData';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -13,20 +13,19 @@ const StatsSection = () => {
   const { t, language } = useLanguage();
   const { data: intersectProjects = [], isLoading } = useIntersectData();
 
-  const { data: cexplorerStats } = useQuery({
-    queryKey: ['cexplorerStats'],
-    queryFn: getCexplorerStats,
-    initialData: {
-      treasury: 1621148478,
-      circulating: 35948271034
-    }
+  const { data: cardanoStats } = useQuery({
+    queryKey: ['cardanoStats'],
+    queryFn: getCardanoStats,
+    staleTime: 5 * 60 * 1000,
+    refetchInterval: 5 * 60 * 1000,
+    retry: 2,
   });
 
   const { data: adaPrice } = useQuery({
     queryKey: ['adaPrice'],
     queryFn: getAdaPrice,
-    initialData: 0.62,
     refetchInterval: 60000,
+    retry: 2,
   });
 
   // Calculate real financial stats from intersectProjects
@@ -47,7 +46,8 @@ const StatsSection = () => {
 
   // Format currency
   const formatCurrency = (adaAmount: number) => {
-    const usdAmount = adaPrice ? adaAmount * adaPrice : 0;
+    const usdAmount = adaPrice === undefined ? null : adaAmount * adaPrice;
+    if (usdAmount === null) return '—';
     return new Intl.NumberFormat(language === 'JP' ? 'ja-JP' : language === 'PT' ? 'pt-BR' : language === 'ES' ? 'es-ES' : 'en-US', {
       style: 'currency',
       currency: 'USD',
@@ -86,8 +86,8 @@ const StatsSection = () => {
               </div>
             </div>
             <div className="space-y-1">
-              <p className="text-3xl font-black text-cardano-blue dark:text-blue-400 tracking-tight">₳{formatNumber(cexplorerStats?.treasury || 0)}</p>
-              <p className="text-sm font-bold text-gray-500/80 dark:text-gray-400/80">{formatCurrency(cexplorerStats?.treasury || 0)}</p>
+              <p className="text-3xl font-black text-cardano-blue dark:text-blue-400 tracking-tight">{cardanoStats ? `₳${formatNumber(cardanoStats.treasury)}` : '—'}</p>
+              <p className="text-sm font-bold text-gray-500/80 dark:text-gray-400/80">{cardanoStats ? formatCurrency(cardanoStats.treasury) : '—'}</p>
             </div>
           </CardContent>
         </Card>
@@ -141,6 +141,15 @@ const StatsSection = () => {
           </CardContent>
         </Card>
       </div>
+      <p className="mt-3 text-xs text-gray-500 dark:text-gray-400" role="status">
+        {cardanoStats ? (
+          <>
+            {t('stats.data_source')}: {cardanoStats.source} · {t('stats.epoch')} {cardanoStats.epoch}
+            {cardanoStats.blockTime && <> · {t('stats.block_updated')}: {new Intl.DateTimeFormat(language === 'PT' ? 'pt-BR' : language === 'ES' ? 'es-ES' : language === 'JP' ? 'ja-JP' : 'en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' }).format(new Date(cardanoStats.blockTime))} UTC</>}
+            {cardanoStats.stale && <span className="text-amber-600 dark:text-amber-400"> · {t('stats.stale_data')}</span>}
+          </>
+        ) : t('stats.data_unavailable')}
+      </p>
     </div>
   );
 };

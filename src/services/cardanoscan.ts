@@ -4,14 +4,17 @@ export interface NetworkState {
   reserves: string;
   circulatingSupply: string;
   totalSupply: string;
+  epoch?: number;
+  blockTime?: string;
   source?: string;
   updatedAt?: string;
+  stale?: boolean;
 }
 
 export const getNetworkState = async (): Promise<NetworkState> => {
   const response = await fetch('/api/v1/cardano/network-state');
   if (!response.ok) {
-    throw new Error('Failed to fetch network state from Cexplorer');
+    throw new Error('Failed to fetch Cardano mainnet network state');
   }
   return response.json();
 };

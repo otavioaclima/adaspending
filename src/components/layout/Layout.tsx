@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/sheet";
 import { useQueryClient } from '@tanstack/react-query';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getCexplorerStats } from '@/services/cexplorer';
+import { getCardanoStats } from '@/services/cardano';
 import { getAdaPrice } from '@/services/cardanoscan';
 import Footer from './Footer';
 
@@ -69,7 +69,7 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
   const handlePrefetch = (href: string) => {
     // Prefetch common API data for dashboard pages
     if (['/overview', '/analytics', '/projects', '/vendors'].includes(href)) {
-      queryClient.prefetchQuery({ queryKey: ['cexplorerStats'], queryFn: getCexplorerStats });
+      queryClient.prefetchQuery({ queryKey: ['cardanoStats'], queryFn: getCardanoStats });
       queryClient.prefetchQuery({ queryKey: ['adaPrice'], queryFn: getAdaPrice });
     }
     

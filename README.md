@@ -8,7 +8,7 @@ ADAspending is a comprehensive transparency platform and open data source for tr
 - **Vendor Directory**: A comprehensive list of official vendors and teams delivering projects. View financial summaries, project history, and competence benchmarks.
 - **Spending Explorer**: Analyze ADA flows and treasury distribution across different categories and time periods.
 - **Transparency & Governance**: Resources for DReps to evaluate proposals based on competence and delivery capacity, including market benchmarks and communication channels.
-- **Real-time Data**: Integrated with Cexplorer API, Intersect metrics, and Sundae Treasury data.
+- **Real-time Data**: Integrated with Cardano mainnet through Koios, plus Intersect metrics and Sundae Treasury data.
 
 ## 🛠️ Tech Stack
 
@@ -56,7 +56,7 @@ ADAspending is a comprehensive transparency platform and open data source for tr
 
 ## Backend and Google Cloud deployment
 
-The app includes a small Node.js API that proxies Cardano treasury data through Cexplorer, serves the ADA price from CoinGecko, and provides the existing Intersect and vendor JSON datasets. Browser requests use same-origin `/api` routes; provider credentials stay on the server.
+The app includes a small Node.js API that proxies Cardano mainnet treasury and supply data through Koios, serves the ADA price from CoinGecko, and provides the existing Intersect and vendor JSON datasets. Browser requests use same-origin `/api` routes; provider credentials stay on the server.
 
 ### Local development
 
@@ -74,7 +74,7 @@ Vite forwards `/api` requests to the API server on port 8081. The API health end
 - **Firebase Hosting** serves the built React app on the public domain and forwards `/api/**` requests to the backend.
 - **Cloud Run** runs the Node.js API in `southamerica-east1`.
 - **Artifact Registry and Cloud Build** build and deploy the API container from `cloudbuild.yaml`.
-- Cardano treasury and supply data is fetched server-side from the Cexplorer mainnet API. Provider requests stay on the server and are cached for five minutes.
+- Cardano treasury and supply data is fetched server-side from the public Koios mainnet API. The API's `circulation`, `treasury`, `reserves`, and `supply` totals are used directly; circulation is not inferred from the 45 billion maximum supply. Provider requests stay on the server and are cached for five minutes, with up to six hours of stale data served on warm instances during upstream failures.
 
 The Firebase Hosting rewrite expects a Cloud Run service named `adaspending-api`. Deploy that service before publishing Hosting. The GCP project must have billing and the Cloud Run, Cloud Build, and Artifact Registry APIs enabled, plus an Artifact Registry Docker repository named `adaspending` in `southamerica-east1`. Select the intended ADAspending project explicitly when running `gcloud` or Firebase CLI commands.
 
@@ -87,12 +87,12 @@ gcloud builds submit --project=cardano-feed-v3 --region=southamerica-east1 --con
 firebase deploy --only hosting:adaspending --project cardano-feed-v3
 ```
 
-After deploying Hosting, connect `adaspending.com` in Firebase Hosting and update its DNS records at the current DNS provider. Keep the existing records until the new Firebase Hosting domain has a valid HTTPS certificate and the site has been checked on the Firebase preview URL.
+The production custom domains `adaspending.com` and `www.adaspending.com` are connected to Firebase Hosting. Keep the domain ownership TXT record in Cloudflare so Firebase can continue renewing its HTTPS certificate. The existing mail MX, SRV, and SPF records are independent and must be preserved.
 
 ## 📊 Data Sources
 
 ADAspending sources data directly from:
-- **Cardano Blockchain**: Real-time transaction data via Cexplorer API.
+- **Cardano Blockchain**: Cardano mainnet treasury and supply data via the Koios query API.
 - **Intersect Treasury**: Official project reporting and milestone tracking.
 - **Sundae Treasury**: Smart contract instance data for treasury management.
 

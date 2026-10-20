@@ -5,27 +5,26 @@ import { BarChart3, TrendingUp, Briefcase, Users, Wallet, ArrowDownRight, ArrowU
 import StatCard from '@/components/ui/StatCard';
 import { useIntersectData } from '@/hooks/useIntersectData';
 import { getAdaPrice } from '@/services/cardanoscan';
-import { getCexplorerStats } from '@/services/cexplorer';
+import { getCardanoStats } from '@/services/cardano';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const StatsSection = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { data: intersectProjects = [] } = useIntersectData();
 
-  const { data: cexplorerStats } = useQuery({
-    queryKey: ['cexplorerStats'],
-    queryFn: getCexplorerStats,
-    initialData: {
-      treasury: 1621148478,
-      circulating: 35948271034
-    }
+  const { data: cardanoStats } = useQuery({
+    queryKey: ['cardanoStats'],
+    queryFn: getCardanoStats,
+    staleTime: 5 * 60 * 1000,
+    refetchInterval: 5 * 60 * 1000,
+    retry: 2,
   });
 
   const { data: adaPrice } = useQuery({
     queryKey: ['adaPrice'],
     queryFn: getAdaPrice,
-    initialData: 0.62,
     refetchInterval: 60000,
+    retry: 2,
   });
 
   const formatADA = (value: number) => {
@@ -60,7 +59,7 @@ const StatsSection = () => {
   };
 
   const formatUSD = (adaValue: number) => {
-    if (!adaPrice) return null;
+    if (adaPrice === undefined) return null;
     const usd = adaValue * adaPrice;
     return new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 0,
@@ -68,13 +67,18 @@ const StatsSection = () => {
     }).format(usd);
   };
 
+  const locale = { EN: 'en-US', PT: 'pt-BR', ES: 'es-ES', JP: 'ja-JP' }[language];
+  const blockUpdatedAt = cardanoStats?.blockTime
+    ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' }).format(new Date(cardanoStats.blockTime))
+    : null;
+
   return (
     <section className="mb-10">
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         <StatCard 
           title={t('stats.total_treasury')} 
-          value={formatADA(cexplorerStats?.treasury || 0)} 
-          usdValue={formatUSD(cexplorerStats?.treasury || 0) || undefined}
+          value={cardanoStats ? formatADA(cardanoStats.treasury) : '—'} 
+          usdValue={cardanoStats ? formatUSD(cardanoStats.treasury) || undefined : undefined}
           icon={<Wallet className="h-5 w-5 text-cardano-blue" />} 
           className="bg-cardano-blue/5 dark:bg-cardano-blue/10 border-cardano-blue/20 h-full" 
           valueClassName="text-cardano-blue dark:text-blue-400"
@@ -125,6 +129,15 @@ const StatsSection = () => {
           className="bg-gray-50 dark:bg-gray-800/40 border-gray-100 dark:border-gray-700 h-full" 
         />
       </div>
+      <p className="mt-3 text-xs text-gray-500 dark:text-gray-400" role="status">
+        {cardanoStats ? (
+          <>
+            {t('stats.data_source')}: {cardanoStats.source} · {t('stats.epoch')} {cardanoStats.epoch}
+            {blockUpdatedAt && <> · {t('stats.block_updated')}: <time dateTime={cardanoStats.blockTime}>{blockUpdatedAt} UTC</time></>}
+            {cardanoStats.stale && <span className="text-amber-600 dark:text-amber-400"> · {t('stats.stale_data')}</span>}
+          </>
+        ) : t('stats.data_unavailable')}
+      </p>
     </section>
   );
 };

@@ -9,8 +9,9 @@ const isDevelopment = process.env.NODE_ENV === "development";
 const staticDirectory = path.join(projectDirectory, "dist");
 const publicDirectory = path.join(projectDirectory, "public");
 const port = Number(process.env.PORT || 8081);
-const cexplorerBaseUrl = "https://api-mainnet-stage.cexplorer.io/v1";
+const koiosBaseUrl = process.env.KOIOS_API_URL || "https://api.koios.rest/api/v1";
 const cache = new Map();
+const maxStaleSeconds = 6 * 60 * 60;
 
 const mimeTypes = {
   ".css": "text/css; charset=utf-8",
@@ -44,12 +45,21 @@ const cached = async (key, maxAgeSeconds, load) => {
   if (existing?.pending) return existing.pending;
 
   const pending = load();
-  cache.set(key, { pending, expiresAt: 0 });
+  cache.set(key, { ...existing, pending, expiresAt: 0 });
   try {
     const value = await pending;
-    cache.set(key, { value, expiresAt: Date.now() + maxAgeSeconds * 1000 });
+    cache.set(key, { value, cachedAt: Date.now(), expiresAt: Date.now() + maxAgeSeconds * 1000 });
     return value;
   } catch (error) {
+    if (existing?.value && Date.now() - existing.cachedAt < maxStaleSeconds * 1000) {
+      const staleValue = { ...existing.value, stale: true };
+      cache.set(key, {
+        value: existing.value,
+        cachedAt: existing.cachedAt,
+        expiresAt: Date.now() + Math.min(maxAgeSeconds, 60) * 1000,
+      });
+      return staleValue;
+    }
     cache.delete(key);
     throw error;
   }
@@ -68,30 +78,59 @@ const fetchJson = async (url, options = {}) => {
   return response.json();
 };
 
-const getTreasuryStats = () => cached("cardano-treasury-stats", 300, async () => {
-  const tip = await fetchJson(`${cexplorerBaseUrl}/block/tip`);
-  const currentEpoch = tip?.data?.tip?.data?.[0]?.epoch_no;
-  if (!Number.isInteger(Number(currentEpoch))) {
-    throw new Error("Cexplorer did not return a current epoch");
+const toLovelace = (value, field) => {
+  if (typeof value !== "string" && typeof value !== "number") {
+    throw new Error(`Koios did not return ${field}`);
+  }
+  const normalized = String(value);
+  if (!/^\d+$/.test(normalized)) throw new Error(`Koios returned invalid ${field}`);
+  return normalized;
+};
+
+const getCardanoSnapshot = () => cached("cardano-snapshot", 300, async () => {
+  const tipRows = await fetchJson(`${koiosBaseUrl}/tip`);
+  const tip = Array.isArray(tipRows) ? tipRows[0] : undefined;
+  const currentEpoch = Number(tip?.epoch_no);
+  if (!Number.isInteger(currentEpoch) || currentEpoch < 0) {
+    throw new Error("Koios did not return the current Cardano epoch");
   }
 
-  const stats = await fetchJson(`${cexplorerBaseUrl}/epoch/stats?no=${currentEpoch}`);
-  const pots = stats?.data?.pots;
-  const treasuryLovelace = Number(pots?.treasury);
-  const reservesLovelace = Number(pots?.reserves);
-  if (!Number.isFinite(treasuryLovelace) || !Number.isFinite(reservesLovelace)) {
-    throw new Error("Cexplorer returned invalid treasury data");
+  const totalsRows = await fetchJson(`${koiosBaseUrl}/totals?_epoch_no=${currentEpoch}`);
+  const totals = Array.isArray(totalsRows) ? totalsRows[0] : undefined;
+  if (Number(totals?.epoch_no) !== currentEpoch) {
+    throw new Error("Koios did not return totals for the current epoch");
   }
 
-  const reserves = reservesLovelace / 1_000_000;
+  const blockTime = Number(tip?.block_time);
+  if (!Number.isFinite(blockTime) || blockTime <= 0) {
+    throw new Error("Koios did not return the latest block time");
+  }
+
   return {
-    treasury: treasuryLovelace / 1_000_000,
-    circulating: 45_000_000_000 - reserves,
-    epoch: Number(currentEpoch),
-    source: "Cexplorer",
+    treasury: toLovelace(totals.treasury, "treasury"),
+    reserves: toLovelace(totals.reserves, "reserves"),
+    circulatingSupply: toLovelace(totals.circulation, "circulation"),
+    totalSupply: toLovelace(totals.supply, "supply"),
+    epoch: currentEpoch,
+    blockTime: new Date(blockTime * 1000).toISOString(),
+    source: "Koios · Cardano mainnet",
     updatedAt: new Date().toISOString(),
+    stale: false,
   };
 });
+
+const getTreasuryStats = async () => {
+  const snapshot = await getCardanoSnapshot();
+  return {
+    treasury: Number(snapshot.treasury) / 1_000_000,
+    circulating: Number(snapshot.circulatingSupply) / 1_000_000,
+    epoch: snapshot.epoch,
+    blockTime: snapshot.blockTime,
+    source: snapshot.source,
+    updatedAt: snapshot.updatedAt,
+    stale: Boolean(snapshot.stale),
+  };
+};
 
 const getAdaPrice = () => cached("ada-price-usd", 300, async () => {
   const price = await fetchJson(
@@ -99,21 +138,23 @@ const getAdaPrice = () => cached("ada-price-usd", 300, async () => {
   );
   const usd = Number(price?.cardano?.usd);
   if (!Number.isFinite(usd) || usd <= 0) throw new Error("CoinGecko returned an invalid ADA price");
-  return { usd, source: "CoinGecko", updatedAt: new Date().toISOString() };
+  return { usd, source: "CoinGecko", updatedAt: new Date().toISOString(), stale: false };
 });
 
-const getNetworkState = () => cached("cardano-network-state", 300, async () => {
-  const stats = await getTreasuryStats();
-  const reserves = 45_000_000_000 - stats.circulating;
+const getNetworkState = async () => {
+  const snapshot = await getCardanoSnapshot();
   return {
-    treasury: String(Math.round(stats.treasury * 1_000_000)),
-    reserves: String(Math.round(reserves * 1_000_000)),
-    circulatingSupply: String(Math.round(stats.circulating * 1_000_000)),
-    totalSupply: String(45_000_000_000 * 1_000_000),
-    source: stats.source,
-    updatedAt: stats.updatedAt,
+    treasury: snapshot.treasury,
+    reserves: snapshot.reserves,
+    circulatingSupply: snapshot.circulatingSupply,
+    totalSupply: snapshot.totalSupply,
+    epoch: snapshot.epoch,
+    blockTime: snapshot.blockTime,
+    source: snapshot.source,
+    updatedAt: snapshot.updatedAt,
+    stale: Boolean(snapshot.stale),
   };
-});
+};
 
 const readDataFile = async (filename) => {
   const directory = isDevelopment ? publicDirectory : staticDirectory;
