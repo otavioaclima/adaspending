@@ -106,7 +106,7 @@ const CustomizedContent = (props: any) => {
 const SpendingExplorer = () => {
   const { t } = useLanguage();
   const isMobile = useIsMobile();
-  const { data: vendorDirectory } = useIntersectVendorProjects();
+  const { data: vendorDirectory, isLoading, isError, refetch } = useIntersectVendorProjects();
   const intersectProjects = vendorDirectory?.projects || [];
   const [viewMode, setViewMode] = useState<'treemap' | 'table' | 'sankey' | 'packing' | 'bubbles'>('treemap');
   const [breakdown, setBreakdown] = useState<'vendor' | 'project'>('vendor');
@@ -332,8 +332,9 @@ const SpendingExplorer = () => {
           <div className="p-0 lg:p-0 flex-1 lg:overflow-hidden flex flex-col min-h-[650px] lg:min-h-0 relative">
             <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 dark:border-gray-800 overflow-hidden flex-1 p-0 lg:p-0 h-[600px] lg:h-full min-h-[600px] lg:min-h-0 relative">
               {chartData.length === 0 ? (
-                <div className="h-full flex items-center justify-center text-gray-400 font-bold text-sm">
-                  {t('explorer.no_data_available') || 'Loading explorer data...'}
+                <div className="h-full flex flex-col items-center justify-center gap-3 text-gray-500 dark:text-gray-400 text-sm">
+                  <span>{isError ? t('common.data_unavailable') : isLoading ? t('common.loading') : t('explorer.no_data_available')}</span>
+                  {isError && <Button variant="outline" size="sm" onClick={() => refetch()}>{t('donations.retry')}</Button>}
                 </div>
               ) : (
                 <>

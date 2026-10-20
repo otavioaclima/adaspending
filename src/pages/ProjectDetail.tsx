@@ -356,7 +356,7 @@ const MilestoneTimeline = ({ milestones, t }: { milestones: any[], t: any }) => 
 const ProjectDetail = () => {
   const { t } = useLanguage();
   const { id } = useParams<{ id: string }>();
-  const { data: directory, isLoading: loadingProjects } = useIntersectVendorProjects();
+  const { data: directory, isLoading: loadingProjects, isError: projectsError, refetch: refetchProjects } = useIntersectVendorProjects();
   const intersectProjects = directory?.projects || [];
   const { data: vendorProfiles = [], isLoading: loadingProfiles } = useVendorProfiles();
   const { data: adaPrice } = useQuery({ queryKey: ['adaPrice'], queryFn: getAdaPrice, staleTime: 5 * 60 * 1000, refetchInterval: 60_000 });
@@ -436,7 +436,7 @@ const ProjectDetail = () => {
 
   if (loadingProjects || loadingProfiles) return <PageSkeleton />;
 
-  if (!directory) return <p className="py-10 text-center text-gray-600 dark:text-gray-300">{t('stats.data_unavailable')}</p>;
+  if (projectsError || !directory) return <div className="py-10 text-center text-gray-600 dark:text-gray-300"><p className="mb-3">{t('common.data_unavailable')}</p><Button variant="outline" onClick={() => refetchProjects()}>{t('donations.retry')}</Button></div>;
 
   if (!project) {
     return (

@@ -53,7 +53,7 @@ const getStatusColor = (status: string) => {
 const VendorDetail = () => {
   const { language, t } = useLanguage();
   const { id } = useParams<{ id: string }>();
-  const { data: vendorDirectory, isLoading: loadingProjects } = useIntersectVendorProjects();
+  const { data: vendorDirectory, isLoading: loadingProjects, isError: projectsError, refetch: refetchProjects } = useIntersectVendorProjects();
   const { data: adaPrice } = useQuery({ queryKey: ['adaPrice'], queryFn: getAdaPrice, staleTime: 5 * 60 * 1000, refetchInterval: 60_000 });
   const intersectProjects = vendorDirectory?.projects || [];
   const { data: vendorProfiles = [], isLoading: loadingProfiles } = useVendorProfiles();
@@ -122,6 +122,10 @@ const VendorDetail = () => {
   }, [vendorProjects]);
 
   if (loadingProjects || loadingProfiles) return <PageSkeleton />;
+
+  if (projectsError || !vendorDirectory) {
+    return <div className="py-10 text-center text-gray-600 dark:text-gray-300"><p className="mb-3">{t('common.data_unavailable')}</p><Button variant="outline" onClick={() => refetchProjects()}>{t('donations.retry')}</Button></div>;
+  }
 
   if (vendorProjects.length === 0 || !stats) {
     return (

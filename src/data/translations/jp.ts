@@ -1,6 +1,8 @@
 export default {
   'nav.overview': '概要',
   'common.view_all': 'すべて見る',
+  'common.loading': '読み込み中…',
+  'common.data_unavailable': 'プロジェクトデータを一時的に取得できません。',
   'common.more': 'もっと',
   'nav.projects': 'プロジェクト',
   'nav.vendors': 'ベンダー',

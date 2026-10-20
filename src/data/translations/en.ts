@@ -1,6 +1,8 @@
 export default {
   'nav.overview': 'Overview',
   'common.view_all': 'View all',
+  'common.loading': 'Loading…',
+  'common.data_unavailable': 'Project data is temporarily unavailable.',
   'common.more': 'more',
   'nav.projects': 'Projects',
   'nav.vendors': 'Vendors',

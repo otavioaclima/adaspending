@@ -106,7 +106,7 @@ const VendorCard = ({ vendor, profile }: { vendor: any, profile: any }) => {
 
 const Vendors = () => {
   const { language, t } = useLanguage();
-  const { data: directory, isLoading: loadingProjects, isError: projectsError } = useIntersectVendorProjects();
+  const { data: directory, isLoading: loadingProjects, isError: projectsError, refetch: refetchProjects } = useIntersectVendorProjects();
   const intersectProjects = directory?.projects || [];
   const { data: vendorProfiles = [], isLoading: loadingProfiles } = useVendorProfiles();
   
@@ -216,7 +216,7 @@ const Vendors = () => {
 
   if (loadingProjects || loadingProfiles) return <PageSkeleton />;
   if (projectsError || !directory) return (
-    <Card><CardContent className="py-8 text-center text-gray-600 dark:text-gray-300">{t('vendors.load_error')}</CardContent></Card>
+    <Card><CardContent className="flex flex-col items-center gap-3 py-8 text-center text-gray-600 dark:text-gray-300"><p>{t('vendors.load_error')}</p><Button variant="outline" onClick={() => refetchProjects()}>{t('donations.retry')}</Button></CardContent></Card>
   );
 
   const locale = ({ EN: 'en-US', PT: 'pt-BR', ES: 'es-ES', JP: 'ja-JP' } as Record<string, string>)[language] || 'en-US';

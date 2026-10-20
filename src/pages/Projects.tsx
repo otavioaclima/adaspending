@@ -68,7 +68,7 @@ const getStatusColor = (status: string) => {
 
 const Projects = () => {
   const { t } = useLanguage();
-  const { data: directory, isLoading, isError } = useIntersectVendorProjects();
+  const { data: directory, isLoading, isError, refetch } = useIntersectVendorProjects();
   const intersectProjects = directory?.projects || [];
   const totalAllocation = directory?.financialSummary.totalAllocatedAda ?? 0;
   const [searchParams] = useSearchParams();
@@ -178,7 +178,7 @@ const Projects = () => {
   };
 
   if (isLoading) return <PageSkeleton />;
-  if (isError || !directory) return <p className="py-10 text-center text-gray-600 dark:text-gray-300">{t('stats.data_unavailable')}</p>;
+  if (isError || !directory) return <div className="py-10 text-center text-gray-600 dark:text-gray-300"><p className="mb-3">{t('common.data_unavailable')}</p><Button variant="outline" onClick={() => refetch()}>{t('donations.retry')}</Button></div>;
 
   return (
     <>

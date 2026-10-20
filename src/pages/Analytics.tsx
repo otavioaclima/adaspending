@@ -11,6 +11,7 @@ import StatCard from '@/components/ui/StatCard';
 import { Briefcase, Users, Wallet, TrendingUp, Activity, PieChart as PieChartIcon } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { getAdaPrice } from '@/services/market';
+import { Button } from '@/components/ui/button';
 
 const COLORS = ['hsl(var(--cardano-blue))', '#1BAAD6', '#FF9F43', '#28C76F', '#EA5455', '#7367F0'];
 const chartTooltipStyle = {
@@ -20,7 +21,7 @@ const chartTooltipStyle = {
 
 const Analytics = () => {
   const { t } = useLanguage();
-  const { data, isLoading, isError } = useIntersectVendorProjects();
+  const { data, isLoading, isError, refetch } = useIntersectVendorProjects();
   // Keep every hook above the loading/error returns so hook order never changes.
   const { data: adaPrice = 0 } = useQuery({
     queryKey: ['adaPrice'],
@@ -90,7 +91,8 @@ const Analytics = () => {
 
       {isError || !data ? (
         <Card className="cardano-card mb-10"><CardContent className="py-10 text-center text-gray-600 dark:text-gray-300">
-          Analytics data is temporarily unavailable. Please try again shortly.
+          <p className="mb-3">{t('common.data_unavailable')}</p>
+          <Button variant="outline" onClick={() => refetch()}>{t('donations.retry')}</Button>
         </CardContent></Card>
       ) : (
         <>
