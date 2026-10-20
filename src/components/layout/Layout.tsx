@@ -61,6 +61,7 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
     { name: t('nav.projects'), href: '/projects', icon: Briefcase },
     { name: t('nav.vendors'), href: '/vendors', icon: Users },
     { name: t('nav.explorer'), href: '/explorer', icon: FileText },
+    { name: t('nav.donations'), href: '/donations', icon: Heart },
     { name: t('nav.analytics'), href: '/analytics', icon: BarChart3 },
     { name: t('nav.about'), href: '/about', icon: Info },
   ];
@@ -80,6 +81,7 @@ const Layout = ({ children, fullWidth = false }: { children: React.ReactNode, fu
       case '/vendors': import('@/pages/Vendors'); break;
       case '/explorer': import('@/pages/SpendingExplorer'); break;
       case '/analytics': import('@/pages/Analytics'); break;
+      case '/donations': import('@/pages/TreasuryDonations'); break;
       default: break;
     }
   };

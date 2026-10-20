@@ -6,6 +6,7 @@ The production API reads public Cardano mainnet data through the Koios query API
 
 - `GET /api/v1/cardano/treasury-stats` returns ADA-denominated treasury and circulating-supply values for the home dashboard.
 - `GET /api/v1/cardano/network-state` returns the same values in lovelace, along with reserves, total supply, epoch, source, and the latest block time.
+- `GET /api/v1/cardano/treasury-donations` returns confirmed treasury-donation transactions and per-epoch totals for the latest ten epochs.
 
 The API is called from Cloud Run. The browser does not contact the chain-data provider directly.
 
@@ -16,6 +17,8 @@ The backend reads the latest epoch from Koios `GET /tip`, then requests that epo
 This matters because `45,000,000,000 ADA - reserves` is total supply, not circulating supply: total supply also includes the treasury and rewards pots. The earlier implementation therefore overstated the circulating-supply figure. The dashboard now uses Koios's `circulation` field and reports the source, epoch, and latest block time alongside the figure.
 
 ADAspending now uses Koios's documented public API tier instead.
+
+The donations page queries Koios `GET /tx_treasury_donations_epoch?_epoch_no={epoch}` for each of the latest ten epochs. It sums the on-chain `treasury_donation` lovelace field, displays the transaction hash and block time, and links each hash to a Cardano explorer. The page labels its ten-epoch reporting window rather than presenting a partial sum as an all-time total.
 
 ## Freshness and provider failures
 

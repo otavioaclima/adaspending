@@ -156,6 +156,67 @@ const getNetworkState = async () => {
   };
 };
 
+const getTreasuryDonations = () => cached("treasury-donations", 300, async () => {
+  const tipRows = await fetchJson(`${koiosBaseUrl}/tip`);
+  const tip = Array.isArray(tipRows) ? tipRows[0] : undefined;
+  const currentEpoch = Number(tip?.epoch_no);
+  if (!Number.isInteger(currentEpoch) || currentEpoch < 0) {
+    throw new Error("Koios did not return the current Cardano epoch for donations");
+  }
+  const firstEpoch = Math.max(0, currentEpoch - 9);
+  const epochs = Array.from(
+    { length: currentEpoch - firstEpoch + 1 },
+    (_, index) => firstEpoch + index,
+  );
+  const epochRows = await Promise.all(epochs.map(async (epoch) => {
+    const rows = await fetchJson(`${koiosBaseUrl}/tx_treasury_donations_epoch?_epoch_no=${epoch}`);
+    if (!Array.isArray(rows)) throw new Error(`Koios returned invalid donation data for epoch ${epoch}`);
+    return { epoch, rows };
+  }));
+
+  const donationsByHash = new Map();
+  for (const { epoch, rows } of epochRows) {
+    for (const row of rows) {
+      const txHash = String(row.tx_hash || "");
+      const blockTime = Number(row.block_time);
+      const rowEpoch = Number(row.epoch_no);
+      if (!/^[a-f0-9]{64}$/i.test(txHash) || rowEpoch !== epoch || !Number.isFinite(blockTime)) {
+        throw new Error(`Koios returned an invalid treasury donation in epoch ${epoch}`);
+      }
+      donationsByHash.set(txHash, {
+        epoch,
+        txHash,
+        blockTime: new Date(blockTime * 1000).toISOString(),
+        lovelace: toLovelace(row.treasury_donation, "treasury donation"),
+      });
+    }
+  }
+
+  const donations = [...donationsByHash.values()].sort((left, right) =>
+    Date.parse(right.blockTime) - Date.parse(left.blockTime),
+  );
+  const epochSummaries = epochs.map((epoch) => {
+    const epochDonations = donations.filter((donation) => donation.epoch === epoch);
+    const totalLovelace = epochDonations.reduce((total, donation) => total + BigInt(donation.lovelace), 0n);
+    return { epoch, donationCount: epochDonations.length, totalLovelace: totalLovelace.toString() };
+  });
+  const totalLovelace = donations.reduce((total, donation) => total + BigInt(donation.lovelace), 0n);
+
+  return {
+    currentEpoch,
+    firstEpoch,
+    lastEpoch: currentEpoch,
+    totalLovelace: totalLovelace.toString(),
+    averagePerEpochLovelace: (totalLovelace / BigInt(epochs.length)).toString(),
+    donationCount: donations.length,
+    epochs: epochSummaries,
+    donations,
+    source: "Koios · Cardano mainnet",
+    updatedAt: new Date().toISOString(),
+    stale: false,
+  };
+});
+
 const readDataFile = async (filename) => {
   const directory = isDevelopment ? publicDirectory : staticDirectory;
   return JSON.parse(await fs.readFile(path.join(directory, "data", filename), "utf8"));
@@ -164,6 +225,7 @@ const readDataFile = async (filename) => {
 const apiRoutes = {
   "/api/health": async () => ({ status: "ok", service: "adaspending", timestamp: new Date().toISOString() }),
   "/api/v1/cardano/treasury-stats": getTreasuryStats,
+  "/api/v1/cardano/treasury-donations": getTreasuryDonations,
   "/api/v1/cardano/network-state": getNetworkState,
   "/api/v1/markets/ada-price": getAdaPrice,
   "/api/v1/data/intersect-projects": () => readDataFile("intersectData.json"),
