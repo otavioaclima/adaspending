@@ -23,6 +23,24 @@
       ],
       "headers": [
         {
+          "regex": "^/$",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, must-revalidate"
+            }
+          ]
+        },
+        {
+          "regex": "^/(overview|projects|vendors|explorer|donations|analytics|about|privacy|cookies|accessibility|architecture|wireframe|tech-requirements|user-stories|design-system|ui-design)(/.*)?$",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, must-revalidate"
+            }
+          ]
+        },
+        {
           "source": "/assets/**",
           "headers": [
             {
