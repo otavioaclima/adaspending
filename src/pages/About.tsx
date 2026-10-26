@@ -2,7 +2,7 @@
 import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent } from '@/components/ui/card';
-import { BarChart3, ShieldCheck, Database, Users } from 'lucide-react';
+import { BarChart3, ShieldCheck, Database, Users, ExternalLink } from 'lucide-react';
 
 const About = () => {
   const { t } = useLanguage();
@@ -74,6 +74,14 @@ const About = () => {
               <p className="text-gray-300 mb-6 leading-relaxed">
                 {t('about.data_source_desc_long')}
               </p>
+              <div className="mb-6 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+                <a className="inline-flex items-center gap-1 text-cardano-teal hover:underline" href="https://administration.info.intersectmbo.org/docs/" target="_blank" rel="noreferrer">
+                  {t('about.intersect_api_link')} <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+                <a className="inline-flex items-center gap-1 text-cardano-teal hover:underline" href="https://github.com/otavioaclima/adaspending/blob/main/docs/cardano-blockchain-integration.md" target="_blank" rel="noreferrer">
+                  {t('about.integration_details_link')} <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+              </div>
               <p className="text-gray-300 leading-relaxed">
                 {t('about.community_note')}
               </p>
