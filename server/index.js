@@ -150,16 +150,22 @@ const cached = async (key, maxAgeSeconds, load) => {
 };
 
 const fetchJson = async (url, options = {}) => {
-  const response = await fetch(url, {
-    ...options,
-    signal: AbortSignal.timeout(12_000),
-  });
+  let lastError;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        ...options,
+        signal: AbortSignal.timeout(12_000),
+      });
 
-  if (!response.ok) {
-    throw new Error(`Upstream request failed (${response.status})`);
+      if (!response.ok) throw new Error(`Upstream request failed (${response.status})`);
+      return await response.json();
+    } catch (error) {
+      lastError = error;
+      if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 300 * (attempt + 1)));
+    }
   }
-
-  return response.json();
+  throw lastError;
 };
 
 const toLovelace = (value, field) => {
@@ -252,11 +258,17 @@ const getTreasuryDonations = () => cached("treasury-donations", 300, async () =>
     { length: currentEpoch - firstEpoch + 1 },
     (_, index) => firstEpoch + index,
   );
-  const epochRows = await Promise.all(epochs.map(async (epoch) => {
-    const rows = await fetchJson(`${koiosBaseUrl}/tx_treasury_donations_epoch?_epoch_no=${epoch}`);
-    if (!Array.isArray(rows)) throw new Error(`Koios returned invalid donation data for epoch ${epoch}`);
-    return { epoch, rows };
-  }));
+  const epochRows = [];
+  let nextEpochIndex = 0;
+  const worker = async () => {
+    while (nextEpochIndex < epochs.length) {
+      const epoch = epochs[nextEpochIndex++];
+      const rows = await fetchJson(`${koiosBaseUrl}/tx_treasury_donations_epoch?_epoch_no=${epoch}`);
+      if (!Array.isArray(rows)) throw new Error(`Koios returned invalid donation data for epoch ${epoch}`);
+      epochRows.push({ epoch, rows });
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(4, epochs.length) }, worker));
 
   const donationsByHash = new Map();
   for (const { epoch, rows } of epochRows) {

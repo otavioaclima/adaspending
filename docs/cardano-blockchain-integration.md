@@ -55,6 +55,8 @@ The same live project allocation and withdrawn-milestone summary powers the proj
 
 ## Verification record
 
+The CI workflow runs `npm run test:api:integration` against the public production API on pull requests and pushes to `main`. The integration check has a 30-second request timeout and retries transient failures up to three times. It verifies HTTP success and response shape for health, treasury stats, network state, and the donations route consumed by the website; it also checks epoch consistency and validates each returned donation transaction. Run it locally with `npm run test:api:integration`, or point `API_BASE_URL` at a deployed environment.
+
 The public Koios mainnet endpoints return the current chain tip and monetary totals for that epoch. The totals include separate `circulation`, `treasury`, `reserves`, and `supply` values. The API validates that the totals epoch matches the chain tip before publishing the snapshot.
 
 After deployment to GCP project `cardano-feed-v3`, production verification confirmed that the health route and both Cardano endpoints returned HTTP 200. The Cardano endpoints returned the provider source, current epoch, latest block time, and separate monetary totals. The values come from the live provider response rather than hard-coded estimates.
