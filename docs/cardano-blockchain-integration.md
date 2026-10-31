@@ -55,7 +55,7 @@ The same live project allocation and withdrawn-milestone summary powers the proj
 
 ## Verification record
 
-The CI workflow runs `npm run test:api:integration` against the public production API on pull requests and pushes to `main`. The integration check has a 30-second request timeout and retries transient failures up to three times. It verifies HTTP success and response shape for health, treasury stats, network state, and the donations route consumed by the website; it also checks epoch consistency and validates each returned donation transaction. Run it locally with `npm run test:api:integration`, or point `API_BASE_URL` at a deployed environment.
+The CI workflow runs `npm run test:api:integration` against the public production API on pull requests and pushes to `main`. The integration check retries transient failures up to three times; requests have a 30-second timeout, and the historical all-time donation query has a 120-second timeout because a cold refresh reads the full recorded history. It verifies health, treasury stats, network state, both donations routes consumed by the website, response shape, freshness, epoch consistency, and each returned transaction. Run it locally with `npm run test:api:integration`, or point `API_BASE_URL` at a deployed environment.
 
 The public Koios mainnet endpoints return the current chain tip and monetary totals for that epoch. The totals include separate `circulation`, `treasury`, `reserves`, and `supply` values. The API validates that the totals epoch matches the chain tip before publishing the snapshot.
 

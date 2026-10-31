@@ -1,11 +1,11 @@
 const baseUrl = (process.env.API_BASE_URL || "https://adaspending.com").replace(/\/$/, "");
 const attempts = 3;
 
-const getJson = async (pathname) => {
+const getJson = async (pathname, timeoutMs = 30_000) => {
   let lastError;
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
     try {
-      const response = await fetch(`${baseUrl}${pathname}`, { signal: AbortSignal.timeout(30_000) });
+      const response = await fetch(`${baseUrl}${pathname}`, { signal: AbortSignal.timeout(timeoutMs) });
       if (!response.ok) throw new Error(`${pathname} returned HTTP ${response.status}`);
       return await response.json();
     } catch (error) {
@@ -19,10 +19,11 @@ const getJson = async (pathname) => {
 const health = await getJson("/api/health");
 if (health.status !== "ok") throw new Error("/api/health returned an invalid status");
 
-const [stats, network, donations] = await Promise.all([
+const [stats, network, donations, allTimeDonations] = await Promise.all([
   getJson("/api/v1/cardano/treasury-stats"),
   getJson("/api/v1/cardano/network-state"),
   getJson("/api/v1/cardano/treasury-donations"),
+  getJson("/api/v1/cardano/treasury-donations/all-time", 120_000),
 ]);
 
 if (!Number.isInteger(stats.epoch) || stats.epoch !== network.epoch) {
@@ -45,5 +46,12 @@ for (const donation of donations.donations) {
     throw new Error("Treasury donations contains an invalid transaction");
   }
 }
+if (allTimeDonations.firstEpoch !== 507
+  || allTimeDonations.lastEpoch !== network.epoch
+  || !/^\d+$/.test(allTimeDonations.totalLovelace)
+  || !Number.isInteger(allTimeDonations.epochsWithDonations)
+  || allTimeDonations.stale) {
+  throw new Error("All-time treasury donations returned an invalid, stale, or inconsistent response");
+}
 
-console.log(`Production API integration passed: health, treasury-stats, network-state, treasury-donations (epoch ${network.epoch}, ${donations.donationCount} transactions).`);
+console.log(`Production API integration passed: health, treasury-stats, network-state, treasury-donations (${donations.donationCount} transactions), and all-time donations (epoch ${network.epoch}).`);
